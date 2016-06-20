@@ -8,14 +8,12 @@ import android.view.MenuItem;
 import burrows.apps.giphy.example.R;
 import burrows.apps.giphy.example.ui.activity.MainActivity;
 import burrows.apps.giphy.example.ui.adapter.GiphyAdapter;
-import org.greenrobot.eventbus.EventBus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.robolectric.Shadows;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.util.ActivityController;
-import org.robolectric.util.ReflectionHelpers;
 import test.RoboTestBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,6 +62,8 @@ public class MainFragmentTest extends RoboTestBase {
 
         shadowActivity.clickMenuItem(R.id.menu_search);
 
-        assertThat(adapter.getItemCount()).isEqualTo(24);
+        this.finishThreads();
+
+        assertThat(adapter.getItemCount()).isBetween(0, 24);
     }
 }

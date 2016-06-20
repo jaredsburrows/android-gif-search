@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import burrows.apps.giphy.example.R;
 import burrows.apps.giphy.example.event.PreviewImageEvent;
 import burrows.apps.giphy.example.rest.model.Data;
+import burrows.apps.giphy.example.rest.model.GiphyResponse;
 import burrows.apps.giphy.example.rest.service.GiphyService;
 import burrows.apps.giphy.example.ui.adapter.GiphyAdapter;
 import burrows.apps.giphy.example.ui.adapter.ItemOffsetDecoration;
@@ -37,6 +38,7 @@ import com.bumptech.glide.request.target.Target;
 import com.felipecsl.gifimageview.library.GifImageView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -51,7 +53,7 @@ import java.util.List;
 public final class MainFragment extends Fragment {
 
     private static final String TAG = MainFragment.class.getSimpleName();
-    private static final int GIF_IMAGE_HEIGHT_PIXELS = 175;
+    private static final int GIF_IMAGE_HEIGHT_PIXELS = 128;
     private static final int GIF_IMAGE_WIDTH_PIXELS = GIF_IMAGE_HEIGHT_PIXELS;
     private static final int GIPHY_TRENDING_RESULTS_COUNT = 25;
     private static final int PORTRAIT_COLUMNS = 3;
@@ -165,7 +167,7 @@ public final class MainFragment extends Fragment {
             public boolean onQueryTextChange(final String newText) {
                 // Search on type
                 if (!TextUtils.isEmpty(newText)) {
-                    searchImages(newText);
+                    loadSearchImages(newText);
                     hasSearched = true;
                 }
                 return false;
@@ -228,6 +230,9 @@ public final class MainFragment extends Fragment {
                         text.setVisibility(View.VISIBLE);
 
                         progressBar.setVisibility(View.INVISIBLE);
+                        if (Log.isLoggable(TAG, Log.INFO)) {
+                            Log.i(TAG, "finished loading\t" + model);
+                        }
                         return false;
                     }
                 })
@@ -243,38 +248,9 @@ public final class MainFragment extends Fragment {
      * Load Giphy trending images.
      */
     private void loadTrendingImages() {
-        this.mAdapter.clear();
+        final Observable<GiphyResponse> observable = GiphyService.getInstance().getTrendingResults();
 
-        this.mSubscription.add(GiphyService.getInstance().getTrendingResults()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    // onNext
-                    final List<Data> data = response.getData();
-
-                    // Iterate over data from response and grab the urls
-                    for (final Data datum : data) {
-                        final String url = datum.getImages().getFixedHeight().getUrl();
-
-                        final GiphyImageInfo model = new GiphyImageInfo().withUrl(url);
-
-                        this.mAdapter.add(model);
-
-                        if (Log.isLoggable(TAG, Log.INFO)) {
-                            Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
-                        }
-                    }
-                }, error -> {
-                    // onError
-                    if (Log.isLoggable(TAG, Log.ERROR)) {
-                        Log.e(TAG, "onError", error);
-                    }
-                }, () -> {
-                    // onComplete
-                    if (Log.isLoggable(TAG, Log.INFO)) {
-                        Log.i(TAG, "Done loading!");
-                    }
-                }));
+        this.loadImages(observable);
     }
 
     /**
@@ -282,16 +258,29 @@ public final class MainFragment extends Fragment {
      *
      * @param searchString User input.
      */
-    private void searchImages(final String searchString) {
-        this.mAdapter.clear();
+    private void loadSearchImages(final String searchString) {
+        final Observable<GiphyResponse> observable = GiphyService.getInstance().getSearchResults(searchString);
 
-        this.mSubscription.add(GiphyService.getInstance().getSearchResults(searchString)
+        this.loadImages(observable);
+    }
+
+    /**
+     * Common code for subscription.
+     *
+     * @param observable Observable to added to the subscription.
+     */
+    private void loadImages(final Observable<GiphyResponse> observable) {
+        this.mSubscription.add(observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     // onNext
-                    final List<Data> data = response.getData();
 
+                    // Clear current data
+                    this.mAdapter.clear();
+
+                    // Iterate over data from response and grab the urls
+                    final List<Data> data = response.getData();
                     for (final Data datum : data) {
                         final String url = datum.getImages().getFixedHeight().getUrl();
 

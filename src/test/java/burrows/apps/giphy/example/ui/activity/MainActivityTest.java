@@ -67,7 +67,7 @@ public class MainActivityTest extends RoboTestBase {
 
     @Test
     public void testActivityHasLoadedToolbarTitle() {
-        assertThat(this.sut.mToolbar.getTitle()).isEqualTo("Burrows Giphy App");
+        assertThat(this.sut.mToolbar.getTitle()).isEqualTo("Giphy: Top Trending Gifs");
     }
 
     @Test

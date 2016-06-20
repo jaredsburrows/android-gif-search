@@ -4,5 +4,6 @@
     <string name="app_name">Burrows Giphy App</string>
     <string name="menu_search">Search</string>
     <string name="search_gifs">Search Gifs</string>
+    <string name="main_screen_title">Giphy: Top Trending Gifs</string>
 
 </resources>

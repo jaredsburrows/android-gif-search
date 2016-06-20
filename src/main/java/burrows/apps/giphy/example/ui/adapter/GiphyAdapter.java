@@ -29,7 +29,7 @@ import org.greenrobot.eventbus.EventBus;
 public final class GiphyAdapter extends BaseAdapter<GiphyImageInfo, GiphyAdapter.GiphyAdapterViewHolder> {
 
     private static final String TAG = MainFragment.class.getSimpleName();
-    private static final int GIF_IMAGE_HEIGHT_PIXELS = 175;
+    private static final int GIF_IMAGE_HEIGHT_PIXELS = 128;
     private static final int GIF_IMAGE_WIDTH_PIXELS = GIF_IMAGE_HEIGHT_PIXELS;
 
     @Override
@@ -75,6 +75,9 @@ public final class GiphyAdapter extends BaseAdapter<GiphyImageInfo, GiphyAdapter
                         holder.mGifImageView.setVisibility(View.VISIBLE);
 
                         holder.mProgressBar.setVisibility(View.INVISIBLE);
+                        if (Log.isLoggable(TAG, Log.INFO)) {
+                            Log.i(TAG, "finished loading\t" + model);
+                        }
                         return false;
                     }
                 })
@@ -82,81 +85,6 @@ public final class GiphyAdapter extends BaseAdapter<GiphyImageInfo, GiphyAdapter
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(R.mipmap.ic_launcher)
                 .into(holder.mGifImageView);
-
-//                .load(model.getUrl())
-//                .asGif()
-////                .asBitmap()
-////                .thumbnail(0.1f)
-////                .listener(new RequestListener<String, GifDrawable>() {
-////                    @Override
-////                    public boolean onException(final Exception e, final String model, final Target<GifDrawable> target,
-////                                               final boolean isFirstResource) {
-////                        holder.mProgressBar.setVisibility(View.INVISIBLE);
-////
-////                        holder.mGifImageView.setImageResource(R.mipmap.ic_launcher);
-////                        holder.mGifImageView.setVisibility(View.VISIBLE);
-////
-////                        if (Log.isLoggable(TAG, Log.ERROR)) {
-////                            Log.e(TAG, "onException", e);
-////                        }
-////                        return false;
-////                    }
-////
-////                    @Override
-////                    public boolean onResourceReady(final GifDrawable resource, final String model,
-////                                                   final Target<GifDrawable> target, final boolean isFromMemoryCache,
-////                                                   final boolean isFirstResource) {
-////                        holder.mGifImageView.startAnimation();
-////                        holder.mGifImageView.setVisibility(View.VISIBLE);
-////
-////                        holder.mProgressBar.setVisibility(View.INVISIBLE);
-////                        return false;
-////                    }
-////                })
-////                .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
-////                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-////                .error(R.mipmap.ic_launcher)
-////                .into(holder.mGifImageView);
-//                .toBytes()
-//                .listener(new RequestListener<String, byte[]>() {
-//                    @Override
-//                    public boolean onException(Exception e, String model, Target<byte[]> target, boolean isFirstResource) {
-//                        holder.mProgressBar.setVisibility(View.INVISIBLE);
-//
-//                        holder.mGifImageView.setImageResource(R.mipmap.ic_launcher);
-//                        holder.mGifImageView.setVisibility(View.VISIBLE);
-//
-//                        if (Log.isLoggable(TAG, Log.ERROR)) {
-//                            Log.e(TAG, "onException", e);
-//                        }
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onResourceReady(byte[] resource, String model, Target<byte[]> target, boolean isFromMemoryCache, boolean isFirstResource) {
-//                        holder.mGifImageView.setBytes(resource);
-//                        holder.mGifImageView.startAnimation();
-//                        holder.mGifImageView.setVisibility(View.VISIBLE);
-//
-//                        holder.mProgressBar.setVisibility(View.INVISIBLE);
-//                        return false;
-//                    }
-//                })
-//                .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
-//                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-////                .into(holder.mGifImageView);
-//                .into(new SimpleTarget<byte[]>(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS) {
-//                    @Override
-//                    public void onResourceReady(byte[] data, GlideAnimation anim) {
-//                        holder.mGifImageView.setBytes(data);
-//                        holder.mGifImageView.startAnimation();
-//                    }
-//                });
-
-
-//        holder.mGifImageView.startAnimation();
-//        holder.mGifImageView.setVisibility(View.VISIBLE);
-//        holder.mProgressBar.setVisibility(View.INVISIBLE);
 
         holder.itemView.setOnClickListener(view -> {
             final PreviewImageEvent event = new PreviewImageEvent(model);

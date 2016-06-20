@@ -31,7 +31,7 @@ public final class MainActivity extends AppCompatActivity {
 
         // Setup Toolbar
         this.mToolbar.setNavigationIcon(R.mipmap.ic_launcher);
-        this.mToolbar.setTitle(R.string.app_name);
+        this.mToolbar.setTitle(R.string.main_screen_title);
         this.setSupportActionBar(this.mToolbar);
 
         // Use Fragments
