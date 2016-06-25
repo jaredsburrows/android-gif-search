@@ -1,50 +1,45 @@
 buildscript {
     repositories {
-        maven { url "https://plugins.gradle.org/m2/" } // Mirrors jcenter() and mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }                      // Mirrors jcenter() and mavenCentral()
     }
 
     dependencies {
-        // Android gradle plugin
-        classpath "com.android.tools.build:gradle:2.1.2"
-        // Android command plugin
-        classpath "com.novoda:gradle-android-command-plugin:1.5.0"
-        // Google error-prone
-        classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.0.8"
-        // Publish to google play store
-        classpath "com.github.triplet.gradle:play-publisher:1.1.4"
-        // Dex method count
-        classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.4"
-        // Check for plugin updates
-        classpath "com.github.ben-manes:gradle-versions-plugin:0.12.0"
-        // Apk size
-        classpath "com.vanniktech:gradle-android-apk-size-plugin:0.2.0"
-        // Java 8 lambda support
-        classpath "me.tatarka:gradle-retrolambda:3.2.5"
+        classpath "com.android.tools.build:gradle:2.1.2"                    // Android gradle plugin
+        classpath "com.novoda:gradle-android-command-plugin:1.5.0"          // Android command plugin
+        classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.4"   // Dex method count
+        classpath "com.vanniktech:gradle-android-apk-size-plugin:0.2.0"     // Apk size
+        classpath "me.tatarka:gradle-retrolambda:3.2.5"                     // Java 8 lambda support
         classpath "me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2"
-        // Annotation processing
-        classpath "com.neenbedankt.gradle.plugins:android-apt:1.8"
+        classpath "com.neenbedankt.gradle.plugins:android-apt:1.8"          // Annotation processing
     }
 
     // Retrolambda - exclude the version that the android plugin depends on
     configurations.classpath.exclude group: "com.android.tools.external.lombok"
 }
 
+plugins {
+    id "com.gradle.build-scan" version "1.0"                                // Gradle build receipt
+    id "net.ltgt.errorprone" version "0.0.8"                                // Google error-prone
+    id "com.github.kt3k.coveralls" version "2.6.3"                          // Code coverage
+    id "com.github.ben-manes.versions" version "0.12.0"                     // Check for plugin updates
+    id "build-dashboard"
+    id "jacoco"
+}
+
 repositories {
-    maven { url "https://plugins.gradle.org/m2/" } // Mirrors jcenter() and mavenCentral()
+    maven { url "https://plugins.gradle.org/m2/" }                          // Mirrors jcenter() and mavenCentral()
     maven { url "https://jitpack.io" }
 }
 
 apply plugin: "com.android.application"
 apply plugin: "android-command"
-apply plugin: "net.ltgt.errorprone"
-apply plugin: "com.github.triplet.play"
 apply plugin: "com.getkeepsafe.dexcount"
-apply plugin: "com.github.ben-manes.versions"
 apply plugin: "com.vanniktech.android.apk.size"
 apply plugin: "me.tatarka.retrolambda"
 apply plugin: "com.neenbedankt.android-apt"
-apply from: rootProject.file("./gradle/compile.gradle")
-apply from: rootProject.file("./gradle/codeQuality.gradle")
+apply from: rootProject.file("gradle/buildScan.gradle")
+apply from: rootProject.file("gradle/compile.gradle")
+apply from: rootProject.file("gradle/codeQuality.gradle")
 
 android {
     compileSdkVersion 24
@@ -88,7 +83,7 @@ android {
     }
 
     lintOptions {
-        abortOnError false                      // Turn off for now in case different lint versions are used
+        abortOnError true
         textReport true
         textOutput "stdout"
         checkAllWarnings true

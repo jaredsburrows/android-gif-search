@@ -1,5 +1,3 @@
-apply plugin: "jacoco"
-
 // Creates tasks based on the application build variant (productFlavor + buildType = variant)
 (android.hasProperty("applicationVariants")
         ? android."applicationVariants"
