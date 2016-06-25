@@ -10,12 +10,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class ImagesTest extends TestBase {
 
-    private final FixedHeight fixedHeight = new FixedHeight();
-    private final Images sut = new Images(this.fixedHeight);
+    private FixedHeight mFixedHeight = new FixedHeight();
+    private Images sut = new Images(this.mFixedHeight);
 
     @Test
     public void testGetFixedHeight() {
-        assertThat(this.sut.getFixedHeight()).isEqualTo(this.fixedHeight);
+        assertThat(this.sut.getFixedHeight()).isEqualTo(this.mFixedHeight);
     }
 
     @Test

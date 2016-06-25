@@ -24,7 +24,8 @@ import static org.robolectric.Robolectric.buildActivity;
  */
 public class MainFragmentTest extends RoboTestBase {
 
-    private ActivityController<MainActivity> controller;
+    private ActivityController<MainActivity> mController;
+    private FragmentActivity mActivity;
     private MainFragment sut;
 
     @Before
@@ -34,17 +35,18 @@ public class MainFragmentTest extends RoboTestBase {
         this.sut = new MainFragment();
 
         // Control the activity to control the fragment
-        this.controller = buildActivity(MainActivity.class);
+        this.mController = buildActivity(MainActivity.class);
 
-        final FragmentActivity activity = this.controller.create().start().resume().visible().get();
-        activity.getSupportFragmentManager().beginTransaction().replace(android.R.id.content, this.sut, null).commit();
+        this.mActivity = this.mController.create().start().resume().visible().get();
+        this.mActivity.getSupportFragmentManager().beginTransaction().replace(android.R.id.content, this.sut, null).commit();
     }
 
     @After
     public void tearDown() throws Exception {
         super.tearDown();
 
-        this.controller.pause().stop().destroy();
+        this.mController.pause().stop().destroy();
+        this.mActivity.finish();
     }
 
     @Test

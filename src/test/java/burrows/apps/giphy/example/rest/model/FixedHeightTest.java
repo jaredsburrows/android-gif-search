@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class FixedHeightTest extends TestBase {
 
-    private final FixedHeight sut = new FixedHeight(STRING_UNIQUE);
+    private FixedHeight sut = new FixedHeight(STRING_UNIQUE);
 
     @Test
     public void testGetUrl() {

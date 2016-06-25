@@ -4,8 +4,7 @@ machine:
 
 test:
   override:
-  # Circle CI fails/timeouts on unit tests
-    - ./gradlew clean assembleDebug -Dscan --configure-on-demand --daemon --parallel --stacktrace
+    - ./gradlew clean assembleDebug testDebug jacocoDebugReport coveralls -Dscan --configure-on-demand --daemon --parallel --stacktrace
 
 dependencies:
   pre:

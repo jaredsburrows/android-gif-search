@@ -21,45 +21,45 @@ public class ItemOffsetDecorationTest extends RoboTestBase {
     private final GridLayoutManager GRID_LAYOUT_MANAGER = new GridLayoutManager(CONTEXT, 3);
     private final Rect RECT = new Rect();
     private final RecyclerView.State STATE = new RecyclerView.State();
-    private RecyclerView recyclerView;
+    private RecyclerView mRecyclerView;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
 
         final GiphyAdapter adapter = new GiphyAdapter();
-        recyclerView = new RecyclerView(CONTEXT);
+        this.mRecyclerView = new RecyclerView(CONTEXT);
 
         // Setup RecyclerView
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(GRID_LAYOUT_MANAGER);
+        this.mRecyclerView.setAdapter(adapter);
+        this.mRecyclerView.setLayoutManager(GRID_LAYOUT_MANAGER);
 
         // Add fake data
         adapter.add(new GiphyImageInfo());
 
         // Increase the childcount
-        recyclerView.addView(new AppCompatTextView(CONTEXT));
+        this.mRecyclerView.addView(new AppCompatTextView(CONTEXT));
 
         final RecyclerView.LayoutParams layoutParams = Mockito.mock(RecyclerView.LayoutParams.class);
         when(layoutParams.getViewLayoutPosition()).thenReturn(0);
-        recyclerView.setLayoutParams(layoutParams);
+        this.mRecyclerView.setLayoutParams(layoutParams);
     }
 
     @Test
     public void testGetItemOffsetsInt() {
         // Item decoration with specified offset
         final ItemOffsetDecoration sut = new ItemOffsetDecoration(1);
-        recyclerView.addItemDecoration(sut);
+        this.mRecyclerView.addItemDecoration(sut);
 
-        sut.getItemOffsets(RECT, recyclerView, recyclerView, STATE);
+        sut.getItemOffsets(RECT, this.mRecyclerView, this.mRecyclerView, STATE);
     }
 
     @Test
     public void testGetItemOffsetsContextResId() {
         // Item decoration with specified context and dimen
         final ItemOffsetDecoration sut = new ItemOffsetDecoration(CONTEXT, R.dimen.gif_adapter_item_offset);
-        recyclerView.addItemDecoration(sut);
+        this.mRecyclerView.addItemDecoration(sut);
 
-        sut.getItemOffsets(RECT, recyclerView, recyclerView, STATE);
+        sut.getItemOffsets(RECT, this.mRecyclerView, this.mRecyclerView, STATE);
     }
 }

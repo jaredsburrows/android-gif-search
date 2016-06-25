@@ -6,6 +6,10 @@
 
 Giphy RecyclerView Grid Example with Robolectric + Espresso tests
 
+<a href="http://i.imgur.com/NGUKKmj.png" target="_blank"><img src="http://i.imgur.com/NGUKKmjm.png" /></a>
+<a href="http://i.imgur.com/HCJzijT.png" target="_blank"><img src="http://i.imgur.com/HCJzijTm.png" /></a>
+<a href="http://i.imgur.com/3xMzhKH.png" target="_blank"><img src="http://i.imgur.com/3xMzhKHm.png" /></a>
+
 ## Module(s)
  
  - **burrows-apps-giphy-example** - Root module

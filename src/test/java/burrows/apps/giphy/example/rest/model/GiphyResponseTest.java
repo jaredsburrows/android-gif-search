@@ -14,12 +14,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class GiphyResponseTest extends TestBase {
 
-    private final List<Data> data = new ArrayList<>(Collections.singletonList(new Data()));
-    private final GiphyResponse sut = new GiphyResponse(this.data);
+    private List<Data> mData = new ArrayList<>(Collections.singletonList(new Data()));
+    private GiphyResponse sut = new GiphyResponse(this.mData);
 
     @Test
     public void testGetData() {
-        assertThat(this.sut.getData()).isEqualTo(this.data);
+        assertThat(this.sut.getData()).isEqualTo(this.mData);
     }
 
     @Test

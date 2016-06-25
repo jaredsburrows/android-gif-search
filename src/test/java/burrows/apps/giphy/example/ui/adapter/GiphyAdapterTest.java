@@ -14,15 +14,15 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class GiphyAdapterTest extends RoboTestBase {
 
+    private GiphyAdapter.GiphyAdapterViewHolder mViewHolder;
     private GiphyAdapter sut;
-    private GiphyAdapter.GiphyAdapterViewHolder viewHolder;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
 
         this.sut = new GiphyAdapter();
-        this.viewHolder = this.sut.onCreateViewHolder(new LinearLayout(CONTEXT), 0);
+        this.mViewHolder = this.sut.onCreateViewHolder(new LinearLayout(CONTEXT), 0);
     }
 
     @Test
@@ -46,9 +46,9 @@ public class GiphyAdapterTest extends RoboTestBase {
         this.sut.add(new GiphyImageInfo().withUrl(STRING_UNIQUE2));
         this.sut.add(new GiphyImageInfo());
 
-        this.sut.onBindViewHolder(this.viewHolder, 0);
+        this.sut.onBindViewHolder(this.mViewHolder, 0);
 
-        assertThat(this.viewHolder.itemView.performClick()).isTrue();
+        assertThat(this.mViewHolder.itemView.performClick()).isTrue();
     }
 
     @Test
@@ -62,8 +62,8 @@ public class GiphyAdapterTest extends RoboTestBase {
     @Test
     public void onViewRecycled() throws Exception {
         this.sut.add(new GiphyImageInfo());
-        this.sut.onBindViewHolder(this.viewHolder, 0);
+        this.sut.onBindViewHolder(this.mViewHolder, 0);
 
-        this.sut.onViewRecycled(this.viewHolder);
+        this.sut.onViewRecycled(this.mViewHolder);
     }
 }

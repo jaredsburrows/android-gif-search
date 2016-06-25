@@ -10,12 +10,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class DataTest extends TestBase {
 
-    private final Images images = new Images();
-    private final Data sut = new Data(this.images);
+    private Images mImages = new Images();
+    private Data sut = new Data(this.mImages);
 
     @Test
     public void testGetImages() {
-        assertThat(this.sut.getImages()).isEqualTo(images);
+        assertThat(this.sut.getImages()).isEqualTo(this.mImages);
     }
 
     @Test

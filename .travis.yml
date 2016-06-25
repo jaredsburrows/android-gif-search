@@ -1,5 +1,9 @@
 language: android
 
+env:
+  global:
+    - MALLOC_ARENA_MAX=2
+
 matrix:
   include:
     - os: linux
@@ -28,7 +32,7 @@ script:
 notifications:
   email: false
 
-sudo: false
+sudo: required
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
