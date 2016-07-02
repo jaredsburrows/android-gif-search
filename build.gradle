@@ -1,25 +1,25 @@
 buildscript {
     repositories {
-        maven { url "https://plugins.gradle.org/m2/" }                      // Mirrors jcenter() and mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:2.1.2"                    // Android gradle plugin
-        classpath "com.novoda:gradle-android-command-plugin:1.5.0"          // Android command plugin
-        classpath "com.github.triplet.gradle:play-publisher:1.1.4"          // Publish to google play store
-        classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.4"   // Dex method count
-        classpath "com.vanniktech:gradle-android-apk-size-plugin:0.2.0"     // Apk size
-        classpath "me.tatarka:gradle-retrolambda:3.2.5"                     // Java 8 lambda support
+        classpath "com.android.tools.build:gradle:2.1.2"
+        classpath "com.novoda:gradle-android-command-plugin:1.5.0"
+        classpath "com.github.triplet.gradle:play-publisher:1.1.4"
+        classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.4"
+        classpath "com.vanniktech:gradle-android-apk-size-plugin:0.2.0"
+        classpath "me.tatarka:gradle-retrolambda:3.2.5"
         classpath "me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2"
-        classpath "com.neenbedankt.gradle.plugins:android-apt:1.8"          // Annotation processing
+        classpath "com.neenbedankt.gradle.plugins:android-apt:1.8"
     }
 }
 
 plugins {
-    id "com.gradle.build-scan" version "1.0"                                // Gradle build receipt
-    id "net.ltgt.errorprone" version "0.0.8"                                // Google error-prone
-    id "com.github.kt3k.coveralls" version "2.6.3"                          // Code coverage
-    id "com.github.ben-manes.versions" version "0.12.0"                     // Check for plugin updates
+    id "com.gradle.build-scan" version "1.0"
+    id "net.ltgt.errorprone" version "0.0.8"
+    id "com.github.kt3k.coveralls" version "2.6.3"
+    id "com.github.ben-manes.versions" version "0.12.0"
     id "build-dashboard"
     id "pmd"
     id "jacoco"
@@ -28,7 +28,7 @@ plugins {
 }
 
 repositories {
-    maven { url "https://plugins.gradle.org/m2/" }                          // Mirrors jcenter() and mavenCentral()
+    maven { url "https://plugins.gradle.org/m2/" }
     maven { url "https://jitpack.io" }
 }
 
@@ -115,7 +115,7 @@ dependencies {
     androidTestCompile "com.android.support.test.espresso:espresso-contrib:2.2.2"
 
     testCompile "junit:junit:4.12"
-    testCompile "org.mockito:mockito-core:2.0.71-beta"
+    testCompile "org.mockito:mockito-core:2.0.78-beta"
     testCompile "org.assertj:assertj-core:3.4.1"
     testCompile "org.robolectric:shadows-support-v4:3.1"
     testCompile "org.khronos:opengl-api:gl1.1-android-2.1_r1"

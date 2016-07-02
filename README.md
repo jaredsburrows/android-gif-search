@@ -1,8 +1,10 @@
 # Giphy Example
 
-|TravisCI(OSX)|CircleCI(Linux)|AppVeyor(Windows)|Coveralls|
-|:---:|:---:|:---:|:---:|
-|[![TravisCI](https://travis-ci.org/jaredsburrows/android-glide-giphy-example.svg?branch=master)](https://travis-ci.org/jaredsburrows/android-glide-giphy-example)|[![CircleCI](https://circleci.com/gh/jaredsburrows/android-glide-giphy-example.svg?style=shield)](https://circleci.com/gh/jaredsburrows/android-glide-giphy-example)|[![AppVeyor](https://ci.appveyor.com/api/projects/status/be1n4df4kvy5saaj/branch/master?svg=true)](https://ci.appveyor.com/project/jaredsburrows/android-glide-giphy-example/branch/master)|[![Coveralls](https://coveralls.io/repos/github/jaredsburrows/android-glide-giphy-example/badge.svg?branch=master)](https://coveralls.io/github/jaredsburrows/android-glide-giphy-example?branch=master)|
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![TravisCI OSX Build](https://img.shields.io/travis/jaredsburrows/android-glide-giphy-example/master.svg?label=OSX%20Build)](https://travis-ci.org/jaredsburrows/android-glide-giphy-example)
+[![CircleCI Linux Build](https://img.shields.io/circleci/project/jaredsburrows/android-glide-giphy-example/master.svg?label=Linux%20Build)](https://circleci.com/gh/jaredsburrows/android-glide-giphy-example)
+[![AppVeyor Windows Build](https://img.shields.io/appveyor/ci/jaredsburrows/android-glide-giphy-example/master.svg?label=Windows%20Build)](https://ci.appveyor.com/project/jaredsburrows/android-glide-giphy-example/branch/master)
+[![Coveralls Code Coverage](https://img.shields.io/coveralls/jaredsburrows/android-glide-giphy-example/master.svg?label=Code%20Coverage)](https://coveralls.io/github/jaredsburrows/android-glide-giphy-example?branch=master)
 
 Giphy RecyclerView Grid Example with Robolectric + Espresso tests
 
@@ -155,20 +157,3 @@ Check for Dependency and Plugin Updates:
 
     $ gradlew dependencyUpdates
     
-
-License
-=========
-
-    Copyright (C) 2016 Android Gradle Java App Example by Jared Burrows
-   
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
