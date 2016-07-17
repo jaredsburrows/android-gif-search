@@ -29,9 +29,6 @@ install:
 script:
   - ./gradlew clean testDebug jacocoDebugReport coveralls -Dscan --configure-on-demand --daemon --parallel --stacktrace
 
-notifications:
-  email: false
-
 sudo: required
 
 before_cache:
