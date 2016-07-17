@@ -23,6 +23,7 @@ public class ItemOffsetDecorationTest extends RoboTestBase {
     private final RecyclerView.State STATE = new RecyclerView.State();
     private RecyclerView mRecyclerView;
 
+    @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();

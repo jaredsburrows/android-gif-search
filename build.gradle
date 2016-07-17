@@ -5,9 +5,9 @@ buildscript {
 
     dependencies {
         classpath "com.android.tools.build:gradle:2.1.2"
-        classpath "com.novoda:gradle-android-command-plugin:1.5.0"
+        classpath "com.novoda:gradle-android-command-plugin:1.6.0"
         classpath "com.github.triplet.gradle:play-publisher:1.1.4"
-        classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.4"
+        classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.5"
         classpath "com.vanniktech:gradle-android-apk-size-plugin:0.2.0"
         classpath "me.tatarka:gradle-retrolambda:3.2.5"
         classpath "me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2"
@@ -19,7 +19,7 @@ plugins {
     id "com.gradle.build-scan" version "1.0"
     id "net.ltgt.errorprone" version "0.0.8"
     id "com.github.kt3k.coveralls" version "2.6.3"
-    id "com.github.ben-manes.versions" version "0.12.0"
+    id "com.github.ben-manes.versions" version "0.13.0"
     id "build-dashboard"
     id "pmd"
     id "jacoco"
@@ -83,6 +83,12 @@ android {
 
 // Retrolambda - exclude the version that the android plugin depends on
 configurations {
+    all {
+        resolutionStrategy {
+            force "com.google.errorprone:error_prone_core:2.0.9"
+        }
+    }
+
     classpath {
         exclude group: "com.android.tools.external.lombok"
     }
@@ -97,15 +103,15 @@ configurations {
 dependencies {
     compile "com.android.support:design:24.0.0"
     compile "com.android.support:cardview-v7:24.0.0"
-    compile "com.jakewharton:butterknife:8.1.0"
-    apt "com.jakewharton:butterknife-compiler:8.1.0"
-    compile "com.squareup.okhttp3:logging-interceptor:3.3.1"
-    compile "com.squareup.okhttp3:okhttp:3.3.1"
+    compile "com.jakewharton:butterknife:8.2.1"
+    apt "com.jakewharton:butterknife-compiler:8.2.1"
+    compile "com.squareup.okhttp3:logging-interceptor:3.4.1"
+    compile "com.squareup.okhttp3:okhttp:3.4.1"
     compile "com.squareup.retrofit2:adapter-rxjava:2.1.0"
     compile "com.squareup.retrofit2:converter-gson:2.1.0"
     compile "com.squareup.retrofit2:retrofit:2.1.0"
     compile "io.reactivex:rxandroid:1.2.1"
-    compile "io.reactivex:rxjava:1.1.6"
+    compile "io.reactivex:rxjava:1.1.7"
     compile "com.felipecsl:gifimageview:2.1.0"
     compile "com.github.bumptech.glide:glide:3.7.0"
     compile "com.github.bumptech.glide:okhttp3-integration:1.4.0@aar"
@@ -115,10 +121,10 @@ dependencies {
     androidTestCompile "com.android.support.test.espresso:espresso-contrib:2.2.2"
 
     testCompile "junit:junit:4.12"
-    testCompile "org.mockito:mockito-core:2.0.78-beta"
-    testCompile "org.assertj:assertj-core:3.4.1"
-    testCompile "org.robolectric:shadows-support-v4:3.1"
+    testCompile "org.mockito:mockito-core:2.0.86-beta"
+    testCompile "org.assertj:assertj-core:3.5.1"
+    testCompile "org.robolectric:shadows-support-v4:3.1.1"
     testCompile "org.khronos:opengl-api:gl1.1-android-2.1_r1"
     testCompile "com.squareup.retrofit2:retrofit-mock:2.1.0"
-    testCompile "com.squareup.okhttp3:mockwebserver:3.3.1"
+    testCompile "com.squareup.okhttp3:mockwebserver:3.4.1"
 }

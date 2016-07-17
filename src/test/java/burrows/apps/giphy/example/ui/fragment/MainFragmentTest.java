@@ -28,6 +28,7 @@ public class MainFragmentTest extends RoboTestBase {
     private FragmentActivity mActivity;
     private MainFragment sut;
 
+    @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
@@ -41,6 +42,7 @@ public class MainFragmentTest extends RoboTestBase {
         this.mActivity.getSupportFragmentManager().beginTransaction().replace(android.R.id.content, this.sut, null).commit();
     }
 
+    @Override
     @After
     public void tearDown() throws Exception {
         super.tearDown();
@@ -56,15 +58,17 @@ public class MainFragmentTest extends RoboTestBase {
         final MenuItem menuItem = shadowActivity.getOptionsMenu().getItem(0);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
 
+        this.finishThreads();
+
         shadowActivity.clickMenuItem(R.id.menu_search);
 
         assertThat(searchView.isIconified()).isTrue();
 
         searchView.setQuery("test", true);
 
-        shadowActivity.clickMenuItem(R.id.menu_search);
-
         this.finishThreads();
+
+        shadowActivity.clickMenuItem(R.id.menu_search);
 
         assertThat(adapter.getItemCount()).isBetween(0, 24);
     }

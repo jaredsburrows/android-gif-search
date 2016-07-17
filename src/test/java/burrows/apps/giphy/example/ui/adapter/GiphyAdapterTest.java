@@ -17,6 +17,7 @@ public class GiphyAdapterTest extends RoboTestBase {
     private GiphyAdapter.GiphyAdapterViewHolder mViewHolder;
     private GiphyAdapter sut;
 
+    @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();

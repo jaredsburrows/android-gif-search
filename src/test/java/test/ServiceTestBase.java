@@ -15,6 +15,7 @@ public abstract class ServiceTestBase extends TestBase {
     @Rule public final MockWebServer server = new MockWebServer();
     protected String mMockEndPoint;
 
+    @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
@@ -22,6 +23,7 @@ public abstract class ServiceTestBase extends TestBase {
         this.mMockEndPoint = this.server.url("/").toString();
     }
 
+    @Override
     @After
     public void tearDown() throws Exception {
         super.tearDown();

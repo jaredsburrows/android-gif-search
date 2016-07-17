@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public final class GiphyServiceTest extends ServiceTestBase {
 
+    @Override
     @After
     public void tearDown() throws Exception {
         super.tearDown();
