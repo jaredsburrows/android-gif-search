@@ -101,8 +101,8 @@ configurations {
 }
 
 dependencies {
-    compile "com.android.support:design:24.0.0"
-    compile "com.android.support:cardview-v7:24.0.0"
+    compile "com.android.support:design:24.1.0"
+    compile "com.android.support:cardview-v7:24.1.0"
     compile "com.jakewharton:butterknife:8.2.1"
     apt "com.jakewharton:butterknife-compiler:8.2.1"
     compile "com.squareup.okhttp3:logging-interceptor:3.4.1"
@@ -117,12 +117,22 @@ dependencies {
     compile "com.github.bumptech.glide:okhttp3-integration:1.4.0@aar"
     compile "org.greenrobot:eventbus:3.0.0"
 
-    androidTestCompile "com.android.support.test:rules:0.5"
-    androidTestCompile "com.android.support.test.espresso:espresso-contrib:2.2.2"
+    androidTestCompile "com.android.support:support-annotations:24.1.0"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:2.2.2"
+    androidTestCompile "com.android.support.test:runner:0.5"
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:2.2.2"
+    androidTestCompile("com.android.support.test.espresso:espresso-contrib:2.2.2") {
+        exclude module: "appcompat"
+        exclude module: "support-v4"
+        exclude module: "support-v7"
+        exclude module: "design"
+        exclude module: "support-annotations"
+        exclude module: "recyclerview-v7"
+    }
 
     testCompile "junit:junit:4.12"
-    testCompile "org.mockito:mockito-core:2.0.86-beta"
-    testCompile "org.assertj:assertj-core:3.5.1"
+    testCompile "org.mockito:mockito-core:2.0.87-beta"
+    testCompile "org.assertj:assertj-core:3.5.2"
     testCompile "org.robolectric:shadows-support-v4:3.1.1"
     testCompile "org.khronos:opengl-api:gl1.1-android-2.1_r1"
     testCompile "com.squareup.retrofit2:retrofit-mock:2.1.0"
