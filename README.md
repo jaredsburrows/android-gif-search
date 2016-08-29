@@ -6,7 +6,7 @@
 [![AppVeyor Windows Build](https://img.shields.io/appveyor/ci/jaredsburrows/android-glide-giphy-example/master.svg?label=Windows%20Build)](https://ci.appveyor.com/project/jaredsburrows/android-glide-giphy-example/branch/master)
 [![Coveralls Code Coverage](https://img.shields.io/coveralls/jaredsburrows/android-glide-giphy-example/master.svg?label=Code%20Coverage)](https://coveralls.io/github/jaredsburrows/android-glide-giphy-example?branch=master)
 
-Giphy RecyclerView Grid Example with Robolectric + Espresso tests
+Giphy RecyclerView Grid Example with Junit + Espresso tests
 
 <a href="http://i.imgur.com/NGUKKmj.png" target="_blank"><img src="http://i.imgur.com/NGUKKmjm.png" /></a>
 <a href="http://i.imgur.com/HCJzijT.png" target="_blank"><img src="http://i.imgur.com/HCJzijTm.png" /></a>
@@ -93,7 +93,7 @@ Assemble, Install and Run the `.apk`:
 **Running the Unit Tests (debug):**
 
 
-The [Robolectric](http://robolectric.org/) unit tests run on the JVM, no need for emulators or real devices.
+The [Junit](http://junit.org/junit4/) tests run on the JVM, no need for emulators or real devices.
 
 
     $ gradlew testDebug

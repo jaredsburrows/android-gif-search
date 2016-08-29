@@ -72,6 +72,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
+
         release {
             minifyEnabled false
             proguardFile getDefaultProguardFile("proguard-android-optimize.txt")
@@ -117,6 +121,9 @@ dependencies {
     compile "com.github.bumptech.glide:okhttp3-integration:1.4.0@aar"
     compile "org.greenrobot:eventbus:3.0.0"
 
+    androidTestCompile "junit:junit:4.12"
+    androidTestCompile "org.mockito:mockito-core:1.9.5"
+    androidTestCompile "com.squareup.assertj:assertj-android:1.1.1"
     androidTestCompile "com.android.support:support-annotations:${supportLibraryVersion}"
     androidTestCompile "com.android.support.test:runner:0.5"
     androidTestCompile "com.android.support.test.espresso:espresso-core:${espressoVersion}"
@@ -132,9 +139,8 @@ dependencies {
 
     testCompile "junit:junit:4.12"
     testCompile "org.mockito:mockito-core:1.9.5"
-    testCompile "org.assertj:assertj-core:3.5.2"
-    testCompile "org.robolectric:shadows-support-v4:3.1.2"
-    testCompile "org.khronos:opengl-api:gl1.1-android-2.1_r1"
+    testCompile "com.squareup.assertj:assertj-android:1.1.1"
+    testCompile "com.android.support:support-annotations:${supportLibraryVersion}"
     testCompile "com.squareup.retrofit2:retrofit-mock:${retrofitVersion}"
     testCompile "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
 

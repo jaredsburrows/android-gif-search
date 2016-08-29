@@ -10,8 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public class PreviewImageEventTest extends TestBase {
-    private static final GiphyImageInfo IMAGE_INFO = new GiphyImageInfo().withUrl(STRING_UNIQUE);
-    private PreviewImageEvent sut = new PreviewImageEvent(IMAGE_INFO);
+    private PreviewImageEvent sut = new PreviewImageEvent(new GiphyImageInfo().withUrl(STRING_UNIQUE));
 
     @Test
     public void testGetImageInfo() {

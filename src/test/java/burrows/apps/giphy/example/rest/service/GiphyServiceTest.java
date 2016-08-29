@@ -4,9 +4,9 @@ import burrows.apps.giphy.example.rest.model.GiphyResponse;
 import okhttp3.mockwebserver.MockResponse;
 import org.junit.After;
 import org.junit.Test;
-import org.robolectric.util.ReflectionHelpers;
 import test.ServiceTestBase;
 
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +19,9 @@ public final class GiphyServiceTest extends ServiceTestBase {
         super.tearDown();
 
         // Destroy singletons
-        ReflectionHelpers.setStaticField(GiphyService.class, "sInstance", null);
+        final Field field = GiphyService.class.getDeclaredField("sInstance");
+        field.setAccessible(true);
+        field.set(null, null);
     }
 
     // --------------------------------------------

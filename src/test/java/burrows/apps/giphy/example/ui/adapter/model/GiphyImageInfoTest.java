@@ -3,7 +3,7 @@ package burrows.apps.giphy.example.ui.adapter.model;
 import org.junit.Test;
 import test.TestBase;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>

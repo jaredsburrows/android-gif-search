@@ -1,11 +1,10 @@
 package burrows.apps.giphy.example;
 
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import burrows.apps.giphy.example.ui.activity.MainActivity;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import test.AndroidTestBase;
 
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
@@ -22,76 +21,59 @@ import static java.lang.Thread.sleep;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class MainActivityTest extends AndroidTestBase<MainActivity> {
 
-    @Rule
-    public ActivityTestRule<MainActivity> activity = new ActivityTestRule<>(MainActivity.class);
+    public MainActivityTest() {
+        super(MainActivity.class);
+    }
 
-    @Test
-    public void testLoadTrendingCache() throws Exception {
-        onView(withId(R.id.recyclerview_root))
-                .check(matches(isDisplayed()));
+    @Test public void testLoadTrendingCache() throws Exception {
+        onView(withId(R.id.recyclerview_root)).check(matches(isDisplayed()));
 
         // Wait for the internet
         sleep(2000);
     }
 
-    @Test
-    public void testLoadTrendingClickOpenDialog() throws Exception {
+    @Test public void testLoadTrendingClickOpenDialog() throws Exception {
         onView(withId(R.id.recyclerview_root))
                 .check(matches(isDisplayed()))
                 .perform(actionOnItemAtPosition(0, click()));
 
         // Make sure dialog view is displayed
-        onView(withId(R.id.gif_dialog_image))
-                .check(matches(isDisplayed()));
+        onView(withId(R.id.gif_dialog_image)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testLoadSearchResults() throws Exception {
+    @Test public void testLoadSearchResults() throws Exception {
         onView(withId(R.id.menu_search)).perform(click());
         // App Compat SearchView widget does not use the same id as in the regular
         // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
         // search widget.
         onView(withId(R.id.search_src_text)).perform(typeText("cat"));
 
-        // Wait for the internet
-        sleep(500);
-
-        onView(withId(R.id.recyclerview_root))
-                .check(matches(isDisplayed()));
+        onView(withId(R.id.recyclerview_root)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testLoadSearchResultsClickOpenDialog() throws Exception {
+    @Test public void testLoadSearchResultsClickOpenDialog() throws Exception {
         onView(withId(R.id.menu_search)).perform(click());
         // App Compat SearchView widget does not use the same id as in the regular
         // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
         // search widget.
         onView(withId(R.id.search_src_text)).perform(typeText("cat"));
 
-        // Wait for the internet
-        sleep(500);
-
         onView(withId(R.id.recyclerview_root))
                 .check(matches(isDisplayed()))
                 .perform(actionOnItemAtPosition(0, click()));
 
         // Make sure dialog view is displayed
-        onView(withId(R.id.gif_dialog_image))
-                .check(matches(isDisplayed()));
+        onView(withId(R.id.gif_dialog_image)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testLoadTrendingThenSearchThenBackToTrending() throws Exception {
+    @Test public void testLoadTrendingThenSearchThenBackToTrending() throws Exception {
         onView(withId(R.id.menu_search)).perform(click());
         // App Compat SearchView widget does not use the same id as in the regular
         // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
         // search widget.
         onView(withId(R.id.search_src_text)).perform(typeText("mouse"));
-
-        // Wait for the internet
-        sleep(500);
 
         // Go back to trending screen
         pressBack();
@@ -100,7 +82,6 @@ public class MainActivityTest {
 
         closeSoftKeyboard();
 
-        onView(withId(R.id.recyclerview_root))
-                .check(matches(isDisplayed()));
+        onView(withId(R.id.recyclerview_root)).check(matches(isDisplayed()));
     }
 }

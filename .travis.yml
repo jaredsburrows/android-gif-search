@@ -1,9 +1,5 @@
 language: android
 
-env:
-  global:
-    - MALLOC_ARENA_MAX=2
-
 matrix:
   include:
     - os: linux
@@ -27,7 +23,7 @@ install:
 script:
   - ./gradlew clean testDebug jacocoDebugReport coveralls -Dscan --configure-on-demand --daemon --parallel --stacktrace
 
-sudo: required
+sudo: false
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock

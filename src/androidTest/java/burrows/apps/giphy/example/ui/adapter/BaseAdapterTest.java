@@ -3,10 +3,12 @@ package burrows.apps.giphy.example.ui.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import burrows.apps.giphy.example.ui.activity.MainActivity;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-import test.RoboTestBase;
+import test.AndroidTestBase;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,13 +19,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class BaseAdapterTest extends RoboTestBase {
-
+@Ignore
+public final class BaseAdapterTest extends AndroidTestBase<MainActivity> {
     private BaseAdapter<String, TestAdapter.TestViewHolder> sut;
 
-    @Override
-    @Before
-    public void setUp() throws Exception {
+    public BaseAdapterTest() {
+        super(MainActivity.class);
+    }
+
+    @Before @Override public void setUp() throws Exception {
         super.setUp();
 
         sut = new TestAdapter(); // use String, has equals/compareTo
@@ -33,9 +37,7 @@ public final class BaseAdapterTest extends RoboTestBase {
         sut.add(STRING_UNIQUE2);
     }
 
-    @Override
-    @After
-    public void tearDown() throws Exception {
+    @After @Override public void tearDown() throws Exception {
         super.tearDown();
 
         sut.clear();
@@ -45,8 +47,7 @@ public final class BaseAdapterTest extends RoboTestBase {
     // getItemCount()
     // --------------------------------------------
 
-    @Test
-    public void testGetItemCountShouldReturnCorrectValues() {
+    @Test public void testGetItemCountShouldReturnCorrectValues() {
         assertThat(sut.getItemCount()).isEqualTo(2);
     }
 
@@ -54,8 +55,7 @@ public final class BaseAdapterTest extends RoboTestBase {
     // getList()
     // --------------------------------------------
 
-    @Test
-    public void testGetListCountShouldReturnCorrectValues() {
+    @Test public void testGetListCountShouldReturnCorrectValues() {
         assertThat(sut.getList()).isEqualTo(Arrays.asList(STRING_UNIQUE, STRING_UNIQUE2));
     }
 
@@ -63,8 +63,7 @@ public final class BaseAdapterTest extends RoboTestBase {
     // getItem(final int location)
     // --------------------------------------------
 
-    @Test
-    public void testGetItemShouldReturnCorrectValues() {
+    @Test public void testGetItemShouldReturnCorrectValues() {
         assertThat(sut.getItem(1)).isEqualTo(STRING_UNIQUE2);
     }
 
@@ -72,8 +71,7 @@ public final class BaseAdapterTest extends RoboTestBase {
     // getLocation(final T object)
     // --------------------------------------------
 
-    @Test
-    public void testGetLocationShouldReturnCorrectValues() {
+    @Test public void testGetLocationShouldReturnCorrectValues() {
         assertThat(sut.getLocation(STRING_UNIQUE2)).isEqualTo(1);
     }
 
@@ -81,8 +79,7 @@ public final class BaseAdapterTest extends RoboTestBase {
     // clear()
     // --------------------------------------------
 
-    @Test
-    public void testClearShouldClearAdapter() {
+    @Test public void testClearShouldClearAdapter() {
         sut.clear();
 
         assertThat(sut.getItemCount()).isEqualTo(0);
@@ -103,8 +100,7 @@ public final class BaseAdapterTest extends RoboTestBase {
     // add(final List<T> collection)
     // --------------------------------------------
 
-    @Test
-    public void testAddCollectionShouldReturnCorrectValues() {
+    @Test public void testAddCollectionShouldReturnCorrectValues() {
         final List<String> list = Collections.singletonList(STRING_UNIQUE3);
 
         sut.addAll(list);
@@ -116,8 +112,7 @@ public final class BaseAdapterTest extends RoboTestBase {
     // add(final int location, final T object)
     // --------------------------------------------
 
-    @Test
-    public void testAddLocationObjectShouldReturnCorrectValues() {
+    @Test public void testAddLocationObjectShouldReturnCorrectValues() {
         sut.add(0, STRING_UNIQUE3);
 
         assertThat(sut.getList()).isEqualTo(Arrays.asList(STRING_UNIQUE3, STRING_UNIQUE, STRING_UNIQUE2));
@@ -127,8 +122,7 @@ public final class BaseAdapterTest extends RoboTestBase {
     // remove(final int location, final T object)
     // --------------------------------------------
 
-    @Test
-    public void testRemoveLocationObjectShouldReturnCorrectValues() {
+    @Test public void testRemoveLocationObjectShouldReturnCorrectValues() {
         sut.remove(0, STRING_UNIQUE);
 
         assertThat(sut.getList()).isEqualTo(Collections.singletonList(STRING_UNIQUE2));
@@ -138,8 +132,7 @@ public final class BaseAdapterTest extends RoboTestBase {
     // remove(final T object)
     // --------------------------------------------
 
-    @Test
-    public void testRemoveObjectShouldReturnCorrectValues() {
+    @Test public void testRemoveObjectShouldReturnCorrectValues() {
         sut.remove(STRING_UNIQUE);
 
         assertThat(sut.getList()).isEqualTo(Collections.singletonList(STRING_UNIQUE2));
@@ -149,8 +142,7 @@ public final class BaseAdapterTest extends RoboTestBase {
     // remove(final int location)
     // --------------------------------------------
 
-    @Test
-    public void testRemoveLocationShouldReturnCorrectValues() {
+    @Test public void testRemoveLocationShouldReturnCorrectValues() {
         sut.remove(0);
 
         assertThat(sut.getList()).isEqualTo(Collections.singletonList(STRING_UNIQUE2));
