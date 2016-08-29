@@ -12,7 +12,6 @@ import rx.Observable;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class GiphyService {
-
     /**
      * URL for Giphy.
      */
@@ -29,7 +28,7 @@ public final class GiphyService {
     public static final String PUBLIC_API_KEY = "dc6zaTOxFJmzC";
 
     /**
-     * Contains the methods that will be used for retrieving the mModel.
+     * Contains the methods that will be used for retrieving the model.
      */
     private static GiphyApi sApi;
 
@@ -152,9 +151,8 @@ public final class GiphyService {
          * @param apiKey Api key for Giphy.
          * @return Response of trending results.
          */
-        @GET("/v1/gifs/trending")
-        Observable<GiphyResponse> getTrendingResults(@Query("limit") final int limit,
-                                                     @Query("api_key") final String apiKey);
+        @GET("/v1/gifs/trending") Observable<GiphyResponse> getTrendingResults(@Query("limit") final int limit,
+                                                                               @Query("api_key") final String apiKey);
 
         /**
          * Get search gif results by a search string.
@@ -169,9 +167,8 @@ public final class GiphyService {
          * @param apiKey       Api key for Giphy.
          * @return Response of search results.
          */
-        @GET("/v1/gifs/search")
-        Observable<GiphyResponse> getSearchResults(@Query("q") final String searchString,
-                                                   @Query("limit") final int limit,
-                                                   @Query("api_key") final String apiKey);
+        @GET("/v1/gifs/search") Observable<GiphyResponse> getSearchResults(@Query("q") final String searchString,
+                                                                           @Query("limit") final int limit,
+                                                                           @Query("api_key") final String apiKey);
     }
 }

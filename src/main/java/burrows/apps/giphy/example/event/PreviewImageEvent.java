@@ -8,7 +8,6 @@ import burrows.apps.giphy.example.ui.adapter.model.GiphyImageInfo;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class PreviewImageEvent {
-
     private final GiphyImageInfo imageInfo;
 
     public PreviewImageEvent(final GiphyImageInfo imageInfo) {

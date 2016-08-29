@@ -13,8 +13,6 @@ import static java.util.UUID.randomUUID;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public abstract class TestBase {
-
-    // Testing Comparisons
     protected static final int NUMBER_NEGATIVE_ONE = -1;
     protected static final int NUMBER_ZERO = 0;
     protected static final int NUMBER_ONE = 1;
@@ -34,13 +32,10 @@ public abstract class TestBase {
     protected static final Long LONG_RANDOM = new Random().nextLong();
     protected static final Double DOUBLE_RANDOM = new Random().nextDouble();
 
-
-    @Before
-    public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @After public void tearDown() throws Exception {
 
     }
 }

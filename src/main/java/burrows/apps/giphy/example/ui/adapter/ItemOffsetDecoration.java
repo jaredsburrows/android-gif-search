@@ -13,7 +13,6 @@ import android.view.View;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class ItemOffsetDecoration extends RecyclerView.ItemDecoration {
-
     private int mOffSet;
 
     public ItemOffsetDecoration(final int offSet) {
@@ -24,8 +23,7 @@ public final class ItemOffsetDecoration extends RecyclerView.ItemDecoration {
         this(context.getResources().getDimensionPixelSize(resourceId));
     }
 
-    @Override
-    public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent,
+    @Override public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent,
                                final RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
 

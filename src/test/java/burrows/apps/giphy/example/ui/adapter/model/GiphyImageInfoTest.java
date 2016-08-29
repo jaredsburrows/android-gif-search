@@ -9,16 +9,13 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public class GiphyImageInfoTest extends TestBase {
-
     private final GiphyImageInfo sut = new GiphyImageInfo().withUrl(STRING_UNIQUE);
 
-    @Test
-    public void getUrl() {
+    @Test public void getUrl() {
         assertThat(this.sut.getUrl()).isEqualTo(STRING_UNIQUE);
     }
 
-    @Test
-    public void withUrl() {
+    @Test public void withUrl() {
         this.sut.withUrl(STRING_UNIQUE2);
 
         assertThat(this.sut.getUrl()).isEqualTo(STRING_UNIQUE2);

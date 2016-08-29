@@ -9,10 +9,7 @@ import com.google.gson.annotations.SerializedName;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class Data {
-
-    @SerializedName("images")
-    @Expose
-    private Images images;
+    @SerializedName("images") @Expose private Images images;
 
     /**
      * No args constructor for use in serialization

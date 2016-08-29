@@ -12,10 +12,7 @@ import java.util.List;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class GiphyResponse {
-
-    @SerializedName("data")
-    @Expose
-    private List<Data> data = new ArrayList<>();
+    @SerializedName("data") @Expose private List<Data> data = new ArrayList<>();
 
     /**
      * No args constructor for use in serialization

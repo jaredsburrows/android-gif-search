@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class ServiceUtil {
-
     /**
      * HTTP client request time out.
      */
@@ -28,7 +27,6 @@ public final class ServiceUtil {
     private static final String DATE_FORMAT = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'";
 
     private ServiceUtil() {
-        // Utility class
     }
 
     /**

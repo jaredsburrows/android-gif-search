@@ -14,14 +14,12 @@ import butterknife.ButterKnife;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class MainActivity extends AppCompatActivity {
-
     /**
      * Toolbar for entire app created from the Activity.
      */
     @BindView(R.id.tool_bar) Toolbar mToolbar;
 
-    @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    @Override protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         this.setContentView(R.layout.activity_main);

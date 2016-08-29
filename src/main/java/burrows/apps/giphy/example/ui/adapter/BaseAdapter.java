@@ -15,7 +15,6 @@ import java.util.List;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
-
     /**
      * Data in the Adapter.
      */
@@ -26,8 +25,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
      *
      * @return the number of elements in the mModel.
      */
-    @Override
-    public int getItemCount() {
+    @Override public int getItemCount() {
         return this.mModel.size();
     }
 

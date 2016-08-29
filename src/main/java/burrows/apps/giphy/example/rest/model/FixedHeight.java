@@ -9,10 +9,7 @@ import com.google.gson.annotations.SerializedName;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class FixedHeight {
-
-    @SerializedName("url")
-    @Expose
-    private String url;
+    @SerializedName("url") @Expose private String url;
 
     /**
      * No args constructor for use in serialization

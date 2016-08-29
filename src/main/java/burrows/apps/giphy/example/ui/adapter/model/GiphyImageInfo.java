@@ -6,7 +6,6 @@ package burrows.apps.giphy.example.ui.adapter.model;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class GiphyImageInfo {
-
     /**
      * Image URL.
      */
