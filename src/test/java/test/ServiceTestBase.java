@@ -11,18 +11,18 @@ import org.junit.Rule;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public abstract class ServiceTestBase extends TestBase {
-    @Rule public final MockWebServer server = new MockWebServer();
-    protected String mMockEndPoint;
+  @Rule public final MockWebServer server = new MockWebServer();
+  protected String mMockEndPoint;
 
-    @Override @Before public void setUp() throws Exception {
-        super.setUp();
+  @Before @Override public void setUp() throws Exception {
+    super.setUp();
 
-        this.mMockEndPoint = this.server.url("/").toString();
-    }
+    this.mMockEndPoint = this.server.url("/").toString();
+  }
 
-    @Override @After public void tearDown() throws Exception {
-        super.tearDown();
+  @After @Override public void tearDown() throws Exception {
+    super.tearDown();
 
-        this.server.shutdown();
-    }
+    this.server.shutdown();
+  }
 }

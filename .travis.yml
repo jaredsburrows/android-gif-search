@@ -21,7 +21,7 @@ install:
   - echo y | android update sdk -u -a -t extra-android-m2repository
 
 script:
-  - ./gradlew clean testDebug jacocoDebugReport coveralls -Dscan --configure-on-demand --daemon --parallel --stacktrace
+  - ./gradlew clean assembleDebugAndroidTest testDebug jacocoDebugReport coveralls -Dscan --configure-on-demand --daemon --parallel --stacktrace
 
 sudo: false
 

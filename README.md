@@ -93,7 +93,7 @@ Assemble, Install and Run the `.apk`:
 **Running the Unit Tests (debug):**
 
 
-The [Junit](http://junit.org/junit4/) tests run on the JVM, no need for emulators or real devices.
+The [Junit](http://junit.org/junit4/)/[Robolectric](https://github.com/robolectric/robolectric) tests run on the JVM, no need for emulators or real devices.
 
 
     $ gradlew testDebug

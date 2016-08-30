@@ -22,66 +22,65 @@ import static java.lang.Thread.sleep;
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest extends AndroidTestBase<MainActivity> {
+  public MainActivityTest() {
+    super(MainActivity.class);
+  }
 
-    public MainActivityTest() {
-        super(MainActivity.class);
-    }
+  @Test public void testLoadTrendingCache() throws Exception {
+    onView(withId(R.id.recyclerview_root)).check(matches(isDisplayed()));
 
-    @Test public void testLoadTrendingCache() throws Exception {
-        onView(withId(R.id.recyclerview_root)).check(matches(isDisplayed()));
+    // Wait for the internet
+    sleep(2000);
+  }
 
-        // Wait for the internet
-        sleep(2000);
-    }
+  @Test public void testLoadTrendingClickOpenDialog() throws Exception {
+    onView(withId(R.id.recyclerview_root))
+            .check(matches(isDisplayed()))
+            .perform(actionOnItemAtPosition(0, click()));
 
-    @Test public void testLoadTrendingClickOpenDialog() throws Exception {
-        onView(withId(R.id.recyclerview_root))
-                .check(matches(isDisplayed()))
-                .perform(actionOnItemAtPosition(0, click()));
+    // Make sure dialog view is displayed
+    onView(withId(R.id.gif_dialog_image)).check(matches(isDisplayed()));
+  }
 
-        // Make sure dialog view is displayed
-        onView(withId(R.id.gif_dialog_image)).check(matches(isDisplayed()));
-    }
+  @Test public void testLoadSearchResults() throws Exception {
+    onView(withId(R.id.menu_search)).perform(click());
+    // App Compat SearchView widget does not use the same id as in the regular
+    // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
+    // search widget.
+    onView(withId(R.id.search_src_text)).perform(typeText("cat"));
 
-    @Test public void testLoadSearchResults() throws Exception {
-        onView(withId(R.id.menu_search)).perform(click());
-        // App Compat SearchView widget does not use the same id as in the regular
-        // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
-        // search widget.
-        onView(withId(R.id.search_src_text)).perform(typeText("cat"));
+    onView(withId(R.id.recyclerview_root)).check(matches(isDisplayed()));
+  }
 
-        onView(withId(R.id.recyclerview_root)).check(matches(isDisplayed()));
-    }
+  @Test public void testLoadSearchResultsClickOpenDialog() throws Exception {
+    onView(withId(R.id.menu_search)).perform(click());
+    // App Compat SearchView widget does not use the same id as in the regular
+    // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
+    // search widget.
+    onView(withId(R.id.search_src_text)).perform(typeText("cat"));
 
-    @Test public void testLoadSearchResultsClickOpenDialog() throws Exception {
-        onView(withId(R.id.menu_search)).perform(click());
-        // App Compat SearchView widget does not use the same id as in the regular
-        // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
-        // search widget.
-        onView(withId(R.id.search_src_text)).perform(typeText("cat"));
+    onView(withId(R.id.recyclerview_root))
+            .check(matches(isDisplayed()))
+            .perform(actionOnItemAtPosition(0, click()));
 
-        onView(withId(R.id.recyclerview_root))
-                .check(matches(isDisplayed()))
-                .perform(actionOnItemAtPosition(0, click()));
+    // Make sure dialog view is displayed
+    onView(withId(R.id.gif_dialog_image)).check(matches(isDisplayed()));
+  }
 
-        // Make sure dialog view is displayed
-        onView(withId(R.id.gif_dialog_image)).check(matches(isDisplayed()));
-    }
+  @Test public void testLoadTrendingThenSearchThenBackToTrending() throws Exception {
+    onView(withId(R.id.menu_search)).perform(click());
+    // App Compat SearchView widget does not use the same id as in the regular
+    // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
+    // search widget.
+    onView(withId(R.id.search_src_text)).perform(typeText("mouse"));
 
-    @Test public void testLoadTrendingThenSearchThenBackToTrending() throws Exception {
-        onView(withId(R.id.menu_search)).perform(click());
-        // App Compat SearchView widget does not use the same id as in the regular
-        // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
-        // search widget.
-        onView(withId(R.id.search_src_text)).perform(typeText("mouse"));
+    // Go back to trending screen
+    pressBack();
 
-        // Go back to trending screen
-        pressBack();
+    onView(withId(R.id.search_close_btn)).perform(click());
 
-        onView(withId(R.id.search_close_btn)).perform(click());
+    closeSoftKeyboard();
 
-        closeSoftKeyboard();
-
-        onView(withId(R.id.recyclerview_root)).check(matches(isDisplayed()));
-    }
+    onView(withId(R.id.recyclerview_root)).check(matches(isDisplayed()));
+  }
 }
