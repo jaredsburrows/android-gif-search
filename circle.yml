@@ -4,7 +4,7 @@ machine:
 
 test:
   override:
-    - ./gradlew clean assembleDebugAndroidTest testDebug jacocoDebugReport coveralls -Dscan --configure-on-demand --daemon --parallel --stacktrace
+    - ./gradlew clean assembleDebugAndroidTest build coveralls -Dscan --configure-on-demand --parallel --stacktrace
 
 dependencies:
   pre:
