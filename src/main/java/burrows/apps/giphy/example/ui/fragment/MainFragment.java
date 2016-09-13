@@ -18,11 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import burrows.apps.giphy.example.App;
 import burrows.apps.giphy.example.R;
-import burrows.apps.giphy.example.event.PreviewImageEvent;
 import burrows.apps.giphy.example.rest.model.Data;
 import burrows.apps.giphy.example.rest.model.GiphyResponse;
 import burrows.apps.giphy.example.rest.service.GiphyService;
+import burrows.apps.giphy.example.rx.event.PreviewImageEvent;
 import burrows.apps.giphy.example.ui.adapter.GiphyAdapter;
 import burrows.apps.giphy.example.ui.adapter.ItemOffsetDecoration;
 import burrows.apps.giphy.example.ui.adapter.model.GiphyImageInfo;
@@ -34,8 +35,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifDrawableBuilder;
 import pl.droidsonroids.gif.GifImageView;
@@ -62,19 +61,62 @@ public final class MainFragment extends Fragment {
     private ItemOffsetDecoration mItemOffsetDecoration;
     private GiphyAdapter mAdapter;
     private Unbinder mUnbinder;
-    private boolean hasSearched;
-    private Dialog dialog;
-    private AppCompatTextView dialogText;
-    private ProgressBar dialogProgressBar;
-    private GifImageView dialogGifImageView;
+    private boolean mHasSearched;
+    private Dialog mDialog;
+    private AppCompatTextView mDialogText;
+    private ProgressBar mDialogProgressBar;
+    private GifImageView mDialogGifImageView;
     @BindView(R.id.recyclerview_root) RecyclerView mRecyclerView;
     @BindString(R.string.search_gifs) String mSearchGifs;
 
     @Override public void onStart() {
         super.onStart();
 
-        // This needs to be 'initiated/registered' here, moving to 'onCreate' has caused weird behaviors
-        EventBus.getDefault().register(this);
+        this.mSubscription.add(App.getBus().toObservable()
+                                  .subscribe(event -> {
+                                      if (event instanceof PreviewImageEvent) {
+                                          // Get url from event
+                                          final String url = ((PreviewImageEvent) event).getImageInfo().getUrl();
+
+                                          Glide.with(getContext())
+                                               .load(url)
+                                               .asGif()
+                                               .toBytes()
+                                               .thumbnail(0.1f)
+                                               .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
+                                               .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                               .error(R.mipmap.ic_launcher)
+                                               .into(new SimpleTarget<byte[]>() {
+                                                   @Override public void onResourceReady(final byte[] resource,
+                                                                                         final GlideAnimation<? super byte[]> glideAnimation) {
+                                                       // Load gif
+                                                       final GifDrawable gifDrawable;
+                                                       try {
+                                                           gifDrawable = new GifDrawableBuilder().from(resource)
+                                                                                                 .build();
+                                                           mDialogGifImageView.setImageDrawable(gifDrawable);
+                                                       } catch (final IOException e) {
+                                                           mDialogGifImageView
+                                                               .setImageResource(R.mipmap.ic_launcher);
+                                                       }
+                                                       mDialogGifImageView.setVisibility(View.VISIBLE);
+
+                                                       // Load associated text
+                                                       mDialogText.setText(url);
+                                                       mDialogText.setVisibility(View.VISIBLE);
+
+                                                       // Turn off progressbar
+                                                       mDialogProgressBar.setVisibility(View.INVISIBLE);
+                                                       if (Log.isLoggable(TAG, Log.INFO)) {
+                                                           Log.i(TAG,
+                                                               "finished loading\t" + Arrays.toString(resource));
+                                                       }
+                                                   }
+                                               });
+
+                                          mDialog.show();
+                                      }
+                                  }));
     }
 
     @Override public void onCreate(final Bundle savedInstanceState) {
@@ -112,17 +154,17 @@ public final class MainFragment extends Fragment {
         final View dialogView = View.inflate(this.getContext(), R.layout.dialog_preview, null);
 
         // Customize Dialog
-        this.dialog = new Dialog(this.getContext());
-        this.dialog.setContentView(dialogView);
-        this.dialog.setOnDismissListener(dialog1 -> {
-            Glide.clear(dialogGifImageView);
-            dialogGifImageView.setImageDrawable(null);
+        this.mDialog = new Dialog(this.getContext());
+        this.mDialog.setContentView(dialogView);
+        this.mDialog.setOnDismissListener(dialog1 -> {
+            Glide.clear(mDialogGifImageView);
+            mDialogGifImageView.setImageDrawable(null);
         });
 
         // Dialog views
-        this.dialogText = ButterKnife.findById(this.dialog, R.id.gif_dialog_title);
-        this.dialogProgressBar = ButterKnife.findById(this.dialog, R.id.gif_dialog_progress);
-        this.dialogGifImageView = ButterKnife.findById(this.dialog, R.id.gif_dialog_image);
+        this.mDialogText = ButterKnife.findById(this.mDialog, R.id.gif_dialog_title);
+        this.mDialogProgressBar = ButterKnife.findById(this.mDialog, R.id.gif_dialog_progress);
+        this.mDialogGifImageView = ButterKnife.findById(this.mDialog, R.id.gif_dialog_image);
 
         // Load initial images
         this.loadTrendingImages();
@@ -141,10 +183,13 @@ public final class MainFragment extends Fragment {
         // Unsubscribe from all subscriptions
         this.mSubscription.unsubscribe();
 
-        // This needs to be 'unregistered' here, moving to 'onDestroy' has caused weird behaviors
-        EventBus.getDefault().unregister(this);
-
         super.onStop();
+    }
+
+    @Override public void onDestroy() {
+        super.onDestroy();
+
+        App.getRefWatcher(this.getActivity()).watch(this, TAG);
     }
 
     @Override public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
@@ -165,9 +210,9 @@ public final class MainFragment extends Fragment {
 
             @Override public boolean onMenuItemActionCollapse(final MenuItem item) {
                 // When search is closed, go back to trending results
-                if (hasSearched) {
+                if (mHasSearched) {
                     loadTrendingImages();
-                    hasSearched = false;
+                    mHasSearched = false;
                 }
                 return true;
             }
@@ -179,7 +224,7 @@ public final class MainFragment extends Fragment {
                 // Search on type
                 if (!TextUtils.isEmpty(newText)) {
                     loadSearchImages(newText);
-                    hasSearched = true;
+                    mHasSearched = true;
                 }
                 return false;
             }
@@ -188,46 +233,6 @@ public final class MainFragment extends Fragment {
                 return false;
             }
         });
-    }
-
-    @Subscribe public void onEvent(final PreviewImageEvent event) {
-        // Get url from event
-        final String url = event.getImageInfo().getUrl();
-
-        Glide.with(this.getContext())
-                .load(url)
-                .asGif()
-                .toBytes()
-                .thumbnail(0.1f)
-                .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(R.mipmap.ic_launcher)
-                .into(new SimpleTarget<byte[]>() {
-                    @Override public void onResourceReady(final byte[] resource,
-                                                          final GlideAnimation<? super byte[]> glideAnimation) {
-                        // Load gif
-                        final GifDrawable gifDrawable;
-                        try {
-                            gifDrawable = new GifDrawableBuilder().from(resource).build();
-                            dialogGifImageView.setImageDrawable(gifDrawable);
-                        } catch (final IOException e) {
-                            dialogGifImageView.setImageResource(R.mipmap.ic_launcher);
-                        }
-                        dialogGifImageView.setVisibility(View.VISIBLE);
-
-                        // Load associated text
-                        dialogText.setText(url);
-                        dialogText.setVisibility(View.VISIBLE);
-
-                        // Turn off progressbar
-                        dialogProgressBar.setVisibility(View.INVISIBLE);
-                        if (Log.isLoggable(TAG, Log.INFO)) {
-                            Log.i(TAG, "finished loading\t" + Arrays.toString(resource));
-                        }
-                    }
-                });
-
-        this.dialog.show();
     }
 
     /**
@@ -253,34 +258,34 @@ public final class MainFragment extends Fragment {
      */
     private void loadImages(final Observable<GiphyResponse> observable) {
         this.mSubscription.add(observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    // onNext
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(response -> {
+                // onNext
 
-                    // Clear current data
-                    this.mAdapter.clear();
+                // Clear current data
+                this.mAdapter.clear();
 
-                    // Iterate over data from response and grab the urls
-                    for (final Data datum : response.getData()) {
-                        final String url = datum.getImages().getFixedHeight().getUrl();
+                // Iterate over data from response and grab the urls
+                for (final Data datum : response.getData()) {
+                    final String url = datum.getImages().getFixedHeight().getUrl();
 
-                        this.mAdapter.add(new GiphyImageInfo().withUrl(url));
+                    this.mAdapter.add(new GiphyImageInfo().withUrl(url));
 
-                        if (Log.isLoggable(TAG, Log.INFO)) {
-                            Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
-                        }
-                    }
-                }, error -> {
-                    // onError
-                    if (Log.isLoggable(TAG, Log.ERROR)) {
-                        Log.e(TAG, "onError", error);
-                    }
-                }, () -> {
-                    // onComplete
                     if (Log.isLoggable(TAG, Log.INFO)) {
-                        Log.i(TAG, "Done loading!");
+                        Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
                     }
-                }));
+                }
+            }, error -> {
+                // onError
+                if (Log.isLoggable(TAG, Log.ERROR)) {
+                    Log.e(TAG, "onError", error);
+                }
+            }, () -> {
+                // onComplete
+                if (Log.isLoggable(TAG, Log.INFO)) {
+                    Log.i(TAG, "Done loading!");
+                }
+            }));
     }
 }

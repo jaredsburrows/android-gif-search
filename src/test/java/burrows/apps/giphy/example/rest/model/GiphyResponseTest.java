@@ -13,22 +13,22 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public class GiphyResponseTest extends TestBase {
-  private List<Data> mData = new ArrayList<>(Collections.singletonList(new Data()));
-  private GiphyResponse sut = new GiphyResponse(this.mData);
+    private List<Data> mData = new ArrayList<>(Collections.singletonList(new Data()));
+    private GiphyResponse sut = new GiphyResponse(this.mData);
 
-  @Test public void testGetData() {
-    assertThat(this.sut.getData()).isEqualTo(this.mData);
-  }
+    @Test public void testGetData() {
+        assertThat(this.sut.getData()).isEqualTo(this.mData);
+    }
 
-  @Test public void testSetData() {
-    final List<Data> expected = new ArrayList<>();
+    @Test public void testSetData() {
+        final List<Data> expected = new ArrayList<>();
 
-    this.sut.setData(expected);
+        this.sut.setData(expected);
 
-    assertThat(this.sut.getData()).isEqualTo(expected);
+        assertThat(this.sut.getData()).isEqualTo(expected);
 
-    final GiphyResponse sut = new GiphyResponse();
+        final GiphyResponse sut = new GiphyResponse();
 
-    assertThat(sut.getData()).isNotNull();
-  }
+        assertThat(sut.getData()).isNotNull();
+    }
 }

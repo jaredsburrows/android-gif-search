@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class Data {
-    @SerializedName("images") @Expose private Images images;
+    @SerializedName("images") @Expose private Images mImages;
 
     /**
      * No args constructor for use in serialization
@@ -18,20 +18,20 @@ public final class Data {
     }
 
     public Data(final Images images) {
-        this.images = images;
+        this.mImages = images;
     }
 
     /**
      * @return The images
      */
     public Images getImages() {
-        return this.images;
+        return this.mImages;
     }
 
     /**
      * @param images The images
      */
     public void setImages(final Images images) {
-        this.images = images;
+        this.mImages = images;
     }
 }

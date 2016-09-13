@@ -19,7 +19,7 @@ install:
   - echo y | "%ANDROID_HOME%\tools\android.bat" update sdk -u -a -t extra-android-m2repository
 
 build_script:
-  - gradlew.bat clean assembleDebugAndroidTest build coveralls -Dscan --configure-on-demand --parallel --stacktrace
+  - gradlew.bat clean assembleDebugAndroidTest build coveralls -Pci -Dscan --stacktrace
 
 artifacts:
   - path: "build\\reports\\"

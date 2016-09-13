@@ -17,45 +17,45 @@ import static org.mockito.Mockito.when;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public class ItemOffsetDecorationTest extends RoboTestBase {
-  private final GridLayoutManager GRID_LAYOUT_MANAGER = new GridLayoutManager(CONTEXT, 3);
-  private final Rect RECT = new Rect();
-  private final RecyclerView.State STATE = new RecyclerView.State();
-  private RecyclerView mRecyclerView;
+    private final GridLayoutManager GRID_LAYOUT_MANAGER = new GridLayoutManager(CONTEXT, 3);
+    private final Rect RECT = new Rect();
+    private final RecyclerView.State STATE = new RecyclerView.State();
+    private RecyclerView mRecyclerView;
 
-  @Before @Override public void setUp() throws Exception {
-    super.setUp();
+    @Before @Override public void setUp() throws Exception {
+        super.setUp();
 
-    final GiphyAdapter adapter = new GiphyAdapter();
-    this.mRecyclerView = new RecyclerView(CONTEXT);
+        final GiphyAdapter adapter = new GiphyAdapter();
+        this.mRecyclerView = new RecyclerView(CONTEXT);
 
-    // Setup RecyclerView
-    this.mRecyclerView.setAdapter(adapter);
-    this.mRecyclerView.setLayoutManager(GRID_LAYOUT_MANAGER);
+        // Setup RecyclerView
+        this.mRecyclerView.setAdapter(adapter);
+        this.mRecyclerView.setLayoutManager(GRID_LAYOUT_MANAGER);
 
-    // Add fake data
-    adapter.add(new GiphyImageInfo());
+        // Add fake data
+        adapter.add(new GiphyImageInfo());
 
-    // Increase the childcount
-    this.mRecyclerView.addView(new AppCompatTextView(CONTEXT));
+        // Increase the childcount
+        this.mRecyclerView.addView(new AppCompatTextView(CONTEXT));
 
-    final RecyclerView.LayoutParams layoutParams = Mockito.mock(RecyclerView.LayoutParams.class);
-    when(layoutParams.getViewLayoutPosition()).thenReturn(0);
-    this.mRecyclerView.setLayoutParams(layoutParams);
-  }
+        final RecyclerView.LayoutParams layoutParams = Mockito.mock(RecyclerView.LayoutParams.class);
+        when(layoutParams.getViewLayoutPosition()).thenReturn(0);
+        this.mRecyclerView.setLayoutParams(layoutParams);
+    }
 
-  @Test public void testGetItemOffsetsInt() {
-    // Item decoration with specified offset
-    final ItemOffsetDecoration sut = new ItemOffsetDecoration(1);
-    this.mRecyclerView.addItemDecoration(sut);
+    @Test public void testGetItemOffsetsInt() {
+        // Item decoration with specified offset
+        final ItemOffsetDecoration sut = new ItemOffsetDecoration(1);
+        this.mRecyclerView.addItemDecoration(sut);
 
-    sut.getItemOffsets(RECT, this.mRecyclerView, this.mRecyclerView, STATE);
-  }
+        sut.getItemOffsets(RECT, this.mRecyclerView, this.mRecyclerView, STATE);
+    }
 
-  @Test public void testGetItemOffsetsContextResId() {
-    // Item decoration with specified context and dimen
-    final ItemOffsetDecoration sut = new ItemOffsetDecoration(CONTEXT, R.dimen.gif_adapter_item_offset);
-    this.mRecyclerView.addItemDecoration(sut);
+    @Test public void testGetItemOffsetsContextResId() {
+        // Item decoration with specified context and dimen
+        final ItemOffsetDecoration sut = new ItemOffsetDecoration(CONTEXT, R.dimen.gif_adapter_item_offset);
+        this.mRecyclerView.addItemDecoration(sut);
 
-    sut.getItemOffsets(RECT, this.mRecyclerView, this.mRecyclerView, STATE);
-  }
+        sut.getItemOffsets(RECT, this.mRecyclerView, this.mRecyclerView, STATE);
+    }
 }

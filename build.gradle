@@ -1,4 +1,6 @@
 buildscript {
+    ext.ci = rootProject.hasProperty("ci")
+
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
     }
@@ -113,7 +115,9 @@ dependencies {
     compile "pl.droidsonroids.gif:android-gif-drawable:1.2.0"
     compile "com.github.bumptech.glide:glide:3.7.0"
     compile "com.github.bumptech.glide:okhttp3-integration:1.4.0@aar"
-    compile "org.greenrobot:eventbus:3.0.0"
+
+    debugCompile "com.squareup.leakcanary:leakcanary-android:1.4"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:1.4"
 
     androidTestCompile "junit:junit:4.12"
     androidTestCompile "org.mockito:mockito-core:1.9.5"
@@ -130,6 +134,7 @@ dependencies {
         exclude module: "support-annotations"
         exclude module: "recyclerview-v7"
     }
+    androidTestCompile "com.squareup.leakcanary:leakcanary-android-no-op:1.4"
 
     testCompile "junit:junit:4.12"
     testCompile "org.mockito:mockito-core:1.9.5"
@@ -139,6 +144,7 @@ dependencies {
     testCompile "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
     testCompile "org.robolectric:shadows-support-v4:3.1.2"
     testCompile "org.khronos:opengl-api:gl1.1-android-2.1_r1"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:1.4"
 
     retrolambdaConfig "net.orfjackal.retrolambda:retrolambda:2.3.0"
 }

@@ -7,8 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import burrows.apps.giphy.example.App;
 import burrows.apps.giphy.example.R;
-import burrows.apps.giphy.example.event.PreviewImageEvent;
+import burrows.apps.giphy.example.rx.event.PreviewImageEvent;
 import burrows.apps.giphy.example.ui.adapter.model.GiphyImageInfo;
 import burrows.apps.giphy.example.ui.fragment.MainFragment;
 import butterknife.BindView;
@@ -17,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import org.greenrobot.eventbus.EventBus;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifDrawableBuilder;
 import pl.droidsonroids.gif.GifImageView;
@@ -114,7 +114,7 @@ public final class GiphyAdapter extends BaseAdapter<GiphyImageInfo, GiphyAdapter
 //                .error(R.mipmap.ic_launcher)
 //                .into(holder.mGifImageView);
 
-        holder.itemView.setOnClickListener(view -> EventBus.getDefault().post(new PreviewImageEvent(model)));
+        holder.itemView.setOnClickListener(view -> App.getBus().send(new PreviewImageEvent(model)));
     }
 
     @Override public void onViewRecycled(final GiphyAdapterViewHolder holder) {
@@ -128,7 +128,6 @@ public final class GiphyAdapter extends BaseAdapter<GiphyImageInfo, GiphyAdapter
      * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
      */
     public class GiphyAdapterViewHolder extends RecyclerView.ViewHolder {
-
         @BindView(R.id.gif_progress) ProgressBar mProgressBar;
         @BindView(R.id.gif_image) GifImageView mGifImageView;
 

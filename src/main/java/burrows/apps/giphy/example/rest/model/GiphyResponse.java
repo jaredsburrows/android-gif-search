@@ -12,7 +12,7 @@ import java.util.List;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class GiphyResponse {
-    @SerializedName("data") @Expose private List<Data> data = new ArrayList<>();
+    @SerializedName("data") @Expose private List<Data> mData = new ArrayList<>();
 
     /**
      * No args constructor for use in serialization
@@ -24,20 +24,20 @@ public final class GiphyResponse {
      * @param data
      */
     public GiphyResponse(final List<Data> data) {
-        this.data = data;
+        this.mData = data;
     }
 
     /**
      * @return The data
      */
     public List<Data> getData() {
-        return this.data;
+        return this.mData;
     }
 
     /**
      * @param data The data
      */
     public void setData(final List<Data> data) {
-        this.data = data;
+        this.mData = data;
     }
 }

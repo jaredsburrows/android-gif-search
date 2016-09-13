@@ -1,4 +1,4 @@
-package burrows.apps.giphy.example.event;
+package burrows.apps.giphy.example.rx.event;
 
 import burrows.apps.giphy.example.ui.adapter.model.GiphyImageInfo;
 
