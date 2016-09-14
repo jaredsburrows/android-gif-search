@@ -4,7 +4,7 @@ machine:
 
 test:
   override:
-    - ./gradlew clean assembleDebugAndroidTest build coveralls -Pci -Dscan --stacktrace
+    - ./gradlew clean assembleDebugAndroidTest testDebug -Pci -Dscan --stacktrace
 
 dependencies:
   pre:
