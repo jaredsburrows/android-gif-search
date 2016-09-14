@@ -14,27 +14,27 @@ import butterknife.ButterKnife;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class MainActivity extends AppCompatActivity {
-    @BindView(R.id.tool_bar) Toolbar mToolbar;
+  @BindView(R.id.tool_bar) Toolbar toolbar;
 
-    @Override protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override protected void onCreate(final Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        this.setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_main);
 
-        // Bind views
-        ButterKnife.bind(this);
+    // Bind views
+    ButterKnife.bind(this);
 
-        // Setup Toolbar
-        this.mToolbar.setNavigationIcon(R.mipmap.ic_launcher);
-        this.mToolbar.setTitle(R.string.main_screen_title);
-        this.setSupportActionBar(this.mToolbar);
+    // Setup Toolbar
+    toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+    toolbar.setTitle(R.string.main_screen_title);
+    setSupportActionBar(toolbar);
 
-        // Use Fragments
-        if (savedInstanceState == null) {
-            this.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.content_frame, new MainFragment(), MainFragment.class.getSimpleName())
-                    .commit();
-        }
+    // Use Fragments
+    if (savedInstanceState == null) {
+      getSupportFragmentManager()
+          .beginTransaction()
+          .replace(R.id.content_frame, new MainFragment(), MainFragment.class.getSimpleName())
+          .commit();
     }
+  }
 }

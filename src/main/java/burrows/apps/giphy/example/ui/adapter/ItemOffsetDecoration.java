@@ -13,20 +13,20 @@ import android.view.View;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class ItemOffsetDecoration extends RecyclerView.ItemDecoration {
-    private int mOffSet;
+  private int offSet;
 
-    public ItemOffsetDecoration(final int offSet) {
-        this.mOffSet = offSet;
-    }
+  public ItemOffsetDecoration(final int offSet) {
+    this.offSet = offSet;
+  }
 
-    public ItemOffsetDecoration(@NonNull final Context context, @DimenRes final int resourceId) {
-        this(context.getResources().getDimensionPixelSize(resourceId));
-    }
+  public ItemOffsetDecoration(@NonNull final Context context, @DimenRes final int resourceId) {
+    this(context.getResources().getDimensionPixelSize(resourceId));
+  }
 
-    @Override public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent,
-                               final RecyclerView.State state) {
-        super.getItemOffsets(outRect, view, parent, state);
+  @Override public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent,
+                                       final RecyclerView.State state) {
+    super.getItemOffsets(outRect, view, parent, state);
 
-        outRect.set(this.mOffSet, this.mOffSet, this.mOffSet, this.mOffSet);
-    }
+    outRect.set(offSet, offSet, offSet, offSet);
+  }
 }

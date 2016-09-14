@@ -9,32 +9,32 @@ import com.google.gson.annotations.SerializedName;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class Images {
-    @SerializedName("fixed_height") @Expose private FixedHeight mFixedHeight;
+  @SerializedName("fixed_height") @Expose private FixedHeight fixedHeight;
 
-    /**
-     * No args constructor for use in serialization
-     */
-    public Images() {
-    }
+  /**
+   * No args constructor for use in serialization
+   */
+  public Images() {
+  }
 
-    /**
-     * @param fixedHeight
-     */
-    public Images(final FixedHeight fixedHeight) {
-        this.mFixedHeight = fixedHeight;
-    }
+  /**
+   * @param fixedHeight
+   */
+  public Images(final FixedHeight fixedHeight) {
+    this.fixedHeight = fixedHeight;
+  }
 
-    /**
-     * @return The fixedHeight
-     */
-    public FixedHeight getFixedHeight() {
-        return this.mFixedHeight;
-    }
+  /**
+   * @return The fixedHeight
+   */
+  public FixedHeight getFixedHeight() {
+    return fixedHeight;
+  }
 
-    /**
-     * @param fixedHeight The fixed_height
-     */
-    public void setFixedHeight(final FixedHeight fixedHeight) {
-        this.mFixedHeight = fixedHeight;
-    }
+  /**
+   * @param fixedHeight The fixed_height
+   */
+  public void setFixedHeight(final FixedHeight fixedHeight) {
+    this.fixedHeight = fixedHeight;
+  }
 }

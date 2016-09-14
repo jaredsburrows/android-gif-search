@@ -6,7 +6,7 @@
 [![AppVeyor Windows Build](https://img.shields.io/appveyor/ci/jaredsburrows/android-glide-giphy-example/master.svg?label=Windows%20Build)](https://ci.appveyor.com/project/jaredsburrows/android-glide-giphy-example/branch/master)
 [![Coveralls Code Coverage](https://img.shields.io/coveralls/jaredsburrows/android-glide-giphy-example/master.svg?label=Code%20Coverage)](https://coveralls.io/github/jaredsburrows/android-glide-giphy-example?branch=master)
 
-Giphy RecyclerView Grid Example with Junit + Espresso tests
+Giphy RecyclerView Grid Example using Dagger 2, Retrofit 2, RxJava 2 and Butterknife with Junit + Espresso tests
 
 <a href="http://i.imgur.com/NGUKKmj.png" target="_blank"><img src="http://i.imgur.com/NGUKKmjm.png" /></a>
 <a href="http://i.imgur.com/HCJzijT.png" target="_blank"><img src="http://i.imgur.com/HCJzijTm.png" /></a>

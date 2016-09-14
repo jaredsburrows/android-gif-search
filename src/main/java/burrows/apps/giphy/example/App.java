@@ -6,54 +6,66 @@ import android.os.StrictMode;
 import android.os.StrictMode.ThreadPolicy;
 import android.os.StrictMode.VmPolicy;
 import android.support.v7.app.AppCompatDelegate;
+import burrows.apps.giphy.example.di.component.AppComponent;
+import burrows.apps.giphy.example.di.component.DaggerAppComponent;
+import burrows.apps.giphy.example.di.module.AppModule;
+import burrows.apps.giphy.example.di.module.LeakCanaryModule;
 import burrows.apps.giphy.example.rx.RxBus;
-import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+
+import javax.inject.Inject;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public class App extends Application {
-    private static RxBus sBus;
-    private RefWatcher mRefWatcher;
+  private AppComponent appComponent;
+  @Inject RxBus bus;
+  @Inject RefWatcher refWatcher;
 
-    @Override public void onCreate() {
-        super.onCreate();
+  @Override public void onCreate() {
+    super.onCreate();
 
-        // Let's start paying critical attention to issues via Logcat
-        if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(new ThreadPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build());
-            StrictMode.setVmPolicy(new VmPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build());
-        }
-
-        sBus = new RxBus();
-
-        // Initialize LeakCanary for memory analysis, removed on release
-        this.mRefWatcher = LeakCanary.install(this);
-
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    // Let's start paying critical attention to issues via Logcat
+    if (BuildConfig.DEBUG) {
+      StrictMode.setThreadPolicy(new ThreadPolicy.Builder()
+        .detectAll()
+        .penaltyLog()
+        .build());
+      StrictMode.setVmPolicy(new VmPolicy.Builder()
+        .detectAll()
+        .penaltyLog()
+        .build());
     }
 
-    public static RxBus getBus() {
-        if (sBus == null) {
-            return new RxBus();
-        }
-        return sBus;
-    }
+    appComponent = DaggerAppComponent.builder()
+                                     .appModule(new AppModule(this))
+                                     .leakCanaryModule(new LeakCanaryModule(this))
+                                     .build();
+    appComponent.inject(this);
 
-    /**
-     * Use this method to watch the reference to context in onDestroy methods.
-     *
-     * @param context Context.
-     * @return Instance of RefWatcher.
-     */
-    public static RefWatcher getRefWatcher(final Context context) {
-        return ((App) context.getApplicationContext()).mRefWatcher;
-    }
+    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+  }
+
+  public static App get(final Context context) {
+    return (App) context.getApplicationContext();
+  }
+
+  /**
+   * Use this method to watch the reference to context in onDestroy methods.
+   *
+   * @param context Context.
+   * @return Instance of RefWatcher.
+   */
+  public static RefWatcher getRefWatcher(final Context context) {
+    return ((App) context.getApplicationContext()).refWatcher;
+  }
+
+  public AppComponent getAppComponent() {
+    return appComponent;
+  }
+
+  public RxBus getBus() {
+    return bus;
+  }
 }

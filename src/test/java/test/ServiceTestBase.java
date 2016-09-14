@@ -12,17 +12,17 @@ import org.junit.Rule;
  */
 public abstract class ServiceTestBase extends TestBase {
   @Rule public final MockWebServer server = new MockWebServer();
-  protected String mMockEndPoint;
+  protected String mockEndPoint;
 
   @Before @Override public void setUp() throws Exception {
     super.setUp();
 
-    this.mMockEndPoint = this.server.url("/").toString();
+    mockEndPoint = server.url("/").toString();
   }
 
   @After @Override public void tearDown() throws Exception {
     super.tearDown();
 
-    this.server.shutdown();
+    server.shutdown();
   }
 }

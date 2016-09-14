@@ -24,9 +24,9 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
  */
 @RunWith(AndroidJUnit4.class)
 public abstract class AndroidTestBase<T extends Activity> extends TestBase {
-    protected Context mContext;
-    protected Activity mActivity;
-    protected Resources mResources;
+    protected Context context;
+    protected Activity activity;
+    protected Resources resources;
     @Rule public ActivityTestRule<T> mActivityRule;
 
     public AndroidTestBase(final Class<T> activityClass) {
@@ -36,12 +36,12 @@ public abstract class AndroidTestBase<T extends Activity> extends TestBase {
     @Before @Override public void setUp() throws Exception {
         super.setUp();
 
-        this.mContext = getInstrumentation().getTargetContext();
-        this.mActivity = this.mActivityRule.getActivity();
-        this.mResources = this.mContext.getResources();
+        this.context = getInstrumentation().getTargetContext();
+        this.activity = this.mActivityRule.getActivity();
+        this.resources = this.context.getResources();
 
         // Allows us to mock classes
-        System.setProperty("dexmaker.dexcache", this.mContext.getCacheDir().getPath());
+        System.setProperty("dexmaker.dexcache", this.context.getCacheDir().getPath());
 
         this.keepScreenOn();
         this.grantPhonePermissions();

@@ -12,32 +12,32 @@ import java.util.List;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class GiphyResponse {
-    @SerializedName("data") @Expose private List<Data> mData = new ArrayList<>();
+  @SerializedName("data") @Expose private List<Data> data = new ArrayList<>();
 
-    /**
-     * No args constructor for use in serialization
-     */
-    public GiphyResponse() {
-    }
+  /**
+   * No args constructor for use in serialization
+   */
+  public GiphyResponse() {
+  }
 
-    /**
-     * @param data
-     */
-    public GiphyResponse(final List<Data> data) {
-        this.mData = data;
-    }
+  /**
+   * @param data
+   */
+  public GiphyResponse(final List<Data> data) {
+    this.data = data;
+  }
 
-    /**
-     * @return The data
-     */
-    public List<Data> getData() {
-        return this.mData;
-    }
+  /**
+   * @return The data
+   */
+  public List<Data> getData() {
+    return data;
+  }
 
-    /**
-     * @param data The data
-     */
-    public void setData(final List<Data> data) {
-        this.mData = data;
-    }
+  /**
+   * @param data The data
+   */
+  public void setData(final List<Data> data) {
+    this.data = data;
+  }
 }

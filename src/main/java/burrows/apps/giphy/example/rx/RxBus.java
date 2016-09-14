@@ -1,25 +1,23 @@
 package burrows.apps.giphy.example.rx;
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
-import rx.subjects.Subject;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class RxBus {
-    private final Subject<Object, Object> mBus = new SerializedSubject<>(PublishSubject.create());
+  private final PublishSubject<Object> bus = PublishSubject.create();
 
-    public void send(final Object event) {
-        this.mBus.onNext(event);
-    }
+  public void send(final Object event) {
+    bus.onNext(event);
+  }
 
-    public Observable<Object> toObservable() {
-        return this.mBus;
-    }
+  public Observable<Object> toObservable() {
+    return bus;
+  }
 
-    public boolean hasObservers() {
-        return this.mBus.hasObservers();
-    }
+  public boolean hasObservers() {
+    return bus.hasObservers();
+  }
 }

@@ -23,6 +23,7 @@ import burrows.apps.giphy.example.R;
 import burrows.apps.giphy.example.rest.model.Data;
 import burrows.apps.giphy.example.rest.model.GiphyResponse;
 import burrows.apps.giphy.example.rest.service.GiphyService;
+import burrows.apps.giphy.example.rx.RxBus;
 import burrows.apps.giphy.example.rx.event.PreviewImageEvent;
 import burrows.apps.giphy.example.ui.adapter.GiphyAdapter;
 import burrows.apps.giphy.example.ui.adapter.ItemOffsetDecoration;
@@ -35,14 +36,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifDrawableBuilder;
 import pl.droidsonroids.gif.GifImageView;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -52,240 +54,245 @@ import java.util.Arrays;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class MainFragment extends Fragment {
-    private static final String TAG = MainFragment.class.getSimpleName();
-    private static final int GIF_IMAGE_HEIGHT_PIXELS = 128;
-    private static final int GIF_IMAGE_WIDTH_PIXELS = GIF_IMAGE_HEIGHT_PIXELS;
-    private static final int PORTRAIT_COLUMNS = 3;
-    private CompositeSubscription mSubscription;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private ItemOffsetDecoration mItemOffsetDecoration;
-    private GiphyAdapter mAdapter;
-    private Unbinder mUnbinder;
-    private boolean mHasSearched;
-    private Dialog mDialog;
-    private AppCompatTextView mDialogText;
-    private ProgressBar mDialogProgressBar;
-    private GifImageView mDialogGifImageView;
-    @BindView(R.id.recyclerview_root) RecyclerView mRecyclerView;
-    @BindString(R.string.search_gifs) String mSearchGifs;
+  static final String TAG = MainFragment.class.getSimpleName();
+  private static final int GIF_IMAGE_HEIGHT_PIXELS = 128;
+  private static final int GIF_IMAGE_WIDTH_PIXELS = GIF_IMAGE_HEIGHT_PIXELS;
+  private static final int PORTRAIT_COLUMNS = 3;
+  private CompositeDisposable compositeDisposable;
+  private RecyclerView.LayoutManager layoutManager;
+  private ItemOffsetDecoration itemOffsetDecoration;
+  private GiphyAdapter adapter;
+  private Unbinder unbinder;
+  boolean hasSearched;
+  private Dialog dialog;
+  AppCompatTextView dialogText;
+  ProgressBar progressBar;
+  GifImageView gifImageView;
+  @BindView(R.id.recyclerview_root) RecyclerView recyclerView;
+  @BindString(R.string.search_gifs) String searchGifs;
+  @Inject RxBus mRxBus;
 
-    @Override public void onStart() {
-        super.onStart();
+  @Override public void onStart() {
+    super.onStart();
 
-        this.mSubscription.add(App.getBus().toObservable()
+    compositeDisposable.add(mRxBus.toObservable()
                                   .subscribe(event -> {
-                                      if (event instanceof PreviewImageEvent) {
-                                          // Get url from event
-                                          final String url = ((PreviewImageEvent) event).getImageInfo().getUrl();
-
-                                          Glide.with(getContext())
-                                               .load(url)
-                                               .asGif()
-                                               .toBytes()
-                                               .thumbnail(0.1f)
-                                               .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
-                                               .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                               .error(R.mipmap.ic_launcher)
-                                               .into(new SimpleTarget<byte[]>() {
-                                                   @Override public void onResourceReady(final byte[] resource,
-                                                                                         final GlideAnimation<? super byte[]> glideAnimation) {
-                                                       // Load gif
-                                                       final GifDrawable gifDrawable;
-                                                       try {
-                                                           gifDrawable = new GifDrawableBuilder().from(resource)
-                                                                                                 .build();
-                                                           mDialogGifImageView.setImageDrawable(gifDrawable);
-                                                       } catch (final IOException e) {
-                                                           mDialogGifImageView
-                                                               .setImageResource(R.mipmap.ic_launcher);
-                                                       }
-                                                       mDialogGifImageView.setVisibility(View.VISIBLE);
-
-                                                       // Load associated text
-                                                       mDialogText.setText(url);
-                                                       mDialogText.setVisibility(View.VISIBLE);
-
-                                                       // Turn off progressbar
-                                                       mDialogProgressBar.setVisibility(View.INVISIBLE);
-                                                       if (Log.isLoggable(TAG, Log.INFO)) {
-                                                           Log.i(TAG,
-                                                               "finished loading\t" + Arrays.toString(resource));
-                                                       }
-                                                   }
-                                               });
-
-                                          mDialog.show();
-                                      }
+                                    if (event instanceof PreviewImageEvent) {
+                                      showImageDialog((PreviewImageEvent) event);
+                                    }
                                   }));
-    }
+  }
 
-    @Override public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override public void onCreate(final Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        this.setHasOptionsMenu(true);
+    setHasOptionsMenu(true);
 
-        this.mSubscription = new CompositeSubscription();
-        this.mLayoutManager = new GridLayoutManager(this.getActivity(), PORTRAIT_COLUMNS);
-        this.mItemOffsetDecoration = new ItemOffsetDecoration(this.getActivity(), R.dimen.gif_adapter_item_offset);
-        this.mAdapter = new GiphyAdapter();
-    }
+    App.get(getContext()).getAppComponent().inject(this);
 
-    @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
-                                       final Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    compositeDisposable = new CompositeDisposable();
+    layoutManager = new GridLayoutManager(getActivity(), PORTRAIT_COLUMNS);
+    itemOffsetDecoration = new ItemOffsetDecoration(getActivity(), R.dimen.gif_adapter_item_offset);
+    adapter = new GiphyAdapter();
+  }
 
-        final View view = inflater.inflate(R.layout.fragment_main, container, false);
+  @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                                     final Bundle savedInstanceState) {
+    super.onCreateView(inflater, container, savedInstanceState);
 
-        // Bind views
-        this.mUnbinder = ButterKnife.bind(this, view);
+    final View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        // Setup RecyclerView
-        this.mRecyclerView.setLayoutManager(this.mLayoutManager);
-        this.mRecyclerView.addItemDecoration(this.mItemOffsetDecoration);
-        this.mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        this.mRecyclerView.setAdapter(this.mAdapter);
-        this.mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS + PORTRAIT_COLUMNS);
-        this.mRecyclerView.setHasFixedSize(true);
-        this.mRecyclerView.setItemViewCacheSize(GiphyService.RESULTS_COUNT);
-        this.mRecyclerView.setDrawingCacheEnabled(true);
-        this.mRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+    // Bind views
+    unbinder = ButterKnife.bind(this, view);
 
-        // Custom view for Dialog
-        final View dialogView = View.inflate(this.getContext(), R.layout.dialog_preview, null);
+    // Setup RecyclerView
+    recyclerView.setLayoutManager(layoutManager);
+    recyclerView.addItemDecoration(itemOffsetDecoration);
+    recyclerView.setItemAnimator(new DefaultItemAnimator());
+    recyclerView.setAdapter(adapter);
+    recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS + PORTRAIT_COLUMNS);
+    recyclerView.setHasFixedSize(true);
+    recyclerView.setItemViewCacheSize(GiphyService.DEFAULT_RESULTS_COUNT);
+    recyclerView.setDrawingCacheEnabled(true);
+    recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
-        // Customize Dialog
-        this.mDialog = new Dialog(this.getContext());
-        this.mDialog.setContentView(dialogView);
-        this.mDialog.setOnDismissListener(dialog1 -> {
-            Glide.clear(mDialogGifImageView);
-            mDialogGifImageView.setImageDrawable(null);
-        });
+    // Custom view for Dialog
+    final View dialogView = View.inflate(getContext(), R.layout.dialog_preview, null);
 
-        // Dialog views
-        this.mDialogText = ButterKnife.findById(this.mDialog, R.id.gif_dialog_title);
-        this.mDialogProgressBar = ButterKnife.findById(this.mDialog, R.id.gif_dialog_progress);
-        this.mDialogGifImageView = ButterKnife.findById(this.mDialog, R.id.gif_dialog_image);
+    // Customize Dialog
+    dialog = new Dialog(getContext());
+    dialog.setContentView(dialogView);
+    dialog.setOnDismissListener(dialog1 -> {
+      Glide.clear(gifImageView);
+      gifImageView.setImageDrawable(null);
+    });
 
-        // Load initial images
-        this.loadTrendingImages();
+    // Dialog views
+    dialogText = ButterKnife.findById(dialog, R.id.gif_dialog_title);
+    progressBar = ButterKnife.findById(dialog, R.id.gif_dialog_progress);
+    gifImageView = ButterKnife.findById(dialog, R.id.gif_dialog_image);
 
-        return view;
-    }
+    // Load initial images
+    loadTrendingImages();
 
-    @Override public void onDestroyView() {
-        super.onDestroyView();
+    return view;
+  }
 
-        // Unbind views
-        this.mUnbinder.unbind();
-    }
+  @Override public void onDestroyView() {
+    super.onDestroyView();
 
-    @Override public void onStop() {
-        // Unsubscribe from all subscriptions
-        this.mSubscription.unsubscribe();
+    // Unbind views
+    unbinder.unbind();
+  }
 
-        super.onStop();
-    }
+  @Override public void onStop() {
+    // Unsubscribe from all subscriptions
+    compositeDisposable.clear();
 
-    @Override public void onDestroy() {
-        super.onDestroy();
+    super.onStop();
+  }
 
-        App.getRefWatcher(this.getActivity()).watch(this, TAG);
-    }
+  @Override public void onDestroy() {
+    super.onDestroy();
 
-    @Override public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+    App.getRefWatcher(getActivity()).watch(this, TAG);
+  }
 
-        inflater.inflate(R.menu.menu_fragment_main, menu);
+  @Override public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+    super.onCreateOptionsMenu(menu, inflater);
 
-        final MenuItem menuItem = menu.findItem(R.id.menu_search);
+    inflater.inflate(R.menu.menu_fragment_main, menu);
 
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
-        searchView.setQueryHint(this.mSearchGifs);
+    final MenuItem menuItem = menu.findItem(R.id.menu_search);
 
-        // Set contextual action on search icon click
-        MenuItemCompat.setOnActionExpandListener(menuItem, new MenuItemCompat.OnActionExpandListener() {
-            @Override public boolean onMenuItemActionExpand(final MenuItem item) {
-                return true;
-            }
+    final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+    searchView.setQueryHint(searchGifs);
 
-            @Override public boolean onMenuItemActionCollapse(final MenuItem item) {
-                // When search is closed, go back to trending results
-                if (mHasSearched) {
-                    loadTrendingImages();
-                    mHasSearched = false;
-                }
-                return true;
-            }
-        });
+    // Set contextual action on search icon click
+    MenuItemCompat.setOnActionExpandListener(menuItem, new MenuItemCompat.OnActionExpandListener() {
+      @Override public boolean onMenuItemActionExpand(final MenuItem item) {
+        return true;
+      }
 
-        // Query listener for search bar
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override public boolean onQueryTextChange(final String newText) {
-                // Search on type
-                if (!TextUtils.isEmpty(newText)) {
-                    loadSearchImages(newText);
-                    mHasSearched = true;
-                }
-                return false;
-            }
+      @Override public boolean onMenuItemActionCollapse(final MenuItem item) {
+        // When search is closed, go back to trending results
+        if (hasSearched) {
+          loadTrendingImages();
+          hasSearched = false;
+        }
+        return true;
+      }
+    });
 
-            @Override public boolean onQueryTextSubmit(final String query) {
-                return false;
-            }
-        });
-    }
+    // Query listener for search bar
+    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override public boolean onQueryTextChange(final String newText) {
+        // Search on type
+        if (!TextUtils.isEmpty(newText)) {
+          loadSearchImages(newText);
+          hasSearched = true;
+        }
+        return false;
+      }
 
-    /**
-     * Load Giphy trending images.
-     */
-    private void loadTrendingImages() {
-        this.loadImages(GiphyService.getInstance().getTrendingResults());
-    }
+      @Override public boolean onQueryTextSubmit(final String query) {
+        return false;
+      }
+    });
+  }
 
-    /**
-     * Search Giphy based on user input.
-     *
-     * @param searchString User input.
-     */
-    private void loadSearchImages(final String searchString) {
-        this.loadImages(GiphyService.getInstance().getSearchResults(searchString));
-    }
+  /**
+   * Load Giphy trending images.
+   */
+  void loadTrendingImages() {
+    loadImages(GiphyService.getInstance().getTrendingResults());
+  }
 
-    /**
-     * Common code for subscription.
-     *
-     * @param observable Observable to added to the subscription.
-     */
-    private void loadImages(final Observable<GiphyResponse> observable) {
-        this.mSubscription.add(observable
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(response -> {
-                // onNext
+  /**
+   * Search Giphy based on user input.
+   *
+   * @param searchString User input.
+   */
+  void loadSearchImages(final String searchString) {
+    loadImages(GiphyService.getInstance().getSearchResults(searchString));
+  }
 
-                // Clear current data
-                this.mAdapter.clear();
+  /**
+   * Common code for subscription.
+   *
+   * @param observable Observable to added to the subscription.
+   */
+  private void loadImages(final Observable<GiphyResponse> observable) {
+    compositeDisposable.add(observable
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(response -> {
+        // onNext
 
-                // Iterate over data from response and grab the urls
-                for (final Data datum : response.getData()) {
-                    final String url = datum.getImages().getFixedHeight().getUrl();
+        // Clear current data
+        adapter.clear();
 
-                    this.mAdapter.add(new GiphyImageInfo().withUrl(url));
+        // Iterate over data from response and grab the urls
+        for (final Data datum : response.getData()) {
+          final String url = datum.getImages().getFixedHeight().getUrl();
 
-                    if (Log.isLoggable(TAG, Log.INFO)) {
-                        Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
-                    }
-                }
-            }, error -> {
-                // onError
-                if (Log.isLoggable(TAG, Log.ERROR)) {
-                    Log.e(TAG, "onError", error);
-                }
-            }, () -> {
-                // onComplete
-                if (Log.isLoggable(TAG, Log.INFO)) {
-                    Log.i(TAG, "Done loading!");
-                }
-            }));
-    }
+          adapter.add(new GiphyImageInfo().withUrl(url));
+
+          if (Log.isLoggable(TAG, Log.INFO)) {
+            Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
+          }
+        }
+      }, error -> {
+        // onError
+        if (Log.isLoggable(TAG, Log.ERROR)) {
+          Log.e(TAG, "onError", error);
+        }
+      }, () -> {
+        // onComplete
+        if (Log.isLoggable(TAG, Log.INFO)) {
+          Log.i(TAG, "Done loading!");
+        }
+      }));
+  }
+
+  private void showImageDialog(final PreviewImageEvent event) {
+    // Get url from event
+    final String url = event.getImageInfo().getUrl();
+
+    Glide.with(getContext())
+         .load(url)
+         .asGif()
+         .toBytes()
+         .thumbnail(0.1f)
+         .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
+         .diskCacheStrategy(DiskCacheStrategy.ALL)
+         .error(R.mipmap.ic_launcher)
+         .into(new SimpleTarget<byte[]>() {
+           @Override public void onResourceReady(final byte[] resource,
+                                                 final GlideAnimation<? super byte[]> glideAnimation) {
+             // Load gif
+             final GifDrawable gifDrawable;
+             try {
+               gifDrawable = new GifDrawableBuilder().from(resource)
+                                                     .build();
+               gifImageView.setImageDrawable(gifDrawable);
+             } catch (final IOException e) {
+               gifImageView.setImageResource(R.mipmap.ic_launcher);
+             }
+             gifImageView.setVisibility(View.VISIBLE);
+
+             // Load associated text
+             dialogText.setText(url);
+             dialogText.setVisibility(View.VISIBLE);
+
+             // Turn off progressbar
+             progressBar.setVisibility(View.INVISIBLE);
+             if (Log.isLoggable(TAG, Log.INFO)) {
+               Log.i(TAG, "finished loading\t" + Arrays.toString(resource));
+             }
+           }
+         });
+
+    dialog.show();
+  }
 }
