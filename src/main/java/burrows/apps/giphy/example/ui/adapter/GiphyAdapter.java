@@ -189,9 +189,8 @@ public final class GiphyAdapter extends RecyclerView.Adapter<GiphyAdapter.GiphyA
     int size = data.size();
     if (size > 0) {
       for (int i = 0; i < size; i++) {
-        data.remove(0);
+        data.remove(i);
       }
-
       notifyItemRangeRemoved(0, size);
     }
   }
