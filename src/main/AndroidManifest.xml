@@ -23,6 +23,7 @@
         android:fullBackupContent="true"
         android:allowBackup="true"
         android:supportsRtl="true"
+        android:largeHeap="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name="burrows.apps.giphy.example.ui.activity.MainActivity"

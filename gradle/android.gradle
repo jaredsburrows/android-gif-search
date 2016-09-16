@@ -30,7 +30,7 @@ android {
     }
 
     dexOptions {
-        preDexLibraries !Boolean.valueOf(System.getenv("TRAVIS"))
+        preDexLibraries !rootProject.ext.ci
     }
 
     lintOptions {
