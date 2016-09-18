@@ -53,7 +53,6 @@ public final class GiphyImageInfo {
     final GiphyImageInfo that = (GiphyImageInfo) o;
 
     return url != null ? url.equals(that.url) : that.url == null;
-
   }
 
   @Override public int hashCode() {

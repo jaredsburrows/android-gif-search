@@ -15,7 +15,6 @@ import burrows.apps.giphy.example.ui.fragment.MainFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import pl.droidsonroids.gif.GifDrawable;
@@ -33,13 +32,13 @@ import java.util.List;
  */
 public final class GiphyAdapter extends RecyclerView.Adapter<GiphyAdapter.GiphyAdapterViewHolder> {
   static final String TAG = MainFragment.class.getSimpleName();
-  private static final int GIF_IMAGE_HEIGHT_PIXELS = 128;
+  private static final int GIF_IMAGE_HEIGHT_PIXELS = 135;
   private static final int GIF_IMAGE_WIDTH_PIXELS = GIF_IMAGE_HEIGHT_PIXELS;
   private List<GiphyImageInfo> data = new ArrayList<>();
 
   @Override public GiphyAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int position) {
     return new GiphyAdapterViewHolder(LayoutInflater.from(parent.getContext())
-                                                    .inflate(R.layout.recyclerview_list_item, parent, false));
+      .inflate(R.layout.recyclerview_list_item, parent, false));
   }
 
   @Override public void onBindViewHolder(final GiphyAdapterViewHolder holder, final int position) {
@@ -47,33 +46,32 @@ public final class GiphyAdapter extends RecyclerView.Adapter<GiphyAdapter.GiphyA
     final GiphyImageInfo model = getItem(position);
 
     Glide.with(context)
-         .load(model.getUrl())
-         .asGif()
-         .toBytes()
-         .thumbnail(0.1f)
-         .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
-         .diskCacheStrategy(DiskCacheStrategy.ALL)
-         .error(R.mipmap.ic_launcher)
-         .into(new SimpleTarget<byte[]>() {
-           @Override public void onResourceReady(final byte[] resource,
-                                                 final GlideAnimation<? super byte[]> glideAnimation) {
-             // Load gif
-             final GifDrawable gifDrawable;
-             try {
-               gifDrawable = new GifDrawableBuilder().from(resource).build();
-               holder.gifImageView.setImageDrawable(gifDrawable);
-             } catch (final IOException e) {
-               holder.gifImageView.setImageResource(R.mipmap.ic_launcher);
-             }
-             holder.gifImageView.setVisibility(View.VISIBLE);
+      .load(model.getUrl())
+      .asGif()
+      .toBytes()
+      .thumbnail(0.1f)
+      .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
+      .error(R.mipmap.ic_launcher)
+      .into(new SimpleTarget<byte[]>() {
+        @Override public void onResourceReady(final byte[] resource,
+                                              final GlideAnimation<? super byte[]> glideAnimation) {
+          // Load gif
+          final GifDrawable gifDrawable;
+          try {
+            gifDrawable = new GifDrawableBuilder().from(resource).build();
+            holder.gifImageView.setImageDrawable(gifDrawable);
+          } catch (final IOException e) {
+            holder.gifImageView.setImageResource(R.mipmap.ic_launcher);
+          }
+          holder.gifImageView.setVisibility(View.VISIBLE);
 
-             // Turn off progressbar
-             holder.progressBar.setVisibility(View.INVISIBLE);
-             if (Log.isLoggable(TAG, Log.INFO)) {
-               Log.i(TAG, "finished loading\t" + model);
-             }
-           }
-         });
+          // Turn off progressbar
+          holder.progressBar.setVisibility(View.INVISIBLE);
+          if (Log.isLoggable(TAG, Log.INFO)) {
+            Log.i(TAG, "finished loading\t" + model);
+          }
+        }
+      });
 
 
 //        Glide.with(context)

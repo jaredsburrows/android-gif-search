@@ -32,9 +32,9 @@ public final class MainActivity extends AppCompatActivity {
     // Use Fragments
     if (savedInstanceState == null) {
       getSupportFragmentManager()
-          .beginTransaction()
-          .replace(R.id.content_frame, new MainFragment(), MainFragment.class.getSimpleName())
-          .commit();
+        .beginTransaction()
+        .replace(R.id.content_frame, new MainFragment(), MainFragment.class.getSimpleName())
+        .commit();
     }
   }
 }

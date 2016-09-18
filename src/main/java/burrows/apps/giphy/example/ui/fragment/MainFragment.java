@@ -33,7 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import io.reactivex.Observable;
@@ -55,7 +54,7 @@ import java.util.Arrays;
  */
 public final class MainFragment extends Fragment {
   static final String TAG = MainFragment.class.getSimpleName();
-  private static final int GIF_IMAGE_HEIGHT_PIXELS = 128;
+  private static final int GIF_IMAGE_HEIGHT_PIXELS = 135;
   private static final int GIF_IMAGE_WIDTH_PIXELS = GIF_IMAGE_HEIGHT_PIXELS;
   private static final int PORTRAIT_COLUMNS = 3;
   private CompositeDisposable compositeDisposable;
@@ -76,11 +75,11 @@ public final class MainFragment extends Fragment {
     super.onStart();
 
     compositeDisposable.add(mRxBus.toObservable()
-                                  .subscribe(event -> {
-                                    if (event instanceof PreviewImageEvent) {
-                                      showImageDialog((PreviewImageEvent) event);
-                                    }
-                                  }));
+      .subscribe(event -> {
+        if (event instanceof PreviewImageEvent) {
+          showImageDialog((PreviewImageEvent) event);
+        }
+      }));
   }
 
   @Override public void onCreate(final Bundle savedInstanceState) {
@@ -110,8 +109,8 @@ public final class MainFragment extends Fragment {
     recyclerView.addItemDecoration(itemOffsetDecoration);
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(adapter);
-    recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS + PORTRAIT_COLUMNS);
     recyclerView.setHasFixedSize(true);
+    recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS + PORTRAIT_COLUMNS);
     recyclerView.setItemViewCacheSize(GiphyService.DEFAULT_RESULTS_COUNT);
     recyclerView.setDrawingCacheEnabled(true);
     recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
@@ -128,9 +127,9 @@ public final class MainFragment extends Fragment {
     });
 
     // Dialog views
-    dialogText = ButterKnife.findById(dialog, R.id.gif_dialog_title);
-    progressBar = ButterKnife.findById(dialog, R.id.gif_dialog_progress);
-    gifImageView = ButterKnife.findById(dialog, R.id.gif_dialog_image);
+    dialogText = ButterKnife.findById(dialogView, R.id.gif_dialog_title);
+    progressBar = ButterKnife.findById(dialogView, R.id.gif_dialog_progress);
+    gifImageView = ButterKnife.findById(dialogView, R.id.gif_dialog_image);
 
     // Load initial images
     loadTrendingImages();
@@ -259,40 +258,40 @@ public final class MainFragment extends Fragment {
     // Get url from event
     final String url = event.getImageInfo().getUrl();
 
-    Glide.with(getContext())
-         .load(url)
-         .asGif()
-         .toBytes()
-         .thumbnail(0.1f)
-         .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
-         .diskCacheStrategy(DiskCacheStrategy.ALL)
-         .error(R.mipmap.ic_launcher)
-         .into(new SimpleTarget<byte[]>() {
-           @Override public void onResourceReady(final byte[] resource,
-                                                 final GlideAnimation<? super byte[]> glideAnimation) {
-             // Load gif
-             final GifDrawable gifDrawable;
-             try {
-               gifDrawable = new GifDrawableBuilder().from(resource)
-                                                     .build();
-               gifImageView.setImageDrawable(gifDrawable);
-             } catch (final IOException e) {
-               gifImageView.setImageResource(R.mipmap.ic_launcher);
-             }
-             gifImageView.setVisibility(View.VISIBLE);
-
-             // Load associated text
-             dialogText.setText(url);
-             dialogText.setVisibility(View.VISIBLE);
-
-             // Turn off progressbar
-             progressBar.setVisibility(View.INVISIBLE);
-             if (Log.isLoggable(TAG, Log.INFO)) {
-               Log.i(TAG, "finished loading\t" + Arrays.toString(resource));
-             }
-           }
-         });
-
     dialog.show();
+    dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
+
+    Glide.with(getContext())
+      .load(url)
+      .asGif()
+      .toBytes()
+      .thumbnail(0.1f)
+      .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
+      .error(R.mipmap.ic_launcher)
+      .into(new SimpleTarget<byte[]>() {
+        @Override public void onResourceReady(final byte[] resource,
+                                              final GlideAnimation<? super byte[]> glideAnimation) {
+          // Load gif
+          final GifDrawable gifDrawable;
+          try {
+            gifDrawable = new GifDrawableBuilder().from(resource)
+              .build();
+            gifImageView.setImageDrawable(gifDrawable);
+          } catch (final IOException e) {
+            gifImageView.setImageResource(R.mipmap.ic_launcher);
+          }
+          gifImageView.setVisibility(View.VISIBLE);
+
+          // Load associated text
+          dialogText.setText(url);
+          dialogText.setVisibility(View.VISIBLE);
+
+          // Turn off progressbar
+          progressBar.setVisibility(View.INVISIBLE);
+          if (Log.isLoggable(TAG, Log.INFO)) {
+            Log.i(TAG, "finished loading\t" + Arrays.toString(resource));
+          }
+        }
+      });
   }
 }

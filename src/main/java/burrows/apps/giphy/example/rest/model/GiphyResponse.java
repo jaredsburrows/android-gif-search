@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Giphy Api Response.
+ * eg. http://api.giphy.com/v1/gifs/trending?api_key=dc6zaTOxFJmzC
  *
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
