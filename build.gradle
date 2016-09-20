@@ -6,7 +6,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.gradle:build-scan-plugin:1.0"
+    classpath "com.gradle:build-scan-plugin:1.1"
     classpath "com.android.tools.build:gradle:2.2.0"
     classpath "com.novoda:gradle-android-command-plugin:1.6.0"
     classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.1"
@@ -17,7 +17,6 @@ buildscript {
     classpath "com.github.ben-manes:gradle-versions-plugin:0.13.0"
     classpath "me.tatarka:gradle-retrolambda:3.3.0"
     classpath "me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2"
-    classpath "com.neenbedankt.gradle.plugins:android-apt:1.8"
   }
 }
 
@@ -33,7 +32,6 @@ apply plugin: "com.github.triplet.play"
 apply plugin: "com.getkeepsafe.dexcount"
 apply plugin: "com.vanniktech.android.apk.size"
 apply plugin: "me.tatarka.retrolambda"
-apply plugin: "com.neenbedankt.android-apt"
 apply plugin: "net.ltgt.errorprone"
 apply plugin: "com.github.ben-manes.versions"
 apply from: rootProject.file("gradle/buildScan.gradle")
@@ -127,8 +125,8 @@ dependencies {
   debugCompile "com.squareup.leakcanary:leakcanary-android:1.4"
   releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:1.4"
 
-  apt "com.jakewharton:butterknife-compiler:${butterKnifeVersion}"
-  apt "com.google.dagger:dagger-compiler:${daggerVersion}"
+  annotationProcessor "com.jakewharton:butterknife-compiler:${butterKnifeVersion}"
+  annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
 
   provided "org.glassfish:javax.annotation:10.0-b28"
 
@@ -137,8 +135,8 @@ dependencies {
   androidTestCompile "com.squareup.assertj:assertj-android:1.1.1"
   androidTestCompile "com.android.support:support-annotations:${supportLibraryVersion}"
   androidTestCompile "com.android.support.test:runner:0.5"
-  androidTestCompile"com.android.support.test.espresso:espresso-core:${espressoVersion}"
-  androidTestCompile"com.android.support.test.espresso:espresso-intents:${espressoVersion}"
+  androidTestCompile "com.android.support.test.espresso:espresso-core:${espressoVersion}"
+  androidTestCompile "com.android.support.test.espresso:espresso-intents:${espressoVersion}"
   androidTestCompile("com.android.support.test.espresso:espresso-contrib:${espressoVersion}") {
     exclude module: "appcompat"
     exclude module: "support-v4"
