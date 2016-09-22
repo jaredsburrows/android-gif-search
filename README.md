@@ -8,9 +8,7 @@
 
 Riffsy RecyclerView Grid Example using Dagger 2, Retrofit 2, RxJava 2 and Butterknife with Junit + Espresso tests
 
-<a href="http://i.imgur.com/NGUKKmj.png" target="_blank"><img src="http://i.imgur.com/NGUKKmjm.png" /></a>
 <a href="http://i.imgur.com/HCJzijT.png" target="_blank"><img src="http://i.imgur.com/HCJzijTm.png" /></a>
-<a href="http://i.imgur.com/3xMzhKH.png" target="_blank"><img src="http://i.imgur.com/3xMzhKHm.png" /></a>
 
 ## Module(s)
  
