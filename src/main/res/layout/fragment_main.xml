@@ -8,4 +8,4 @@
     android:scrollbars="none"
     android:padding="@dimen/gif_adapter_item_offset"
     tools:listitem="@layout/recyclerview_list_item"
-    tools:context="burrows.apps.giphy.example.ui.activity.MainActivity" />
+    tools:context="burrows.apps.gif.example.ui.activity.MainActivity" />

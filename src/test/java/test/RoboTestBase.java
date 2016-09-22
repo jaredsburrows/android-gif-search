@@ -3,7 +3,7 @@ package test;
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;
-import burrows.apps.giphy.example.BuildConfig;
+import burrows.apps.gif.example.BuildConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;

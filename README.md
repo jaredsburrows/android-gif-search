@@ -1,12 +1,12 @@
-# Giphy Example
+# Android RecyclerView Gif Example
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![TravisCI OSX Build](https://img.shields.io/travis/jaredsburrows/android-glide-giphy-example/master.svg?label=OSX%20Build)](https://travis-ci.org/jaredsburrows/android-glide-giphy-example)
-[![CircleCI Linux Build](https://img.shields.io/circleci/project/jaredsburrows/android-glide-giphy-example/master.svg?label=Linux%20Build)](https://circleci.com/gh/jaredsburrows/android-glide-giphy-example)
-[![AppVeyor Windows Build](https://img.shields.io/appveyor/ci/jaredsburrows/android-glide-giphy-example/master.svg?label=Windows%20Build)](https://ci.appveyor.com/project/jaredsburrows/android-glide-giphy-example/branch/master)
-[![Coveralls Code Coverage](https://img.shields.io/coveralls/jaredsburrows/android-glide-giphy-example/master.svg?label=Code%20Coverage)](https://coveralls.io/github/jaredsburrows/android-glide-giphy-example?branch=master)
+[![TravisCI OSX Build](https://img.shields.io/travis/jaredsburrows/android-gif-example/master.svg?label=OSX%20Build)](https://travis-ci.org/jaredsburrows/android-gif-example)
+[![CircleCI Linux Build](https://img.shields.io/circleci/project/jaredsburrows/android-gif-example/master.svg?label=Linux%20Build)](https://circleci.com/gh/jaredsburrows/android-gif-example)
+[![AppVeyor Windows Build](https://img.shields.io/appveyor/ci/jaredsburrows/android-gif-example/master.svg?label=Windows%20Build)](https://ci.appveyor.com/project/jaredsburrows/android-gif-example/branch/master)
+[![Coveralls Code Coverage](https://img.shields.io/coveralls/jaredsburrows/android-gif-example/master.svg?label=Code%20Coverage)](https://coveralls.io/github/jaredsburrows/android-gif-example?branch=master)
 
-Giphy RecyclerView Grid Example using Dagger 2, Retrofit 2, RxJava 2 and Butterknife with Junit + Espresso tests
+Riffsy RecyclerView Grid Example using Dagger 2, Retrofit 2, RxJava 2 and Butterknife with Junit + Espresso tests
 
 <a href="http://i.imgur.com/NGUKKmj.png" target="_blank"><img src="http://i.imgur.com/NGUKKmjm.png" /></a>
 <a href="http://i.imgur.com/HCJzijT.png" target="_blank"><img src="http://i.imgur.com/HCJzijTm.png" /></a>
@@ -14,7 +14,7 @@ Giphy RecyclerView Grid Example using Dagger 2, Retrofit 2, RxJava 2 and Butterk
 
 ## Module(s)
  
- - **burrows-apps-giphy-example** - Root module
+ - **android-gif-example** - Root module
    - **src**
      - **androidTest** - UI Tests
      - **main** - Source Code

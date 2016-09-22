@@ -26,6 +26,7 @@ repositories {
   maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
+apply from: rootProject.file("gradle/buildScan.gradle")
 apply plugin: "com.android.application"
 apply plugin: "android-command"
 apply plugin: "com.github.triplet.play"
@@ -34,7 +35,6 @@ apply plugin: "com.vanniktech.android.apk.size"
 apply plugin: "me.tatarka.retrolambda"
 apply plugin: "net.ltgt.errorprone"
 apply plugin: "com.github.ben-manes.versions"
-apply from: rootProject.file("gradle/buildScan.gradle")
 apply from: rootProject.file("gradle/compile.gradle")
 apply from: rootProject.file("gradle/android.gradle")
 apply from: rootProject.file("gradle/codeQuality.gradle")
@@ -42,7 +42,7 @@ apply from: rootProject.file("gradle/publishing.gradle")
 
 android {
   defaultConfig {
-    applicationId "burrows.apps.giphy.example"
+    applicationId "burrows.apps.gif.example"
     versionCode 1
     versionName "1.0"
 
