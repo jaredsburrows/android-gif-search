@@ -24,7 +24,6 @@ public final class ImageInfo {
    * Set image URL.
    *
    * @param url Image URL.
-   * @return Updated instance of ImageInfo.
    */
   public void setUrl(final String url) {
     this.url = url;

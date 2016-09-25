@@ -22,7 +22,7 @@ public final class RiffsyResponse {
   }
 
   /**
-   * @param results
+   * @param results The results
    */
   public RiffsyResponse(final List<Result> results) {
     this.results = results;
