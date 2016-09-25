@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="burrows.apps.gif.example.ui.activity.MainActivity">
+    tools:context=".ui.activity.MainActivity">
     
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="fill_parent"
