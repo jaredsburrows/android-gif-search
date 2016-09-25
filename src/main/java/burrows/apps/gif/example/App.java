@@ -24,8 +24,6 @@ public class App extends Application {
   @Inject RefWatcher refWatcher;
 
   @Override public void onCreate() {
-    super.onCreate();
-
     // Let's start paying critical attention to issues via Logcat
     if (BuildConfig.DEBUG) {
       StrictMode.setThreadPolicy(new ThreadPolicy.Builder()
@@ -37,11 +35,12 @@ public class App extends Application {
         .penaltyLog()
         .build());
     }
+    super.onCreate();
 
     appComponent = DaggerAppComponent.builder()
-                                     .appModule(new AppModule(this))
-                                     .leakCanaryModule(new LeakCanaryModule(this))
-                                     .build();
+      .appModule(new AppModule(this))
+      .leakCanaryModule(new LeakCanaryModule(this))
+      .build();
     appComponent.inject(this);
 
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);

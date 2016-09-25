@@ -129,7 +129,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
   /**
    * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
    */
-  class GifAdapterViewHolder extends RecyclerView.ViewHolder {
+  final class GifAdapterViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.gif_progress) ProgressBar progressBar;
     @BindView(R.id.gif_image) GifImageView gifImageView;
 

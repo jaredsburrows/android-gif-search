@@ -7,18 +7,18 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="burrows.apps.gif.example.ui.activity.MainActivity">
-
+    
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-
+        
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             tools:ignore="PrivateResource">
-
+            
             <android.support.v7.widget.Toolbar
                 android:id="@+id/tool_bar"
                 android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_scrollFlags="scroll|enterAlways|snap" />
         </android.support.design.widget.AppBarLayout>
-
+        
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"

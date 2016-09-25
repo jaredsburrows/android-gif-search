@@ -32,21 +32,21 @@ public abstract class AndroidTestBase<T extends Activity> extends TestBase {
   @Rule public ActivityTestRule<T> mActivityRule;
 
   public AndroidTestBase(final Class<T> activityClass) {
-    this.mActivityRule = this.getActivityRule(activityClass);
+    mActivityRule = getActivityRule(activityClass);
   }
 
   @Before @Override public void setUp() throws Exception {
     super.setUp();
 
-    this.context = getInstrumentation().getTargetContext();
-    this.activity = this.mActivityRule.getActivity();
-    this.resources = this.context.getResources();
+    context = getInstrumentation().getTargetContext();
+    activity = mActivityRule.getActivity();
+    resources = context.getResources();
 
     // Allows us to mock classes
-    System.setProperty("dexmaker.dexcache", this.context.getCacheDir().getPath());
+    System.setProperty("dexmaker.dexcache", context.getCacheDir().getPath());
 
-    this.keepScreenOn();
-    this.grantPhonePermissions();
+    keepScreenOn();
+    grantPhonePermissions();
 
     Intents.init();
   }
@@ -69,7 +69,7 @@ public abstract class AndroidTestBase<T extends Activity> extends TestBase {
   }
 
   private void keepScreenOn() {
-    final T activity = this.mActivityRule.getActivity();
+    final T activity = mActivityRule.getActivity();
     final Runnable wakeUpDevice = () -> activity.getWindow().addFlags(FLAG_TURN_SCREEN_ON
       | FLAG_SHOW_WHEN_LOCKED
       | FLAG_KEEP_SCREEN_ON);
@@ -80,7 +80,7 @@ public abstract class AndroidTestBase<T extends Activity> extends TestBase {
     // In M+, trying to call a number will trigger a runtime dialog. Make sure
     // the permission is granted before running this test.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      for (final String permission : this.permissions()) {
+      for (final String permission : permissions()) {
         getInstrumentation().getUiAutomation().executeShellCommand(
           "pm grant " + getTargetContext().getPackageName() + " " + permission);
       }

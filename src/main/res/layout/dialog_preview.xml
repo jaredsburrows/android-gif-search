@@ -6,13 +6,13 @@
     android:layout_gravity="center"
     app:cardPreventCornerOverlap="false"
     app:cardCornerRadius="4dp">
-
+    
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="300dp"
         android:layout_gravity="center"
         android:orientation="vertical">
-
+        
         <ProgressBar
             android:id="@+id/gif_dialog_progress"
             android:visibility="visible"
@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:padding="24dp" />
-
+        
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/gif_dialog_image"
             android:visibility="invisible"
@@ -29,7 +29,7 @@
             android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true" />
-
+        
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/gif_dialog_title"
             android:visibility="invisible"

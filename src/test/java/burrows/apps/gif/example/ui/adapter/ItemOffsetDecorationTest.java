@@ -17,9 +17,9 @@ import static org.mockito.Mockito.when;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class ItemOffsetDecorationTest extends RoboTestBase {
-  private final GridLayoutManager GRID_LAYOUT_MANAGER = new GridLayoutManager(CONTEXT, 3);
-  private final Rect RECT = new Rect();
-  private final RecyclerView.State STATE = new RecyclerView.State();
+  private final GridLayoutManager gridLayoutManager = new GridLayoutManager(CONTEXT, 3);
+  private final Rect rect = new Rect();
+  private final RecyclerView.State state = new RecyclerView.State();
   private RecyclerView recyclerView;
 
   @Before @Override public void setUp() throws Exception {
@@ -30,7 +30,7 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
 
     // Setup RecyclerView
     recyclerView.setAdapter(adapter);
-    recyclerView.setLayoutManager(GRID_LAYOUT_MANAGER);
+    recyclerView.setLayoutManager(gridLayoutManager);
 
     // Add fake data
     adapter.add(new ImageInfo());
@@ -48,7 +48,7 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
     final ItemOffsetDecoration sut = new ItemOffsetDecoration(1);
     recyclerView.addItemDecoration(sut);
 
-    sut.getItemOffsets(RECT, recyclerView, recyclerView, STATE);
+    sut.getItemOffsets(rect, recyclerView, recyclerView, state);
   }
 
   @Test public void testGetItemOffsetsContextResId() {
@@ -56,6 +56,6 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
     final ItemOffsetDecoration sut = new ItemOffsetDecoration(CONTEXT, R.dimen.gif_adapter_item_offset);
     recyclerView.addItemDecoration(sut);
 
-    sut.getItemOffsets(RECT, recyclerView, recyclerView, STATE);
+    sut.getItemOffsets(rect, recyclerView, recyclerView, state);
   }
 }
