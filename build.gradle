@@ -45,6 +45,8 @@ android {
     applicationId "burrows.apps.gif.example"
     versionCode 1
     versionName "1.0"
+    testApplicationId "burrows.apps.gif.example.test"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     vectorDrawables {
       useSupportLibrary true
@@ -145,6 +147,9 @@ dependencies {
     exclude group: "javax.inject"
   }
   androidTestCompile "com.squareup.leakcanary:leakcanary-android-no-op:1.4"
+  androidTestCompile "com.google.dagger:dagger:${daggerVersion}"
+
+  androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
 
   testCompile "junit:junit:4.12"
   testCompile "org.mockito:mockito-core:1.9.5"

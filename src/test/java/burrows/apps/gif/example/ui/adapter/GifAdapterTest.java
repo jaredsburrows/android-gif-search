@@ -24,10 +24,10 @@ public final class GifAdapterTest extends RoboTestBase {
   @Before @Override public void setUp() throws Exception {
     super.setUp();
 
-    sut = new GifAdapter();
+    sut = new GifAdapter(application);
     sut.add(new ImageInfo().withUrl(STRING_UNIQUE));
     sut.add(new ImageInfo().withUrl(STRING_UNIQUE2));
-    viewHolder = sut.onCreateViewHolder(new LinearLayout(CONTEXT), 0);
+    viewHolder = sut.onCreateViewHolder(new LinearLayout(context), 0);
   }
 
   @After @Override public void tearDown() throws Exception {
@@ -37,7 +37,7 @@ public final class GifAdapterTest extends RoboTestBase {
   }
 
   @Test public void testOnCreateViewHolder() throws Exception {
-    final ViewGroup parent = new ViewGroup(CONTEXT) {
+    final ViewGroup parent = new ViewGroup(context) {
       @Override protected void onLayout(boolean b, int i, int i1, int i2, int i3) {
       }
     };

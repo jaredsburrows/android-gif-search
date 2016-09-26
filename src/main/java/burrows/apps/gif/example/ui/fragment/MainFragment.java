@@ -67,14 +67,10 @@ public final class MainFragment extends Fragment {
   AppCompatTextView dialogText;
   ProgressBar progressBar;
   GifImageView gifImageView;
-  @BindView(R.id.recyclerview_root) RecyclerView recyclerView;
+  @BindView(R.id.recycler_view) RecyclerView recyclerView;
   @BindString(R.string.search_gifs) String searchGifs;
   @Inject RxBus rxBus;
   @Inject RiffsyService riffsyService;
-
-  public MainFragment() {
-    App.getRiffsyComponent().inject(this);
-  }
 
   @Override public void onStart() {
     super.onStart();
@@ -90,12 +86,14 @@ public final class MainFragment extends Fragment {
   @Override public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    ((App) getActivity().getApplication()).getRiffsyComponent().inject(this);
+
     setHasOptionsMenu(true);
 
     compositeDisposable = new CompositeDisposable();
     layoutManager = new GridLayoutManager(getActivity(), PORTRAIT_COLUMNS);
     itemOffsetDecoration = new ItemOffsetDecoration(getActivity(), R.dimen.gif_adapter_item_offset);
-    adapter = new GifAdapter();
+    adapter = new GifAdapter(getActivity().getApplication());
   }
 
   @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container,

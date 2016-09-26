@@ -25,8 +25,8 @@ import static org.robolectric.shadows.ShadowLooper.runUiThreadTasksIncludingDela
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
 public abstract class RoboTestBase extends TestBase {
   // Android Related
-  protected static final Context CONTEXT = RuntimeEnvironment.application;
-  protected static final Application APPLICATION = RuntimeEnvironment.application;
+  protected static final Context context = RuntimeEnvironment.application;
+  protected static final Application application = RuntimeEnvironment.application;
 
   @Before @Override public void setUp() throws Exception {
     super.setUp();

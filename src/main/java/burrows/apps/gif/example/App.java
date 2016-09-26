@@ -17,9 +17,9 @@ import javax.inject.Inject;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public class App extends Application {
-  private static App app;
-  private static AppComponent appComponent;
-  private static RiffsyComponent riffsyComponent;
+  private App app;
+  private AppComponent appComponent;
+  private RiffsyComponent riffsyComponent;
   @Inject RxBus bus;
   @Inject RefWatcher refWatcher;
 
@@ -59,20 +59,20 @@ public class App extends Application {
   }
 
   // App Component
-  public static void initAppComponent() {
+  public void initAppComponent() {
     appComponent = AppComponent.Builder.build(app);
   }
 
-  public static AppComponent getAppComponent() {
+  public AppComponent getAppComponent() {
     return appComponent;
   }
 
   // Riffsy Component
-  public static void initRiffsyComponent() {
+  public void initRiffsyComponent() {
     riffsyComponent = RiffsyComponent.Builder.build(appComponent);
   }
 
-  public static RiffsyComponent getRiffsyComponent() {
+  public RiffsyComponent getRiffsyComponent() {
     return riffsyComponent;
   }
 }

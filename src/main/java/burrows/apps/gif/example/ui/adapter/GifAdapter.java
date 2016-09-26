@@ -1,5 +1,6 @@
 package burrows.apps.gif.example.ui.adapter;
 
+import android.app.Application;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,8 +40,8 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
   private List<ImageInfo> data = new ArrayList<>();
   @Inject RxBus rxBus;
 
-  public GifAdapter() {
-    App.getRiffsyComponent().inject(this);
+  public GifAdapter(final Application application) {
+    ((App) application).getRiffsyComponent().inject(this);
   }
 
   @Override public GifAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int position) {
