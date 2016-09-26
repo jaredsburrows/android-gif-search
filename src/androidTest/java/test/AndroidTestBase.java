@@ -29,17 +29,17 @@ public abstract class AndroidTestBase<T extends Activity> extends TestBase {
   protected Context context;
   protected Activity activity;
   protected Resources resources;
-  @Rule public ActivityTestRule<T> mActivityRule;
+  @Rule public ActivityTestRule<T> activityRule;
 
   public AndroidTestBase(final Class<T> activityClass) {
-    mActivityRule = getActivityRule(activityClass);
+    activityRule = getActivityRule(activityClass);
   }
 
   @Before @Override public void setUp() throws Exception {
     super.setUp();
 
     context = getInstrumentation().getTargetContext();
-    activity = mActivityRule.getActivity();
+    activity = activityRule.getActivity();
     resources = context.getResources();
 
     // Allows us to mock classes
@@ -69,7 +69,7 @@ public abstract class AndroidTestBase<T extends Activity> extends TestBase {
   }
 
   private void keepScreenOn() {
-    final T activity = mActivityRule.getActivity();
+    final T activity = activityRule.getActivity();
     final Runnable wakeUpDevice = () -> activity.getWindow().addFlags(FLAG_TURN_SCREEN_ON
       | FLAG_SHOW_WHEN_LOCKED
       | FLAG_KEEP_SCREEN_ON);

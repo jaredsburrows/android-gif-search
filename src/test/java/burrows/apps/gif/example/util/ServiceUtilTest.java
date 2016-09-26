@@ -1,6 +1,6 @@
 package burrows.apps.gif.example.util;
 
-import burrows.apps.gif.example.rest.service.RiffsyService;
+import burrows.apps.gif.example.rest.service.RiffsyService.RiffsyServiceApi;
 import org.junit.Test;
 import test.ServiceTestBase;
 
@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public final class ServiceUtilTest extends ServiceTestBase {
   @Test public void testCreateService() {
-    assertThat(ServiceUtil.createService(RiffsyService.Api.class, mockEndPoint))
-      .isInstanceOf(RiffsyService.Api.class);
+    assertThat(ServiceUtil.createService(RiffsyServiceApi.class, mockEndPoint))
+      .isInstanceOf(RiffsyServiceApi.class);
   }
 }

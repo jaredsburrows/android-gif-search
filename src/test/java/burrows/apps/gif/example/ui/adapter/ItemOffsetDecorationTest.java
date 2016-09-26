@@ -4,13 +4,14 @@ import android.graphics.Rect;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.LayoutParams;
 import burrows.apps.gif.example.R;
 import burrows.apps.gif.example.ui.adapter.model.ImageInfo;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import test.RoboTestBase;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -38,7 +39,7 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
     // Increase the childcount
     recyclerView.addView(new AppCompatTextView(CONTEXT));
 
-    final RecyclerView.LayoutParams layoutParams = Mockito.mock(RecyclerView.LayoutParams.class);
+    final RecyclerView.LayoutParams layoutParams = mock(RecyclerView.LayoutParams.class);
     when(layoutParams.getViewLayoutPosition()).thenReturn(0);
     recyclerView.setLayoutParams(layoutParams);
   }

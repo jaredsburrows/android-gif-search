@@ -7,9 +7,7 @@ import android.os.StrictMode.ThreadPolicy;
 import android.os.StrictMode.VmPolicy;
 import android.support.v7.app.AppCompatDelegate;
 import burrows.apps.gif.example.di.component.AppComponent;
-import burrows.apps.gif.example.di.component.DaggerAppComponent;
-import burrows.apps.gif.example.di.module.AppModule;
-import burrows.apps.gif.example.di.module.LeakCanaryModule;
+import burrows.apps.gif.example.di.component.RiffsyComponent;
 import burrows.apps.gif.example.rx.RxBus;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -19,7 +17,9 @@ import javax.inject.Inject;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public class App extends Application {
-  private AppComponent appComponent;
+  private static App app;
+  private static AppComponent appComponent;
+  private static RiffsyComponent riffsyComponent;
   @Inject RxBus bus;
   @Inject RefWatcher refWatcher;
 
@@ -37,17 +37,15 @@ public class App extends Application {
     }
     super.onCreate();
 
-    appComponent = DaggerAppComponent.builder()
-      .appModule(new AppModule(this))
-      .leakCanaryModule(new LeakCanaryModule(this))
-      .build();
+    app = this;
+
+    // Setup components
+    initAppComponent();
     appComponent.inject(this);
+    initRiffsyComponent();
 
+    // Make sure we use vector drawables
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-  }
-
-  public static App get(final Context context) {
-    return (App) context.getApplicationContext();
   }
 
   /**
@@ -60,11 +58,21 @@ public class App extends Application {
     return ((App) context.getApplicationContext()).refWatcher;
   }
 
-  public AppComponent getAppComponent() {
+  // App Component
+  public static void initAppComponent() {
+    appComponent = AppComponent.Builder.build(app);
+  }
+
+  public static AppComponent getAppComponent() {
     return appComponent;
   }
 
-  public RxBus getBus() {
-    return bus;
+  // Riffsy Component
+  public static void initRiffsyComponent() {
+    riffsyComponent = RiffsyComponent.Builder.build(appComponent);
+  }
+
+  public static RiffsyComponent getRiffsyComponent() {
+    return riffsyComponent;
   }
 }

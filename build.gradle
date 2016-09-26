@@ -93,9 +93,7 @@ configurations {
   }
 
   androidTestCompile {
-    androidTestCompile {
-      exclude group: "com.android.support"
-    }
+    exclude group: "com.android.support"
   }
 }
 

@@ -42,7 +42,7 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew clean assembleDebugAndroidTest build jacocoDebugReport coveralls -Pci -Dscan --stacktrace
+  - ./gradlew clean assembleDebugAndroidTest testDebug jacocoDebugReport coveralls -Pci -Dscan --stacktrace
 
 after_script:
   - ./gradlew connectedDebugAndroidTest

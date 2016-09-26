@@ -19,15 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import burrows.apps.gif.example.App;
+import burrows.apps.gif.example.R;
 import burrows.apps.gif.example.rest.model.Result;
 import burrows.apps.gif.example.rest.model.RiffsyResponse;
-import burrows.apps.gif.example.rx.event.PreviewImageEvent;
-import burrows.apps.gif.example.ui.adapter.GifAdapter;
-import burrows.apps.gif.example.ui.adapter.model.ImageInfo;
-import burrows.apps.gif.example.R;
 import burrows.apps.gif.example.rest.service.RiffsyService;
 import burrows.apps.gif.example.rx.RxBus;
+import burrows.apps.gif.example.rx.event.PreviewImageEvent;
+import burrows.apps.gif.example.ui.adapter.GifAdapter;
 import burrows.apps.gif.example.ui.adapter.ItemOffsetDecoration;
+import burrows.apps.gif.example.ui.adapter.model.ImageInfo;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,6 +70,11 @@ public final class MainFragment extends Fragment {
   @BindView(R.id.recyclerview_root) RecyclerView recyclerView;
   @BindString(R.string.search_gifs) String searchGifs;
   @Inject RxBus rxBus;
+  @Inject RiffsyService riffsyService;
+
+  public MainFragment() {
+    App.getRiffsyComponent().inject(this);
+  }
 
   @Override public void onStart() {
     super.onStart();
@@ -86,8 +91,6 @@ public final class MainFragment extends Fragment {
     super.onCreate(savedInstanceState);
 
     setHasOptionsMenu(true);
-
-    App.get(getContext()).getAppComponent().inject(this);
 
     compositeDisposable = new CompositeDisposable();
     layoutManager = new GridLayoutManager(getActivity(), PORTRAIT_COLUMNS);
@@ -204,7 +207,7 @@ public final class MainFragment extends Fragment {
    * Load gif trending images.
    */
   void loadTrendingImages() {
-    loadImages(RiffsyService.getInstance().getTrendingResults());
+    loadImages(riffsyService.getTrendingResults());
   }
 
   /**
@@ -213,7 +216,7 @@ public final class MainFragment extends Fragment {
    * @param searchString User input.
    */
   void loadSearchImages(final String searchString) {
-    loadImages(RiffsyService.getInstance().getSearchResults(searchString));
+    loadImages(riffsyService.getSearchResults(searchString));
   }
 
   /**

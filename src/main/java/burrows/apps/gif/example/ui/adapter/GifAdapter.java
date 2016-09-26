@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import burrows.apps.gif.example.rx.RxBus;
 import burrows.apps.gif.example.ui.adapter.model.ImageInfo;
 import burrows.apps.gif.example.App;
 import burrows.apps.gif.example.R;
@@ -21,6 +22,7 @@ import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifDrawableBuilder;
 import pl.droidsonroids.gif.GifImageView;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,11 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
   private static final int GIF_IMAGE_HEIGHT_PIXELS = 135;
   private static final int GIF_IMAGE_WIDTH_PIXELS = GIF_IMAGE_HEIGHT_PIXELS;
   private List<ImageInfo> data = new ArrayList<>();
+  @Inject RxBus rxBus;
+
+  public GifAdapter() {
+    App.getRiffsyComponent().inject(this);
+  }
 
   @Override public GifAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int position) {
     return new GifAdapterViewHolder(LayoutInflater.from(parent.getContext())
@@ -116,7 +123,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
 //                .error(R.mipmap.ic_launcher)
 //                .into(holder.gifImageView);
 
-    holder.itemView.setOnClickListener(view -> App.get(context).getBus().send(new PreviewImageEvent(url)));
+    holder.itemView.setOnClickListener(view -> rxBus.send(new PreviewImageEvent(url)));
   }
 
   @Override public void onViewRecycled(final GifAdapterViewHolder holder) {

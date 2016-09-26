@@ -42,21 +42,6 @@ public final class ServiceUtil {
   }
 
   /**
-   * Creates custom Retrofit instance with RxJava support, Gson support and OkHttp supprt.
-   *
-   * @param endPoint Endpoint of service.
-   * @return Custom instance of Retrofit.
-   */
-  private static Retrofit getRetrofit(final String endPoint) {
-    return new Retrofit.Builder()
-      .baseUrl(endPoint)
-      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-      .addConverterFactory(GsonConverterFactory.create(getGson()))
-      .client(getOkHttpClient())
-      .build();
-  }
-
-  /**
    * Creates custom Gson instance with custom date format.
    *
    * @return Custom instance of Gson.
@@ -79,6 +64,21 @@ public final class ServiceUtil {
       .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+      .build();
+  }
+
+  /**
+   * Creates custom Retrofit instance with RxJava support, Gson support and OkHttp supprt.
+   *
+   * @param endPoint Endpoint of service.
+   * @return Custom instance of Retrofit.
+   */
+  private static Retrofit getRetrofit(final String endPoint) {
+    return new Retrofit.Builder()
+      .baseUrl(endPoint)
+      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+      .addConverterFactory(GsonConverterFactory.create(getGson()))
+      .client(getOkHttpClient())
       .build();
   }
 }
