@@ -24,7 +24,7 @@ Riffsy RecyclerView Grid Example using Dagger 2, Retrofit 2, RxJava 2 and Butter
 This project builds with [Gradle](www.gradle.org) and the Android Build [tools](http://tools.android.com/tech-docs/new-build-system).
 
 
-**Build the APK**
+**Build the APK:**
 
     $ gradlew assembleDebug
 
@@ -74,4 +74,4 @@ The [Lint](http://developer.android.com/tools/help/lint.html) plugin generates r
 The [Jacoco](http://www.eclemma.org/jacoco/) plugin generates coverage reports based off the unit tests.
 
 
-    $ gradlew testDebug jacocoDebugReport
+    $ gradlew jacocoDebugReport
