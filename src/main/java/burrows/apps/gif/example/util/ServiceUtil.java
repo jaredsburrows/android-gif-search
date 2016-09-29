@@ -37,7 +37,7 @@ public final class ServiceUtil {
    * @param <T>      Service type.
    * @return Instance of new Service.
    */
-  public static <T> T createService(final Class<T> clazz, final String endPoint) {
+  public static <T> T createService(Class<T> clazz, String endPoint) {
     return getRetrofit(endPoint).create(clazz);
   }
 
@@ -73,7 +73,7 @@ public final class ServiceUtil {
    * @param endPoint Endpoint of service.
    * @return Custom instance of Retrofit.
    */
-  private static Retrofit getRetrofit(final String endPoint) {
+  private static Retrofit getRetrofit(String endPoint) {
     return new Retrofit.Builder()
       .baseUrl(endPoint)
       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

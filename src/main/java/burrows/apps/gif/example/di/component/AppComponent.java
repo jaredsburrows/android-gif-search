@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 @Component(modules = {AppModule.class, RxModule.class, LeakCanaryModule.class})
 public interface AppComponent {
   // Injections
-  void inject(final App app);
+  void inject(App app);
 
   // Expose to subgraphs
   Application application();
@@ -32,7 +32,7 @@ public interface AppComponent {
     private Builder() {
     }
 
-    public static AppComponent build(final Application application) {
+    public static AppComponent build(Application application) {
       return DaggerAppComponent.builder()
         .appModule(new AppModule(application))
         .leakCanaryModule(new LeakCanaryModule(application))

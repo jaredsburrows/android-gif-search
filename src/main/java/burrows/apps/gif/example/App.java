@@ -54,7 +54,7 @@ public class App extends Application {
    * @param context Context.
    * @return Instance of RefWatcher.
    */
-  public static RefWatcher getRefWatcher(final Context context) {
+  public static RefWatcher getRefWatcher(Context context) {
     return ((App) context.getApplicationContext()).refWatcher;
   }
 

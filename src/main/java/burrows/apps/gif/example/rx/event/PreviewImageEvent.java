@@ -8,7 +8,7 @@ package burrows.apps.gif.example.rx.event;
 public final class PreviewImageEvent {
   private final String url;
 
-  public PreviewImageEvent(final String url) {
+  public PreviewImageEvent(String url) {
     this.url = url;
   }
 

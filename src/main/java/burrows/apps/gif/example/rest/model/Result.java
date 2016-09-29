@@ -19,7 +19,7 @@ public final class Result {
   public Result() {
   }
 
-  public Result(final List<Media> media, final String title) {
+  public Result(List<Media> media, String title) {
     this.media = media;
     this.title = title;
   }
@@ -34,11 +34,11 @@ public final class Result {
   /**
    * @param media The media
    */
-  public void setMedia(final List<Media> media) {
+  public void setMedia(List<Media> media) {
     this.media = media;
   }
 
-  public Result withMedia(final List<Media> media) {
+  public Result withMedia(List<Media> media) {
     this.media = media;
     return this;
   }
@@ -53,11 +53,11 @@ public final class Result {
   /**
    * @param title The title
    */
-  public void setTitle(final String title) {
+  public void setTitle(String title) {
     this.title = title;
   }
 
-  public Result withTitle(final String title) {
+  public Result withTitle(String title) {
     this.title = title;
     return this;
   }

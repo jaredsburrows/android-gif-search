@@ -15,16 +15,15 @@ import android.view.View;
 public final class ItemOffsetDecoration extends RecyclerView.ItemDecoration {
   private int offSet;
 
-  public ItemOffsetDecoration(final int offSet) {
+  public ItemOffsetDecoration(int offSet) {
     this.offSet = offSet;
   }
 
-  public ItemOffsetDecoration(@NonNull final Context context, @DimenRes final int resourceId) {
+  public ItemOffsetDecoration(@NonNull Context context, @DimenRes int resourceId) {
     this(context.getResources().getDimensionPixelSize(resourceId));
   }
 
-  @Override public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent,
-                                       final RecyclerView.State state) {
+  @Override public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
     super.getItemOffsets(outRect, view, parent, state);
 
     outRect.set(offSet, offSet, offSet, offSet);

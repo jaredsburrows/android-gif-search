@@ -9,7 +9,7 @@ import io.reactivex.subjects.PublishSubject;
 public final class RxBus {
   private final PublishSubject<Object> bus = PublishSubject.create();
 
-  public void send(final Object event) {
+  public void send(Object event) {
     bus.onNext(event);
   }
 

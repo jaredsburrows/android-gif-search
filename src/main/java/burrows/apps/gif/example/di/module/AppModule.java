@@ -15,7 +15,7 @@ import javax.inject.Singleton;
 public class AppModule {
   private Application application;
 
-  public AppModule(final Application application) {
+  public AppModule(Application application) {
     this.application = application;
   }
 

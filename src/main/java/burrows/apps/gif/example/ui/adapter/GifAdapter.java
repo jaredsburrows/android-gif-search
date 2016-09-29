@@ -40,16 +40,16 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
   private List<ImageInfo> data = new ArrayList<>();
   @Inject RxBus rxBus;
 
-  public GifAdapter(final Application application) {
+  public GifAdapter(Application application) {
     ((App) application).getRiffsyComponent().inject(this);
   }
 
-  @Override public GifAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int position) {
+  @Override public GifAdapterViewHolder onCreateViewHolder(ViewGroup parent, int position) {
     return new GifAdapterViewHolder(LayoutInflater.from(parent.getContext())
       .inflate(R.layout.recyclerview_list_item, parent, false));
   }
 
-  @Override public void onBindViewHolder(final GifAdapterViewHolder holder, final int position) {
+  @Override public void onBindViewHolder(GifAdapterViewHolder holder, int position) {
     final Context context = holder.gifImageView.getContext();
     final ImageInfo model = getItem(position);
     final String url = model.getUrl();
@@ -62,14 +62,13 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
       .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
       .error(R.mipmap.ic_launcher)
       .into(new SimpleTarget<byte[]>() {
-        @Override public void onResourceReady(final byte[] resource,
-                                              final GlideAnimation<? super byte[]> glideAnimation) {
+        @Override public void onResourceReady(byte[] resource, GlideAnimation<? super byte[]> glideAnimation) {
           // Load gif
           final GifDrawable gifDrawable;
           try {
             gifDrawable = new GifDrawableBuilder().from(resource).build();
             holder.gifImageView.setImageDrawable(gifDrawable);
-          } catch (final IOException e) {
+          } catch (IOException e) {
             holder.gifImageView.setImageResource(R.mipmap.ic_launcher);
           }
           holder.gifImageView.setVisibility(View.VISIBLE);
@@ -173,7 +172,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
    * @return the element at the specified location.
    * @throws IndexOutOfBoundsException if {@code location < 0 || location >= size()}
    */
-  public ImageInfo getItem(final int location) {
+  public ImageInfo getItem(int location) {
     return data.get(location);
   }
 
@@ -185,7 +184,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
    * @return the index of the first occurrence of the object or -1 if the
    * object was not found.
    */
-  public int getLocation(final ImageInfo object) {
+  public int getLocation(ImageInfo object) {
     return data.indexOf(object);
   }
 
@@ -213,7 +212,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
    *                                       data.
    * @throws IllegalArgumentException      if the object cannot be added to the data.
    */
-  public boolean add(final ImageInfo object) {
+  public boolean add(ImageInfo object) {
     final boolean added = data.add(object);
     notifyItemInserted(data.size() + 1);
     return added;
@@ -232,7 +231,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
    *                                       data.
    * @throws IllegalArgumentException      if an object cannot be added to the data.
    */
-  public boolean addAll(final List<ImageInfo> collection) {
+  public boolean addAll(List<ImageInfo> collection) {
     final boolean added = data.addAll(collection);
     notifyItemRangeInserted(0, data.size() + 1);
     return added;
@@ -254,7 +253,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
    * @throws IllegalArgumentException      if the object cannot be added to the data.
    * @throws IndexOutOfBoundsException     if {@code location < 0 || location > size()}
    */
-  public void add(final int location, final ImageInfo object) {
+  public void add(int location, ImageInfo object) {
     data.add(location, object);
     notifyItemInserted(location);
   }
@@ -267,7 +266,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
    * otherwise.
    * @throws UnsupportedOperationException if removing from the data is not supported.
    */
-  public boolean remove(final int location, final ImageInfo object) {
+  public boolean remove(int location, ImageInfo object) {
     final boolean removed = data.remove(object);
     notifyItemRangeRemoved(location, data.size());
     return removed;
@@ -281,7 +280,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
    * otherwise.
    * @throws UnsupportedOperationException if removing from the data is not supported.
    */
-  public boolean remove(final ImageInfo object) {
+  public boolean remove(ImageInfo object) {
     final int location = getLocation(object);
     final boolean removed = data.remove(object);
     notifyItemRemoved(location);
@@ -296,7 +295,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
    * @throws UnsupportedOperationException if removing from the data is not supported.
    * @throws IndexOutOfBoundsException     if {@code location < 0 || location >= size()}
    */
-  public ImageInfo remove(final int location) {
+  public ImageInfo remove(int location) {
     final ImageInfo removedObject = data.remove(location);
     notifyItemRemoved(location);
     notifyItemRangeChanged(location, data.size());

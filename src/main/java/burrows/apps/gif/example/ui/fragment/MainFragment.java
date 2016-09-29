@@ -2,6 +2,7 @@ package burrows.apps.gif.example.ui.fragment;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.AppCompatTextView;
@@ -83,7 +84,7 @@ public final class MainFragment extends Fragment {
       }));
   }
 
-  @Override public void onCreate(final Bundle savedInstanceState) {
+  @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     ((App) getActivity().getApplication()).getRiffsyComponent().inject(this);
@@ -96,8 +97,7 @@ public final class MainFragment extends Fragment {
     adapter = new GifAdapter(getActivity().getApplication());
   }
 
-  @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
-                                     final Bundle savedInstanceState) {
+  @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     super.onCreateView(inflater, container, savedInstanceState);
 
     final View view = inflater.inflate(R.layout.fragment_main, container, false);
@@ -158,7 +158,7 @@ public final class MainFragment extends Fragment {
     App.getRefWatcher(getActivity()).watch(this, TAG);
   }
 
-  @Override public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
 
     inflater.inflate(R.menu.menu_fragment_main, menu);
@@ -170,11 +170,11 @@ public final class MainFragment extends Fragment {
 
     // Set contextual action on search icon click
     MenuItemCompat.setOnActionExpandListener(menuItem, new MenuItemCompat.OnActionExpandListener() {
-      @Override public boolean onMenuItemActionExpand(final MenuItem item) {
+      @Override public boolean onMenuItemActionExpand(MenuItem item) {
         return true;
       }
 
-      @Override public boolean onMenuItemActionCollapse(final MenuItem item) {
+      @Override public boolean onMenuItemActionCollapse(MenuItem item) {
         // When search is closed, go back to trending results
         if (hasSearched) {
           loadTrendingImages();
@@ -186,7 +186,7 @@ public final class MainFragment extends Fragment {
 
     // Query listener for search bar
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-      @Override public boolean onQueryTextChange(final String newText) {
+      @Override public boolean onQueryTextChange(String newText) {
         // Search on type
         if (!TextUtils.isEmpty(newText)) {
           loadSearchImages(newText);
@@ -195,7 +195,7 @@ public final class MainFragment extends Fragment {
         return false;
       }
 
-      @Override public boolean onQueryTextSubmit(final String query) {
+      @Override public boolean onQueryTextSubmit(String query) {
         return false;
       }
     });
@@ -213,7 +213,7 @@ public final class MainFragment extends Fragment {
    *
    * @param searchString User input.
    */
-  void loadSearchImages(final String searchString) {
+  void loadSearchImages(String searchString) {
     loadImages(riffsyService.getSearchResults(searchString));
   }
 
@@ -222,7 +222,7 @@ public final class MainFragment extends Fragment {
    *
    * @param observable Observable to added to the subscription.
    */
-  private void loadImages(final Observable<RiffsyResponse> observable) {
+  private void loadImages(Observable<RiffsyResponse> observable) {
     compositeDisposable.add(observable
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
@@ -255,7 +255,7 @@ public final class MainFragment extends Fragment {
       }));
   }
 
-  private void showImageDialog(final PreviewImageEvent event) {
+  private void showImageDialog(PreviewImageEvent event) {
     // Get url from event
     final String url = event.getUrl();
 
@@ -271,8 +271,7 @@ public final class MainFragment extends Fragment {
       .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
       .error(R.mipmap.ic_launcher)
       .into(new SimpleTarget<byte[]>() {
-        @Override public void onResourceReady(final byte[] resource,
-                                              final GlideAnimation<? super byte[]> glideAnimation) {
+        @Override public void onResourceReady(byte[] resource, GlideAnimation<? super byte[]> glideAnimation) {
           // Load gif
           final GifDrawable gifDrawable;
           try {

@@ -16,7 +16,7 @@ public final class Gif {
   public Gif() {
   }
 
-  public Gif(final String url, final String preview) {
+  public Gif(String url, String preview) {
     this.url = url;
     this.preview = preview;
   }
@@ -31,11 +31,11 @@ public final class Gif {
   /**
    * @param url The url
    */
-  public void setUrl(final String url) {
+  public void setUrl(String url) {
     this.url = url;
   }
 
-  public Gif withUrl(final String url) {
+  public Gif withUrl(String url) {
     this.url = url;
     return this;
   }
@@ -50,11 +50,11 @@ public final class Gif {
   /**
    * @param preview The preview
    */
-  public void setPreview(final String preview) {
+  public void setPreview(String preview) {
     this.preview = preview;
   }
 
-  public Gif withPreview(final String preview) {
+  public Gif withPreview(String preview) {
     this.preview = preview;
     return this;
   }

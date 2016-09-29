@@ -14,8 +14,8 @@ import dagger.Component;
 @Component(dependencies = AppComponent.class, modules = RiffsyModule.class)
 public interface RiffsyComponent {
   // Injections
-  void inject(final MainFragment mainFragment);
-  void inject(final GifAdapter gifAdapter);
+  void inject(MainFragment mainFragment);
+  void inject(GifAdapter gifAdapter);
 
   // Expose to subgraphs
   RiffsyService riffsyService();
@@ -25,7 +25,7 @@ public interface RiffsyComponent {
     private Builder() {
     }
 
-    public static RiffsyComponent build(final AppComponent appComponent) {
+    public static RiffsyComponent build(AppComponent appComponent) {
       return DaggerRiffsyComponent.builder()
         .appComponent(appComponent)
         .build();

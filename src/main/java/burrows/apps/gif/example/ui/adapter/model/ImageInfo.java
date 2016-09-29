@@ -25,7 +25,7 @@ public final class ImageInfo {
    *
    * @param url Image URL.
    */
-  public void setUrl(final String url) {
+  public void setUrl(String url) {
     this.url = url;
   }
 
@@ -40,7 +40,7 @@ public final class ImageInfo {
     return this;
   }
 
-  @Override public boolean equals(final Object object) {
+  @Override public boolean equals(Object object) {
     if (this == object) {
       return true;
     }

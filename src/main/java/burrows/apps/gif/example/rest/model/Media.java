@@ -15,7 +15,7 @@ public final class Media {
   public Media() {
   }
 
-  public Media(final Gif gif) {
+  public Media(Gif gif) {
     this.gif = gif;
   }
 
@@ -29,11 +29,11 @@ public final class Media {
   /**
    * @param gif The gif
    */
-  public void setGif(final Gif gif) {
+  public void setGif(Gif gif) {
     this.gif = gif;
   }
 
-  public Media withGif(final Gif gif) {
+  public Media withGif(Gif gif) {
     this.gif = gif;
     return this;
   }

@@ -24,7 +24,7 @@ public final class RiffsyResponse {
   /**
    * @param results The results
    */
-  public RiffsyResponse(final List<Result> results) {
+  public RiffsyResponse(List<Result> results) {
     this.results = results;
   }
 
@@ -38,11 +38,11 @@ public final class RiffsyResponse {
   /**
    * @param results The results
    */
-  public void setResults(final List<Result> results) {
+  public void setResults(List<Result> results) {
     this.results = results;
   }
 
-  public RiffsyResponse withGif(final List<Result> results) {
+  public RiffsyResponse withGif(List<Result> results) {
     this.results = results;
     return this;
   }

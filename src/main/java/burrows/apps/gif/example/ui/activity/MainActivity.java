@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 public final class MainActivity extends AppCompatActivity {
   @BindView(R.id.tool_bar) Toolbar toolbar;
 
-  @Override protected void onCreate(final Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_main);
