@@ -11,7 +11,7 @@ import dagger.Provides;
  */
 @Module
 public class RiffsyModule {
-  @Provides @PerActivity RiffsyService provideRiffsyService() {
+  @Provides @PerActivity protected RiffsyService provideRiffsyService() {
     return new RiffsyService();
   }
 }

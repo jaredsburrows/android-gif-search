@@ -13,13 +13,13 @@ init:
 install:
   - echo y | "%ANDROID_HOME%\tools\android.bat" update sdk -u -a -t tools
   - echo y | "%ANDROID_HOME%\tools\android.bat" update sdk -u -a -t platform-tools
-  - echo y | "%ANDROID_HOME%\tools\android.bat" update sdk -u -a -t build-tools-24.0.2
+  - echo y | "%ANDROID_HOME%\tools\android.bat" update sdk -u -a -t build-tools-24.0.3
   - echo y | "%ANDROID_HOME%\tools\android.bat" update sdk -u -a -t android-24
   - echo y | "%ANDROID_HOME%\tools\android.bat" update sdk -u -a -t extra-google-m2repository
   - echo y | "%ANDROID_HOME%\tools\android.bat" update sdk -u -a -t extra-android-m2repository
 
 build_script:
-  - gradlew.bat clean assembleDebugAndroidTest testDebug -Pci -Dscan --stacktrace
+  - gradlew.bat clean testDebug assembleDebugAndroidTest -Pci -Dscan --stacktrace
 
 artifacts:
   - path: "build\\reports\\"

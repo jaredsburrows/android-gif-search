@@ -15,10 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class RiffsyServiceTest extends ServiceTestBase {
-  // --------------------------------------------
-  // getTrendingResults
-  // --------------------------------------------
-
   @Test public void testGetTrendingDataFromApiShouldParseCorrectly() {
     // Response
     final String mockResponse = new Scanner(getClass().getResourceAsStream("/trending_results.json"),
@@ -73,10 +69,6 @@ public final class RiffsyServiceTest extends ServiceTestBase {
     assertThat(response.getResults().get(0).getMedia().get(0).getGif().getUrl())
       .isEqualTo("https://media.riffsy.com/images/f54932e6b9553a5538f31a5ddd78a9f3/raw");
   }
-
-  // --------------------------------------------
-  // getSearchResults
-  // --------------------------------------------
 
   @Test public void testGetSearchDataFromApiShouldParseCorrectly() {
     // Response

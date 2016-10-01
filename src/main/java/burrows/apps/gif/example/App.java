@@ -18,8 +18,8 @@ import javax.inject.Inject;
  */
 public class App extends Application {
   private App app;
-  private AppComponent appComponent;
-  private RiffsyComponent riffsyComponent;
+  protected AppComponent appComponent;
+  protected RiffsyComponent riffsyComponent;
   @Inject RxBus bus;
   @Inject RefWatcher refWatcher;
 

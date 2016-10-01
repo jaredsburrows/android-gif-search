@@ -46,7 +46,7 @@ android {
     versionCode 1
     versionName "1.0"
     testApplicationId "burrows.apps.gif.example.test"
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner "test.CustomTestRunner"
 
     vectorDrawables {
       useSupportLibrary true
@@ -148,6 +148,7 @@ dependencies {
   }
   androidTestCompile "com.squareup.leakcanary:leakcanary-android-no-op:1.4"
   androidTestCompile "com.google.dagger:dagger:${daggerVersion}"
+  androidTestCompile "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
 
   androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
 

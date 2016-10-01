@@ -76,53 +76,28 @@ public final class GifAdapterTest extends RoboTestBase {
     sut.onViewRecycled(viewHolder);
   }
 
-
-  // --------------------------------------------
-  // getItemCount()
-  // --------------------------------------------
-
   @Test public void testGetItemCountShouldReturnCorrectValues() {
     assertThat(sut.getItemCount()).isEqualTo(2);
   }
-
-  // --------------------------------------------
-  // getList()
-  // --------------------------------------------
 
   @Test public void testGetListCountShouldReturnCorrectValues() {
     assertThat(sut.getList()).isEqualTo(Arrays.asList(new ImageInfo().withUrl(STRING_UNIQUE),
       new ImageInfo().withUrl(STRING_UNIQUE2)));
   }
 
-  // --------------------------------------------
-  // getItem(final int location)
-  // --------------------------------------------
-
   @Test public void testGetItemShouldReturnCorrectValues() {
     assertThat(sut.getItem(1)).isEqualTo(new ImageInfo().withUrl(STRING_UNIQUE2));
   }
 
-  // --------------------------------------------
-  // getLocation(final T object)
-  // --------------------------------------------
-
   @Test public void testGetLocationShouldReturnCorrectValues() {
     assertThat(sut.getLocation(new ImageInfo().withUrl(STRING_UNIQUE2))).isEqualTo(1);
   }
-
-  // --------------------------------------------
-  // clear()
-  // --------------------------------------------
 
   @Test public void testClearShouldClearAdapter() {
     sut.clear();
 
     assertThat(sut.getItemCount()).isEqualTo(0);
   }
-
-  // --------------------------------------------
-  // add(final T object)
-  // --------------------------------------------
 
   @Test public void testAddObjectShouldReturnCorrectValues() {
     sut.add(new ImageInfo().withUrl(STRING_UNIQUE3));
@@ -131,10 +106,6 @@ public final class GifAdapterTest extends RoboTestBase {
       new ImageInfo().withUrl(STRING_UNIQUE2),
       new ImageInfo().withUrl(STRING_UNIQUE3)));
   }
-
-  // --------------------------------------------
-  // add(final List<T> collection)
-  // --------------------------------------------
 
   @Test public void testAddCollectionShouldReturnCorrectValues() {
     final List<ImageInfo> list = Collections.singletonList(new ImageInfo().withUrl(STRING_UNIQUE3));
@@ -146,10 +117,6 @@ public final class GifAdapterTest extends RoboTestBase {
       new ImageInfo().withUrl(STRING_UNIQUE3)));
   }
 
-  // --------------------------------------------
-  // add(final int location, final T object)
-  // --------------------------------------------
-
   @Test public void testAddLocationObjectShouldReturnCorrectValues() {
     sut.add(0, new ImageInfo().withUrl(STRING_UNIQUE3));
 
@@ -158,29 +125,17 @@ public final class GifAdapterTest extends RoboTestBase {
       new ImageInfo().withUrl(STRING_UNIQUE2)));
   }
 
-  // --------------------------------------------
-  // remove(final int location, final T object)
-  // --------------------------------------------
-
   @Test public void testRemoveLocationObjectShouldReturnCorrectValues() {
     sut.remove(0, new ImageInfo().withUrl(STRING_UNIQUE));
 
     assertThat(sut.getList()).isEqualTo(Collections.singletonList(new ImageInfo().withUrl(STRING_UNIQUE2)));
   }
 
-  // --------------------------------------------
-  // remove(final T object)
-  // --------------------------------------------
-
   @Test public void testRemoveObjectShouldReturnCorrectValues() {
     sut.remove(new ImageInfo().withUrl(STRING_UNIQUE));
 
     assertThat(sut.getList()).isEqualTo(Collections.singletonList(new ImageInfo().withUrl(STRING_UNIQUE2)));
   }
-
-  // --------------------------------------------
-  // remove(final int location)
-  // --------------------------------------------
 
   @Test public void testRemoveLocationShouldReturnCorrectValues() {
     sut.remove(0);
