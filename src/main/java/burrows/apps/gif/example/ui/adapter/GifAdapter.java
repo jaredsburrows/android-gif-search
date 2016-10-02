@@ -3,28 +3,22 @@ package burrows.apps.gif.example.ui.adapter;
 import android.app.Application;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import burrows.apps.gif.example.rx.RxBus;
-import burrows.apps.gif.example.ui.adapter.model.ImageInfo;
 import burrows.apps.gif.example.App;
 import burrows.apps.gif.example.R;
+import burrows.apps.gif.example.rest.service.ImageDownloader;
+import burrows.apps.gif.example.rx.RxBus;
 import burrows.apps.gif.example.rx.event.PreviewImageEvent;
-import burrows.apps.gif.example.ui.fragment.MainFragment;
+import burrows.apps.gif.example.ui.adapter.model.ImageInfo;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import pl.droidsonroids.gif.GifDrawable;
-import pl.droidsonroids.gif.GifDrawableBuilder;
 import pl.droidsonroids.gif.GifImageView;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,14 +28,13 @@ import java.util.List;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapterViewHolder> {
-  static final String TAG = MainFragment.class.getSimpleName();
-  private static final int GIF_IMAGE_HEIGHT_PIXELS = 135;
-  private static final int GIF_IMAGE_WIDTH_PIXELS = GIF_IMAGE_HEIGHT_PIXELS;
   private List<ImageInfo> data = new ArrayList<>();
   @Inject RxBus rxBus;
+  @Inject ImageDownloader imageDownloader;
 
   public GifAdapter(Application application) {
-    ((App) application).getRiffsyComponent().inject(this);
+    // Injection dependencies
+    ((App) application).getNetComponent().inject(this);
   }
 
   @Override public GifAdapterViewHolder onCreateViewHolder(ViewGroup parent, int position) {
@@ -54,79 +47,12 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
     final ImageInfo model = getItem(position);
     final String url = model.getUrl();
 
-    Glide.with(context)
-      .load(url)
-      .asGif()
-      .toBytes()
-      .thumbnail(0.1f)
-      .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
-      .error(R.mipmap.ic_launcher)
-      .into(new SimpleTarget<byte[]>() {
-        @Override public void onResourceReady(byte[] resource, GlideAnimation<? super byte[]> glideAnimation) {
-          // Load gif
-          final GifDrawable gifDrawable;
-          try {
-            gifDrawable = new GifDrawableBuilder().from(resource).build();
-            holder.gifImageView.setImageDrawable(gifDrawable);
-          } catch (IOException e) {
-            holder.gifImageView.setImageResource(R.mipmap.ic_launcher);
-          }
-          holder.gifImageView.setVisibility(View.VISIBLE);
-
-          // Turn off progressbar
-          holder.progressBar.setVisibility(View.INVISIBLE);
-          if (Log.isLoggable(TAG, Log.INFO)) {
-            Log.i(TAG, "finished loading\t" + model);
-          }
-        }
-      });
-
-
-//        Glide.with(context)
-//                .load(model.getUrl())
-//                .asGif()
-//                .thumbnail(0.1f)
-//                .crossFade()
-//                .listener(new RequestListener<String, GifDrawable>() {
-//                    @Override
-//                    public boolean onException(final Exception e, final String model, final Target<GifDrawable> target,
-//                                               final boolean isFirstResource) {
-//                        // Update views
-//                        holder.progressBar.setVisibility(View.INVISIBLE);
-//
-//                        holder.gifImageView.setImageResource(R.mipmap.ic_launcher);
-//                        holder.gifImageView.setVisibility(View.VISIBLE);
-//
-//                        if (Log.isLoggable(TAG, Log.ERROR)) {
-//                            Log.e(TAG, "onException", e);
-//                        }
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onResourceReady(final GifDrawable resource, final String model,
-//                                                   final Target<GifDrawable> target, final boolean isFromMemoryCache,
-//                                                   final boolean isFirstResource) {
-//                        // Update views
-//                        holder.gifImageView.startAnimation();
-//                        holder.gifImageView.setVisibility(View.VISIBLE);
-//
-//                        holder.progressBar.setVisibility(View.INVISIBLE);
-//                        if (Log.isLoggable(TAG, Log.INFO)) {
-//                            Log.i(TAG, "finished loading\t" + model);
-//                        }
-//                        return false;
-//                    }
-//                })
-//                .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .error(R.mipmap.ic_launcher)
-//                .into(holder.gifImageView);
+    imageDownloader.load(url, holder.gifImageView, holder.progressBar);
 
     holder.itemView.setOnClickListener(view -> rxBus.send(new PreviewImageEvent(url)));
   }
 
-  @Override public void onViewRecycled(final GifAdapterViewHolder holder) {
+  @Override public void onViewRecycled(GifAdapterViewHolder holder) {
     super.onViewRecycled(holder);
 
     Glide.clear(holder.gifImageView);
@@ -140,7 +66,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
     @BindView(R.id.gif_progress) ProgressBar progressBar;
     @BindView(R.id.gif_image) GifImageView gifImageView;
 
-    GifAdapterViewHolder(final View view) {
+    GifAdapterViewHolder(View view) {
       super(view);
 
       ButterKnife.bind(this, view);

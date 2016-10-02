@@ -105,6 +105,9 @@ def okHttpVersion = "3.4.1"
 def retrofitVersion = "2.1.0"
 def daggerVersion = "2.7"
 def espressoVersion = "2.2.2"
+def leakCanaryVersion = "1.5"
+def assertjCoreVersion = "3.5.2"
+def dexMakerVersion = "1.2"
 
 dependencies {
   compile "com.android.support:design:${supportLibraryVersion}"
@@ -122,8 +125,8 @@ dependencies {
   compile "com.github.bumptech.glide:okhttp3-integration:1.4.0@aar"
   compile "com.google.dagger:dagger:${daggerVersion}"
 
-  debugCompile "com.squareup.leakcanary:leakcanary-android:1.4"
-  releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:1.4"
+  debugCompile "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
+  releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
 
   annotationProcessor "com.jakewharton:butterknife-compiler:${butterKnifeVersion}"
   annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
@@ -132,7 +135,7 @@ dependencies {
 
   androidTestCompile "junit:junit:4.12"
   androidTestCompile "org.mockito:mockito-core:1.9.5"
-  androidTestCompile "com.squareup.assertj:assertj-android:1.1.1"
+  androidTestCompile "com.squareup.assertj:assertj-android:1.1.1" // TODO fix java 7 issue
   androidTestCompile "com.android.support:support-annotations:${supportLibraryVersion}"
   androidTestCompile "com.android.support.test:runner:0.5"
   androidTestCompile "com.android.support.test.espresso:espresso-core:${espressoVersion}"
@@ -146,7 +149,9 @@ dependencies {
     exclude module: "recyclerview-v7"
     exclude group: "javax.inject"
   }
-  androidTestCompile "com.squareup.leakcanary:leakcanary-android-no-op:1.4"
+  androidTestCompile "com.google.dexmaker:dexmaker:${dexMakerVersion}"
+  androidTestCompile "com.google.dexmaker:dexmaker-mockito:${dexMakerVersion}"
+  androidTestCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
   androidTestCompile "com.google.dagger:dagger:${daggerVersion}"
   androidTestCompile "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
 
@@ -155,12 +160,13 @@ dependencies {
   testCompile "junit:junit:4.12"
   testCompile "org.mockito:mockito-core:1.9.5"
   testCompile "com.squareup.assertj:assertj-android:1.1.1"
+  testCompile "org.assertj:assertj-core:${assertjCoreVersion}"
   testCompile "com.android.support:support-annotations:${supportLibraryVersion}"
   testCompile "com.squareup.retrofit2:retrofit-mock:${retrofitVersion}"
   testCompile "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
   testCompile "org.robolectric:shadows-support-v4:3.1.2"
   testCompile "org.khronos:opengl-api:gl1.1-android-2.1_r1"
-  testCompile "com.squareup.leakcanary:leakcanary-android-no-op:1.4"
+  testCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
 
   retrolambdaConfig "net.orfjackal.retrolambda:retrolambda:2.3.0"
 }

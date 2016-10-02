@@ -4,26 +4,32 @@ import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import burrows.apps.gif.example.R;
 import burrows.apps.gif.example.TestApp;
 import burrows.apps.gif.example.di.component.AppComponent;
 import burrows.apps.gif.example.di.component.DaggerAppComponent;
-import burrows.apps.gif.example.di.component.DaggerRiffsyComponent;
-import burrows.apps.gif.example.di.component.RiffsyComponent;
+import burrows.apps.gif.example.di.component.DaggerNetComponent;
+import burrows.apps.gif.example.di.component.NetComponent;
 import burrows.apps.gif.example.di.module.AppModule;
+import burrows.apps.gif.example.di.module.GlideModule;
 import burrows.apps.gif.example.di.module.LeakCanaryModule;
 import burrows.apps.gif.example.di.module.RiffsyModule;
+import burrows.apps.gif.example.rest.service.ImageDownloader;
 import burrows.apps.gif.example.rest.service.RiffsyService;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
 import java.util.Scanner;
@@ -37,6 +43,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
@@ -47,7 +54,6 @@ public class MainActivityTest {
   @Rule public final ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class, true, false) {
     @Override protected void beforeActivityLaunched() {
       super.beforeActivityLaunched();
-
       final TestApp testApp = getApplication();
       // Override app component
       final AppComponent appComponent = DaggerAppComponent.builder()
@@ -57,15 +63,28 @@ public class MainActivityTest {
       testApp.setAppComponent(appComponent);
 
       // Override service component
-      final RiffsyComponent riffsyComponent = DaggerRiffsyComponent.builder()
+      final NetComponent netComponent = DaggerNetComponent.builder()
         .appComponent(appComponent)
         .riffsyModule(new RiffsyModule() {
+          // Set custom endpoint for rest service
           @Override protected RiffsyService provideRiffsyService() {
             return new RiffsyService(mockEndPoint);
           }
         })
+        .glideModule(new GlideModule() {
+          @Override protected ImageDownloader provideImageDownloader(Context context) {
+            return new ImageDownloader(context) {
+              // Prevent Glide network call with custom override
+              @Override public void load(String url, ImageView imageView, ProgressBar progressBar) {
+                progressBar.setVisibility(View.INVISIBLE);
+                imageView.setImageResource(R.mipmap.ic_launcher);
+                imageView.setVisibility(View.VISIBLE);
+              }
+            };
+          }
+        })
         .build();
-      testApp.setRiffsyComponent(riffsyComponent);
+      testApp.setRiffsyComponent(netComponent);
     }
 
     public TestApp getApplication() {
@@ -80,19 +99,31 @@ public class MainActivityTest {
       return InstrumentationRegistry.getInstrumentation();
     }
   };
-  protected String mockEndPoint;
+  String mockEndPoint;
 
   @Before public void setUp() throws Exception {
+    initMocks(this);
+
     mockEndPoint = server.url("/").toString();
   }
 
-  @Test public void testLoadTrendingClickOpenDialog() {
-    // Fake server response
-    final String mockResponse = new Scanner(getClass().getResourceAsStream("/trending_results.json"),
-      Charset.defaultCharset().name()).useDelimiter("\\A").next();
+  @After public void tearDown() throws Exception {
+    server.shutdown();
+  }
+
+  private void sendMockMessages(String fileName) throws Exception {
+    final InputStream stream = getClass().getResourceAsStream(fileName);
+    final String mockResponse = new Scanner(stream, Charset.defaultCharset().name())
+      .useDelimiter("\\A").next();
     server.enqueue(new MockResponse()
       .setResponseCode(HttpURLConnection.HTTP_OK)
       .setBody(mockResponse));
+    stream.close();
+  }
+
+  @Test public void testLoadTrendingClickOpenDialog() throws Exception {
+    // Fake server response
+    sendMockMessages("/trending_results.json");
 
 
     // Launch activity
@@ -100,7 +131,10 @@ public class MainActivityTest {
 
 
     // Click and make sure dialog is shown
-    onView(ViewMatchers.withId(R.id.recycler_view))
+    onView(withId(R.id.recycler_view))
+      .check(matches(isDisplayed()));
+
+    onView(withId(R.id.recycler_view))
       .check(matches(isDisplayed()))
       .perform(actionOnItemAtPosition(0, click()));
     // Make sure dialog view is displayed
@@ -108,13 +142,9 @@ public class MainActivityTest {
       .check(matches(isDisplayed()));
   }
 
-  @Test public void testLoadSearchResults() {
+  @Test public void testLoadSearchResults() throws Exception {
     // Fake server response
-    final String mockResponse = new Scanner(getClass().getResourceAsStream("/search_results.json"),
-      Charset.defaultCharset().name()).useDelimiter("\\A").next();
-    server.enqueue(new MockResponse()
-      .setResponseCode(HttpURLConnection.HTTP_OK)
-      .setBody(mockResponse));
+    sendMockMessages("/search_results.json");
 
 
     // Launch activity
@@ -134,13 +164,9 @@ public class MainActivityTest {
       .check(matches(isDisplayed()));
   }
 
-  @Test public void testLoadSearchResultsClickOpenDialog() {
+  @Test public void testLoadSearchResultsClickOpenDialog() throws Exception {
     // Fake server response
-    final String mockResponse = new Scanner(getClass().getResourceAsStream("/search_results.json"),
-      Charset.defaultCharset().name()).useDelimiter("\\A").next();
-    server.enqueue(new MockResponse()
-      .setResponseCode(HttpURLConnection.HTTP_OK)
-      .setBody(mockResponse));
+    sendMockMessages("/search_results.json");
 
 
     // Launch activity
@@ -165,13 +191,9 @@ public class MainActivityTest {
       .check(matches(isDisplayed()));
   }
 
-  @Test public void testLoadTrendingThenSearchThenBackToTrending() {
+  @Test public void testLoadTrendingThenSearchThenBackToTrending() throws Exception {
     // Fake server response
-    final String mockResponse = new Scanner(getClass().getResourceAsStream("/trending_results.json"),
-      Charset.defaultCharset().name()).useDelimiter("\\A").next();
-    server.enqueue(new MockResponse()
-      .setResponseCode(HttpURLConnection.HTTP_OK)
-      .setBody(mockResponse));
+    sendMockMessages("/trending_results.json");
 
 
     // Launch activity

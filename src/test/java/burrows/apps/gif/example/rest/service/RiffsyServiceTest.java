@@ -5,6 +5,7 @@ import okhttp3.mockwebserver.MockResponse;
 import org.junit.Test;
 import test.ServiceTestBase;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
 import java.util.Scanner;
@@ -15,14 +16,19 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class RiffsyServiceTest extends ServiceTestBase {
-  @Test public void testGetTrendingDataFromApiShouldParseCorrectly() {
-    // Response
-    final String mockResponse = new Scanner(getClass().getResourceAsStream("/trending_results.json"),
-      Charset.defaultCharset().name()).useDelimiter("\\A").next();
-
+  private void sendMockMessages(String fileName) throws Exception {
+    final InputStream stream = getClass().getResourceAsStream(fileName);
+    final String mockResponse = new Scanner(stream, Charset.defaultCharset().name())
+      .useDelimiter("\\A").next();
     server.enqueue(new MockResponse()
       .setResponseCode(HttpURLConnection.HTTP_OK)
       .setBody(mockResponse));
+    stream.close();
+  }
+
+  @Test public void testGetTrendingDataFromApiShouldParseCorrectly() throws Exception {
+    // Response
+    sendMockMessages("/trending_results.json");
 
     // Request
     final RiffsyResponse response = new RiffsyService(mockEndPoint)
@@ -33,14 +39,9 @@ public final class RiffsyServiceTest extends ServiceTestBase {
       .isEqualTo("https://media.riffsy.com/images/f54932e6b9553a5538f31a5ddd78a9f3/raw");
   }
 
-  @Test public void testGetTrendingDataWithCustomApiKeyFromApiShouldParseCorrectly() {
+  @Test public void testGetTrendingDataWithCustomApiKeyFromApiShouldParseCorrectly() throws Exception {
     // Response
-    final String mockResponse = new Scanner(getClass().getResourceAsStream("/trending_results.json"),
-      Charset.defaultCharset().name()).useDelimiter("\\A").next();
-
-    server.enqueue(new MockResponse()
-      .setResponseCode(HttpURLConnection.HTTP_OK)
-      .setBody(mockResponse));
+    sendMockMessages("/trending_results.json");
 
     // Request
     final RiffsyResponse response = new RiffsyService(mockEndPoint)
@@ -52,14 +53,9 @@ public final class RiffsyServiceTest extends ServiceTestBase {
   }
 
   @Test
-  public void testGetTrendingDataWithLimitWithCustomApiKeyFromApiShouldParseCorrectly() {
+  public void testGetTrendingDataWithLimitWithCustomApiKeyFromApiShouldParseCorrectly() throws Exception {
     // Response
-    final String mockResponse = new Scanner(getClass().getResourceAsStream("/trending_results.json"),
-      Charset.defaultCharset().name()).useDelimiter("\\A").next();
-
-    server.enqueue(new MockResponse()
-      .setResponseCode(HttpURLConnection.HTTP_OK)
-      .setBody(mockResponse));
+    sendMockMessages("/trending_results.json");
 
     // Request
     final RiffsyResponse response = new RiffsyService(mockEndPoint)
@@ -70,14 +66,9 @@ public final class RiffsyServiceTest extends ServiceTestBase {
       .isEqualTo("https://media.riffsy.com/images/f54932e6b9553a5538f31a5ddd78a9f3/raw");
   }
 
-  @Test public void testGetSearchDataFromApiShouldParseCorrectly() {
+  @Test public void testGetSearchDataFromApiShouldParseCorrectly() throws Exception {
     // Response
-    final String mockResponse = new Scanner(getClass().getResourceAsStream("/search_results.json"),
-      Charset.defaultCharset().name()).useDelimiter("\\A").next();
-
-    server.enqueue(new MockResponse()
-      .setResponseCode(HttpURLConnection.HTTP_OK)
-      .setBody(mockResponse));
+    sendMockMessages("/search_results.json");
 
     // Request
     final RiffsyResponse response = new RiffsyService(mockEndPoint)
@@ -88,14 +79,9 @@ public final class RiffsyServiceTest extends ServiceTestBase {
       .isEqualTo("https://media.riffsy.com/images/5b6a39aa00312575583031d2de4edbd4/raw");
   }
 
-  @Test public void testGetSearchDataCustomApiKeyFromApiShouldParseCorrectly() {
+  @Test public void testGetSearchDataCustomApiKeyFromApiShouldParseCorrectly() throws Exception {
     // Response
-    final String mockResponse = new Scanner(getClass().getResourceAsStream("/search_results.json"),
-      Charset.defaultCharset().name()).useDelimiter("\\A").next();
-
-    server.enqueue(new MockResponse()
-      .setResponseCode(HttpURLConnection.HTTP_OK)
-      .setBody(mockResponse));
+    sendMockMessages("/search_results.json");
 
     // Request
     final RiffsyResponse response = new RiffsyService(mockEndPoint)
@@ -106,14 +92,9 @@ public final class RiffsyServiceTest extends ServiceTestBase {
       .isEqualTo("https://media.riffsy.com/images/5b6a39aa00312575583031d2de4edbd4/raw");
   }
 
-  @Test public void testGetSearchDataWithLimitCustomApiKeyFromApiShouldParseCorrectly() {
+  @Test public void testGetSearchDataWithLimitCustomApiKeyFromApiShouldParseCorrectly() throws Exception {
     // Response
-    final String mockResponse = new Scanner(getClass().getResourceAsStream("/search_results.json"),
-      Charset.defaultCharset().name()).useDelimiter("\\A").next();
-
-    server.enqueue(new MockResponse()
-      .setResponseCode(HttpURLConnection.HTTP_OK)
-      .setBody(mockResponse));
+    sendMockMessages("/search_results.json");
 
     // Request
     final RiffsyResponse response = new RiffsyService(mockEndPoint)

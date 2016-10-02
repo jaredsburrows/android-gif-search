@@ -1,17 +1,12 @@
 package burrows.apps.gif.example;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.StrictMode;
 import android.os.StrictMode.ThreadPolicy;
 import android.os.StrictMode.VmPolicy;
 import android.support.v7.app.AppCompatDelegate;
 import burrows.apps.gif.example.di.component.AppComponent;
-import burrows.apps.gif.example.di.component.RiffsyComponent;
-import burrows.apps.gif.example.rx.RxBus;
-import com.squareup.leakcanary.RefWatcher;
-
-import javax.inject.Inject;
+import burrows.apps.gif.example.di.component.NetComponent;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
@@ -19,9 +14,7 @@ import javax.inject.Inject;
 public class App extends Application {
   private App app;
   protected AppComponent appComponent;
-  protected RiffsyComponent riffsyComponent;
-  @Inject RxBus bus;
-  @Inject RefWatcher refWatcher;
+  protected NetComponent netComponent;
 
   @Override public void onCreate() {
     // Let's start paying critical attention to issues via Logcat
@@ -41,21 +34,10 @@ public class App extends Application {
 
     // Setup components
     initAppComponent();
-    appComponent.inject(this);
-    initRiffsyComponent();
+    initNetComponent();
 
     // Make sure we use vector drawables
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-  }
-
-  /**
-   * Use this method to watch the reference to context in onDestroy methods.
-   *
-   * @param context Context.
-   * @return Instance of RefWatcher.
-   */
-  public static RefWatcher getRefWatcher(Context context) {
-    return ((App) context.getApplicationContext()).refWatcher;
   }
 
   // App Component
@@ -68,11 +50,11 @@ public class App extends Application {
   }
 
   // Riffsy Component
-  public void initRiffsyComponent() {
-    riffsyComponent = RiffsyComponent.Builder.build(appComponent);
+  public void initNetComponent() {
+    netComponent = NetComponent.Builder.build(appComponent);
   }
 
-  public RiffsyComponent getRiffsyComponent() {
-    return riffsyComponent;
+  public NetComponent getNetComponent() {
+    return netComponent;
   }
 }

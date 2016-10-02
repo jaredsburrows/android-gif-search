@@ -1,7 +1,7 @@
 package burrows.apps.gif.example;
 
 import burrows.apps.gif.example.di.component.AppComponent;
-import burrows.apps.gif.example.di.component.RiffsyComponent;
+import burrows.apps.gif.example.di.component.NetComponent;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
@@ -11,7 +11,7 @@ public class TestApp extends App {
     this.appComponent = appComponent;
   }
 
-  public void setRiffsyComponent(final RiffsyComponent riffsyComponent) {
-    this.riffsyComponent = riffsyComponent;
+  public void setRiffsyComponent(final NetComponent riffsyComponent) {
+    this.netComponent = riffsyComponent;
   }
 }

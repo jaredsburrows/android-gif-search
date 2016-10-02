@@ -31,7 +31,7 @@ public abstract class AndroidTestBase<T extends Activity> extends TestBase {
   protected Resources resources;
   @Rule public ActivityTestRule<T> activityRule;
 
-  public AndroidTestBase(final Class<T> activityClass) {
+  public AndroidTestBase(Class<T> activityClass) {
     activityRule = getActivityRule(activityClass);
   }
 
@@ -57,7 +57,7 @@ public abstract class AndroidTestBase<T extends Activity> extends TestBase {
     Intents.release();
   }
 
-  protected ActivityTestRule<T> getActivityRule(final Class<T> activityClass) {
+  protected ActivityTestRule<T> getActivityRule(Class<T> activityClass) {
     return new ActivityTestRule<>(activityClass);
   }
 

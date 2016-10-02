@@ -23,6 +23,7 @@ import burrows.apps.gif.example.App;
 import burrows.apps.gif.example.R;
 import burrows.apps.gif.example.rest.model.Result;
 import burrows.apps.gif.example.rest.model.RiffsyResponse;
+import burrows.apps.gif.example.rest.service.ImageDownloader;
 import burrows.apps.gif.example.rest.service.RiffsyService;
 import burrows.apps.gif.example.rx.RxBus;
 import burrows.apps.gif.example.rx.event.PreviewImageEvent;
@@ -34,19 +35,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.squareup.leakcanary.RefWatcher;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import pl.droidsonroids.gif.GifDrawable;
-import pl.droidsonroids.gif.GifDrawableBuilder;
 import pl.droidsonroids.gif.GifImageView;
 
 import javax.inject.Inject;
-import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Main Fragment of the application that displays the Recylcerview of Gif images.
@@ -55,8 +51,6 @@ import java.util.Arrays;
  */
 public final class MainFragment extends Fragment {
   static final String TAG = MainFragment.class.getSimpleName();
-  private static final int GIF_IMAGE_HEIGHT_PIXELS = 135;
-  private static final int GIF_IMAGE_WIDTH_PIXELS = GIF_IMAGE_HEIGHT_PIXELS;
   private static final int PORTRAIT_COLUMNS = 3;
   private CompositeDisposable compositeDisposable;
   private RecyclerView.LayoutManager layoutManager;
@@ -71,7 +65,9 @@ public final class MainFragment extends Fragment {
   @BindView(R.id.recycler_view) RecyclerView recyclerView;
   @BindString(R.string.search_gifs) String searchGifs;
   @Inject RxBus rxBus;
+  @Inject RefWatcher refWatcher;
   @Inject RiffsyService riffsyService;
+  @Inject ImageDownloader imageDownloader;
 
   @Override public void onStart() {
     super.onStart();
@@ -87,7 +83,8 @@ public final class MainFragment extends Fragment {
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    ((App) getActivity().getApplication()).getRiffsyComponent().inject(this);
+    // Injection dependencies
+    ((App) getActivity().getApplication()).getNetComponent().inject(this);
 
     setHasOptionsMenu(true);
 
@@ -155,7 +152,7 @@ public final class MainFragment extends Fragment {
   @Override public void onDestroy() {
     super.onDestroy();
 
-    App.getRefWatcher(getActivity()).watch(this, TAG);
+    refWatcher.watch(this, TAG);
   }
 
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -232,6 +229,8 @@ public final class MainFragment extends Fragment {
         // Clear current data
         adapter.clear();
 
+        adapter.add(new ImageInfo());
+
         // Iterate over data from response and grab the urls
         for (final Result result : response.getResults()) {
           final String url = result.getMedia().get(0).getGif().getUrl();
@@ -263,36 +262,10 @@ public final class MainFragment extends Fragment {
     // Remove "white" background for dialog
     dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
 
-    Glide.with(getContext())
-      .load(url)
-      .asGif()
-      .toBytes()
-      .thumbnail(0.1f)
-      .override(GIF_IMAGE_WIDTH_PIXELS, GIF_IMAGE_HEIGHT_PIXELS)
-      .error(R.mipmap.ic_launcher)
-      .into(new SimpleTarget<byte[]>() {
-        @Override public void onResourceReady(byte[] resource, GlideAnimation<? super byte[]> glideAnimation) {
-          // Load gif
-          final GifDrawable gifDrawable;
-          try {
-            gifDrawable = new GifDrawableBuilder().from(resource)
-              .build();
-            gifImageView.setImageDrawable(gifDrawable);
-          } catch (final IOException e) {
-            gifImageView.setImageResource(R.mipmap.ic_launcher);
-          }
-          gifImageView.setVisibility(View.VISIBLE);
+    // Load associated text
+    dialogText.setText(url);
+    dialogText.setVisibility(View.VISIBLE);
 
-          // Load associated text
-          dialogText.setText(url);
-          dialogText.setVisibility(View.VISIBLE);
-
-          // Turn off progressbar
-          progressBar.setVisibility(View.INVISIBLE);
-          if (Log.isLoggable(TAG, Log.INFO)) {
-            Log.i(TAG, "finished loading\t" + Arrays.toString(resource));
-          }
-        }
-      });
+    imageDownloader.load(url, gifImageView, progressBar);
   }
 }

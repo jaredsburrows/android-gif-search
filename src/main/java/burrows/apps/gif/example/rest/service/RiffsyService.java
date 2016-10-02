@@ -47,7 +47,7 @@ public final class RiffsyService {
    *
    * @param endPoint Base URL.
    */
-  public RiffsyService(final String endPoint) {
+  public RiffsyService(String endPoint) {
     api = ServiceUtil.createService(RiffsyServiceApi.class, endPoint);
   }
 
