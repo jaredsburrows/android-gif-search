@@ -229,8 +229,6 @@ public final class MainFragment extends Fragment {
         // Clear current data
         adapter.clear();
 
-        adapter.add(new ImageInfo());
-
         // Iterate over data from response and grab the urls
         for (final Result result : response.getResults()) {
           final String url = result.getMedia().get(0).getGif().getUrl();

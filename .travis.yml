@@ -16,7 +16,9 @@ env:
 
 matrix:
   allow_failures:
-    - env: ANDROID_TARGET=android-19
+    - env: ANDROID_TARGET=android-24
+    - env: ANDROID_TARGET=android-23
+    - env: ANDROID_TARGET=android-22
 
 install:
   # SDK

@@ -48,6 +48,8 @@ android {
     testApplicationId "burrows.apps.gif.example.test"
     testInstrumentationRunner "test.CustomTestRunner"
 
+    resConfigs "en"
+
     vectorDrawables {
       useSupportLibrary true
     }
@@ -88,13 +90,20 @@ android {
   }
 }
 
-// Retrolambda - exclude the version that the android plugin depends on
 configurations {
+  // Retrolambda - exclude the version that the android plugin depends on
   classpath {
     exclude group: "com.android.tools.external.lombok"
   }
 
+  // Use "compile" configuration support version in "androidTestCompile"
   androidTestCompile {
+    exclude group: "com.android.support"
+    exclude group: "javax.inject"
+  }
+
+  // Use "compile" configuration support version in "testCompile"
+  testCompile {
     exclude group: "com.android.support"
   }
 }
@@ -106,7 +115,7 @@ def retrofitVersion = "2.1.0"
 def daggerVersion = "2.7"
 def espressoVersion = "2.2.2"
 def leakCanaryVersion = "1.5"
-def assertjCoreVersion = "3.5.2"
+def assertjCoreVersion = "2.5.0" // Java 8 - 3.5.2
 def dexMakerVersion = "1.2"
 
 dependencies {
@@ -131,27 +140,15 @@ dependencies {
   annotationProcessor "com.jakewharton:butterknife-compiler:${butterKnifeVersion}"
   annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
 
-  provided "org.glassfish:javax.annotation:10.0-b28"
-
   androidTestCompile "junit:junit:4.12"
   androidTestCompile "org.mockito:mockito-core:1.9.5"
-  androidTestCompile "com.squareup.assertj:assertj-android:1.1.1" // TODO fix java 7 issue
-  androidTestCompile "com.android.support:support-annotations:${supportLibraryVersion}"
+  androidTestCompile "org.assertj:assertj-core:${assertjCoreVersion}"
   androidTestCompile "com.android.support.test:runner:0.5"
   androidTestCompile "com.android.support.test.espresso:espresso-core:${espressoVersion}"
   androidTestCompile "com.android.support.test.espresso:espresso-intents:${espressoVersion}"
-  androidTestCompile("com.android.support.test.espresso:espresso-contrib:${espressoVersion}") {
-    exclude module: "appcompat"
-    exclude module: "support-v4"
-    exclude module: "support-v7"
-    exclude module: "design"
-    exclude module: "support-annotations"
-    exclude module: "recyclerview-v7"
-    exclude group: "javax.inject"
-  }
+  androidTestCompile "com.android.support.test.espresso:espresso-contrib:${espressoVersion}"
   androidTestCompile "com.google.dexmaker:dexmaker:${dexMakerVersion}"
   androidTestCompile "com.google.dexmaker:dexmaker-mockito:${dexMakerVersion}"
-  androidTestCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
   androidTestCompile "com.google.dagger:dagger:${daggerVersion}"
   androidTestCompile "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
 
@@ -161,7 +158,6 @@ dependencies {
   testCompile "org.mockito:mockito-core:1.9.5"
   testCompile "com.squareup.assertj:assertj-android:1.1.1"
   testCompile "org.assertj:assertj-core:${assertjCoreVersion}"
-  testCompile "com.android.support:support-annotations:${supportLibraryVersion}"
   testCompile "com.squareup.retrofit2:retrofit-mock:${retrofitVersion}"
   testCompile "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
   testCompile "org.robolectric:shadows-support-v4:3.1.2"
