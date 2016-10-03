@@ -1,7 +1,6 @@
 package burrows.apps.gif.example.ui.adapter;
 
 import android.app.Application;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,7 @@ import java.util.List;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapterViewHolder> {
-  private List<ImageInfo> data = new ArrayList<>();
+  private final List<ImageInfo> data = new ArrayList<>();
   @Inject RxBus rxBus;
   @Inject ImageDownloader imageDownloader;
 
@@ -43,9 +42,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
   }
 
   @Override public void onBindViewHolder(GifAdapterViewHolder holder, int position) {
-    final Context context = holder.gifImageView.getContext();
-    final ImageInfo model = getItem(position);
-    final String url = model.getUrl();
+    final String url = getItem(position).getUrl();
 
     imageDownloader.load(url, holder.gifImageView, holder.progressBar);
 

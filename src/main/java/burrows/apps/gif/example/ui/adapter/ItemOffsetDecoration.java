@@ -13,7 +13,7 @@ import android.view.View;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class ItemOffsetDecoration extends RecyclerView.ItemDecoration {
-  private int offSet;
+  private final int offSet;
 
   public ItemOffsetDecoration(int offSet) {
     this.offSet = offSet;

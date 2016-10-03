@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public class GifTest extends TestBase {
-  private Gif sut = new Gif(STRING_UNIQUE, STRING_UNIQUE2).withUrl(STRING_UNIQUE).withPreview(STRING_UNIQUE2);
+  private final Gif sut = new Gif(STRING_UNIQUE, STRING_UNIQUE2).withUrl(STRING_UNIQUE).withPreview(STRING_UNIQUE2);
 
   @Test public void testGetUrl() {
     assertThat(sut.getUrl()).isEqualTo(STRING_UNIQUE);

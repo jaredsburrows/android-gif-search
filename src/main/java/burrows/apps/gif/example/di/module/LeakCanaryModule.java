@@ -13,7 +13,7 @@ import javax.inject.Singleton;
  */
 @Module
 public class LeakCanaryModule {
-  private Application application;
+  private final Application application;
 
   public LeakCanaryModule(Application application) {
     this.application = application;

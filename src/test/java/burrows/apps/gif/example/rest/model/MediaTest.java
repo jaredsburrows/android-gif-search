@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class MediaTest extends TestBase {
   private final Gif gif = new Gif();
-  private Media sut = new Media(gif).withGif(gif);
+  private final Media sut = new Media(gif).withGif(gif);
 
   @Test public void testGetGif() {
     assertThat(sut.getGif()).isEqualTo(gif);

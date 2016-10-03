@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class ResultTest extends TestBase {
   private final List<Media> medias = new ArrayList<>();
-  private Result sut = new Result(medias, STRING_UNIQUE).withMedia(medias).withTitle(STRING_UNIQUE);
+  private final Result sut = new Result(medias, STRING_UNIQUE).withMedia(medias).withTitle(STRING_UNIQUE);
 
   @Test public void testGetMedia() {
     assertThat(sut.getMedia()).isEqualTo(medias);

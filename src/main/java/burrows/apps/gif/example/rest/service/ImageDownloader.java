@@ -24,7 +24,7 @@ public class ImageDownloader {
   private static final int GIF_IMAGE_HEIGHT_PIXELS = 135;
   private static final int GIF_IMAGE_WIDTH_PIXELS = GIF_IMAGE_HEIGHT_PIXELS;
   private static final float THUMBNAIL_MULTIPLIER = 0.1f;
-  private Context context;
+  private final Context context;
 
   public ImageDownloader(Context context) {
     this.context = context;

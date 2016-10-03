@@ -3,7 +3,6 @@ package burrows.apps.gif.example.rest.service;
 import burrows.apps.gif.example.rest.model.RiffsyResponse;
 import burrows.apps.gif.example.util.ServiceUtil;
 import io.reactivex.Observable;
-import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -35,8 +34,6 @@ public final class RiffsyService {
 
   /**
    * Riffsy service.
-   *
-   * @param endPoint Base URL.
    */
   public RiffsyService() {
     this(BASE_URL);

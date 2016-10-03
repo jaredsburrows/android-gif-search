@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class RiffsyResponseTest extends TestBase {
   private final List<Result> data = new ArrayList<>(Collections.singletonList(new Result()));
-  private RiffsyResponse sut = new RiffsyResponse(data).withGif(data);
+  private final RiffsyResponse sut = new RiffsyResponse(data).withGif(data);
 
   @Test public void testGetData() {
     assertThat(sut.getResults()).isEqualTo(data);
