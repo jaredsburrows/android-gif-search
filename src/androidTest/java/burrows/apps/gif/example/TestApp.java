@@ -11,7 +11,7 @@ public class TestApp extends App {
     this.appComponent = appComponent;
   }
 
-  public void setRiffsyComponent(NetComponent riffsyComponent) {
-    this.netComponent = riffsyComponent;
+  public void setRiffsyComponent(NetComponent netComponent) {
+    this.netComponent = netComponent;
   }
 }
