@@ -5,6 +5,8 @@
 [![CircleCI Linux Build](https://img.shields.io/circleci/project/jaredsburrows/android-gif-example/master.svg?label=Linux%20Build)](https://circleci.com/gh/jaredsburrows/android-gif-example)
 [![AppVeyor Windows Build](https://img.shields.io/appveyor/ci/jaredsburrows/android-gif-example/master.svg?label=Windows%20Build)](https://ci.appveyor.com/project/jaredsburrows/android-gif-example/branch/master)
 [![Coveralls Code Coverage](https://img.shields.io/coveralls/jaredsburrows/android-gif-example/master.svg?label=Code%20Coverage)](https://coveralls.io/github/jaredsburrows/android-gif-example?branch=master)
+[![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
+
 
 Riffsy RecyclerView Grid Example using Dagger 2, Retrofit 2, RxJava 2 and Butterknife with Junit + Espresso tests
 
