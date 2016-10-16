@@ -22,5 +22,8 @@
         android:layout_height="128dp"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/gif_image"
+        tools:src="@mipmap/ic_launcher"
+        tools:visibility="visible" />
 </RelativeLayout>
