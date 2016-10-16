@@ -28,7 +28,7 @@ import burrows.apps.gif.example.rest.service.RiffsyService;
 import burrows.apps.gif.example.rx.RxBus;
 import burrows.apps.gif.example.rx.event.PreviewImageEvent;
 import burrows.apps.gif.example.ui.adapter.GifAdapter;
-import burrows.apps.gif.example.ui.adapter.ItemOffsetDecoration;
+import burrows.apps.gif.example.ui.adapter.GifItemDecoration;
 import burrows.apps.gif.example.ui.adapter.model.ImageInfo;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -54,7 +54,7 @@ public final class MainFragment extends Fragment {
   private static final int PORTRAIT_COLUMNS = 3;
   private final CompositeDisposable compositeDisposable = new CompositeDisposable();
   private RecyclerView.LayoutManager layoutManager;
-  private ItemOffsetDecoration itemOffsetDecoration;
+  private GifItemDecoration itemOffsetDecoration;
   private GifAdapter adapter;
   private Unbinder unbinder;
   boolean hasSearched;
@@ -75,7 +75,7 @@ public final class MainFragment extends Fragment {
     compositeDisposable.add(bus.toObservable()
       .subscribe(event -> {
         if (event instanceof PreviewImageEvent) {
-          showImageDialog((PreviewImageEvent) event);
+          showImageDialog(((PreviewImageEvent) event).getUrl());
         }
       }));
   }
@@ -89,7 +89,7 @@ public final class MainFragment extends Fragment {
     setHasOptionsMenu(true);
 
     layoutManager = new GridLayoutManager(getActivity(), PORTRAIT_COLUMNS);
-    itemOffsetDecoration = new ItemOffsetDecoration(getActivity(), R.dimen.gif_adapter_item_offset);
+    itemOffsetDecoration = new GifItemDecoration(getActivity(), R.dimen.gif_adapter_item_offset);
     adapter = new GifAdapter(getActivity().getApplication());
   }
 
@@ -251,10 +251,7 @@ public final class MainFragment extends Fragment {
       }));
   }
 
-  private void showImageDialog(PreviewImageEvent event) {
-    // Get url from event
-    final String url = event.getUrl();
-
+  private void showImageDialog(String url) {
     dialog.show();
     // Remove "white" background for dialog
     dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);

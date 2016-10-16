@@ -45,7 +45,7 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
 
   @Test public void testGetItemOffsetsInt() {
     // Item decoration with specified offset
-    final ItemOffsetDecoration sut = new ItemOffsetDecoration(1);
+    final GifItemDecoration sut = new GifItemDecoration(1);
     recyclerView.addItemDecoration(sut);
 
     sut.getItemOffsets(rect, recyclerView, recyclerView, state);
@@ -53,7 +53,7 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
 
   @Test public void testGetItemOffsetsContextResId() {
     // Item decoration with specified context and dimen
-    final ItemOffsetDecoration sut = new ItemOffsetDecoration(context, R.dimen.gif_adapter_item_offset);
+    final GifItemDecoration sut = new GifItemDecoration(context, R.dimen.gif_adapter_item_offset);
     recyclerView.addItemDecoration(sut);
 
     sut.getItemOffsets(rect, recyclerView, recyclerView, state);

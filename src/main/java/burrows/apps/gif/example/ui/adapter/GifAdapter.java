@@ -26,9 +26,9 @@ import java.util.List;
  *
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapterViewHolder> {
+public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder> {
   private final List<ImageInfo> data = new ArrayList<>();
-  @Inject RxBus rxBus;
+  @Inject RxBus bus;
   @Inject ImageDownloader imageDownloader;
 
   public GifAdapter(Application application) {
@@ -36,20 +36,20 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
     ((App) application).getNetComponent().inject(this);
   }
 
-  @Override public GifAdapterViewHolder onCreateViewHolder(ViewGroup parent, int position) {
-    return new GifAdapterViewHolder(LayoutInflater.from(parent.getContext())
+  @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    return new ViewHolder(LayoutInflater.from(parent.getContext())
       .inflate(R.layout.list_item, parent, false));
   }
 
-  @Override public void onBindViewHolder(GifAdapterViewHolder holder, int position) {
+  @Override public void onBindViewHolder(ViewHolder holder, int position) {
     final String url = getItem(position).getUrl();
 
     imageDownloader.load(url, holder.imageView, holder.progressBar);
 
-    holder.itemView.setOnClickListener(view -> rxBus.send(new PreviewImageEvent(url)));
+    holder.itemView.setOnClickListener(view -> bus.send(new PreviewImageEvent(url)));
   }
 
-  @Override public void onViewRecycled(GifAdapterViewHolder holder) {
+  @Override public void onViewRecycled(ViewHolder holder) {
     super.onViewRecycled(holder);
 
     Glide.clear(holder.imageView);
@@ -59,11 +59,11 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
   /**
    * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
    */
-  final class GifAdapterViewHolder extends RecyclerView.ViewHolder {
+  final class ViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.gif_progress) ProgressBar progressBar;
     @BindView(R.id.gif_image) GifImageView imageView;
 
-    GifAdapterViewHolder(View view) {
+    ViewHolder(View view) {
       super(view);
 
       ButterKnife.bind(this, view);

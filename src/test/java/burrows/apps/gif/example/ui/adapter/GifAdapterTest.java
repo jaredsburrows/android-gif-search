@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class GifAdapterTest extends RoboTestBase {
-  private GifAdapter.GifAdapterViewHolder viewHolder;
+  private GifAdapter.ViewHolder viewHolder;
   private GifAdapter sut;
 
   @Before @Override public void setUp() throws Exception {
@@ -42,9 +42,9 @@ public final class GifAdapterTest extends RoboTestBase {
       }
     };
 
-    final GifAdapter.GifAdapterViewHolder viewHolder = sut.onCreateViewHolder(parent, 0);
+    final GifAdapter.ViewHolder viewHolder = sut.onCreateViewHolder(parent, 0);
 
-    assertThat(viewHolder).isInstanceOf(GifAdapter.GifAdapterViewHolder.class);
+    assertThat(viewHolder).isInstanceOf(GifAdapter.ViewHolder.class);
   }
 
   @Test public void testOnBindViewHolderOnAdapterItemClick() {

@@ -12,14 +12,14 @@ import android.view.View;
  *
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class ItemOffsetDecoration extends RecyclerView.ItemDecoration {
+public final class GifItemDecoration extends RecyclerView.ItemDecoration {
   private final int offSet;
 
-  public ItemOffsetDecoration(int offSet) {
+  public GifItemDecoration(int offSet) {
     this.offSet = offSet;
   }
 
-  public ItemOffsetDecoration(@NonNull Context context, @DimenRes int resourceId) {
+  public GifItemDecoration(@NonNull Context context, @DimenRes int resourceId) {
     this(context.getResources().getDimensionPixelSize(resourceId));
   }
 
