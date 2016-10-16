@@ -38,13 +38,13 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
 
   @Override public GifAdapterViewHolder onCreateViewHolder(ViewGroup parent, int position) {
     return new GifAdapterViewHolder(LayoutInflater.from(parent.getContext())
-      .inflate(R.layout.recyclerview_list_item, parent, false));
+      .inflate(R.layout.list_item, parent, false));
   }
 
   @Override public void onBindViewHolder(GifAdapterViewHolder holder, int position) {
     final String url = getItem(position).getUrl();
 
-    imageDownloader.load(url, holder.gifImageView, holder.progressBar);
+    imageDownloader.load(url, holder.imageView, holder.progressBar);
 
     holder.itemView.setOnClickListener(view -> rxBus.send(new PreviewImageEvent(url)));
   }
@@ -52,8 +52,8 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
   @Override public void onViewRecycled(GifAdapterViewHolder holder) {
     super.onViewRecycled(holder);
 
-    Glide.clear(holder.gifImageView);
-    holder.gifImageView.setImageDrawable(null);
+    Glide.clear(holder.imageView);
+    holder.imageView.setImageDrawable(null);
   }
 
   /**
@@ -61,7 +61,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.GifAdapter
    */
   final class GifAdapterViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.gif_progress) ProgressBar progressBar;
-    @BindView(R.id.gif_image) GifImageView gifImageView;
+    @BindView(R.id.gif_image) GifImageView imageView;
 
     GifAdapterViewHolder(View view) {
       super(view);

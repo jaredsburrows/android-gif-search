@@ -116,7 +116,7 @@ def daggerVersion = "2.7"
 def espressoVersion = "2.2.2"
 def leakCanaryVersion = "1.5"
 def junitVersion = "4.12"
-def mockitoVersion = "2.1.0"
+def mockitoVersion = "2.2.3"
 def assertjCoreVersion = "2.5.0" // Java 8 - 3.5.2
 def dexMakerVersion = "1.2"
 

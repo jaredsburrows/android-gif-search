@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import pl.droidsonroids.gif.GifDrawable;
-import pl.droidsonroids.gif.GifDrawableBuilder;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -41,10 +40,8 @@ public class ImageDownloader {
       .into(new SimpleTarget<byte[]>() {
         @Override public void onResourceReady(byte[] resource, GlideAnimation<? super byte[]> glideAnimation) {
           // Load gif
-          final GifDrawable gifDrawable;
           try {
-            gifDrawable = new GifDrawableBuilder().from(resource).build();
-            imageView.setImageDrawable(gifDrawable);
+            imageView.setImageDrawable(new GifDrawable(resource));
           } catch (IOException e) {
             imageView.setImageResource(R.mipmap.ic_launcher);
           }

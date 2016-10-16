@@ -52,7 +52,7 @@ import javax.inject.Inject;
 public final class MainFragment extends Fragment {
   static final String TAG = MainFragment.class.getSimpleName();
   private static final int PORTRAIT_COLUMNS = 3;
-  private CompositeDisposable compositeDisposable;
+  private final CompositeDisposable compositeDisposable = new CompositeDisposable();
   private RecyclerView.LayoutManager layoutManager;
   private ItemOffsetDecoration itemOffsetDecoration;
   private GifAdapter adapter;
@@ -64,7 +64,7 @@ public final class MainFragment extends Fragment {
   GifImageView gifImageView;
   @BindView(R.id.recycler_view) RecyclerView recyclerView;
   @BindString(R.string.search_gifs) String searchGifs;
-  @Inject RxBus rxBus;
+  @Inject RxBus bus;
   @Inject RefWatcher refWatcher;
   @Inject RiffsyService riffsyService;
   @Inject ImageDownloader imageDownloader;
@@ -72,7 +72,7 @@ public final class MainFragment extends Fragment {
   @Override public void onStart() {
     super.onStart();
 
-    compositeDisposable.add(rxBus.toObservable()
+    compositeDisposable.add(bus.toObservable()
       .subscribe(event -> {
         if (event instanceof PreviewImageEvent) {
           showImageDialog((PreviewImageEvent) event);
@@ -80,7 +80,7 @@ public final class MainFragment extends Fragment {
       }));
   }
 
-  @Override public void onCreate(Bundle savedInstanceState) {
+  @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     // Injection dependencies
@@ -88,7 +88,6 @@ public final class MainFragment extends Fragment {
 
     setHasOptionsMenu(true);
 
-    compositeDisposable = new CompositeDisposable();
     layoutManager = new GridLayoutManager(getActivity(), PORTRAIT_COLUMNS);
     itemOffsetDecoration = new ItemOffsetDecoration(getActivity(), R.dimen.gif_adapter_item_offset);
     adapter = new GifAdapter(getActivity().getApplication());

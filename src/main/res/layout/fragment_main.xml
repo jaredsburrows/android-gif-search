@@ -7,5 +7,5 @@
     android:clipToPadding="false"
     android:scrollbars="none"
     android:padding="@dimen/gif_adapter_item_offset"
-    tools:listitem="@layout/recyclerview_list_item"
+    tools:listitem="@layout/list_item"
     tools:context=".ui.activity.MainActivity" />
