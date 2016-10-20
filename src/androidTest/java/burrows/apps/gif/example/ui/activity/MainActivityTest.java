@@ -20,7 +20,7 @@ import burrows.apps.gif.example.di.module.GlideModule;
 import burrows.apps.gif.example.di.module.LeakCanaryModule;
 import burrows.apps.gif.example.di.module.RiffsyModule;
 import burrows.apps.gif.example.rest.service.ImageDownloader;
-import burrows.apps.gif.example.rest.service.RiffsyService;
+import burrows.apps.gif.example.rest.service.RiffsyRepository;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.After;
@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import retrofit2.Retrofit;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -67,8 +68,8 @@ public class MainActivityTest {
         .appComponent(appComponent)
         .riffsyModule(new RiffsyModule() {
           // Set custom endpoint for rest service
-          @Override protected RiffsyService provideRiffsyService() {
-            return new RiffsyService(mockEndPoint);
+          @Override protected RiffsyRepository provideRiffsyService(Retrofit.Builder retrofit) {
+            return new RiffsyRepository(retrofit, mockEndPoint);
           }
         })
         .glideModule(new GlideModule() {

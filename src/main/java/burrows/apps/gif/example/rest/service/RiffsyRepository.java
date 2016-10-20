@@ -1,17 +1,19 @@
 package burrows.apps.gif.example.rest.service;
 
 import burrows.apps.gif.example.rest.model.RiffsyResponse;
-import burrows.apps.gif.example.util.ServiceUtil;
 import io.reactivex.Observable;
+import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+
+import static android.R.attr.key;
 
 /**
  * Riffsy Api Service for getting "trending" and "search" api results.
  *
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class RiffsyService {
+public final class RiffsyRepository {
   /**
    * URL for Riffsy.
    */
@@ -34,18 +36,21 @@ public final class RiffsyService {
 
   /**
    * Riffsy service.
+   *
+   * @param endPoint Base URL.
    */
-  public RiffsyService() {
-    this(BASE_URL);
+  public RiffsyRepository(Retrofit.Builder retrofit) {
+    api = retrofit.baseUrl(BASE_URL).build().create(RiffsyServiceApi.class);
   }
 
   /**
    * Riffsy service.
    *
+   * @param retrofit Retrofit.Builder.
    * @param endPoint Base URL.
    */
-  public RiffsyService(String endPoint) {
-    api = ServiceUtil.createService(RiffsyServiceApi.class, endPoint);
+  public RiffsyRepository(Retrofit.Builder retrofit, String endPoint) {
+    api = retrofit.baseUrl(endPoint).build().create(RiffsyServiceApi.class);
   }
 
   /**
@@ -54,17 +59,7 @@ public final class RiffsyService {
    * @return Response of trending results.
    */
   public Observable<RiffsyResponse> getTrendingResults() {
-    return getTrendingResults(PUBLIC_API_KEY);
-  }
-
-  /**
-   * Get search gif results by a search string. Default limit to 24.
-   *
-   * @param key Api key for Riffsy.
-   * @return Response of trending results.
-   */
-  public Observable<RiffsyResponse> getTrendingResults(String key) {
-    return getTrendingResults(DEFAULT_RESULTS_COUNT, key);
+    return getTrendingResults(DEFAULT_RESULTS_COUNT);
   }
 
   /**
@@ -74,8 +69,8 @@ public final class RiffsyService {
    * @param key   Api key for Riffsy.
    * @return Response of trending results.
    */
-  public Observable<RiffsyResponse> getTrendingResults(int limit, String key) {
-    return api.getTrendingResults(limit, key);
+  public Observable<RiffsyResponse> getTrendingResults(int limit) {
+    return api.getTrendingResults(limit);
   }
 
   /**
@@ -85,18 +80,7 @@ public final class RiffsyService {
    * @return Response of search results.
    */
   public Observable<RiffsyResponse> getSearchResults(String tag) {
-    return getSearchResults(tag, PUBLIC_API_KEY);
-  }
-
-  /**
-   * Get search gif results by a search string. Default limit to 24.
-   *
-   * @param tag Search string to find gifs.
-   * @param key Api key for Riffsy.
-   * @return Response of search results.
-   */
-  public Observable<RiffsyResponse> getSearchResults(String tag, String key) {
-    return getSearchResults(tag, DEFAULT_RESULTS_COUNT, key);
+    return getSearchResults(tag, DEFAULT_RESULTS_COUNT);
   }
 
   /**
@@ -104,11 +88,10 @@ public final class RiffsyService {
    *
    * @param tag   Search string to find gifs.
    * @param limit Limit results.
-   * @param key   Api key for Riffsy.
    * @return Response of search results.
    */
-  public Observable<RiffsyResponse> getSearchResults(String tag, int limit, String key) {
-    return api.getSearchResults(tag, limit, key);
+  public Observable<RiffsyResponse> getSearchResults(String tag, int limit) {
+    return api.getSearchResults(tag, limit);
   }
 
   /**
@@ -126,11 +109,9 @@ public final class RiffsyService {
      * Query: key
      *
      * @param limit Limit results.
-     * @param key   Api key for Riffsy.
      * @return Response of trending results.
      */
-    @GET("/v1/trending") Observable<RiffsyResponse> getTrendingResults(@Query("limit") int limit,
-                                                                       @Query("key") String key);
+    @GET("/v1/trending?key=" + PUBLIC_API_KEY) Observable<RiffsyResponse> getTrendingResults(@Query("limit") int limit);
 
     /**
      * Get search gif results by a search string.
@@ -143,11 +124,9 @@ public final class RiffsyService {
      *
      * @param tag   Search string to find gifs.
      * @param limit Limit results.
-     * @param key   Api key for Riffsy.
      * @return Response of search results.
      */
-    @GET("/v1/search") Observable<RiffsyResponse> getSearchResults(@Query("tag") String tag,
-                                                                   @Query("limit") int limit,
-                                                                   @Query("key") String key);
+    @GET("/v1/search?key=" + PUBLIC_API_KEY) Observable<RiffsyResponse> getSearchResults(@Query("tag") String tag,
+                                                                                         @Query("limit") int limit);
   }
 }

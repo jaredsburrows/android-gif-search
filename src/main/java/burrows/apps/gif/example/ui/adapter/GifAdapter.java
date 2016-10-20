@@ -115,7 +115,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    * Clear the entire adapter using {@link android.support.v7.widget.RecyclerView.Adapter#notifyItemRangeRemoved}.
    */
   public void clear() {
-    int size = data.size();
+    final int size = data.size();
     if (size > 0) {
       for (int i = 0; i < size; i++) {
         data.remove(0);

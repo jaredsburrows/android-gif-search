@@ -24,7 +24,7 @@ import burrows.apps.gif.example.R;
 import burrows.apps.gif.example.rest.model.Result;
 import burrows.apps.gif.example.rest.model.RiffsyResponse;
 import burrows.apps.gif.example.rest.service.ImageDownloader;
-import burrows.apps.gif.example.rest.service.RiffsyService;
+import burrows.apps.gif.example.rest.service.RiffsyRepository;
 import burrows.apps.gif.example.rx.RxBus;
 import burrows.apps.gif.example.rx.event.PreviewImageEvent;
 import burrows.apps.gif.example.ui.adapter.GifAdapter;
@@ -52,7 +52,7 @@ import javax.inject.Inject;
 public final class MainFragment extends Fragment {
   static final String TAG = MainFragment.class.getSimpleName();
   private static final int PORTRAIT_COLUMNS = 3;
-  private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+  private final CompositeDisposable disposable = new CompositeDisposable();
   private RecyclerView.LayoutManager layoutManager;
   private GifItemDecoration itemOffsetDecoration;
   private GifAdapter adapter;
@@ -66,13 +66,13 @@ public final class MainFragment extends Fragment {
   @BindString(R.string.search_gifs) String searchGifs;
   @Inject RxBus bus;
   @Inject RefWatcher refWatcher;
-  @Inject RiffsyService riffsyService;
+  @Inject RiffsyRepository riffsyService;
   @Inject ImageDownloader imageDownloader;
 
   @Override public void onStart() {
     super.onStart();
 
-    compositeDisposable.add(bus.toObservable()
+    disposable.add(bus.toObservable()
       .subscribe(event -> {
         if (event instanceof PreviewImageEvent) {
           showImageDialog(((PreviewImageEvent) event).getUrl());
@@ -108,7 +108,7 @@ public final class MainFragment extends Fragment {
     recyclerView.setAdapter(adapter);
     recyclerView.setHasFixedSize(true);
     recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS + PORTRAIT_COLUMNS);
-    recyclerView.setItemViewCacheSize(RiffsyService.DEFAULT_RESULTS_COUNT);
+    recyclerView.setItemViewCacheSize(RiffsyRepository.DEFAULT_RESULTS_COUNT);
     recyclerView.setDrawingCacheEnabled(true);
     recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
@@ -143,7 +143,7 @@ public final class MainFragment extends Fragment {
 
   @Override public void onStop() {
     // Unsubscribe from all subscriptions
-    compositeDisposable.clear();
+    disposable.clear();
 
     super.onStop();
   }
@@ -219,7 +219,7 @@ public final class MainFragment extends Fragment {
    * @param observable Observable to added to the subscription.
    */
   private void loadImages(Observable<RiffsyResponse> observable) {
-    compositeDisposable.add(observable
+    disposable.add(observable
       .subscribeOn(Schedulers.io())
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe(response -> {
