@@ -1,9 +1,9 @@
-package burrows.apps.example.gif.ui.adapter;
+package burrows.apps.example.gif.presentation.adapter;
 
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
-import burrows.apps.example.gif.ui.adapter.model.ImageInfo;
+import burrows.apps.example.gif.presentation.adapter.model.ImageInfo;
 import com.bumptech.glide.GifRequestBuilder;
 import org.junit.After;
 import org.junit.Before;

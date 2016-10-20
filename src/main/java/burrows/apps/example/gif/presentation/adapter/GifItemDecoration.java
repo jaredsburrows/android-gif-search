@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.ui.adapter;
+package burrows.apps.example.gif.presentation.adapter;
 
 import android.content.Context;
 import android.graphics.Rect;

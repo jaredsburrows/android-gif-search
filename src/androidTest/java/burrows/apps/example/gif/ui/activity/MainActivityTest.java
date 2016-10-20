@@ -20,7 +20,6 @@ import burrows.apps.example.gif.di.module.RiffsyModule;
 import burrows.apps.example.gif.presentation.main.MainActivity;
 import com.bumptech.glide.GifRequestBuilder;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.After;
@@ -81,9 +80,7 @@ public class MainActivityTest {
                 return Glide.with(context)
                   .load(R.mipmap.ic_launcher)
                   .asGif()
-                  .thumbnail(0.1f)
-                  .override(200, 200)
-                  .diskCacheStrategy(DiskCacheStrategy.SOURCE);
+                  .override(200, 200);
               }
             };
           }

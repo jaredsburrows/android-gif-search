@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.ui.adapter;
+package burrows.apps.example.gif.presentation.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import burrows.apps.example.gif.R;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
-import burrows.apps.example.gif.ui.adapter.model.ImageInfo;
+import burrows.apps.example.gif.presentation.adapter.model.ImageInfo;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;

@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.ui.adapter.model;
+package burrows.apps.example.gif.presentation.adapter.model;
 
 /**
  * Model for the GifAdapter in order to display the gifs.

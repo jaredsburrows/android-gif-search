@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import burrows.apps.example.gif.App;
 import burrows.apps.example.gif.di.module.AppModule;
-import burrows.apps.example.gif.di.module.LeakCanaryModule;
-import com.squareup.leakcanary.RefWatcher;
 import dagger.Component;
 
 import javax.inject.Singleton;
@@ -14,7 +12,7 @@ import javax.inject.Singleton;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 @Singleton
-@Component(modules = {AppModule.class, LeakCanaryModule.class})
+@Component(modules = AppModule.class)
 public interface AppComponent {
   // Injections
   void inject(App app);
@@ -22,14 +20,13 @@ public interface AppComponent {
   // Expose to subgraphs
   Application application();
   Context context();
-  RefWatcher refWatcher();
 
   // Setup components dependencies and modules
-  final class Builder {
-    private Builder() {
+  final class Initializer {
+    private Initializer() {
     }
 
-    public static AppComponent build(Application application) {
+    public static AppComponent init(Application application) {
       return DaggerAppComponent.builder()
         .appModule(new AppModule(application))
         .build();

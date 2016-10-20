@@ -1,11 +1,11 @@
-package burrows.apps.example.gif.ui.adapter;
+package burrows.apps.example.gif.presentation.adapter;
 
 import android.graphics.Rect;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
-import burrows.apps.example.gif.ui.adapter.model.ImageInfo;
+import burrows.apps.example.gif.presentation.adapter.model.ImageInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

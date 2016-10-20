@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.ui.adapter.model;
+package burrows.apps.example.gif.presentation.adapter.model;
 
 import org.junit.Test;
 import test.TestBase;

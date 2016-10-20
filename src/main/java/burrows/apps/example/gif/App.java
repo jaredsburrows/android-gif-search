@@ -39,7 +39,7 @@ public class App extends Application {
 
   // App Component
   public void initAppComponent() {
-    appComponent = AppComponent.Builder.build(this);
+    appComponent = AppComponent.Initializer.init(this);
   }
 
   public AppComponent getAppComponent() {
@@ -48,7 +48,7 @@ public class App extends Application {
 
   // Riffsy Component
   public void initActivityComponent() {
-    activityComponent = ActivityComponent.Builder.build(appComponent);
+    activityComponent = ActivityComponent.Initializer.init(appComponent);
   }
 
   public ActivityComponent getActivityComponent() {
