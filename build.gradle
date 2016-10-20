@@ -42,10 +42,10 @@ apply from: rootProject.file("gradle/publishing.gradle")
 
 android {
   defaultConfig {
-    applicationId "burrows.apps.gif.example"
+    applicationId "burrows.apps.example.gif"
     versionCode 1
     versionName "1.0"
-    testApplicationId "burrows.apps.gif.example.test"
+    testApplicationId "burrows.apps.example.gif.test"
     testInstrumentationRunner "test.CustomTestRunner"
 
     resConfigs "en"

@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import burrows.apps.example.gif.App;
 import burrows.apps.example.gif.R;
@@ -41,7 +42,6 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import pl.droidsonroids.gif.GifImageView;
 
 import javax.inject.Inject;
 
@@ -62,7 +62,7 @@ public final class MainFragment extends Fragment implements GifAdapter.OnItemCli
   private Dialog dialog;
   AppCompatTextView dialogText;
   ProgressBar progressBar;
-  GifImageView imageView;
+  ImageView imageView;
   @BindView(R.id.recycler_view) RecyclerView recyclerView;
   @BindString(R.string.search_gifs) String searchGifs;
   @Inject RefWatcher refWatcher;

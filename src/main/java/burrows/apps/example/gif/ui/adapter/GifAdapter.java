@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import burrows.apps.example.gif.R;
 import burrows.apps.example.gif.rest.service.ImageDownloader;
@@ -15,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import pl.droidsonroids.gif.GifImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +88,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    */
   final class ViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.gif_progress) ProgressBar progressBar;
-    @BindView(R.id.gif_image) GifImageView imageView;
+    @BindView(R.id.gif_image) ImageView imageView;
 
     ViewHolder(View view) {
       super(view);

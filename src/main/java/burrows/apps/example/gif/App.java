@@ -12,7 +12,6 @@ import burrows.apps.example.gif.di.component.NetComponent;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public class App extends Application {
-  private App app;
   protected AppComponent appComponent;
   protected NetComponent netComponent;
 
@@ -30,8 +29,6 @@ public class App extends Application {
     }
     super.onCreate();
 
-    app = this;
-
     // Setup components
     initAppComponent();
     initNetComponent();
@@ -42,7 +39,7 @@ public class App extends Application {
 
   // App Component
   public void initAppComponent() {
-    appComponent = AppComponent.Builder.build(app);
+    appComponent = AppComponent.Builder.build(this);
   }
 
   public AppComponent getAppComponent() {

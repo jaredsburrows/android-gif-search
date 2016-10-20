@@ -15,7 +15,7 @@
         android:layout_gravity="center"
         android:padding="24dp" />
     
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/gif_image"
         android:visibility="invisible"
         android:layout_width="match_parent"
