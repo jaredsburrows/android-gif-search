@@ -3,7 +3,7 @@ package test;
 import android.app.Application;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnitRunner;
-import burrows.apps.gif.example.TestApp;
+import burrows.apps.example.gif.TestApp;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>

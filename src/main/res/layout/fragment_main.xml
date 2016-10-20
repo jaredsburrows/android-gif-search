@@ -6,6 +6,5 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:scrollbars="none"
-    android:padding="@dimen/gif_adapter_item_offset"
     tools:listitem="@layout/list_item"
     tools:context=".ui.activity.MainActivity" />
