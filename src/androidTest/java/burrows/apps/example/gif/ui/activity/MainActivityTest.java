@@ -8,16 +8,16 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import burrows.apps.example.gif.R;
 import burrows.apps.example.gif.TestApp;
+import burrows.apps.example.gif.data.rest.repository.ImageRepository;
+import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
+import burrows.apps.example.gif.di.component.ActivityComponent;
 import burrows.apps.example.gif.di.component.AppComponent;
+import burrows.apps.example.gif.di.component.DaggerActivityComponent;
 import burrows.apps.example.gif.di.component.DaggerAppComponent;
-import burrows.apps.example.gif.di.component.DaggerNetComponent;
-import burrows.apps.example.gif.di.component.NetComponent;
 import burrows.apps.example.gif.di.module.AppModule;
 import burrows.apps.example.gif.di.module.GlideModule;
-import burrows.apps.example.gif.di.module.LeakCanaryModule;
 import burrows.apps.example.gif.di.module.RiffsyModule;
-import burrows.apps.example.gif.rest.service.ImageDownloader;
-import burrows.apps.example.gif.rest.service.RiffsyRepository;
+import burrows.apps.example.gif.presentation.main.MainActivity;
 import com.bumptech.glide.GifRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -61,22 +61,21 @@ public class MainActivityTest {
       // Override app component
       final AppComponent appComponent = DaggerAppComponent.builder()
         .appModule(new AppModule(getApplication()))
-        .leakCanaryModule(new LeakCanaryModule(getApplication()))
         .build();
       testApp.setAppComponent(appComponent);
 
       // Override service component
-      final NetComponent netComponent = DaggerNetComponent.builder()
+      final ActivityComponent netComponent = DaggerActivityComponent.builder()
         .appComponent(appComponent)
         .riffsyModule(new RiffsyModule() {
           // Set custom endpoint for rest service
-          @Override protected RiffsyRepository provideRiffsyService(Retrofit.Builder retrofit) {
-            return new RiffsyRepository(retrofit, mockEndPoint);
+          @Override protected RiffsyRepository provideRiffsyApi(Retrofit.Builder retrofit) {
+            return retrofit.baseUrl(mockEndPoint).build().create(RiffsyRepository.class);
           }
         })
         .glideModule(new GlideModule() {
-          @Override protected ImageDownloader provideImageDownloader(Context context) {
-            return new ImageDownloader(context) {
+          @Override protected ImageRepository provideImageDownloader(Context context) {
+            return new ImageRepository(context) {
               // Prevent Glide network call with custom override
               @Override public GifRequestBuilder<?> load(Object url) {
                 return Glide.with(context)

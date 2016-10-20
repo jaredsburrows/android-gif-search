@@ -26,7 +26,7 @@
         android:largeHeap="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".presentation.main.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>

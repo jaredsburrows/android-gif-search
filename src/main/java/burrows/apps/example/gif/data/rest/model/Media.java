@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.rest.model;
+package burrows.apps.example.gif.data.rest.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

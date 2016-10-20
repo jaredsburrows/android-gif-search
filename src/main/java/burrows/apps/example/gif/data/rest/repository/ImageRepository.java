@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.rest.service;
+package burrows.apps.example.gif.data.rest.repository;
 
 import android.content.Context;
 import burrows.apps.example.gif.R;
@@ -9,13 +9,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public class ImageDownloader {
+public class ImageRepository {
   private static final float THUMBNAIL_MULTIPLIER = 0.1f;
   private final int imageHeight;
   private final int imageWidth;
   private final Context context;
 
-  public ImageDownloader(Context context) {
+  public ImageRepository(Context context) {
     this.context = context;
     this.imageHeight = context.getResources().getDimensionPixelSize(R.dimen.gif_image_width);
     this.imageWidth = imageHeight;

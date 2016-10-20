@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.ui.fragment;
+package burrows.apps.example.gif.presentation.main;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -22,10 +22,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import burrows.apps.example.gif.App;
 import burrows.apps.example.gif.R;
-import burrows.apps.example.gif.rest.model.Result;
-import burrows.apps.example.gif.rest.model.RiffsyResponse;
-import burrows.apps.example.gif.rest.service.ImageDownloader;
-import burrows.apps.example.gif.rest.service.RiffsyRepository;
+import burrows.apps.example.gif.data.rest.model.Result;
+import burrows.apps.example.gif.data.rest.model.RiffsyResponse;
+import burrows.apps.example.gif.data.rest.repository.ImageRepository;
+import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
 import burrows.apps.example.gif.ui.adapter.GifAdapter;
 import burrows.apps.example.gif.ui.adapter.GifItemDecoration;
 import burrows.apps.example.gif.ui.adapter.model.ImageInfo;
@@ -38,10 +38,6 @@ import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.squareup.leakcanary.RefWatcher;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 
 import javax.inject.Inject;
 
@@ -50,40 +46,81 @@ import javax.inject.Inject;
  *
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class MainFragment extends Fragment implements GifAdapter.OnItemClickListener {
+public final class MainFragment extends Fragment implements MainContract.View, GifAdapter.OnItemClickListener {
   static final String TAG = MainFragment.class.getSimpleName();
   private static final int PORTRAIT_COLUMNS = 3;
-  private final CompositeDisposable disposable = new CompositeDisposable();
   private GridLayoutManager layoutManager;
   private GifItemDecoration itemOffsetDecoration;
   private GifAdapter adapter;
-  private Unbinder unbinder;
   boolean hasSearched;
   private Dialog dialog;
+  private Unbinder unbinder;
   AppCompatTextView dialogText;
   ProgressBar progressBar;
   ImageView imageView;
+  MainContract.Presenter presenter;
   @BindView(R.id.recycler_view) RecyclerView recyclerView;
   @BindString(R.string.search_gifs) String searchGifs;
   @Inject RefWatcher refWatcher;
-  @Inject RiffsyRepository riffsyRepository;
-  @Inject ImageDownloader imageDownloader;
+  @Inject ImageRepository repository;
+
+  //
+  // Contract
+  //
+
+  @Override public void setPresenter(MainContract.Presenter presenter) {
+    this.presenter = presenter;
+  }
+
+  @Override public void clearImages() {
+    // Clear current data
+    adapter.clear();
+  }
+
+  @Override public void addImages(RiffsyResponse response) {
+    // Iterate over data from response and grab the urls
+    for (final Result result : response.getResults()) {
+      final String url = result.getMedia().get(0).getGif().getUrl();
+
+      adapter.add(new ImageInfo().withUrl(url));
+
+      if (Log.isLoggable(TAG, Log.INFO)) {
+        Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
+      }
+    }
+  }
+
+  @Override public void showDialog(String url) {
+    showImageDialog(url);
+  }
+
+  @Override public boolean isActive() {
+    return isAdded();
+  }
+
+  //
+  // GifAdapter
+  //
 
   @Override public void onUserItemClicked(ImageInfo imageInfo) {
-    showImageDialog(imageInfo.getUrl());
+    showDialog(imageInfo.getUrl());
   }
+
+  //
+  // Fragment
+  //
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     // Injection dependencies
-    ((App) getActivity().getApplication()).getNetComponent().inject(this);
+    ((App) getActivity().getApplication()).getActivityComponent().inject(this);
 
     setHasOptionsMenu(true);
 
     layoutManager = new GridLayoutManager(getActivity(), PORTRAIT_COLUMNS);
     itemOffsetDecoration = new GifItemDecoration(getActivity(), layoutManager.getSpanCount());
-    adapter = new GifAdapter(this, imageDownloader);
+    adapter = new GifAdapter(this, repository);
   }
 
   @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -101,7 +138,7 @@ public final class MainFragment extends Fragment implements GifAdapter.OnItemCli
     recyclerView.setAdapter(adapter);
     recyclerView.setHasFixedSize(true);
     recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS + PORTRAIT_COLUMNS);
-    recyclerView.setItemViewCacheSize(RiffsyRepository.RiffsyApi.DEFAULT_LIMIT_COUNT);
+    recyclerView.setItemViewCacheSize(RiffsyRepository.DEFAULT_LIMIT_COUNT);
     recyclerView.setDrawingCacheEnabled(true);
     recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
@@ -122,29 +159,9 @@ public final class MainFragment extends Fragment implements GifAdapter.OnItemCli
     imageView = ButterKnife.findById(dialogView, R.id.gif_dialog_image);
 
     // Load initial images
-    loadTrendingImages();
+    presenter.loadTrendingImages();
 
     return view;
-  }
-
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-
-    // Unbind views
-    unbinder.unbind();
-  }
-
-  @Override public void onStop() {
-    // Unsubscribe from all subscriptions
-    disposable.clear();
-
-    super.onStop();
-  }
-
-  @Override public void onDestroy() {
-    super.onDestroy();
-
-    refWatcher.watch(this, TAG);
   }
 
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -166,7 +183,7 @@ public final class MainFragment extends Fragment implements GifAdapter.OnItemCli
       @Override public boolean onMenuItemActionCollapse(MenuItem item) {
         // When search is closed, go back to trending results
         if (hasSearched) {
-          loadTrendingImages();
+          presenter.loadTrendingImages();
           hasSearched = false;
         }
         return true;
@@ -178,7 +195,7 @@ public final class MainFragment extends Fragment implements GifAdapter.OnItemCli
       @Override public boolean onQueryTextChange(String newText) {
         // Search on type
         if (!TextUtils.isEmpty(newText)) {
-          loadSearchImages(newText);
+          presenter.loadSearchImages(newText);
           hasSearched = true;
         }
         return false;
@@ -190,58 +207,27 @@ public final class MainFragment extends Fragment implements GifAdapter.OnItemCli
     });
   }
 
-  /**
-   * Load gif trending images.
-   */
-  void loadTrendingImages() {
-    loadImages(riffsyRepository.getTrendingResults(RiffsyRepository.RiffsyApi.DEFAULT_LIMIT_COUNT));
+  @Override public void onResume() {
+    super.onResume();
+    presenter.subscribe();
   }
 
-  /**
-   * Search gifs based on user input.
-   *
-   * @param searchString User input.
-   */
-  void loadSearchImages(String searchString) {
-    loadImages(riffsyRepository.getSearchResults(searchString, RiffsyRepository.RiffsyApi.DEFAULT_LIMIT_COUNT));
+  @Override public void onPause() {
+    super.onPause();
+    presenter.unsubscribe();
   }
 
-  /**
-   * Common code for subscription.
-   *
-   * @param observable Observable to added to the subscription.
-   */
-  private void loadImages(Observable<RiffsyResponse> observable) {
-    disposable.add(observable
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(response -> {
-        // onNext
+  @Override public void onDestroyView() {
+    super.onDestroyView();
 
-        // Clear current data
-        adapter.clear();
+    // Unbind views
+    unbinder.unbind();
+  }
 
-        // Iterate over data from response and grab the urls
-        for (final Result result : response.getResults()) {
-          final String url = result.getMedia().get(0).getGif().getUrl();
+  @Override public void onDestroy() {
+    super.onDestroy();
 
-          adapter.add(new ImageInfo().withUrl(url));
-
-          if (Log.isLoggable(TAG, Log.INFO)) {
-            Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
-          }
-        }
-      }, error -> {
-        // onError
-        if (Log.isLoggable(TAG, Log.ERROR)) {
-          Log.e(TAG, "onError", error);
-        }
-      }, () -> {
-        // onComplete
-        if (Log.isLoggable(TAG, Log.INFO)) {
-          Log.i(TAG, "Done loading!");
-        }
-      }));
+    refWatcher.watch(this, TAG);
   }
 
   private void showImageDialog(String url) {
@@ -254,7 +240,7 @@ public final class MainFragment extends Fragment implements GifAdapter.OnItemCli
     dialogText.setVisibility(View.VISIBLE);
 
     // Load image
-    imageDownloader.load(url)
+    repository.load(url)
       .listener(new RequestListener<Object, GifDrawable>() {
         @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
           // Show gif

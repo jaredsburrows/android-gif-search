@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.rest.model;
+package burrows.apps.example.gif.data.rest.model;
 
 import org.junit.Test;
 import test.TestBase;

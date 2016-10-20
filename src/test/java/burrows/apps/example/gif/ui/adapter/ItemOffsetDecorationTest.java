@@ -4,7 +4,7 @@ import android.graphics.Rect;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import burrows.apps.example.gif.rest.service.ImageDownloader;
+import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.ui.adapter.model.ImageInfo;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
   private final Rect rect = new Rect();
   private final RecyclerView.State state = new RecyclerView.State();
   @Mock GifAdapter.OnItemClickListener onItemClickListener;
-  @Mock ImageDownloader imageDownloader;
+  @Mock ImageRepository imageDownloader;
   @Mock RecyclerView.LayoutParams layoutParams;
   private RecyclerView recyclerView;
 

@@ -1,8 +1,8 @@
 package burrows.apps.example.gif.di.module;
 
 import android.content.Context;
+import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.di.scope.PerActivity;
-import burrows.apps.example.gif.rest.service.ImageDownloader;
 import dagger.Module;
 import dagger.Provides;
 
@@ -11,7 +11,7 @@ import dagger.Provides;
  */
 @Module
 public class GlideModule {
-  @Provides @PerActivity protected ImageDownloader provideImageDownloader(Context context) {
-    return new ImageDownloader(context);
+  @Provides @PerActivity protected ImageRepository provideImageDownloader(Context context) {
+    return new ImageRepository(context);
   }
 }

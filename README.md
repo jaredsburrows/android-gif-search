@@ -8,7 +8,7 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
 
 
-Riffsy RecyclerView Grid Example using Dagger 2, Retrofit 2, RxJava 2 and Butterknife with Junit + Espresso tests
+Riffsy RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, RxJava 2 and Butterknife with Junit and Espresso tests
 
 <a href="http://i.imgur.com/zErC6JV.png" target="_blank"><img src="http://i.imgur.com/zErC6JV.png" width="250px" /></a>
 

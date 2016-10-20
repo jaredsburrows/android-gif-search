@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import burrows.apps.example.gif.R;
-import burrows.apps.example.gif.rest.service.ImageDownloader;
+import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.ui.adapter.model.ImageInfo;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,9 +29,9 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
   final static String TAG = GifAdapter.class.getSimpleName();
   private final List<ImageInfo> data = new ArrayList<>();
   private OnItemClickListener onItemClickListener;
-  private ImageDownloader imageDownloader;
+  private ImageRepository imageDownloader;
 
-  public GifAdapter(OnItemClickListener onItemClickListener, ImageDownloader imageDownloader) {
+  public GifAdapter(OnItemClickListener onItemClickListener, ImageRepository imageDownloader) {
     this.onItemClickListener = onItemClickListener;
     this.imageDownloader = imageDownloader;
   }

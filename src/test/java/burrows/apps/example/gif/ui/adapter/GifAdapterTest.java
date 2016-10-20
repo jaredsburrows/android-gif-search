@@ -2,7 +2,7 @@ package burrows.apps.example.gif.ui.adapter;
 
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import burrows.apps.example.gif.rest.service.ImageDownloader;
+import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.ui.adapter.model.ImageInfo;
 import com.bumptech.glide.GifRequestBuilder;
 import org.junit.After;
@@ -31,7 +31,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
   private GifAdapter.ViewHolder viewHolder;
   @Mock GifAdapter.OnItemClickListener onItemClickListener;
   @Mock GifRequestBuilder requestBuilder;
-  ImageDownloader spyImageDownloader;
+  ImageRepository spyImageDownloader;
   private GifAdapter sut;
 
   @Before @Override public void setUp() throws Exception {
@@ -39,9 +39,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
     initMocks(this);
 
-    final ImageDownloader imageDownloader = new ImageDownloader(context);
-    spyImageDownloader = spy(imageDownloader);
-
+    spyImageDownloader = spy(new ImageRepository(context));
     sut = new GifAdapter(onItemClickListener, spyImageDownloader);
     sut.add(imageInfo);
     sut.add(imageInfo2);

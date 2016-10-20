@@ -32,7 +32,6 @@ public interface AppComponent {
     public static AppComponent build(Application application) {
       return DaggerAppComponent.builder()
         .appModule(new AppModule(application))
-        .leakCanaryModule(new LeakCanaryModule(application))
         .build();
     }
   }

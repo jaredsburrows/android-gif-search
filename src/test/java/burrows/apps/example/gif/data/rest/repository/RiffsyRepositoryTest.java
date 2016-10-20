@@ -1,6 +1,6 @@
-package burrows.apps.example.gif.rest.service;
+package burrows.apps.example.gif.data.rest.repository;
 
-import burrows.apps.example.gif.rest.model.RiffsyResponse;
+import burrows.apps.example.gif.data.rest.model.RiffsyResponse;
 import com.google.gson.Gson;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import okhttp3.OkHttpClient;
@@ -46,7 +46,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
 
   @Before @Override public void setUp() throws Exception {
     super.setUp();
-    sut = new RiffsyRepository(getRetrofit(mockEndPoint), mockEndPoint);
+    sut = getRetrofit(mockEndPoint).build().create(RiffsyRepository.class);
   }
 
   @Test public void testGetTrendingDataWithShouldParseCorrectly() throws Exception {
@@ -55,7 +55,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
 
     // Request
     final RiffsyResponse response = sut
-      .getTrendingResults(RiffsyRepository.RiffsyApi.DEFAULT_LIMIT_COUNT)
+      .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT)
       .blockingFirst();
 
     assertThat(response.getResults().get(0).getMedia().get(0).getGif().getUrl())
@@ -69,7 +69,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
 
     // Request
     final RiffsyResponse response = sut
-      .getTrendingResults(RiffsyRepository.RiffsyApi.DEFAULT_LIMIT_COUNT)
+      .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT)
       .blockingFirst();
 
     assertThat(response.getResults().get(0).getMedia().get(0).getGif().getUrl())
@@ -82,7 +82,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
 
     // Request
     final RiffsyResponse response = sut
-      .getSearchResults("funny cat", RiffsyRepository.RiffsyApi.DEFAULT_LIMIT_COUNT)
+      .getSearchResults("funny cat", RiffsyRepository.DEFAULT_LIMIT_COUNT)
       .blockingFirst();
 
     assertThat(response.getResults().get(0).getMedia().get(0).getGif().getUrl())
@@ -95,7 +95,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
 
     // Request
     final RiffsyResponse response = sut
-      .getSearchResults("funny cat", RiffsyRepository.RiffsyApi.DEFAULT_LIMIT_COUNT)
+      .getSearchResults("funny cat", RiffsyRepository.DEFAULT_LIMIT_COUNT)
       .blockingFirst();
 
     assertThat(response.getResults().get(0).getMedia().get(0).getGif().getUrl())
