@@ -19,7 +19,7 @@
         android:id="@+id/gif_image"
         android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="128dp"
+        android:layout_height="@dimen/gif_image_width"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"

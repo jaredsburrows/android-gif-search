@@ -2,10 +2,13 @@ package burrows.apps.example.gif.ui.adapter;
 
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import burrows.apps.example.gif.rest.service.ImageDownloader;
 import burrows.apps.example.gif.ui.adapter.model.ImageInfo;
+import com.bumptech.glide.GifRequestBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import test.RoboTestBase;
 
 import java.util.Arrays;
@@ -13,20 +16,35 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class GifAdapterTest extends RoboTestBase {
+@SuppressWarnings({"rawtypes", "unchecked"}) public final class GifAdapterTest extends RoboTestBase {
+  private final ImageInfo imageInfo = new ImageInfo().withUrl(STRING_UNIQUE);
+  private final ImageInfo imageInfo2 = new ImageInfo().withUrl(STRING_UNIQUE2);
+  private final ImageInfo imageInfo3 = new ImageInfo().withUrl(STRING_UNIQUE3);
   private GifAdapter.ViewHolder viewHolder;
+  @Mock GifAdapter.OnItemClickListener onItemClickListener;
+  @Mock GifRequestBuilder requestBuilder;
+  ImageDownloader spyImageDownloader;
   private GifAdapter sut;
 
   @Before @Override public void setUp() throws Exception {
     super.setUp();
 
-    sut = new GifAdapter(application);
-    sut.add(new ImageInfo().withUrl(STRING_UNIQUE));
-    sut.add(new ImageInfo().withUrl(STRING_UNIQUE2));
+    initMocks(this);
+
+    final ImageDownloader imageDownloader = new ImageDownloader(context);
+    spyImageDownloader = spy(imageDownloader);
+
+    sut = new GifAdapter(onItemClickListener, spyImageDownloader);
+    sut.add(imageInfo);
+    sut.add(imageInfo2);
     viewHolder = sut.onCreateViewHolder(new LinearLayout(context), 0);
   }
 
@@ -42,22 +60,23 @@ public final class GifAdapterTest extends RoboTestBase {
       }
     };
 
-    final GifAdapter.ViewHolder viewHolder = sut.onCreateViewHolder(parent, 0);
-
-    assertThat(viewHolder).isInstanceOf(GifAdapter.ViewHolder.class);
+    assertThat(sut.onCreateViewHolder(parent, 0)).isInstanceOf(GifAdapter.ViewHolder.class);
   }
 
   @Test public void testOnBindViewHolderOnAdapterItemClick() {
     sut.clear();
 
     // must have one
-    sut.add(new ImageInfo().withUrl(STRING_UNIQUE));
-    sut.add(new ImageInfo().withUrl(STRING_UNIQUE2));
+    sut.add(imageInfo);
+    sut.add(imageInfo2);
     sut.add(new ImageInfo());
 
     sut.onBindViewHolder(viewHolder, 0);
 
     assertThat(viewHolder.itemView.performClick()).isTrue();
+
+    verify(spyImageDownloader).load(any());
+    verify(onItemClickListener).onUserItemClicked(any());
   }
 
   @Test public void testGetItem() {
@@ -81,16 +100,15 @@ public final class GifAdapterTest extends RoboTestBase {
   }
 
   @Test public void testGetListCountShouldReturnCorrectValues() {
-    assertThat(sut.getList()).isEqualTo(Arrays.asList(new ImageInfo().withUrl(STRING_UNIQUE),
-      new ImageInfo().withUrl(STRING_UNIQUE2)));
+    assertThat(sut.getList()).isEqualTo(Arrays.asList(imageInfo, imageInfo2));
   }
 
   @Test public void testGetItemShouldReturnCorrectValues() {
-    assertThat(sut.getItem(1)).isEqualTo(new ImageInfo().withUrl(STRING_UNIQUE2));
+    assertThat(sut.getItem(1)).isEqualTo(imageInfo2);
   }
 
   @Test public void testGetLocationShouldReturnCorrectValues() {
-    assertThat(sut.getLocation(new ImageInfo().withUrl(STRING_UNIQUE2))).isEqualTo(1);
+    assertThat(sut.getLocation(imageInfo2)).isEqualTo(1);
   }
 
   @Test public void testClearShouldClearAdapter() {
@@ -100,46 +118,40 @@ public final class GifAdapterTest extends RoboTestBase {
   }
 
   @Test public void testAddObjectShouldReturnCorrectValues() {
-    sut.add(new ImageInfo().withUrl(STRING_UNIQUE3));
+    sut.add(imageInfo3);
 
-    assertThat(sut.getList()).isEqualTo(Arrays.asList(new ImageInfo().withUrl(STRING_UNIQUE),
-      new ImageInfo().withUrl(STRING_UNIQUE2),
-      new ImageInfo().withUrl(STRING_UNIQUE3)));
+    assertThat(sut.getList()).isEqualTo(Arrays.asList(imageInfo, imageInfo2, imageInfo3));
   }
 
   @Test public void testAddCollectionShouldReturnCorrectValues() {
-    final List<ImageInfo> list = Collections.singletonList(new ImageInfo().withUrl(STRING_UNIQUE3));
+    final List<ImageInfo> list = Collections.singletonList(imageInfo3);
 
     sut.addAll(list);
 
-    assertThat(sut.getList()).isEqualTo(Arrays.asList(new ImageInfo().withUrl(STRING_UNIQUE),
-      new ImageInfo().withUrl(STRING_UNIQUE2),
-      new ImageInfo().withUrl(STRING_UNIQUE3)));
+    assertThat(sut.getList()).isEqualTo(Arrays.asList(imageInfo, imageInfo2, imageInfo3));
   }
 
   @Test public void testAddLocationObjectShouldReturnCorrectValues() {
     sut.add(0, new ImageInfo().withUrl(STRING_UNIQUE3));
 
-    assertThat(sut.getList()).isEqualTo(Arrays.asList(new ImageInfo().withUrl(STRING_UNIQUE3),
-      new ImageInfo().withUrl(STRING_UNIQUE),
-      new ImageInfo().withUrl(STRING_UNIQUE2)));
+    assertThat(sut.getList()).isEqualTo(Arrays.asList(imageInfo3, imageInfo, imageInfo2));
   }
 
   @Test public void testRemoveLocationObjectShouldReturnCorrectValues() {
-    sut.remove(0, new ImageInfo().withUrl(STRING_UNIQUE));
+    sut.remove(0, imageInfo);
 
-    assertThat(sut.getList()).isEqualTo(Collections.singletonList(new ImageInfo().withUrl(STRING_UNIQUE2)));
+    assertThat(sut.getList()).isEqualTo(Collections.singletonList(imageInfo2));
   }
 
   @Test public void testRemoveObjectShouldReturnCorrectValues() {
-    sut.remove(new ImageInfo().withUrl(STRING_UNIQUE));
+    sut.remove(imageInfo);
 
-    assertThat(sut.getList()).isEqualTo(Collections.singletonList(new ImageInfo().withUrl(STRING_UNIQUE2)));
+    assertThat(sut.getList()).isEqualTo(Collections.singletonList(imageInfo2));
   }
 
   @Test public void testRemoveLocationShouldReturnCorrectValues() {
     sut.remove(0);
 
-    assertThat(sut.getList()).isEqualTo(Collections.singletonList(new ImageInfo().withUrl(STRING_UNIQUE2)));
+    assertThat(sut.getList()).isEqualTo(Collections.singletonList(imageInfo2));
   }
 }
