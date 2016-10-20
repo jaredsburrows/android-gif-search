@@ -1,8 +1,8 @@
-package burrows.apps.example.gif.di.module;
+package burrows.apps.example.gif.presentation.di.module;
 
 import android.content.Context;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
-import burrows.apps.example.gif.di.scope.PerActivity;
+import burrows.apps.example.gif.presentation.di.scope.PerActivity;
 import dagger.Module;
 import dagger.Provides;
 

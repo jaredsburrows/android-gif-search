@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.di.scope;
+package burrows.apps.example.gif.presentation.di.scope;
 
 import javax.inject.Scope;
 import java.lang.annotation.Retention;

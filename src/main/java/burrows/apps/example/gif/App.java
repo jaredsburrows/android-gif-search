@@ -5,8 +5,8 @@ import android.os.StrictMode;
 import android.os.StrictMode.ThreadPolicy;
 import android.os.StrictMode.VmPolicy;
 import android.support.v7.app.AppCompatDelegate;
-import burrows.apps.example.gif.di.component.ActivityComponent;
-import burrows.apps.example.gif.di.component.AppComponent;
+import burrows.apps.example.gif.presentation.di.component.ActivityComponent;
+import burrows.apps.example.gif.presentation.di.component.AppComponent;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>

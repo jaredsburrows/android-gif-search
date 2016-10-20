@@ -1,9 +1,9 @@
-package burrows.apps.example.gif.di.component;
+package burrows.apps.example.gif.presentation.di.component;
 
 import android.app.Application;
 import android.content.Context;
 import burrows.apps.example.gif.App;
-import burrows.apps.example.gif.di.module.AppModule;
+import burrows.apps.example.gif.presentation.di.module.AppModule;
 import dagger.Component;
 
 import javax.inject.Singleton;

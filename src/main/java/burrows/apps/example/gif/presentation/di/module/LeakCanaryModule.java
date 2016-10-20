@@ -1,7 +1,7 @@
-package burrows.apps.example.gif.di.module;
+package burrows.apps.example.gif.presentation.di.module;
 
 import android.app.Application;
-import burrows.apps.example.gif.di.scope.PerActivity;
+import burrows.apps.example.gif.presentation.di.scope.PerActivity;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import dagger.Module;

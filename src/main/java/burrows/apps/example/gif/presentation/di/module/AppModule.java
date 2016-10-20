@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.di.module;
+package burrows.apps.example.gif.presentation.di.module;
 
 
 import android.app.Application;

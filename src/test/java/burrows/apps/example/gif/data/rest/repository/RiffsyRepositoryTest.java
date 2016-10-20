@@ -62,8 +62,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
       .isEqualTo("https://media.riffsy.com/images/f54932e6b9553a5538f31a5ddd78a9f3/raw");
   }
 
-  @Test
-  public void testGetTrendingDataWithLimitWithShouldParseCorrectly() throws Exception {
+  @Test public void testGetTrendingDataWithLimitWithShouldParseCorrectly() throws Exception {
     // Response
     sendMockMessages("/trending_results.json");
 

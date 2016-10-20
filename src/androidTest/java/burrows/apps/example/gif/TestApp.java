@@ -1,7 +1,7 @@
 package burrows.apps.example.gif;
 
-import burrows.apps.example.gif.di.component.AppComponent;
-import burrows.apps.example.gif.di.component.ActivityComponent;
+import burrows.apps.example.gif.presentation.di.component.AppComponent;
+import burrows.apps.example.gif.presentation.di.component.ActivityComponent;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>

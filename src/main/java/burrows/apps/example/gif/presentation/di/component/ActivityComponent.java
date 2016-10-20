@@ -1,11 +1,11 @@
-package burrows.apps.example.gif.di.component;
+package burrows.apps.example.gif.presentation.di.component;
 
-import burrows.apps.example.gif.di.module.GlideModule;
-import burrows.apps.example.gif.di.module.LeakCanaryModule;
-import burrows.apps.example.gif.di.module.NetModule;
-import burrows.apps.example.gif.di.module.RiffsyModule;
-import burrows.apps.example.gif.di.module.SchedulerProviderModule;
-import burrows.apps.example.gif.di.scope.PerActivity;
+import burrows.apps.example.gif.presentation.di.module.GlideModule;
+import burrows.apps.example.gif.presentation.di.module.LeakCanaryModule;
+import burrows.apps.example.gif.presentation.di.module.NetModule;
+import burrows.apps.example.gif.presentation.di.module.RiffsyModule;
+import burrows.apps.example.gif.presentation.di.module.SchedulerProviderModule;
+import burrows.apps.example.gif.presentation.di.scope.PerActivity;
 import burrows.apps.example.gif.presentation.main.MainActivity;
 import burrows.apps.example.gif.presentation.main.MainFragment;
 import burrows.apps.example.gif.presentation.adapter.GifAdapter;
