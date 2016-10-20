@@ -1,17 +1,13 @@
 package burrows.apps.example.gif.ui.adapter;
 
-import android.app.Application;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import burrows.apps.example.gif.App;
 import burrows.apps.example.gif.R;
 import burrows.apps.example.gif.rest.service.ImageDownloader;
-import burrows.apps.example.gif.rx.RxBus;
-import burrows.apps.example.gif.rx.event.PreviewImageEvent;
 import burrows.apps.example.gif.ui.adapter.model.ImageInfo;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,7 +17,6 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import pl.droidsonroids.gif.GifImageView;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +28,12 @@ import java.util.List;
 public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder> {
   final static String TAG = GifAdapter.class.getSimpleName();
   private final List<ImageInfo> data = new ArrayList<>();
-  @Inject RxBus bus;
-  @Inject ImageDownloader imageDownloader;
+  private OnItemClickListener onItemClickListener;
+  private ImageDownloader imageDownloader;
 
-  public GifAdapter(Application application) {
-    // Injection dependencies
-    ((App) application).getNetComponent().inject(this);
+  public GifAdapter(OnItemClickListener onItemClickListener, ImageDownloader imageDownloader) {
+    this.onItemClickListener = onItemClickListener;
+    this.imageDownloader = imageDownloader;
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -46,10 +41,10 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
   }
 
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
-    final String url = getItem(position).getUrl();
+    final ImageInfo imageInfo = getItem(position);
 
     // Load images
-    imageDownloader.load(url)
+    imageDownloader.load(imageInfo.getUrl())
       .listener(new RequestListener<Object, GifDrawable>() {
         @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
           // Show gif
@@ -78,7 +73,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
       })
       .into(holder.imageView);
 
-    holder.itemView.setOnClickListener(view -> bus.send(new PreviewImageEvent(url)));
+    holder.itemView.setOnClickListener(view -> onItemClickListener.onUserItemClicked(imageInfo));
   }
 
   @Override public void onViewRecycled(ViewHolder holder) {
@@ -100,6 +95,13 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
 
       ButterKnife.bind(this, view);
     }
+  }
+
+  /**
+   * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
+   */
+  public interface OnItemClickListener {
+    void onUserItemClicked(ImageInfo imageInfo);
   }
 
   /**

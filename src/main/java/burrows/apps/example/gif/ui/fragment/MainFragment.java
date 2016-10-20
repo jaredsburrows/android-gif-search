@@ -25,8 +25,6 @@ import burrows.apps.example.gif.rest.model.Result;
 import burrows.apps.example.gif.rest.model.RiffsyResponse;
 import burrows.apps.example.gif.rest.service.ImageDownloader;
 import burrows.apps.example.gif.rest.service.RiffsyRepository;
-import burrows.apps.example.gif.rx.RxBus;
-import burrows.apps.example.gif.rx.event.PreviewImageEvent;
 import burrows.apps.example.gif.ui.adapter.GifAdapter;
 import burrows.apps.example.gif.ui.adapter.GifItemDecoration;
 import burrows.apps.example.gif.ui.adapter.model.ImageInfo;
@@ -52,7 +50,7 @@ import javax.inject.Inject;
  *
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class MainFragment extends Fragment {
+public final class MainFragment extends Fragment implements GifAdapter.OnItemClickListener {
   static final String TAG = MainFragment.class.getSimpleName();
   private static final int PORTRAIT_COLUMNS = 3;
   private final CompositeDisposable disposable = new CompositeDisposable();
@@ -67,20 +65,12 @@ public final class MainFragment extends Fragment {
   GifImageView imageView;
   @BindView(R.id.recycler_view) RecyclerView recyclerView;
   @BindString(R.string.search_gifs) String searchGifs;
-  @Inject RxBus bus;
   @Inject RefWatcher refWatcher;
   @Inject RiffsyRepository riffsyRepository;
   @Inject ImageDownloader imageDownloader;
 
-  @Override public void onStart() {
-    super.onStart();
-
-    disposable.add(bus.toObservable()
-      .subscribe(event -> {
-        if (event instanceof PreviewImageEvent) {
-          showImageDialog(((PreviewImageEvent) event).getUrl());
-        }
-      }));
+  @Override public void onUserItemClicked(ImageInfo imageInfo) {
+    showImageDialog(imageInfo.getUrl());
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,7 +83,7 @@ public final class MainFragment extends Fragment {
 
     layoutManager = new GridLayoutManager(getActivity(), PORTRAIT_COLUMNS);
     itemOffsetDecoration = new GifItemDecoration(getActivity(), layoutManager.getSpanCount());
-    adapter = new GifAdapter(getActivity().getApplication());
+    adapter = new GifAdapter(this, imageDownloader);
   }
 
   @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
