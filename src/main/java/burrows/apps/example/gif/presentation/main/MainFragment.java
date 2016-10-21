@@ -1,11 +1,10 @@
 package burrows.apps.example.gif.presentation.main;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import burrows.apps.example.gif.App;
 import burrows.apps.example.gif.R;
 import burrows.apps.example.gif.data.rest.model.Result;
@@ -53,9 +53,9 @@ public final class MainFragment extends Fragment implements MainContract.View, G
   private GifItemDecoration itemOffsetDecoration;
   private GifAdapter adapter;
   boolean hasSearched;
-  private Dialog dialog;
+  private AppCompatDialog dialog;
   private Unbinder unbinder;
-  AppCompatTextView dialogText;
+  TextView dialogText;
   ProgressBar progressBar;
   ImageView imageView;
   MainContract.Presenter presenter;
@@ -146,7 +146,7 @@ public final class MainFragment extends Fragment implements MainContract.View, G
     final View dialogView = View.inflate(getContext(), R.layout.dialog_preview, null);
 
     // Customize Dialog
-    dialog = new Dialog(getContext());
+    dialog = new AppCompatDialog(getContext());
     dialog.setContentView(dialogView);
     dialog.setOnDismissListener(dialog1 -> {
       Glide.clear(imageView);

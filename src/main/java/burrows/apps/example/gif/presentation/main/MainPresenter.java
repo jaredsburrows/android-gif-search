@@ -16,12 +16,12 @@ final class MainPresenter implements MainContract.Presenter {
   private final CompositeDisposable disposable = new CompositeDisposable();
   final MainContract.View view;
   private final RiffsyRepository repository;
-  private final BaseSchedulerProvider schedulerProvider;
+  private final BaseSchedulerProvider provider;
 
-  public MainPresenter(MainContract.View view, RiffsyRepository repository, BaseSchedulerProvider schedulerProvider) {
+  public MainPresenter(MainContract.View view, RiffsyRepository repository, BaseSchedulerProvider provider) {
     this.view = view;
     this.repository = repository;
-    this.schedulerProvider = schedulerProvider;
+    this.provider = provider;
 
     this.view.setPresenter(this);
   }
@@ -56,8 +56,8 @@ final class MainPresenter implements MainContract.Presenter {
    */
   public void loadImages(Observable<RiffsyResponse> observable) {
     disposable.add(observable
-      .subscribeOn(schedulerProvider.io())
-      .observeOn(schedulerProvider.ui())
+      .subscribeOn(provider.io())
+      .observeOn(provider.ui())
       .subscribe(response -> {
         if (!view.isActive()) {
           return;
@@ -70,14 +70,10 @@ final class MainPresenter implements MainContract.Presenter {
         view.addImages(response);
       }, error -> {
         // onError
-        if (Log.isLoggable(TAG, Log.ERROR)) {
-          Log.e(TAG, "onError", error);
-        }
+        Log.e(TAG, "onError", error);
       }, () -> {
         // onComplete
-        if (Log.isLoggable(TAG, Log.INFO)) {
-          Log.i(TAG, "Done loading!");
-        }
+        Log.i(TAG, "Done loading!");
       }));
   }
 }

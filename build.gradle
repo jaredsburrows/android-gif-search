@@ -85,6 +85,12 @@ android {
     }
   }
 
+  testOptions {
+    unitTests {
+      returnDefaultValues = true
+    }
+  }
+
   packagingOptions {
     exclude "META-INF/rxjava.properties"
   }
@@ -121,8 +127,12 @@ def assertjCoreVersion = "2.5.0" // Java 8 - 3.5.2
 def dexMakerVersion = "1.2"
 
 dependencies {
-  compile "com.android.support:design:${supportLibraryVersion}"
+  compile "com.android.support:support-annotations:${supportLibraryVersion}"
+  compile "com.android.support:support-v4:${supportLibraryVersion}"
   compile "com.android.support:cardview-v7:${supportLibraryVersion}"
+  compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
+  compile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
+  compile "com.android.support:design:${supportLibraryVersion}"
   compile "com.jakewharton:butterknife:${butterKnifeVersion}"
   compile "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
   compile "com.squareup.okhttp3:okhttp:${okHttpVersion}"
