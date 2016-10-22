@@ -45,18 +45,18 @@ public final class ImageInfo {
     }
   }
 
-  @Override public boolean equals(Object object) {
-    if (this == object) {
+  @Override public boolean equals(Object o) {
+    if (this == o) {
       return true;
     }
-
-    if (object == null || getClass() != object.getClass()) {
+    if (o == null || getClass() != o.getClass()) {
       return false;
     }
 
-    final ImageInfo that = (ImageInfo) object;
+    final ImageInfo imageInfo = (ImageInfo) o;
 
-    return url != null ? url.equals(that.url) : that.url == null;
+    return url != null ? url.equals(imageInfo.url) : imageInfo.url == null;
+
   }
 
   @Override public int hashCode() {

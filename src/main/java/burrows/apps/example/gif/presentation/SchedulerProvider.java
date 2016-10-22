@@ -16,4 +16,3 @@ public final class SchedulerProvider implements BaseSchedulerProvider {
     return AndroidSchedulers.mainThread();
   }
 }
-
