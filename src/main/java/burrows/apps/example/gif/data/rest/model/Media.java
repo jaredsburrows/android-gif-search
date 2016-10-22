@@ -1,40 +1,49 @@
 package burrows.apps.example.gif.data.rest.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class Media {
-  @SerializedName("gif") @Expose private Gif gif;
+  @SerializedName("gif") final Gif gif;
 
   /**
    * No args constructor for use in serialization
    */
   public Media() {
+    this(new Builder());
   }
 
-  public Media(Gif gif) {
-    this.gif = gif;
+  public Media(Builder builder) {
+    this.gif = builder.gif;
   }
 
-  /**
-   * @return The gif
-   */
-  public Gif getGif() {
+  public Gif gif() {
     return gif;
   }
 
-  /**
-   * @param gif The gif
-   */
-  public void setGif(Gif gif) {
-    this.gif = gif;
+  public Builder newBuilder() {
+    return new Builder(this);
   }
 
-  public Media withGif(Gif gif) {
-    this.gif = gif;
-    return this;
+  public static class Builder {
+    Gif gif;
+
+    public Builder() {
+    }
+
+    public Builder(Media media) {
+      this.gif = media.gif;
+    }
+
+    public Builder gif(Gif gif) {
+      this.gif = gif;
+      return this;
+    }
+
+    public Media build() {
+      return new Media(this);
+    }
   }
 }

@@ -80,7 +80,7 @@ public abstract class AndroidTestBase<T extends Activity> extends TestBase {
     // In M+, trying to call a number will trigger a runtime dialog. Make sure
     // the permission is granted before running this test.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      for (final String permission : permissions()) {
+      for (String permission : permissions()) {
         getInstrumentation().getUiAutomation().executeShellCommand(
           "pm grant " + getTargetContext().getPackageName() + " " + permission);
       }

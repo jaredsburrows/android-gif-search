@@ -8,16 +8,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public class ImageInfoTest extends TestBase {
-  private final ImageInfo sut = new ImageInfo().withUrl(STRING_UNIQUE);
+public final class ImageInfoTest extends TestBase {
+  private ImageInfo sut = new ImageInfo.Builder().url(STRING_UNIQUE).build();
 
   @Test public void getUrl() {
-    assertThat(sut.getUrl()).isEqualTo(STRING_UNIQUE);
+    assertThat(sut.url()).isEqualTo(STRING_UNIQUE);
   }
 
   @Test public void withUrl() {
-    sut.withUrl(STRING_UNIQUE2);
+    sut = sut.newBuilder().url(STRING_UNIQUE2).build();
 
-    assertThat(sut.getUrl()).isEqualTo(STRING_UNIQUE2);
+    assertThat(sut.url()).isEqualTo(STRING_UNIQUE2);
   }
 }

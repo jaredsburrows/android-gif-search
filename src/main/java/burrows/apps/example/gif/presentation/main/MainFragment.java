@@ -79,10 +79,10 @@ public final class MainFragment extends Fragment implements MainContract.View, G
 
   @Override public void addImages(RiffsyResponse response) {
     // Iterate over data from response and grab the urls
-    for (final Result result : response.getResults()) {
-      final String url = result.getMedia().get(0).getGif().getUrl();
+    for (Result result : response.results()) {
+      final String url = result.media().get(0).gif().url();
 
-      adapter.add(new ImageInfo().withUrl(url));
+      adapter.add(new ImageInfo.Builder().url(url).build());
 
       if (Log.isLoggable(TAG, Log.INFO)) {
         Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
@@ -102,8 +102,8 @@ public final class MainFragment extends Fragment implements MainContract.View, G
   // GifAdapter
   //
 
-  @Override public void onUserItemClicked(ImageInfo imageInfo) {
-    showDialog(imageInfo.getUrl());
+  @Override public void onClick(ImageInfo imageInfo) {
+    showDialog(imageInfo.url());
   }
 
   //

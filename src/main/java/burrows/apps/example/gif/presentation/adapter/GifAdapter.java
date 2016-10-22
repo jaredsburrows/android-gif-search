@@ -44,7 +44,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
     final ImageInfo imageInfo = getItem(position);
 
     // Load images
-    imageDownloader.load(imageInfo.getUrl())
+    imageDownloader.load(imageInfo.url())
       .listener(new RequestListener<Object, GifDrawable>() {
         @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
           // Show gif
@@ -73,7 +73,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
       })
       .into(holder.imageView);
 
-    holder.itemView.setOnClickListener(view -> onItemClickListener.onUserItemClicked(imageInfo));
+    holder.itemView.setOnClickListener(view -> onItemClickListener.onClick(imageInfo));
   }
 
   @Override public void onViewRecycled(ViewHolder holder) {
@@ -101,7 +101,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
    */
   public interface OnItemClickListener {
-    void onUserItemClicked(ImageInfo imageInfo);
+    void onClick(ImageInfo imageInfo);
   }
 
   /**

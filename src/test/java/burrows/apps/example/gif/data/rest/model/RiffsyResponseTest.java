@@ -12,22 +12,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public class RiffsyResponseTest extends TestBase {
+public final class RiffsyResponseTest extends TestBase {
   private final List<Result> data = new ArrayList<>(Collections.singletonList(new Result()));
-  private final RiffsyResponse sut = new RiffsyResponse(data).withGif(data);
+  private RiffsyResponse sut = new RiffsyResponse.Builder().results(data).build();
 
   @Test public void testGetData() {
-    assertThat(sut.getResults()).isEqualTo(data);
+    assertThat(sut.results()).isEqualTo(data);
   }
 
   @Test public void testSetData() {
     final List<Result> expected = new ArrayList<>();
 
-    sut.setResults(expected);
+    sut = sut.newBuilder().results(expected).build();
 
-    assertThat(sut.getResults()).isEqualTo(expected);
-
-    final RiffsyResponse sut = new RiffsyResponse();
-    assertThat(sut.getResults()).isNotNull();
+    assertThat(sut.results()).isEqualTo(expected);
   }
 }

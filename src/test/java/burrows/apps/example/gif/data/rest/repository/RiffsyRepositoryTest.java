@@ -58,7 +58,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
       .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT)
       .blockingFirst();
 
-    assertThat(response.getResults().get(0).getMedia().get(0).getGif().getUrl())
+    assertThat(response.results().get(0).media().get(0).gif().url())
       .isEqualTo("https://media.riffsy.com/images/f54932e6b9553a5538f31a5ddd78a9f3/raw");
   }
 
@@ -71,7 +71,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
       .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT)
       .blockingFirst();
 
-    assertThat(response.getResults().get(0).getMedia().get(0).getGif().getUrl())
+    assertThat(response.results().get(0).media().get(0).gif().url())
       .isEqualTo("https://media.riffsy.com/images/f54932e6b9553a5538f31a5ddd78a9f3/raw");
   }
 
@@ -84,7 +84,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
       .getSearchResults("funny cat", RiffsyRepository.DEFAULT_LIMIT_COUNT)
       .blockingFirst();
 
-    assertThat(response.getResults().get(0).getMedia().get(0).getGif().getUrl())
+    assertThat(response.results().get(0).media().get(0).gif().url())
       .isEqualTo("https://media.riffsy.com/images/5b6a39aa00312575583031d2de4edbd4/raw");
   }
 
@@ -97,7 +97,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
       .getSearchResults("funny cat", RiffsyRepository.DEFAULT_LIMIT_COUNT)
       .blockingFirst();
 
-    assertThat(response.getResults().get(0).getMedia().get(0).getGif().getUrl())
+    assertThat(response.results().get(0).media().get(0).gif().url())
       .isEqualTo("https://media.riffsy.com/images/5b6a39aa00312575583031d2de4edbd4/raw");
   }
 }

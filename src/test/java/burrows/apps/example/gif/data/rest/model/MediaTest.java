@@ -8,19 +8,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public class MediaTest extends TestBase {
+public final class MediaTest extends TestBase {
   private final Gif gif = new Gif();
-  private final Media sut = new Media(gif).withGif(gif);
+  private Media sut = new Media.Builder().gif(gif).build();
 
   @Test public void testGetGif() {
-    assertThat(sut.getGif()).isEqualTo(gif);
+    assertThat(sut.gif()).isEqualTo(gif);
   }
 
   @Test public void testSetGif() {
     final Gif expected = new Gif();
 
-    sut.setGif(expected);
+    sut = sut.newBuilder().gif(expected).build();
 
-    assertThat(sut.getGif()).isEqualTo(expected);
+    assertThat(sut.gif()).isEqualTo(expected);
   }
 }

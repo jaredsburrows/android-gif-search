@@ -24,10 +24,11 @@ import static org.mockito.MockitoAnnotations.initMocks;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-@SuppressWarnings({"rawtypes", "unchecked"}) public final class GifAdapterTest extends RoboTestBase {
-  private final ImageInfo imageInfo = new ImageInfo().withUrl(STRING_UNIQUE);
-  private final ImageInfo imageInfo2 = new ImageInfo().withUrl(STRING_UNIQUE2);
-  private final ImageInfo imageInfo3 = new ImageInfo().withUrl(STRING_UNIQUE3);
+@SuppressWarnings({"rawtypes", "unchecked"})
+public final class GifAdapterTest extends RoboTestBase {
+  private final ImageInfo imageInfo = new ImageInfo.Builder().url(STRING_UNIQUE).build();
+  private final ImageInfo imageInfo2 = new ImageInfo.Builder().url(STRING_UNIQUE2).build();
+  private final ImageInfo imageInfo3 = new ImageInfo.Builder().url(STRING_UNIQUE3).build();
   private GifAdapter.ViewHolder viewHolder;
   @Mock GifAdapter.OnItemClickListener onItemClickListener;
   @Mock GifRequestBuilder requestBuilder;
@@ -74,7 +75,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
     assertThat(viewHolder.itemView.performClick()).isTrue();
 
     verify(spyImageDownloader).load(any());
-    verify(onItemClickListener).onUserItemClicked(any());
+    verify(onItemClickListener).onClick(any());
   }
 
   @Test public void testGetItem() {
@@ -130,7 +131,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
   }
 
   @Test public void testAddLocationObjectShouldReturnCorrectValues() {
-    sut.add(0, new ImageInfo().withUrl(STRING_UNIQUE3));
+    sut.add(0, new ImageInfo.Builder().url(STRING_UNIQUE3).build());
 
     assertThat(sut.getList()).isEqualTo(Arrays.asList(imageInfo3, imageInfo, imageInfo2));
   }

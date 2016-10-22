@@ -18,7 +18,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public class MainPresenterTest extends TestBase {
+public final class MainPresenterTest extends TestBase {
   @Mock private MainContract.View view;
   @Mock private RiffsyRepository repository;
   private BaseSchedulerProvider provider;

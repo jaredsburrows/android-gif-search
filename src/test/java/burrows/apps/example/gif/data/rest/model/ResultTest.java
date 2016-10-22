@@ -11,29 +11,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public class ResultTest extends TestBase {
-  private final List<Media> medias = new ArrayList<>();
-  private final Result sut = new Result(medias, STRING_UNIQUE).withMedia(medias).withTitle(STRING_UNIQUE);
+public final class ResultTest extends TestBase {
+  private final List<Media> media = new ArrayList<>();
+  private Result sut = new Result.Builder().media(media).title(STRING_UNIQUE).build();
 
   @Test public void testGetMedia() {
-    assertThat(sut.getMedia()).isEqualTo(medias);
+    assertThat(sut.media()).isEqualTo(media);
   }
 
   @Test public void testSetMedia() {
     final List<Media> medias = new ArrayList<>();
 
-    sut.setMedia(medias);
+    sut = sut.newBuilder().media(medias).build();
 
-    assertThat(sut.getMedia()).isEqualTo(medias);
+    assertThat(sut.media()).isEqualTo(medias);
   }
 
   @Test public void testGetTitle() {
-    assertThat(sut.getTitle()).isEqualTo(STRING_UNIQUE);
+    assertThat(sut.title()).isEqualTo(STRING_UNIQUE);
   }
 
   @Test public void testSetTitle() {
-    sut.setTitle(STRING_UNIQUE2);
+    sut = sut.newBuilder().title(STRING_UNIQUE2).build();
 
-    assertThat(sut.getTitle()).isEqualTo(STRING_UNIQUE2);
+    assertThat(sut.title()).isEqualTo(STRING_UNIQUE2);
   }
 }
