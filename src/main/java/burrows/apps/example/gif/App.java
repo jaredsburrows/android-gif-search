@@ -16,17 +16,6 @@ public class App extends Application {
   protected ActivityComponent activityComponent;
 
   @Override public void onCreate() {
-    // Let's start paying critical attention to issues via Logcat
-    if (BuildConfig.DEBUG) {
-      StrictMode.setThreadPolicy(new ThreadPolicy.Builder()
-        .detectAll()
-        .penaltyLog()
-        .build());
-      StrictMode.setVmPolicy(new VmPolicy.Builder()
-        .detectAll()
-        .penaltyLog()
-        .build());
-    }
     super.onCreate();
 
     // Setup components
