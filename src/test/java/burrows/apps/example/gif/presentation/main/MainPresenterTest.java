@@ -34,25 +34,23 @@ public final class MainPresenterTest extends TestBase {
 
   @Test public void testLoadTrendingImagesSuccess() {
     sut = new MainPresenter(view, repository, provider);
-    when(repository.getTrendingResults(any(Integer.class))).thenReturn(Observable.just(new RiffsyResponse()));
+    when(repository.getTrendingResults(any(Integer.class), any(Float.class))).thenReturn(Observable.just(new RiffsyResponse()));
 
-    sut.loadTrendingImages();
+    sut.loadTrendingImages(0f);
 
-    verify(repository).getTrendingResults(any(Integer.class));
+    verify(repository).getTrendingResults(any(Integer.class), any(Float.class));
     verify(view).isActive();
-    verify(view).clearImages();
     verify(view).addImages(any(RiffsyResponse.class));
   }
 
   @Test public void testLoadSearchImagesSuccess() {
     sut = new MainPresenter(view, repository, provider);
-    when(repository.getSearchResults(any(String.class), any(Integer.class))).thenReturn(Observable.just(new RiffsyResponse()));
+    when(repository.getSearchResults(any(String.class), any(Integer.class), any(Float.class))).thenReturn(Observable.just(new RiffsyResponse()));
 
-    sut.loadSearchImages("gifs");
+    sut.loadSearchImages("gifs", 0f);
 
-    verify(repository).getSearchResults(any(String.class), any(Integer.class));
+    verify(repository).getSearchResults(any(String.class), any(Integer.class), any(Float.class));
     verify(view).isActive();
-    verify(view).clearImages();
     verify(view).addImages(any(RiffsyResponse.class));
   }
 }

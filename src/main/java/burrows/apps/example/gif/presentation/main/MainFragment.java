@@ -49,12 +49,19 @@ import javax.inject.Inject;
 public final class MainFragment extends Fragment implements MainContract.View, GifAdapter.OnItemClickListener {
   static final String TAG = MainFragment.class.getSimpleName();
   private static final int PORTRAIT_COLUMNS = 3;
-  private GridLayoutManager layoutManager;
+  GridLayoutManager layoutManager;
   private GifItemDecoration itemOffsetDecoration;
   private GifAdapter adapter;
   boolean hasSearched;
   private AppCompatDialog dialog;
   private Unbinder unbinder;
+  int previousTotal = 0;
+  boolean loading = true;
+  int visibleThreshold = 5;
+  int firstVisibleItem;
+  int visibleItemCount;
+  int totalItemCount;
+  Float next;
   TextView dialogText;
   ProgressBar progressBar;
   ImageView imageView;
@@ -78,6 +85,7 @@ public final class MainFragment extends Fragment implements MainContract.View, G
   }
 
   @Override public void addImages(RiffsyResponse response) {
+    next = response.next();
     // Iterate over data from response and grab the urls
     for (Result result : response.results()) {
       final String url = result.media().get(0).gif().url();
@@ -142,6 +150,27 @@ public final class MainFragment extends Fragment implements MainContract.View, G
     recyclerView.setItemViewCacheSize(RiffsyRepository.DEFAULT_LIMIT_COUNT);
     recyclerView.setDrawingCacheEnabled(true);
     recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+        visibleItemCount = recyclerView.getChildCount();
+        totalItemCount = layoutManager.getItemCount();
+        firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+
+        if (loading) {
+          if (totalItemCount > previousTotal) {
+            loading = false;
+            previousTotal = totalItemCount;
+          }
+        }
+
+        if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+          presenter.loadTrendingImages(next);
+
+          loading = true;
+        }
+      }
+    });
 
     // Custom view for Dialog
     final View dialogView = View.inflate(getContext(), R.layout.dialog_preview, null);
@@ -160,7 +189,7 @@ public final class MainFragment extends Fragment implements MainContract.View, G
     imageView = ButterKnife.findById(dialogView, R.id.gif_dialog_image);
 
     // Load initial images
-    presenter.loadTrendingImages();
+    presenter.loadTrendingImages(next);
 
     return view;
   }
@@ -184,7 +213,9 @@ public final class MainFragment extends Fragment implements MainContract.View, G
       @Override public boolean onMenuItemActionCollapse(MenuItem item) {
         // When search is closed, go back to trending results
         if (hasSearched) {
-          presenter.loadTrendingImages();
+          // Reset
+          presenter.clearImages();
+          presenter.loadTrendingImages(next);
           hasSearched = false;
         }
         return true;
@@ -196,7 +227,9 @@ public final class MainFragment extends Fragment implements MainContract.View, G
       @Override public boolean onQueryTextChange(String newText) {
         // Search on type
         if (!TextUtils.isEmpty(newText)) {
-          presenter.loadSearchImages(newText);
+          // Reset
+          presenter.clearImages();
+          presenter.loadSearchImages(newText, next);
           hasSearched = true;
         }
         return false;

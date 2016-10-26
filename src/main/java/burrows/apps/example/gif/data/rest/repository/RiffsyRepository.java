@@ -35,12 +35,15 @@ public interface RiffsyRepository {
    * Path: /v1/trending
    * Query: limit
    * Query: key
-   * eg. https://api.riffsy.com/v1/trending?key=LIVDSRZULELA&limit=10
+   * Query: pos
+   * eg. https://api.riffsy.com/v1/trending?key=LIVDSRZULELA&limit=10&pos=1
    *
    * @param limit Limit results.
+   * @param pos   Position of results.
    * @return Response of trending results.
    */
-  @GET("/v1/trending?key=" + API_KEY) Observable<RiffsyResponse> getTrendingResults(@Query("limit") int limit);
+  @GET("/v1/trending?key=" + API_KEY) Observable<RiffsyResponse> getTrendingResults(@Query("limit") int limit,
+                                                                                    @Query("pos") Float pos);
 
   /**
    * Get search gif results by a search string.
@@ -50,12 +53,15 @@ public interface RiffsyRepository {
    * Query: q
    * Query: limit
    * Query: key
-   * eg. https://api.riffsy.com/v1/search?key=LIVDSRZULELA&tag=goodluck&limit=10
+   * Query: pos
+   * eg. https://api.riffsy.com/v1/search?key=LIVDSRZULELA&tag=goodluck&limit=10&pos=1
    *
    * @param tag   Search string to find gifs.
    * @param limit Limit results.
+   * @param pos   Position of results.
    * @return Response of search results.
    */
   @GET("/v1/search?key=" + API_KEY) Observable<RiffsyResponse> getSearchResults(@Query("tag") String tag,
-                                                                                @Query("limit") int limit);
+                                                                                @Query("limit") int limit,
+                                                                                @Query("pos") Float pos);
 }

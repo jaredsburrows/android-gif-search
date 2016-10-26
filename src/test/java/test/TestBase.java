@@ -30,6 +30,7 @@ public abstract class TestBase {
   protected static final Integer INTEGER_RANDOM = new Random().nextInt();
   protected static final Integer INTEGER_RANDOM_POSITIVE = new Random().nextInt(Integer.SIZE - 1);
   protected static final Long LONG_RANDOM = new Random().nextLong();
+  protected static final Float FLOAT_RANDOM = new Random().nextFloat();
   protected static final Double DOUBLE_RANDOM = new Random().nextDouble();
 
   @Before public void setUp() throws Exception {

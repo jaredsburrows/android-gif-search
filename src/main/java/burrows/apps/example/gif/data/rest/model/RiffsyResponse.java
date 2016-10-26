@@ -12,6 +12,7 @@ import java.util.List;
  */
 public final class RiffsyResponse {
   @SerializedName("results") final List<Result> results;
+  @SerializedName("next") final Float next;
 
   /**
    * No args constructor for use in serialization
@@ -22,10 +23,15 @@ public final class RiffsyResponse {
 
   public RiffsyResponse(Builder builder) {
     this.results = builder.results;
+    this.next = builder.next;
   }
 
   public List<Result> results() {
     return results;
+  }
+
+  public Float next() {
+    return next;
   }
 
   public Builder newBuilder() {
@@ -34,6 +40,7 @@ public final class RiffsyResponse {
 
   public static class Builder {
     List<Result> results;
+    Float next;
 
     public Builder() {
     }
@@ -44,6 +51,11 @@ public final class RiffsyResponse {
 
     public Builder results(List<Result> results) {
       this.results = results;
+      return this;
+    }
+
+    public Builder next(Float next) {
+      this.next = next;
       return this;
     }
 

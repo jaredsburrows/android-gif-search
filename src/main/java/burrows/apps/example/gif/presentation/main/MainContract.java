@@ -5,6 +5,8 @@ import burrows.apps.example.gif.presentation.BaseView;
 import burrows.apps.example.gif.data.rest.model.RiffsyResponse;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfo;
 
+import javax.inject.Inject;
+
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
@@ -19,7 +21,8 @@ final class MainContract {
 
   // Presenter
   interface Presenter extends BasePresenter {
-    void loadTrendingImages();
-    void loadSearchImages(String searchString);
+    void clearImages();
+    void loadTrendingImages(Float next);
+    void loadSearchImages(String searchString, Float next);
   }
 }

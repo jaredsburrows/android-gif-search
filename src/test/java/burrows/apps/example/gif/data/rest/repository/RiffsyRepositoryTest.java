@@ -56,7 +56,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
 
     // Request
     final RiffsyResponse response = sut
-      .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT)
+      .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst();
 
     assertThat(response.results().get(0).media().get(0).gif().url())
@@ -69,7 +69,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
 
     // Request
     final RiffsyResponse response = sut
-      .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT)
+      .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst();
 
     assertThat(response.results().get(0).media().get(0).gif().preview())
@@ -82,7 +82,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
 
     // Request
     final RiffsyResponse response = sut
-      .getSearchResults("hello", RiffsyRepository.DEFAULT_LIMIT_COUNT)
+      .getSearchResults("hello", RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst();
 
     assertThat(response.results().get(0).media().get(0).gif().url())
@@ -95,7 +95,7 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
 
     // Request
     final RiffsyResponse response = sut
-      .getSearchResults("hello", RiffsyRepository.DEFAULT_LIMIT_COUNT)
+      .getSearchResults("hello", RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst();
 
     assertThat(response.results().get(0).media().get(0).gif().preview())

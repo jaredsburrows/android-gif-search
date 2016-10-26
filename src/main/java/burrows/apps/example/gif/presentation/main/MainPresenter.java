@@ -33,11 +33,16 @@ final class MainPresenter implements MainContract.Presenter {
     disposable.clear();
   }
 
+  @Override public void clearImages() {
+    // Clear current data
+    view.clearImages();
+  }
+
   /**
    * Load gif trending images.
    */
-  @Override public void loadTrendingImages() {
-    loadImages(repository.getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT));
+  @Override public void loadTrendingImages(Float next) {
+    loadImages(repository.getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT, next));
   }
 
   /**
@@ -45,8 +50,8 @@ final class MainPresenter implements MainContract.Presenter {
    *
    * @param searchString User input.
    */
-  @Override public void loadSearchImages(String searchString) {
-    loadImages(repository.getSearchResults(searchString, RiffsyRepository.DEFAULT_LIMIT_COUNT));
+  @Override public void loadSearchImages(String searchString, Float next) {
+    loadImages(repository.getSearchResults(searchString, RiffsyRepository.DEFAULT_LIMIT_COUNT, next));
   }
 
   /**
@@ -63,17 +68,14 @@ final class MainPresenter implements MainContract.Presenter {
           return;
         }
 
-        // Clear current data
-        view.clearImages();
-
         // Iterate over data from response and grab the urls
         view.addImages(response);
       }, error -> {
         // onError
-          Log.e(TAG, "onError", error);
+        Log.e(TAG, "onError", error);
       }, () -> {
         // onComplete
-          Log.i(TAG, "Done loading!");
+        Log.i(TAG, "Done loading!");
       }));
   }
 }
