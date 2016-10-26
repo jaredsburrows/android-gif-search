@@ -70,10 +70,10 @@ final class MainPresenter implements MainContract.Presenter {
         view.addImages(response);
       }, error -> {
         // onError
-        Log.e(TAG, "onError", error);
+          Log.e(TAG, "onError", error);
       }, () -> {
         // onComplete
-        Log.i(TAG, "Done loading!");
+          Log.i(TAG, "Done loading!");
       }));
   }
 }

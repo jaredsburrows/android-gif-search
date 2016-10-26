@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class ImageInfoTest extends TestBase {
-  private ImageInfo sut = new ImageInfo.Builder().url(STRING_UNIQUE).build();
+  private ImageInfo sut = new ImageInfo.Builder().url(STRING_UNIQUE).previewUrl(STRING_UNIQUE2).build();
 
   @Test public void testGetUrl() {
     assertThat(sut.url()).isEqualTo(STRING_UNIQUE);
@@ -21,6 +21,16 @@ public final class ImageInfoTest extends TestBase {
     sut = sut.newBuilder().url(STRING_UNIQUE2).build();
 
     assertThat(sut.url()).isEqualTo(STRING_UNIQUE2);
+  }
+
+  @Test public void testGetUrlPreview() {
+    assertThat(sut.previewUrl()).isEqualTo(STRING_UNIQUE2);
+  }
+
+  @Test public void testSetUrlPreview() {
+    sut = sut.newBuilder().previewUrl(STRING_UNIQUE3).build();
+
+    assertThat(sut.previewUrl()).isEqualTo(STRING_UNIQUE3);
   }
 
   @Test public void testEqualsGashCode() {

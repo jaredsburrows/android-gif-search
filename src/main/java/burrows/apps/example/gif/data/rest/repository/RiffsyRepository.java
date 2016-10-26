@@ -35,6 +35,7 @@ public interface RiffsyRepository {
    * Path: /v1/trending
    * Query: limit
    * Query: key
+   * eg. https://api.riffsy.com/v1/trending?key=LIVDSRZULELA&limit=10
    *
    * @param limit Limit results.
    * @return Response of trending results.
@@ -49,6 +50,7 @@ public interface RiffsyRepository {
    * Query: q
    * Query: limit
    * Query: key
+   * eg. https://api.riffsy.com/v1/search?key=LIVDSRZULELA&tag=goodluck&limit=10
    *
    * @param tag   Search string to find gifs.
    * @param limit Limit results.

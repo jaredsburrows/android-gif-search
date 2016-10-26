@@ -17,6 +17,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -74,17 +76,17 @@ public final class GifAdapterTest extends RoboTestBase {
 
     assertThat(viewHolder.itemView.performClick()).isTrue();
 
-    verify(spyImageDownloader).load(any());
+    verify(spyImageDownloader, atLeastOnce()).load(any());
     verify(onItemClickListener).onClick(any());
   }
 
   @Test public void testGetItem() {
     sut.clear();
 
-    final ImageInfo model = new ImageInfo();
-    sut.add(model);
+    final ImageInfo imageInfo = new ImageInfo();
+    sut.add(imageInfo);
 
-    assertThat(sut.getItem(0)).isEqualTo(model);
+    assertThat(sut.getItem(0)).isEqualTo(imageInfo);
   }
 
   @Test public void onViewRecycled() throws Exception {
@@ -123,9 +125,9 @@ public final class GifAdapterTest extends RoboTestBase {
   }
 
   @Test public void testAddCollectionShouldReturnCorrectValues() {
-    final List<ImageInfo> list = Collections.singletonList(imageInfo3);
+    final List<ImageInfo> imageInfos = Collections.singletonList(imageInfo3);
 
-    sut.addAll(list);
+    sut.addAll(imageInfos);
 
     assertThat(sut.getList()).isEqualTo(Arrays.asList(imageInfo, imageInfo2, imageInfo3));
   }

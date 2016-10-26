@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public class SchedulerProviderTest {
+public final class SchedulerProviderTest {
   private final SchedulerProvider sut = new SchedulerProvider();
 
   @Test public void testIo() {

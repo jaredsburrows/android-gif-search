@@ -29,11 +29,11 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
   final static String TAG = GifAdapter.class.getSimpleName();
   private final List<ImageInfo> data = new ArrayList<>();
   private OnItemClickListener onItemClickListener;
-  private ImageRepository imageDownloader;
+  private ImageRepository repository;
 
-  public GifAdapter(OnItemClickListener onItemClickListener, ImageRepository imageDownloader) {
+  public GifAdapter(OnItemClickListener onItemClickListener, ImageRepository repository) {
     this.onItemClickListener = onItemClickListener;
-    this.imageDownloader = imageDownloader;
+    this.repository = repository;
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,7 +44,8 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
     final ImageInfo imageInfo = getItem(position);
 
     // Load images
-    imageDownloader.load(imageInfo.url())
+    repository.load(imageInfo.url())
+      .thumbnail(repository.load(imageInfo.previewUrl()))
       .listener(new RequestListener<Object, GifDrawable>() {
         @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
           // Show gif

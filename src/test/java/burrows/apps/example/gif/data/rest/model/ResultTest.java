@@ -12,11 +12,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class ResultTest extends TestBase {
-  private final List<Media> media = new ArrayList<>();
-  private Result sut = new Result.Builder().media(media).title(STRING_UNIQUE).build();
+  private List<Media> medias = new ArrayList<>();
+  private Result sut = new Result.Builder().media(medias).title(STRING_UNIQUE).build();
 
   @Test public void testGetMedia() {
-    assertThat(sut.media()).isEqualTo(media);
+    assertThat(sut.media()).isEqualTo(medias);
   }
 
   @Test public void testSetMedia() {

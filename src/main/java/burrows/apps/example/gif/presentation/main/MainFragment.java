@@ -90,8 +90,8 @@ public final class MainFragment extends Fragment implements MainContract.View, G
     }
   }
 
-  @Override public void showDialog(String url) {
-    showImageDialog(url);
+  @Override public void showDialog(ImageInfo imageInfo) {
+    showImageDialog(imageInfo);
   }
 
   @Override public boolean isActive() {
@@ -103,7 +103,7 @@ public final class MainFragment extends Fragment implements MainContract.View, G
   //
 
   @Override public void onClick(ImageInfo imageInfo) {
-    showDialog(imageInfo.url());
+    showDialog(imageInfo);
   }
 
   //
@@ -137,7 +137,8 @@ public final class MainFragment extends Fragment implements MainContract.View, G
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(adapter);
     recyclerView.setHasFixedSize(true);
-    recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS + PORTRAIT_COLUMNS);
+    // http://stackoverflow.com/questions/30511890/does-glide-queue-up-every-image-request-recyclerview-loads-are-very-slow-when-s#comment49135977_30511890
+    recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2);
     recyclerView.setItemViewCacheSize(RiffsyRepository.DEFAULT_LIMIT_COUNT);
     recyclerView.setDrawingCacheEnabled(true);
     recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
@@ -230,17 +231,18 @@ public final class MainFragment extends Fragment implements MainContract.View, G
     refWatcher.watch(this, TAG);
   }
 
-  private void showImageDialog(String url) {
+  private void showImageDialog(ImageInfo imageInfo) {
     dialog.show();
     // Remove "white" background for dialog
     dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
 
     // Load associated text
-    dialogText.setText(url);
+    dialogText.setText(imageInfo.url());
     dialogText.setVisibility(View.VISIBLE);
 
     // Load image
-    repository.load(url)
+    repository.load(imageInfo.url())
+      .thumbnail(repository.load(imageInfo.previewUrl()))
       .listener(new RequestListener<Object, GifDrawable>() {
         @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
           // Show gif

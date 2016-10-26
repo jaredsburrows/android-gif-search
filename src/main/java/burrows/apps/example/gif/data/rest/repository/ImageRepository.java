@@ -26,7 +26,10 @@ public class ImageRepository {
       .load(url)
       .asGif()
       .thumbnail(THUMBNAIL_MULTIPLIER)
+      .error(R.mipmap.ic_launcher)
+      .fallback(R.mipmap.ic_launcher)
       .override(imageWidth, imageHeight)
+      // https://github.com/bumptech/glide/issues/600#issuecomment-135541121
       .diskCacheStrategy(DiskCacheStrategy.SOURCE);
   }
 }

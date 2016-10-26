@@ -8,6 +8,7 @@ package burrows.apps.example.gif.presentation.adapter.model;
  */
 public final class ImageInfo {
   final String url;
+  final String previewUrl;
 
   public ImageInfo() {
     this(new Builder());
@@ -15,10 +16,15 @@ public final class ImageInfo {
 
   public ImageInfo(Builder builder) {
     this.url = builder.url;
+    this.previewUrl = builder.previewUrl;
   }
 
   public String url() {
     return url;
+  }
+
+  public String previewUrl() {
+    return previewUrl;
   }
 
   public Builder newBuilder() {
@@ -27,16 +33,23 @@ public final class ImageInfo {
 
   public static class Builder {
     String url;
+    String previewUrl;
 
     public Builder() {
     }
 
     public Builder(ImageInfo imageInfo) {
       this.url = imageInfo.url;
+      this.previewUrl = imageInfo.previewUrl;
     }
 
     public Builder url(String url) {
       this.url = url;
+      return this;
+    }
+
+    public Builder previewUrl(String previewUrl) {
+      this.previewUrl = previewUrl;
       return this;
     }
 
@@ -55,11 +68,16 @@ public final class ImageInfo {
 
     final ImageInfo imageInfo = (ImageInfo) o;
 
-    return url != null ? url.equals(imageInfo.url) : imageInfo.url == null;
+    if (url != null ? !url.equals(imageInfo.url) : imageInfo.url != null) {
+      return false;
+    }
+    return previewUrl != null ? previewUrl.equals(imageInfo.previewUrl) : imageInfo.previewUrl == null;
 
   }
 
   @Override public int hashCode() {
-    return url != null ? url.hashCode() : 0;
+    int result = url != null ? url.hashCode() : 0;
+    result = 31 * result + (previewUrl != null ? previewUrl.hashCode() : 0);
+    return result;
   }
 }

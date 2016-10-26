@@ -46,10 +46,11 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
 
   @Before @Override public void setUp() throws Exception {
     super.setUp();
+
     sut = getRetrofit(mockEndPoint).build().create(RiffsyRepository.class);
   }
 
-  @Test public void testGetTrendingDataWithShouldParseCorrectly() throws Exception {
+  @Test public void testTrendingResultsUrlShouldParseCorrectly() throws Exception {
     // Response
     sendMockMessages("/trending_results.json");
 
@@ -59,10 +60,10 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
       .blockingFirst();
 
     assertThat(response.results().get(0).media().get(0).gif().url())
-      .isEqualTo("https://media.riffsy.com/images/f54932e6b9553a5538f31a5ddd78a9f3/raw");
+      .isEqualTo("https://media.riffsy.com/images/7d95a1f8a8750460a82b04451be26d69/raw");
   }
 
-  @Test public void testGetTrendingDataWithLimitWithShouldParseCorrectly() throws Exception {
+  @Test public void testTrendingResultsUrlPreviewShouldParseCorrectly() throws Exception {
     // Response
     sendMockMessages("/trending_results.json");
 
@@ -71,33 +72,33 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
       .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT)
       .blockingFirst();
 
-    assertThat(response.results().get(0).media().get(0).gif().url())
-      .isEqualTo("https://media.riffsy.com/images/f54932e6b9553a5538f31a5ddd78a9f3/raw");
+    assertThat(response.results().get(0).media().get(0).gif().preview())
+      .isEqualTo("https://media.riffsy.com/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw");
   }
 
-  @Test public void testGetSearchDataFromApiShouldParseCorrectly() throws Exception {
+  @Test public void testSearchResultsUrlShouldParseCorrectly() throws Exception {
     // Response
     sendMockMessages("/search_results.json");
 
     // Request
     final RiffsyResponse response = sut
-      .getSearchResults("funny cat", RiffsyRepository.DEFAULT_LIMIT_COUNT)
+      .getSearchResults("hello", RiffsyRepository.DEFAULT_LIMIT_COUNT)
       .blockingFirst();
 
     assertThat(response.results().get(0).media().get(0).gif().url())
-      .isEqualTo("https://media.riffsy.com/images/5b6a39aa00312575583031d2de4edbd4/raw");
+      .isEqualTo("https://media.riffsy.com/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw");
   }
 
-  @Test public void testGetSearchDataWithLimitShouldParseCorrectly() throws Exception {
+  @Test public void testSearchResultsUrlPreviewShouldParseCorrectly() throws Exception {
     // Response
     sendMockMessages("/search_results.json");
 
     // Request
     final RiffsyResponse response = sut
-      .getSearchResults("funny cat", RiffsyRepository.DEFAULT_LIMIT_COUNT)
+      .getSearchResults("hello", RiffsyRepository.DEFAULT_LIMIT_COUNT)
       .blockingFirst();
 
-    assertThat(response.results().get(0).media().get(0).gif().url())
-      .isEqualTo("https://media.riffsy.com/images/5b6a39aa00312575583031d2de4edbd4/raw");
+    assertThat(response.results().get(0).media().get(0).gif().preview())
+      .isEqualTo("https://media.riffsy.com/images/6f2ed339fbdb5c1270e29945ee1f0d77/raw");
   }
 }

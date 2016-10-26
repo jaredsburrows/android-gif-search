@@ -19,17 +19,15 @@ import static org.mockito.MockitoAnnotations.initMocks;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class MainPresenterTest extends TestBase {
+  private final BaseSchedulerProvider provider = new ImmediateSchedulerProvider();
   @Mock private MainContract.View view;
   @Mock private RiffsyRepository repository;
-  private BaseSchedulerProvider provider;
   private MainPresenter sut;
 
   @Before @Override public void setUp() throws Exception {
     super.setUp();
 
     initMocks(this);
-
-    provider = new ImmediateSchedulerProvider();
 
     when(view.isActive()).thenReturn(true);
   }

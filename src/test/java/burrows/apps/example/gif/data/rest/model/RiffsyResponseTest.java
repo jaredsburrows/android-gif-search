@@ -4,7 +4,6 @@ import org.junit.Test;
 import test.TestBase;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,11 +12,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class RiffsyResponseTest extends TestBase {
-  private final List<Result> data = new ArrayList<>(Collections.singletonList(new Result()));
-  private RiffsyResponse sut = new RiffsyResponse.Builder().results(data).build();
+  private List<Result> results = new ArrayList<>();
+  private RiffsyResponse sut = new RiffsyResponse.Builder().results(results).build();
 
   @Test public void testGetData() {
-    assertThat(sut.results()).isEqualTo(data);
+    assertThat(sut.results()).isEqualTo(results);
   }
 
   @Test public void testSetData() {

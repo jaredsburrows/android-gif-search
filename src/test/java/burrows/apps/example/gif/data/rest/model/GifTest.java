@@ -26,8 +26,8 @@ public final class GifTest extends TestBase {
   }
 
   @Test public void testSetPreview() {
-    sut = sut.newBuilder().url(STRING_UNIQUE2).build();
+    sut = sut.newBuilder().preview(STRING_UNIQUE3).build();
 
-    assertThat(sut.preview()).isEqualTo(STRING_UNIQUE2);
+    assertThat(sut.preview()).isEqualTo(STRING_UNIQUE3);
   }
 }
