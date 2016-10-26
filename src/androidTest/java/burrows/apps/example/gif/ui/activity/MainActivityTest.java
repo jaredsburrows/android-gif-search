@@ -33,15 +33,17 @@ import retrofit2.Retrofit;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
+import java.util.Random;
 import java.util.Scanner;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -107,11 +109,13 @@ public class MainActivityTest {
       return InstrumentationRegistry.getInstrumentation();
     }
   };
+  private int items;
   String mockEndPoint;
 
   @Before public void setUp() throws Exception {
     initMocks(this);
 
+    items = new Random().nextInt((9 - 1) + 1) + 1;
     mockEndPoint = server.url("/").toString();
   }
 
@@ -124,108 +128,81 @@ public class MainActivityTest {
     final String mockResponse = new Scanner(stream, Charset.defaultCharset().name())
       .useDelimiter("\\A").next();
 
-    server.enqueue(new MockResponse()
-      .setResponseCode(HttpURLConnection.HTTP_OK)
-      .setBody(mockResponse));
+    for (int i = 0; i < items; i++) {
+      server.enqueue(new MockResponse()
+        .setResponseCode(HttpURLConnection.HTTP_OK)
+        .setBody(mockResponse));
+    }
 
     stream.close();
   }
 
-  @Test public void testLoadTrendingClickOpenDialog() throws Exception {
+  @Test public void testTrendingThenClickOpenDialog() throws Exception {
     // Fake server response
     sendMockMessages("/trending_results.json");
 
-
     // Launch activity
     activityRule.launchActivity(new Intent(Intent.ACTION_MAIN));
-
 
     // Click and make sure dialog is shown
     onView(withId(R.id.recycler_view))
-      .check(matches(isDisplayed()));
-
-    onView(withId(R.id.recycler_view))
-      .check(matches(isDisplayed()))
-      .perform(actionOnItemAtPosition(0, click()));
-    // Make sure dialog view is displayed
-    onView(withId(R.id.gif_dialog_image))
-      .check(matches(isDisplayed()));
-  }
-
-  @Test public void testLoadSearchResults() throws Exception {
-    // Fake server response
-    sendMockMessages("/search_results.json");
-
-
-    // Launch activity
-    activityRule.launchActivity(new Intent(Intent.ACTION_MAIN));
-
-
-    // Open menu and search
-    onView(withId(R.id.menu_search))
-      .perform(click());
-    // App Compat SearchView widget does not use the same id as in the regular
-    // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
-    // search widget.
-    onView(withId(R.id.search_src_text))
-      .perform(typeText("cat"), closeSoftKeyboard());
-
-    onView(withId(R.id.recycler_view))
-      .check(matches(isDisplayed()));
-  }
-
-  @Test public void testLoadSearchResultsClickOpenDialog() throws Exception {
-    // Fake server response
-    sendMockMessages("/search_results.json");
-
-
-    // Launch activity
-    activityRule.launchActivity(new Intent(Intent.ACTION_MAIN));
-
-
-    // Open menu and search
-    onView(withId(R.id.menu_search))
-      .perform(click());
-    // App Compat SearchView widget does not use the same id as in the regular
-    // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
-    // search widget.
-    // TODO new data should be sent
-//    onView(withId(R.id.search_src_text))
-//      .perform(typeText("cat"), closeSoftKeyboard());
-
-    onView(withId(R.id.recycler_view))
-      .check(matches(isDisplayed()))
       .perform(actionOnItemAtPosition(0, click()));
 
-    // Make sure dialog view is displayed
+    // Assert
     onView(withId(R.id.gif_dialog_image))
+      .inRoot(isDialog())
       .check(matches(isDisplayed()));
   }
 
-  @Test public void testLoadTrendingThenSearchThenBackToTrending() throws Exception {
+  @Test public void testTrendingResultsThenSearchThenBackToTrending() throws Exception {
     // Fake server response
     sendMockMessages("/trending_results.json");
 
+    // Launch activity
+    activityRule.launchActivity(new Intent(Intent.ACTION_MAIN));
+
+    // Open menu
+    onView(withId(R.id.menu_search))
+      .perform(click());
+
+    // Type in search bar
+    onView(withId(R.id.search_src_text))
+      .perform(typeText("hello"), closeSoftKeyboard(), pressBack());
+
+    // Go back to trending screen
+    onView(withId(R.id.search_close_btn))
+      .perform(click(), closeSoftKeyboard());
+
+    // Assert
+    onView(withId(R.id.recycler_view))
+      .check(matches(isDisplayed()));
+  }
+
+  @Test public void testSearchResultsThenClickOpenDialog() throws Exception {
+    // Fake server response
+    sendMockMessages("/trending_results.json");
 
     // Launch activity
     activityRule.launchActivity(new Intent(Intent.ACTION_MAIN));
 
-
-    // Open menu and search
+    // Open menu
     onView(withId(R.id.menu_search))
       .perform(click());
-    // App Compat SearchView widget does not use the same id as in the regular
-    // android.widget.SearchView. R.id.search_src_text is the id created by appcompat
-    // search widget.
-    onView(withId(R.id.search_src_text))
-      .perform(typeText("dog"), closeSoftKeyboard());
 
-    // Go back to trending screen
-    pressBack();
-    onView(withId(R.id.search_close_btn))
-      .perform(click());
-    closeSoftKeyboard();
+    // Type in search bar
+    onView(withId(R.id.search_src_text))
+      .perform(typeText("hell"), closeSoftKeyboard());
+    onView(withId(R.id.search_src_text))
+      .perform(typeText("o"), closeSoftKeyboard());
+    sendMockMessages("/search_results.json");
+
+    // Click and make sure dialog is shown
     onView(withId(R.id.recycler_view))
+      .perform(actionOnItemAtPosition(0, click()));
+
+    // Assert
+    onView(withId(R.id.gif_dialog_image))
+      .inRoot(isDialog())
       .check(matches(isDisplayed()));
   }
 }
