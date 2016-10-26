@@ -56,13 +56,13 @@ public class MainActivityTest {
     @Override protected void beforeActivityLaunched() {
       super.beforeActivityLaunched();
 
-      final TestApp testApp = getApplication();
+      final TestApp app = getApplication();
 
       // Override app component
       final AppComponent appComponent = DaggerAppComponent.builder()
         .appModule(new AppModule(getApplication()))
         .build();
-      testApp.setAppComponent(appComponent);
+      app.setAppComponent(appComponent);
 
       // Override service component
       final ActivityComponent netComponent = DaggerActivityComponent.builder()
@@ -92,7 +92,7 @@ public class MainActivityTest {
           }
         })
         .build();
-      testApp.setRiffsyComponent(netComponent);
+      app.setRiffsyComponent(netComponent);
     }
 
     public TestApp getApplication() {
