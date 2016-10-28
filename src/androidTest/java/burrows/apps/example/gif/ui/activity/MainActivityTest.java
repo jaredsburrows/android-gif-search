@@ -20,7 +20,6 @@ import burrows.apps.example.gif.presentation.di.module.RiffsyModule;
 import burrows.apps.example.gif.presentation.main.MainActivity;
 import com.bumptech.glide.GifRequestBuilder;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.After;
@@ -33,7 +32,6 @@ import retrofit2.Retrofit;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
-import java.util.Random;
 import java.util.Scanner;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -86,9 +84,7 @@ public class MainActivityTest {
                   .placeholder(R.mipmap.ic_launcher)
                   .fallback(R.mipmap.ic_launcher)
                   .error(R.mipmap.ic_launcher)
-                  .thumbnail(0.1f)
-                  .override(200, 200)
-                  .diskCacheStrategy(DiskCacheStrategy.SOURCE);
+                  .override(200, 200);
               }
             };
           }
@@ -109,13 +105,11 @@ public class MainActivityTest {
       return InstrumentationRegistry.getInstrumentation();
     }
   };
-  private int items;
   String mockEndPoint;
 
   @Before public void setUp() throws Exception {
     initMocks(this);
 
-    items = new Random().nextInt((9 - 1) + 1) + 1;
     mockEndPoint = server.url("/").toString();
   }
 
@@ -128,15 +122,14 @@ public class MainActivityTest {
     final String mockResponse = new Scanner(stream, Charset.defaultCharset().name())
       .useDelimiter("\\A").next();
 
-    for (int i = 0; i < items; i++) {
-      server.enqueue(new MockResponse()
-        .setResponseCode(HttpURLConnection.HTTP_OK)
-        .setBody(mockResponse));
-    }
+    server.enqueue(new MockResponse()
+      .setResponseCode(HttpURLConnection.HTTP_OK)
+      .setBody(mockResponse));
 
     stream.close();
   }
 
+  @SuppressWarnings("unchecked")
   @Test public void testTrendingThenClickOpenDialog() throws Exception {
     // Fake server response
     sendMockMessages("/trending_results.json");
@@ -146,7 +139,7 @@ public class MainActivityTest {
 
     // Click and make sure dialog is shown
     onView(withId(R.id.recycler_view))
-      .perform(actionOnItemAtPosition(0, click()));
+      .perform(actionOnItemAtPosition(0, click())); // Select 0, the response only contains 1 item
 
     // Assert
     onView(withId(R.id.gif_dialog_image))
@@ -189,16 +182,24 @@ public class MainActivityTest {
     onView(withId(R.id.menu_search))
       .perform(click());
 
-    // Type in search bar
+    // Type in search bar - mimic typing and filtering
     onView(withId(R.id.search_src_text))
-      .perform(typeText("hell"), closeSoftKeyboard());
+      .perform(typeText("hel"));
+    sendMockMessages("/search_results.json");
+
+    onView(withId(R.id.search_src_text))
+      .perform(typeText("l"), closeSoftKeyboard());
+    sendMockMessages("/search_results.json");
+
     onView(withId(R.id.search_src_text))
       .perform(typeText("o"), closeSoftKeyboard());
+    sendMockMessages("/search_results.json");
+    sendMockMessages("/search_results.json");
     sendMockMessages("/search_results.json");
 
     // Click and make sure dialog is shown
     onView(withId(R.id.recycler_view))
-      .perform(actionOnItemAtPosition(0, click()));
+      .perform(actionOnItemAtPosition(0, click())); // Select 0, the response only contains 1 item
 
     // Assert
     onView(withId(R.id.gif_dialog_image))
