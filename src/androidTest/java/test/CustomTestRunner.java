@@ -11,6 +11,6 @@ import burrows.apps.example.gif.TestApp;
 public class CustomTestRunner extends AndroidJUnitRunner {
   @Override public Application newApplication(ClassLoader cl, String className, Context context)
     throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-    return super.newApplication(cl, TestApp.class.getName(), context);
+    return super.newApplication(cl, TestApp.class.getName(), context); // Need full path of class
   }
 }

@@ -26,7 +26,7 @@ import java.util.List;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder> {
-  final static String TAG = GifAdapter.class.getSimpleName();
+  final static String TAG = GifAdapter.class.getSimpleName(); // Can't be longer than 23 chars
   private final List<ImageInfo> data = new ArrayList<>();
   private OnItemClickListener onItemClickListener;
   private ImageRepository repository;
@@ -40,7 +40,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
     return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
   }
 
-  @Override public void onBindViewHolder(ViewHolder holder, int position) {
+  @Override public void onBindViewHolder(final ViewHolder holder, int position) {
     final ImageInfo imageInfo = getItem(position);
 
     // Load images
@@ -87,7 +87,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
   /**
    * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
    */
-  final class ViewHolder extends RecyclerView.ViewHolder {
+  final class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
     @BindView(R.id.gif_progress) ProgressBar progressBar;
     @BindView(R.id.gif_image) ImageView imageView;
 

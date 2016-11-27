@@ -47,7 +47,7 @@ import javax.inject.Inject;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class MainFragment extends Fragment implements MainContract.View, GifAdapter.OnItemClickListener {
-  static final String TAG = MainFragment.class.getSimpleName();
+  static final String TAG = MainFragment.class.getSimpleName(); // Can't be longer than 23 chars
   private static final int PORTRAIT_COLUMNS = 3;
   GridLayoutManager layoutManager;
   private GifItemDecoration itemOffsetDecoration;
@@ -157,11 +157,9 @@ public final class MainFragment extends Fragment implements MainContract.View, G
         totalItemCount = layoutManager.getItemCount();
         firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
 
-        if (loading) {
-          if (totalItemCount > previousTotal) {
-            loading = false;
-            previousTotal = totalItemCount;
-          }
+        if (loading && (totalItemCount > previousTotal)) {
+          loading = false;
+          previousTotal = totalItemCount;
         }
 
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {

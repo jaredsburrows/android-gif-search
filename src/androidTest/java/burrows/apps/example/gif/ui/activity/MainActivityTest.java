@@ -1,9 +1,11 @@
 package burrows.apps.example.gif.ui.activity;
 
+import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.filters.FlakyTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import burrows.apps.example.gif.R;
@@ -44,6 +46,9 @@ import static android.support.test.espresso.contrib.RecyclerViewActions.actionOn
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+import static android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -74,7 +79,7 @@ public class MainActivityTest {
           }
         })
         .glideModule(new GlideModule() {
-          @Override protected ImageRepository provideImageDownloader(Context context) {
+          @Override protected ImageRepository provideImageDownloader(final Context context) {
             return new ImageRepository(context) {
               // Prevent Glide network call with custom override
               @Override public GifRequestBuilder<?> load(Object url) {
@@ -171,6 +176,7 @@ public class MainActivityTest {
       .check(matches(isDisplayed()));
   }
 
+  @FlakyTest
   @Test public void testSearchResultsThenClickOpenDialog() throws Exception {
     // Fake server response
     sendMockMessages("/trending_results.json");
@@ -205,5 +211,22 @@ public class MainActivityTest {
     onView(withId(R.id.gif_dialog_image))
       .inRoot(isDialog())
       .check(matches(isDisplayed()));
+  }
+
+  private void launchActivity() {
+    activityRule.launchActivity(new Intent(Intent.ACTION_MAIN));
+
+    // Allows us to mock classes
+    System.setProperty("dexmaker.dexcache", activityRule.getActivity().getCacheDir().getPath());
+
+    keepScreenOn();
+  }
+
+  private void keepScreenOn() {
+    final Activity activity = activityRule.getActivity();
+    final Runnable wakeUpDevice = () -> activity.getWindow().addFlags(FLAG_TURN_SCREEN_ON
+      | FLAG_SHOW_WHEN_LOCKED
+      | FLAG_KEEP_SCREEN_ON);
+    activity.runOnUiThread(wakeUpDevice);
   }
 }

@@ -29,27 +29,11 @@ tasks.withType(Test) {
   }
 }
 
-// Customize the generated Javadoc
-tasks.withType(Javadoc) {
-  title = project.description
-  configure(options) {
-    header = project.description
-    windowTitle = "Documentation"
-    docTitle = "Documentation"
-    bottom = "Copyright &copy; 2011-" + Calendar.getInstance().get(Calendar.YEAR) +
-      ", Burrows Apps, LLC. All Rights Reserved. <a href=\"http://www.burrowsapps.com\" " +
-      "target=\"_blank\">Burrows apps</a>."
-    memberLevel = JavadocMemberLevel.PROTECTED
-    links = ["http://docs.oracle.com/javase/8/docs/api/",
-             "http://docs.oracle.com/javase/7/docs/api/"]
-    linksOffline "http://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
-    encoding = "utf-8"
-    docEncoding = "utf-8"
-    charSet = "utf-8"
-  }
-}
-
 // Prevent forked processes from stealing focus (on MacOS at least)
 tasks.withType(JavaForkOptions) {
+  // should improve memory on a 64bit JVM
+  jvmArgs "-XX:+UseCompressedOops"
+  // should avoid GradleWorkerMain to steal focus
   jvmArgs "-Djava.awt.headless=true"
+  jvmArgs "-Dapple.awt.UIElement=true"
 }

@@ -4,7 +4,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfo;
-import com.bumptech.glide.GifRequestBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -33,7 +31,6 @@ public final class GifAdapterTest extends RoboTestBase {
   private final ImageInfo imageInfo3 = new ImageInfo.Builder().url(STRING_UNIQUE3).build();
   private GifAdapter.ViewHolder viewHolder;
   @Mock GifAdapter.OnItemClickListener onItemClickListener;
-  @Mock GifRequestBuilder requestBuilder;
   ImageRepository spyImageDownloader;
   private GifAdapter sut;
 

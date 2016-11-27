@@ -25,6 +25,7 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
   @Mock ImageRepository imageDownloader;
   @Mock RecyclerView.LayoutParams layoutParams;
   private RecyclerView recyclerView;
+  private GifItemDecoration sut;
 
   @Before @Override public void setUp() throws Exception {
     super.setUp();
@@ -50,7 +51,7 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
 
   @Test public void testGetItemOffsetsContextResId() {
     // Item decoration with specified context and dimen
-    final GifItemDecoration sut = new GifItemDecoration(context, layoutManager.getSpanCount());
+    sut = new GifItemDecoration(context, layoutManager.getSpanCount());
     recyclerView.addItemDecoration(sut);
 
     sut.getItemOffsets(rect, recyclerView, recyclerView, state);
