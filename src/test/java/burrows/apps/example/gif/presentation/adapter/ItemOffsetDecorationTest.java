@@ -1,15 +1,18 @@
 package burrows.apps.example.gif.presentation.adapter;
 
+import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import test.RoboTestBase;
+import test.TestBase;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -18,12 +21,12 @@ import static org.mockito.MockitoAnnotations.initMocks;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class ItemOffsetDecorationTest extends RoboTestBase {
-  private final GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
-  private final Rect rect = new Rect();
-  private final RecyclerView.State state = new RecyclerView.State();
+  @Mock private Rect rect;
+  @Mock private RecyclerView.State state;
   @Mock GifAdapter.OnItemClickListener onItemClickListener;
   @Mock ImageRepository imageDownloader;
   @Mock RecyclerView.LayoutParams layoutParams;
+  private GridLayoutManager layoutManager;
   private RecyclerView recyclerView;
   private GifItemDecoration sut;
 
@@ -31,6 +34,8 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
     super.setUp();
 
     initMocks(this);
+
+    layoutManager = new GridLayoutManager(context, 3);
 
     final GifAdapter adapter = new GifAdapter(onItemClickListener, imageDownloader);
     recyclerView = new RecyclerView(context);

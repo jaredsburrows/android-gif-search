@@ -140,7 +140,7 @@ public class MainActivityTest {
     sendMockMessages("/trending_results.json");
 
     // Launch activity
-    activityRule.launchActivity(new Intent(Intent.ACTION_MAIN));
+    launchActivity();
 
     // Click and make sure dialog is shown
     onView(withId(R.id.recycler_view))
@@ -157,7 +157,7 @@ public class MainActivityTest {
     sendMockMessages("/trending_results.json");
 
     // Launch activity
-    activityRule.launchActivity(new Intent(Intent.ACTION_MAIN));
+    launchActivity();
 
     // Open menu
     onView(withId(R.id.menu_search))
@@ -166,10 +166,6 @@ public class MainActivityTest {
     // Type in search bar
     onView(withId(R.id.search_src_text))
       .perform(typeText("hello"), closeSoftKeyboard(), pressBack());
-
-    // Go back to trending screen
-    onView(withId(R.id.search_close_btn))
-      .perform(click(), closeSoftKeyboard());
 
     // Assert
     onView(withId(R.id.recycler_view))
@@ -182,7 +178,7 @@ public class MainActivityTest {
     sendMockMessages("/trending_results.json");
 
     // Launch activity
-    activityRule.launchActivity(new Intent(Intent.ACTION_MAIN));
+    launchActivity();
 
     // Open menu
     onView(withId(R.id.menu_search))

@@ -264,7 +264,7 @@ dependencies {
   androidTestCompile (deps.espressoContrib) { exclude group: "com.android.support"}
   androidTestCompile deps.dexmaker
   androidTestCompile deps.dexmakerMockito
-  androidTestCompile deps.leakcanaryAndroidNoOp
+//  androidTestCompile deps.leakcanaryAndroidNoOp
   androidTestCompile deps.mockwebserver
   androidTestCompile deps.dagger
 

@@ -1,10 +1,10 @@
 package burrows.apps.example.gif.presentation.adapter.model;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 import test.TestBase;
 
+import static nl.jqno.equalsverifier.EqualsVerifier.forClass;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -34,7 +34,7 @@ public final class ImageInfoTest extends TestBase {
   }
 
   @Test public void testEqualsGashCode() {
-    EqualsVerifier.forClass(ImageInfo.class)
+    forClass(ImageInfo.class)
       .withPrefabValues(ImageInfo.class, new ImageInfo(), new ImageInfo.Builder().url(STRING_UNIQUE).build())
       .suppress(Warning.NONFINAL_FIELDS)
       .verify();
