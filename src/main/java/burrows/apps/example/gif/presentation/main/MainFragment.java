@@ -177,8 +177,10 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     dialog = new AppCompatDialog(getContext());
     dialog.setContentView(dialogView);
     dialog.setOnDismissListener(dialog1 -> {
-      Glide.clear(imageView);
+      // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
+      Glide.clear(imageView);  // Forget view, try to free resources
       imageView.setImageDrawable(null);
+      progressBar.setVisibility(View.VISIBLE); // Make sure to show progress when loading new view
     });
 
     // Dialog views
@@ -241,11 +243,13 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
 
   @Override public void onResume() {
     super.onResume();
+
     presenter.subscribe();
   }
 
   @Override public void onPause() {
     super.onPause();
+
     presenter.unsubscribe();
   }
 

@@ -64,6 +64,7 @@ final class MainPresenter implements IMainPresenter {
       .subscribeOn(provider.io())
       .observeOn(provider.ui())
       .subscribe(response -> {
+        // onNext
         if (!view.isActive()) return;
 
         // Iterate over data from response and grab the urls

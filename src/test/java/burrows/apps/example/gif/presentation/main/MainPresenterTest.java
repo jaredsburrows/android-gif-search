@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import test.TestBase;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -30,6 +31,18 @@ public final class MainPresenterTest extends TestBase {
     initMocks(this);
 
     when(view.isActive()).thenReturn(true);
+  }
+
+  @Test public void testLoadTrendingImagesNotActive() {
+    when(view.isActive()).thenReturn(false);
+    sut = new MainPresenter(view, repository, provider);
+    when(repository.getTrendingResults(any(Integer.class), any(Float.class))).thenReturn(Observable.just(new RiffsyResponse()));
+
+    sut.loadTrendingImages(0f);
+
+    verify(repository).getTrendingResults(any(Integer.class), any(Float.class));
+    verify(view).isActive();
+    verify(view, times(0)).addImages(any(RiffsyResponse.class));
   }
 
   @Test public void testLoadTrendingImagesSuccess() {

@@ -5,6 +5,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
+import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfo;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,9 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
     recyclerView.setLayoutManager(layoutManager);
 
     // Add fake data
-    adapter.add(new ImageInfo());
+    for (int i = 0; i < RiffsyRepository.DEFAULT_LIMIT_COUNT; i++) {
+      adapter.add(new ImageInfo());
+    }
 
     // Increase the childcount
     recyclerView.addView(new AppCompatTextView(context));

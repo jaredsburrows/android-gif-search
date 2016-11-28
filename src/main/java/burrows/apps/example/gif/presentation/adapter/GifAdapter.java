@@ -71,8 +71,10 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
   @Override public void onViewRecycled(ViewHolder holder) {
     super.onViewRecycled(holder);
 
-    Glide.clear(holder.imageView);
+    // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
+    Glide.clear(holder.imageView);  // Forget view, try to free resources
     holder.imageView.setImageDrawable(null);
+    holder.progressBar.setVisibility(View.VISIBLE); // Make sure to show progress when loading new view
   }
 
   /**

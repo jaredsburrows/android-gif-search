@@ -182,7 +182,7 @@ android {
   buildTypes {
     debug {
       debuggable true
-      testCoverageEnabled true
+      testCoverageEnabled true // generated coverage for android tests
       applicationIdSuffix ".debug"
     }
 
