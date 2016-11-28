@@ -10,7 +10,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public class ImageRepository {
-  private static final float THUMBNAIL_MULTIPLIER = 0.1f;
   private final int imageHeight;
   private final int imageWidth;
   private final Context context;
@@ -21,11 +20,10 @@ public class ImageRepository {
     this.imageWidth = imageHeight;
   }
 
-  public GifRequestBuilder<?> load(Object url) {
+  public <T> GifRequestBuilder<T> load(T url) {
     return Glide.with(context)
       .load(url)
       .asGif()
-      .thumbnail(THUMBNAIL_MULTIPLIER)
       .error(R.mipmap.ic_launcher)
       .fallback(R.mipmap.ic_launcher)
       .override(imageWidth, imageHeight)

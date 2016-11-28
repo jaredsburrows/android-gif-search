@@ -48,10 +48,6 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
       .thumbnail(repository.load(imageInfo.previewUrl()))
       .listener(new RequestListener<Object, GifDrawable>() {
         @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
-          // Show gif
-          holder.imageView.setImageResource(R.mipmap.ic_launcher);
-          holder.imageView.setVisibility(View.VISIBLE);
-
           // Hide progressbar
           holder.progressBar.setVisibility(View.GONE);
           if (Log.isLoggable(TAG, Log.INFO)) {
@@ -61,9 +57,6 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
         }
 
         @Override public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-          // Show gif
-          holder.imageView.setVisibility(View.VISIBLE);
-
           // Hide progressbar
           holder.progressBar.setVisibility(View.GONE);
           if (Log.isLoggable(TAG, Log.INFO)) {

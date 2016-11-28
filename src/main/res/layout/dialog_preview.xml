@@ -26,15 +26,13 @@
         
         <ImageView
             android:id="@+id/gif_dialog_image"
-            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:contentDescription="@string/gif_image"
-            tools:src="@mipmap/ic_launcher"
-            tools:visibility="visible" />
+            tools:src="@mipmap/ic_launcher" />
         
         <TextView
             android:id="@+id/gif_dialog_title"

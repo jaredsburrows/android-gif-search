@@ -54,6 +54,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
+@SuppressWarnings("unchecked")
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
   @Rule public final MockWebServer server = new MockWebServer();
@@ -82,8 +83,8 @@ public class MainActivityTest {
           @Override protected ImageRepository provideImageDownloader(final Context context) {
             return new ImageRepository(context) {
               // Prevent Glide network call with custom override
-              @Override public GifRequestBuilder<?> load(Object url) {
-                return Glide.with(context)
+              @Override public <T> GifRequestBuilder<T> load(T url) {
+                return (GifRequestBuilder<T>) Glide.with(context)
                   .load(R.mipmap.ic_launcher)
                   .asGif()
                   .placeholder(R.mipmap.ic_launcher)
@@ -134,7 +135,6 @@ public class MainActivityTest {
     stream.close();
   }
 
-  @SuppressWarnings("unchecked")
   @Test public void testTrendingThenClickOpenDialog() throws Exception {
     // Fake server response
     sendMockMessages("/trending_results.json");
