@@ -1,18 +1,15 @@
 package burrows.apps.example.gif.presentation.adapter;
 
-import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import test.RoboTestBase;
-import test.TestBase;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;

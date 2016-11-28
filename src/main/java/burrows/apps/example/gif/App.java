@@ -12,8 +12,8 @@ import burrows.apps.example.gif.presentation.di.component.AppComponent;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public class App extends Application {
-  protected AppComponent appComponent;
-  protected ActivityComponent activityComponent;
+  public AppComponent appComponent;
+  public ActivityComponent activityComponent;
 
   @Override public void onCreate() {
     super.onCreate();
@@ -31,16 +31,8 @@ public class App extends Application {
     appComponent = AppComponent.Initializer.init(this);
   }
 
-  public AppComponent getAppComponent() {
-    return appComponent;
-  }
-
   // Riffsy Component
   public void initActivityComponent() {
     activityComponent = ActivityComponent.Initializer.init(appComponent);
-  }
-
-  public ActivityComponent getActivityComponent() {
-    return activityComponent;
   }
 }

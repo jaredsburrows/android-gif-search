@@ -59,18 +59,14 @@ public final class ImageInfo {
   }
 
   @Override public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
 
     final ImageInfo imageInfo = (ImageInfo) o;
 
-    if (url != null ? !url.equals(imageInfo.url) : imageInfo.url != null) {
-      return false;
-    }
+    if (url != null ? !url.equals(imageInfo.url) : imageInfo.url != null) return false;
+
     return previewUrl != null ? previewUrl.equals(imageInfo.previewUrl) : imageInfo.previewUrl == null;
 
   }

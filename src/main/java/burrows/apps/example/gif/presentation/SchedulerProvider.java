@@ -7,7 +7,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class SchedulerProvider implements BaseSchedulerProvider {
+public final class SchedulerProvider implements IBaseSchedulerProvider {
   @Override public Scheduler io() {
     return Schedulers.io();
   }

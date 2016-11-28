@@ -29,7 +29,7 @@ public final class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
 
     // Injection dependencies
-    ((App) getApplication()).getActivityComponent().inject(this);
+    ((App) getApplication()).activityComponent.inject(this);
 
     // Bind views
     ButterKnife.bind(this);
@@ -41,9 +41,7 @@ public final class MainActivity extends AppCompatActivity {
 
     // Use Fragments
     MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
-    if (fragment == null) {
-      fragment = new MainFragment();
-    }
+    if (fragment == null) fragment = new MainFragment();
 
     if (savedInstanceState == null) {
       getSupportFragmentManager()

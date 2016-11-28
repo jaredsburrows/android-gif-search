@@ -50,18 +50,16 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
         @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
           // Hide progressbar
           holder.progressBar.setVisibility(View.GONE);
-          if (Log.isLoggable(TAG, Log.INFO)) {
-            Log.i(TAG, "finished loading\t" + model);
-          }
+          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model);
+
           return false;
         }
 
         @Override public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
           // Hide progressbar
           holder.progressBar.setVisibility(View.GONE);
-          if (Log.isLoggable(TAG, Log.INFO)) {
-            Log.i(TAG, "finished loading\t" + model);
-          }
+          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model);
+
           return false;
         }
       })

@@ -2,7 +2,7 @@ package burrows.apps.example.gif.presentation.main;
 
 import burrows.apps.example.gif.data.rest.model.RiffsyResponse;
 import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
-import burrows.apps.example.gif.presentation.BaseSchedulerProvider;
+import burrows.apps.example.gif.presentation.IBaseSchedulerProvider;
 import burrows.apps.example.gif.presentation.ImmediateSchedulerProvider;
 import io.reactivex.Observable;
 import org.junit.Before;
@@ -19,8 +19,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class MainPresenterTest extends TestBase {
-  private final BaseSchedulerProvider provider = new ImmediateSchedulerProvider();
-  @Mock private MainContract.View view;
+  private final IBaseSchedulerProvider provider = new ImmediateSchedulerProvider();
+  @Mock private IMainView view;
   @Mock private RiffsyRepository repository;
   private MainPresenter sut;
 

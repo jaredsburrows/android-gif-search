@@ -3,7 +3,7 @@ package burrows.apps.example.gif.presentation.main;
 import android.util.Log;
 import burrows.apps.example.gif.data.rest.model.RiffsyResponse;
 import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
-import burrows.apps.example.gif.presentation.BaseSchedulerProvider;
+import burrows.apps.example.gif.presentation.IBaseSchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -12,13 +12,13 @@ import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-final class MainPresenter implements MainContract.Presenter {
+final class MainPresenter implements IMainPresenter {
   private final CompositeDisposable disposable = new CompositeDisposable();
-  final MainContract.View view;
+  final IMainView view;
   private final RiffsyRepository repository;
-  private final BaseSchedulerProvider provider;
+  private final IBaseSchedulerProvider provider;
 
-  public MainPresenter(MainContract.View view, RiffsyRepository repository, BaseSchedulerProvider provider) {
+  public MainPresenter(IMainView view, RiffsyRepository repository, IBaseSchedulerProvider provider) {
     this.view = view;
     this.repository = repository;
     this.provider = provider;
@@ -64,18 +64,16 @@ final class MainPresenter implements MainContract.Presenter {
       .subscribeOn(provider.io())
       .observeOn(provider.ui())
       .subscribe(response -> {
-        if (!view.isActive()) {
-          return;
-        }
+        if (!view.isActive()) return;
 
         // Iterate over data from response and grab the urls
         view.addImages(response);
       }, error -> {
         // onError
-        Log.e(TAG, "onError", error);
+        Log.e(TAG, "onError", error); // java.lang.UnsatisfiedLinkError - unit tests
       }, () -> {
         // onComplete
-        Log.i(TAG, "Done loading!");
+        Log.i(TAG, "Done loading!"); // java.lang.UnsatisfiedLinkError - unit tests
       }));
   }
 }

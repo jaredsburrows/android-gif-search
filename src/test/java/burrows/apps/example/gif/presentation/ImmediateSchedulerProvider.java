@@ -6,7 +6,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class ImmediateSchedulerProvider implements BaseSchedulerProvider {
+public final class ImmediateSchedulerProvider implements IBaseSchedulerProvider {
   @Override public Scheduler io() {
     return Schedulers.trampoline();
   }

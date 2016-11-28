@@ -27,14 +27,10 @@ public final class GifItemDecoration extends RecyclerView.ItemDecoration {
     final int dataSize = state.getItemCount();
 
     // Apply inner right
-    if (position % columns < columns - 1) {
-      outRect.right = offSet;
-    }
+    if (position % columns < columns - 1) outRect.right = offSet;
 
     // Apply inner left
-    if (position % columns > 0) {
-      outRect.left = offSet;
-    }
+    if (position % columns > 0) outRect.left = offSet;
 
     // Apply top padding
     if (position < columns) {

@@ -47,6 +47,7 @@ public final class RiffsyResponse {
 
     public Builder(RiffsyResponse response) {
       this.results = response.results;
+      this.next = response.next;
     }
 
     public Builder results(List<Result> results) {

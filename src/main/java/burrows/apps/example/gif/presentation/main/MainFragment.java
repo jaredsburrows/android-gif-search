@@ -46,7 +46,7 @@ import javax.inject.Inject;
  *
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class MainFragment extends Fragment implements MainContract.View, GifAdapter.OnItemClickListener {
+public final class MainFragment extends Fragment implements IMainView, GifAdapter.OnItemClickListener {
   static final String TAG = MainFragment.class.getSimpleName(); // Can't be longer than 23 chars
   private static final int PORTRAIT_COLUMNS = 3;
   GridLayoutManager layoutManager;
@@ -65,7 +65,7 @@ public final class MainFragment extends Fragment implements MainContract.View, G
   TextView dialogText;
   ProgressBar progressBar;
   ImageView imageView;
-  MainContract.Presenter presenter;
+  IMainPresenter presenter;
   @BindView(R.id.recycler_view) RecyclerView recyclerView;
   @BindString(R.string.search_gifs) String searchGifs;
   @Inject RefWatcher refWatcher;
@@ -75,7 +75,7 @@ public final class MainFragment extends Fragment implements MainContract.View, G
   // Contract
   //
 
-  @Override public void setPresenter(MainContract.Presenter presenter) {
+  @Override public void setPresenter(IMainPresenter presenter) {
     this.presenter = presenter;
   }
 
@@ -92,9 +92,7 @@ public final class MainFragment extends Fragment implements MainContract.View, G
 
       adapter.add(new ImageInfo.Builder().url(url).build());
 
-      if (Log.isLoggable(TAG, Log.INFO)) {
-        Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
-      }
+      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
     }
   }
 
@@ -122,7 +120,7 @@ public final class MainFragment extends Fragment implements MainContract.View, G
     super.onCreate(savedInstanceState);
 
     // Injection dependencies
-    ((App) getActivity().getApplication()).getActivityComponent().inject(this);
+    ((App) getActivity().getApplication()).activityComponent.inject(this);
 
     setHasOptionsMenu(true);
 
@@ -153,6 +151,8 @@ public final class MainFragment extends Fragment implements MainContract.View, G
     recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
       @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
+
+        // Continuous scrolling
         visibleItemCount = recyclerView.getChildCount();
         totalItemCount = layoutManager.getItemCount();
         firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
@@ -278,18 +278,16 @@ public final class MainFragment extends Fragment implements MainContract.View, G
         @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
           // Hide progressbar
           progressBar.setVisibility(View.GONE);
-          if (Log.isLoggable(TAG, Log.INFO)) {
-            Log.i(TAG, "finished loading\t" + model);
-          }
+          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model);
+
           return false;
         }
 
         @Override public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
           // Hide progressbar
           progressBar.setVisibility(View.GONE);
-          if (Log.isLoggable(TAG, Log.INFO)) {
-            Log.i(TAG, "finished loading\t" + model);
-          }
+          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model);
+
           return false;
         }
       })

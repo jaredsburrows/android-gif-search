@@ -32,7 +32,7 @@ before_script:
 
 script:
   - if [ "$TRAVIS_OS_NAME" = osx ]; then ./gradlew clean testDebug assembleDebugAndroidTest jacocoDebugReport -Pci -Dscan --stacktrace; fi
-  - if [ "$TRAVIS_OS_NAME" = linux ]; then ./gradlew clean testDebug connectedDebugAndroidTest jacocoDebugReport coveralls -Pci -Dscan --stacktrace; fi
+  - if [ "$TRAVIS_OS_NAME" = linux ]; then ./gradlew clean testDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci -Dscan --stacktrace; fi
 
 sudo: required
 
