@@ -6,10 +6,10 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:2.2.2"
+    classpath "com.android.tools.build:gradle:2.2.3"
     classpath "com.novoda:gradle-android-command-plugin:1.6.2"
     classpath "com.github.triplet.gradle:play-publisher:1.1.5"
-    classpath "com.gradle:build-scan-plugin:1.1.1"
+    classpath "com.gradle:build-scan-plugin:1.3"
     classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.1"
     classpath "com.vanniktech:gradle-android-apk-size-plugin:0.3.0"
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.7.1"
@@ -39,7 +39,7 @@ ext {
   firebaseVersion = "10.0.0"
   butterKnifeVersion = "8.4.0"
   daggerVersion = "2.7" // 2.8 - java.lang.NoSuchMethodError
-  okHttpVersion = "3.4.2"
+  okHttpVersion = "3.5.0"
   retrofitVersion = "2.1.0"
   rxJava2Version = "2.0.1"
   rxJavaVersion = "1.2.2"
@@ -101,7 +101,7 @@ ext.deps = [
         leakcanaryAndroid      : "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}",
         leakcanaryAndroidNoOp  : "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}",
         junit                  : "junit:junit:4.12",
-        mockito                : "org.mockito:mockito-core:2.2.25",
+        mockito                : "org.mockito:mockito-core:2.3.0",
         assertjCore            : "org.assertj:assertj-core:2.5.0", // Java 8 - 3.5.2
         equalsverifier         : "nl.jqno.equalsverifier:equalsverifier:2.1.7",
         mockwebserver          : "com.squareup.okhttp3:mockwebserver:${okHttpVersion}",
@@ -222,7 +222,6 @@ configurations.all {
 // excluding these dependencies from your test configuration will result in an dex pre-verifier error
 // at runtime. More info in this tools bug: (https://code.google.com/p/android/issues/detail?id=192497)
 configurations.compile.dependencies.each { compileDependency ->
-  println "Excluding compile dependency: ${compileDependency.name}"
   configurations.androidTestCompile.dependencies.each { androidTestCompileDependency ->
     configurations.androidTestCompile.exclude module: "${compileDependency.name}"
   }

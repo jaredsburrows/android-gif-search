@@ -21,9 +21,6 @@ public class App extends Application {
     // Setup components
     initAppComponent();
     initActivityComponent();
-
-    // Make sure we use vector drawables
-    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
   }
 
   // App Component

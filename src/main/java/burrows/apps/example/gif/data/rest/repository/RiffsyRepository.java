@@ -43,7 +43,7 @@ public interface RiffsyRepository {
    * @return Response of trending results.
    */
   @GET("/v1/trending?key=" + API_KEY) Observable<RiffsyResponse> getTrendingResults(@Query("limit") int limit,
-                                                                                    @Query("pos") Float pos);
+                                                                                    @Query("pos") Float pos); // Allow passing null
 
   /**
    * Get search gif results by a search string.
@@ -63,5 +63,5 @@ public interface RiffsyRepository {
    */
   @GET("/v1/search?key=" + API_KEY) Observable<RiffsyResponse> getSearchResults(@Query("tag") String tag,
                                                                                 @Query("limit") int limit,
-                                                                                @Query("pos") Float pos);
+                                                                                @Query("pos") Float pos); // Allow passing null
 }
