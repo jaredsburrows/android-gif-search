@@ -259,7 +259,7 @@ dependencies {
   androidTestAnnotationProcessor deps.daggerCompiler
 
   testCompile deps.junit
-  testCompile deps.mockito
+  testCompile deps.mockitoCore
   testCompile deps.assertjCore
   testCompile deps.leakcanaryAndroidNoOp
   testCompile deps.equalsverifier
