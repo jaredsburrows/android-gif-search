@@ -40,7 +40,7 @@ ext {
   supportLibraryVersion = "25.0.1"
   firebaseVersion = "10.0.0"
   butterKnifeVersion = "8.4.0"
-  daggerVersion = "2.8"
+  daggerVersion = "2.7"
   okHttpVersion = "3.5.0"
   retrofitVersion = "2.1.0"
   rxJava2Version = "2.0.1"
@@ -53,6 +53,7 @@ ext {
 // Dependencies
 ext.deps = [
         // compile
+        // - Android/Google
         design                 : "com.android.support:design:${supportLibraryVersion}",
         appcompatv7            : "com.android.support:appcompat-v7:${supportLibraryVersion}",
         supportv4              : "com.android.support:support-v4:${supportLibraryVersion}",
@@ -62,13 +63,11 @@ ext.deps = [
         firebaseCore           : "com.google.firebase:firebase-core:${firebaseVersion}",
         firebaseCrash          : "com.google.firebase:firebase-crash:${firebaseVersion}",
         firebaseAds            : "com.google.firebase:firebase-ads:${firebaseVersion}",
+        // - Other
         butterknife            : "com.jakewharton:butterknife:${butterKnifeVersion}",
-        rxAndroid2             : "io.reactivex.rxjava2:rxandroid:${rxJava2Version}",
-        rxJava2                : "io.reactivex.rxjava2:rxjava:${rxJava2Version}",
-        rxAndroid              : "io.reactivex:rxandroid:1.2.1",
-        rxJava                 : "io.reactivex:rxjava:${rxJavaVersion}",
-        rxJavaProguardRules    : "com.artemzin.rxjava:proguard-rules:${rxJavaVersion}.0",
-        rxRelay                : "com.jakewharton.rxrelay:rxrelay:1.2.0",
+        rxAndroid              : "io.reactivex.rxjava2:rxandroid:${rxJava2Version}",
+        rxJava                 : "io.reactivex.rxjava2:rxjava:${rxJava2Version}",
+        rxRelay                : "com.jakewharton.rxrelay2:rxrelay:2.0.0",
         aboutlibraries         : "com.mikepenz:aboutlibraries:5.8.1",
         androidSdk             : "io.doorbell:android-sdk:0.2.6",
         appintro               : "com.github.paolorotolo:appintro:3.4.0",
@@ -100,7 +99,7 @@ ext.deps = [
         leakcanaryAndroid      : "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}",
         leakcanaryAndroidNoOp  : "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}",
         junit                  : "junit:junit:4.12",
-        mockito                : "org.mockito:mockito-core:2.3.0",
+        mockitoCore            : "org.mockito:mockito-core:2.3.0",
         assertjCore            : "org.assertj:assertj-core:2.5.0", // Java 8 - 3.5.2
         equalsverifier         : "nl.jqno.equalsverifier:equalsverifier:2.1.7",
         mockwebserver          : "com.squareup.okhttp3:mockwebserver:${okHttpVersion}",
@@ -233,8 +232,8 @@ dependencies {
   compile deps.retrofit2Rxjava2Adapter
   compile deps.converterGson
   compile deps.retrofit
-  compile deps.rxAndroid2
-  compile deps.rxJava2
+  compile deps.rxAndroid
+  compile deps.rxJava
   compile deps.androidGifDrawable
   compile deps.glide
   compile deps.okhttp3Integration
