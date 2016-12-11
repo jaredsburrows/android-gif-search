@@ -50,7 +50,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @SuppressWarnings("unchecked")
 @SmallTest
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest extends AndroidTestBase {
+public final class MainActivityTest extends AndroidTestBase {
   @Rule public final CustomTestRule<MainActivity> activityRule = new CustomTestRule<MainActivity>(MainActivity.class, true, false) {
     @Override protected void beforeActivityLaunched() {
       super.beforeActivityLaunched();

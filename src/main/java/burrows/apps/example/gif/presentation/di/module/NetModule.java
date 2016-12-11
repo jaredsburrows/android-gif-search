@@ -1,6 +1,8 @@
 package burrows.apps.example.gif.presentation.di.module;
 
 import android.app.Application;
+import burrows.apps.example.gif.App;
+import burrows.apps.example.gif.BuildConfig;
 import burrows.apps.example.gif.presentation.di.scope.PerActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -56,7 +58,7 @@ public final class NetModule {
   @Provides @PerActivity OkHttpClient provideOkHttpClient(Cache cache) {
     return new OkHttpClient.Builder()
       .addInterceptor(new HttpLoggingInterceptor()
-        .setLevel(HttpLoggingInterceptor.Level.BODY))
+        .setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY: HttpLoggingInterceptor.Level.NONE))
       .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)

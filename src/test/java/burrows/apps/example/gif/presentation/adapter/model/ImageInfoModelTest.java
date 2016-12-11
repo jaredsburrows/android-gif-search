@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class ImageInfoTest extends TestBase {
+public final class ImageInfoModelTest extends TestBase {
   private ImageInfoModel sut = new ImageInfoModel.Builder().url(STRING_UNIQUE).previewUrl(STRING_UNIQUE2).build();
 
   @Test public void testGetUrl() {

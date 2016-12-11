@@ -7,7 +7,7 @@ import android.os.StrictMode.VmPolicy;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public class DebugApp extends App {
+public final class DebugApp extends App {
   @Override public void onCreate() {
     StrictMode.setThreadPolicy(new ThreadPolicy.Builder()
       .detectAll()

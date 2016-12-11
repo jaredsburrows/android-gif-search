@@ -1,16 +1,19 @@
 package burrows.apps.example.gif.presentation.adapter;
 
 import android.graphics.Rect;
+import android.support.test.filters.SmallTest;
+import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import burrows.apps.example.gif.DummyActivity;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel;
-import burrows.apps.example.gif.presentation.main.MainActivity;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import test.AndroidTestBase;
 import test.CustomTestRule;
@@ -21,8 +24,10 @@ import static org.mockito.MockitoAnnotations.initMocks;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public class GifItemDecorationTest extends AndroidTestBase {
-  @Rule public final CustomTestRule<MainActivity> activityTestRule = new CustomTestRule<>(MainActivity.class, true, true);
+@SmallTest
+@RunWith(AndroidJUnit4.class)
+public final class GifItemDecorationTest extends AndroidTestBase {
+  @Rule public final CustomTestRule<DummyActivity> activityTestRule = new CustomTestRule<>(DummyActivity.class, true, true);
   @Mock private RecyclerView.State state;
   @Mock GifAdapter.OnItemClickListener onItemClickListener;
   @Mock ImageRepository imageDownloader;
@@ -60,7 +65,7 @@ public class GifItemDecorationTest extends AndroidTestBase {
 
   @Test public void testGetItemOffsetsContextResId() {
     // Item decoration with specified context and dimen
-    sut = new GifItemDecoration(activityTestRule.getTargetContext(), layoutManager.getSpanCount());
+    sut = new GifItemDecoration(INTEGER_RANDOM, layoutManager.getSpanCount());
     recyclerView.addItemDecoration(sut);
 
     sut.getItemOffsets(rect, recyclerView, recyclerView, state);

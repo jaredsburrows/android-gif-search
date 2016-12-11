@@ -33,12 +33,14 @@ ext {
   buildToolsVersion = "25.0.1"
   sourceCompatibilityVersion = JavaVersion.VERSION_1_8
   targetCompatibilityVersion = JavaVersion.VERSION_1_8
+  debugKeystoreUser = "androiddebugkey"
+  debugKeystorePass = "android"
 
   // Common versions
   supportLibraryVersion = "25.0.1"
   firebaseVersion = "10.0.0"
   butterKnifeVersion = "8.4.0"
-  daggerVersion = "2.7" // 2.8 - java.lang.NoSuchMethodError
+  daggerVersion = "2.8"
   okHttpVersion = "3.5.0"
   retrofitVersion = "2.1.0"
   rxJava2Version = "2.0.1"
@@ -46,9 +48,6 @@ ext {
   espressoVersion = "2.2.2"
   leakCanaryVersion = "1.4"
   dexmakerVersion = "1.2"
-
-  debugKeystoreUser = "androiddebugkey"
-  debugKeystorePass = "android"
 }
 
 // Dependencies
@@ -201,11 +200,6 @@ android {
         }
       }
     }
-  }
-
-  packagingOptions {
-    exclude "asm-license.txt" // androidTest assertj-core-1.7.1.jar/mockito-core-1.9.5.jar
-    exclude "META-INF/rxjava.properties"
   }
 }
 

@@ -125,7 +125,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     setHasOptionsMenu(true);
 
     layoutManager = new GridLayoutManager(getActivity(), PORTRAIT_COLUMNS);
-    itemOffsetDecoration = new GifItemDecoration(getActivity(), layoutManager.getSpanCount());
+    itemOffsetDecoration = new GifItemDecoration(getActivity().getResources().getDimensionPixelSize(R.dimen.gif_adapter_item_offset), layoutManager.getSpanCount());
     adapter = new GifAdapter(this, repository);
   }
 

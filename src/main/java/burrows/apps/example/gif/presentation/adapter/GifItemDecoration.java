@@ -15,8 +15,8 @@ public final class GifItemDecoration extends RecyclerView.ItemDecoration {
   private final int offSet;
   private final int columns;
 
-  public GifItemDecoration(Context context, int columns) {
-    this.offSet = context.getResources().getDimensionPixelSize(R.dimen.gif_adapter_item_offset);
+  public GifItemDecoration(int offSet, int columns) {
+    this.offSet = offSet;
     this.columns = columns;
   }
 

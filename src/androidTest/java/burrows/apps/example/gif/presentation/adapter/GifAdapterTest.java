@@ -5,10 +5,10 @@ import android.support.test.rule.UiThreadTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import burrows.apps.example.gif.DummyActivity;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.presentation.adapter.GifAdapter.OnItemClickListener;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel;
-import burrows.apps.example.gif.presentation.main.MainActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -35,7 +35,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @SmallTest
 @RunWith(AndroidJUnit4.class)
 public final class GifAdapterTest extends AndroidTestBase {
-  @Rule public final CustomTestRule<MainActivity> activityTestRule = new CustomTestRule<>(MainActivity.class, true, true);
+  @Rule public final CustomTestRule<DummyActivity> activityTestRule = new CustomTestRule<>(DummyActivity.class, true, true);
   @Rule public final UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
   @Mock OnItemClickListener onItemClickListener;
   private final ImageInfoModel imageInfoModel = new ImageInfoModel.Builder().url(STRING_UNIQUE).build();

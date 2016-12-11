@@ -10,6 +10,11 @@
     
     <application
         android:name=".DebugApp"
-        tools:replace="android:name" />
+        tools:replace="android:name">
+        <activity
+            android:name="burrows.apps.example.gif.DummyActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:windowSoftInputMode="adjustPan" />
+    </application>
 
 </manifest>
