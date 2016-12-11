@@ -105,8 +105,6 @@ ext.deps = [
         assertjCore            : "org.assertj:assertj-core:2.5.0", // Java 8 - 3.5.2
         equalsverifier         : "nl.jqno.equalsverifier:equalsverifier:2.1.7",
         mockwebserver          : "com.squareup.okhttp3:mockwebserver:${okHttpVersion}",
-        shadowsSupportV4       : "org.robolectric:shadows-support-v4:3.1.4",
-        openglApi              : "org.khronos:opengl-api:gl1.1-android-2.1_r1",
 
         // retrolambdaConfig
         retrolambda            : "net.orfjackal.retrolambda:retrolambda:2.3.0"
@@ -273,8 +271,6 @@ dependencies {
   testCompile deps.leakcanaryAndroidNoOp
   testCompile deps.equalsverifier
   testCompile deps.mockwebserver
-  testCompile deps.shadowsSupportV4
-  testCompile deps.openglApi
 
   retrolambdaConfig deps.retrolambda
 }

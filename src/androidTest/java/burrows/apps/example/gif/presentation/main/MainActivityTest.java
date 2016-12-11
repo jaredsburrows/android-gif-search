@@ -96,12 +96,16 @@ public class MainActivityTest extends AndroidTestBase {
   String mockEndPoint;
 
   @Before @Override public void setUp() throws Exception {
+    super.setUp();
+
     initMocks(this);
 
     mockEndPoint = server.url("/").toString();
   }
 
   @After @Override public void tearDown() throws Exception {
+    super.tearDown();
+
     server.shutdown();
   }
 

@@ -44,7 +44,7 @@ This project builds with [Gradle](www.gradle.org) and the Android Build [tools](
 **Running the Unit Tests:**
 
 
-The [Junit](http://junit.org/junit4/)/[Robolectric](https://github.com/robolectric/robolectric) tests run on the JVM, no need for emulators or real devices.
+The [Junit](http://junit.org/junit4/) tests run on the JVM, no need for emulators or real devices.
 
 
     $ gradlew testDebug

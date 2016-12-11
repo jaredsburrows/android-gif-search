@@ -46,6 +46,8 @@ public final class GifAdapterTest extends AndroidTestBase {
   GifAdapter sut;
 
   @Before @Override public void setUp() throws Exception {
+    super.setUp();
+
     activityTestRule.keepScreenOn();
 
     initMocks(this);
@@ -58,6 +60,8 @@ public final class GifAdapterTest extends AndroidTestBase {
   }
 
   @After @Override public void tearDown() throws Exception {
+    super.tearDown();
+
     sut.clear();
   }
 
