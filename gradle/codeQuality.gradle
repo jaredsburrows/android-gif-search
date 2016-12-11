@@ -100,9 +100,9 @@ apply plugin: "com.github.kt3k.coveralls"
     source = files(android.sourceSets.main.java.srcDirs)
     classpath = files(configurations.compile.files)
   }
+}
 
-  // Only allows specifying of a single file
-  coveralls {
-    jacocoReportPath = "${buildDir}/reports/jacoco/jacoco${variantName}Report/jacoco${variantName}Report.xml"
-  }
+// Only allows specifying of a single file
+coveralls {
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoDebugReport/jacocoDebugReport.xml"
 }
