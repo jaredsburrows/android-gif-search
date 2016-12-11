@@ -6,15 +6,15 @@ package burrows.apps.example.gif.presentation.adapter.model;
  *
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class ImageInfo {
+public final class ImageInfoModel {
   final String url;
   final String previewUrl;
 
-  public ImageInfo() {
+  public ImageInfoModel() {
     this(new Builder());
   }
 
-  public ImageInfo(Builder builder) {
+  public ImageInfoModel(Builder builder) {
     this.url = builder.url;
     this.previewUrl = builder.previewUrl;
   }
@@ -38,7 +38,7 @@ public final class ImageInfo {
     public Builder() {
     }
 
-    public Builder(ImageInfo imageInfo) {
+    public Builder(ImageInfoModel imageInfo) {
       this.url = imageInfo.url;
       this.previewUrl = imageInfo.previewUrl;
     }
@@ -53,8 +53,8 @@ public final class ImageInfo {
       return this;
     }
 
-    public ImageInfo build() {
-      return new ImageInfo(this);
+    public ImageInfoModel build() {
+      return new ImageInfoModel(this);
     }
   }
 
@@ -63,7 +63,7 @@ public final class ImageInfo {
 
     if (o == null || getClass() != o.getClass()) return false;
 
-    final ImageInfo imageInfo = (ImageInfo) o;
+    final ImageInfoModel imageInfo = (ImageInfoModel) o;
 
     if (url != null ? !url.equals(imageInfo.url) : imageInfo.url != null) return false;
 

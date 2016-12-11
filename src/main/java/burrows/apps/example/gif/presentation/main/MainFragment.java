@@ -28,7 +28,7 @@ import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
 import burrows.apps.example.gif.presentation.adapter.GifAdapter;
 import burrows.apps.example.gif.presentation.adapter.GifItemDecoration;
-import burrows.apps.example.gif.presentation.adapter.model.ImageInfo;
+import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -90,13 +90,13 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     for (Result result : response.results()) {
       final String url = result.media().get(0).gif().url();
 
-      adapter.add(new ImageInfo.Builder().url(url).build());
+      adapter.add(new ImageInfoModel.Builder().url(url).build());
 
       if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
     }
   }
 
-  @Override public void showDialog(ImageInfo imageInfo) {
+  @Override public void showDialog(ImageInfoModel imageInfo) {
     showImageDialog(imageInfo);
   }
 
@@ -108,7 +108,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
   // GifAdapter
   //
 
-  @Override public void onClick(ImageInfo imageInfo) {
+  @Override public void onClick(ImageInfoModel imageInfo) {
     showDialog(imageInfo);
   }
 
@@ -266,7 +266,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     refWatcher.watch(this, TAG);
   }
 
-  private void showImageDialog(ImageInfo imageInfo) {
+  private void showImageDialog(ImageInfoModel imageInfo) {
     dialog.show();
     // Remove "white" background for dialog
     dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);

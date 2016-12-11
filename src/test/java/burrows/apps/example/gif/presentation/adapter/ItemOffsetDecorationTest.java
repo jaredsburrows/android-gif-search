@@ -6,7 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
-import burrows.apps.example.gif.presentation.adapter.model.ImageInfo;
+import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -44,7 +44,7 @@ public final class ItemOffsetDecorationTest extends RoboTestBase {
 
     // Add fake data
     for (int i = 0; i < RiffsyRepository.DEFAULT_LIMIT_COUNT; i++) {
-      adapter.add(new ImageInfo());
+      adapter.add(new ImageInfoModel());
     }
 
     // Increase the childcount

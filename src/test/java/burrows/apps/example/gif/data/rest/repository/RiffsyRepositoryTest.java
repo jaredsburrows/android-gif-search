@@ -5,11 +5,14 @@ import com.google.gson.Gson;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import test.ServiceTestBase;
+import test.TestBase;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -21,8 +24,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class RiffsyRepositoryTest extends ServiceTestBase {
+public final class RiffsyRepositoryTest extends TestBase {
+  @Rule public final MockWebServer server = new MockWebServer();
   private RiffsyRepository sut;
+
+  @Before @Override public void setUp() throws Exception {
+    final String mockEndPoint = server.url("/").toString();
+
+    sut = getRetrofit(mockEndPoint).build().create(RiffsyRepository.class);
+  }
+
+  @After @Override public void tearDown() throws Exception {
+    server.shutdown();
+  }
 
   private void sendMockMessages(String fileName) throws Exception {
     final InputStream stream = getClass().getResourceAsStream(fileName);
@@ -42,12 +56,6 @@ public final class RiffsyRepositoryTest extends ServiceTestBase {
       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
       .addConverterFactory(GsonConverterFactory.create(new Gson()))
       .client(new OkHttpClient());
-  }
-
-  @Before @Override public void setUp() throws Exception {
-    super.setUp();
-
-    sut = getRetrofit(mockEndPoint).build().create(RiffsyRepository.class);
   }
 
   @Test public void testTrendingResultsUrlShouldParseCorrectly() throws Exception {

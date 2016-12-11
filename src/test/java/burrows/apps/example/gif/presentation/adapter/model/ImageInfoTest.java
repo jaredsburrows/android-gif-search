@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class ImageInfoTest extends TestBase {
-  private ImageInfo sut = new ImageInfo.Builder().url(STRING_UNIQUE).previewUrl(STRING_UNIQUE2).build();
+  private ImageInfoModel sut = new ImageInfoModel.Builder().url(STRING_UNIQUE).previewUrl(STRING_UNIQUE2).build();
 
   @Test public void testGetUrl() {
     assertThat(sut.url()).isEqualTo(STRING_UNIQUE);
@@ -34,8 +34,8 @@ public final class ImageInfoTest extends TestBase {
   }
 
   @Test public void testEqualsGashCode() {
-    forClass(ImageInfo.class)
-      .withPrefabValues(ImageInfo.class, new ImageInfo(), new ImageInfo.Builder().url(STRING_UNIQUE).build())
+    forClass(ImageInfoModel.class)
+      .withPrefabValues(ImageInfoModel.class, new ImageInfoModel(), new ImageInfoModel.Builder().url(STRING_UNIQUE).build())
       .suppress(Warning.NONFINAL_FIELDS)
       .verify();
   }

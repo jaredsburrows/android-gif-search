@@ -1,12 +1,7 @@
-package burrows.apps.example.gif.ui.activity;
+package burrows.apps.example.gif.presentation.main;
 
-import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Context;
-import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.filters.FlakyTest;
-import android.support.test.rule.ActivityTestRule;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 import burrows.apps.example.gif.R;
 import burrows.apps.example.gif.TestApp;
@@ -19,7 +14,6 @@ import burrows.apps.example.gif.presentation.di.component.DaggerAppComponent;
 import burrows.apps.example.gif.presentation.di.module.AppModule;
 import burrows.apps.example.gif.presentation.di.module.GlideModule;
 import burrows.apps.example.gif.presentation.di.module.RiffsyModule;
-import burrows.apps.example.gif.presentation.main.MainActivity;
 import com.bumptech.glide.GifRequestBuilder;
 import com.bumptech.glide.Glide;
 import okhttp3.mockwebserver.MockResponse;
@@ -30,6 +24,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import retrofit2.Retrofit;
+import test.AndroidTestBase;
+import test.CustomTestRule;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -46,19 +42,16 @@ import static android.support.test.espresso.contrib.RecyclerViewActions.actionOn
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
-import static android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 @SuppressWarnings("unchecked")
+@SmallTest
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
-  @Rule public final MockWebServer server = new MockWebServer();
-  @Rule public final ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class, true, false) {
+public class MainActivityTest extends AndroidTestBase {
+  @Rule public final CustomTestRule<MainActivity> activityRule = new CustomTestRule<MainActivity>(MainActivity.class, true, false) {
     @Override protected void beforeActivityLaunched() {
       super.beforeActivityLaunched();
 
@@ -98,28 +91,17 @@ public class MainActivityTest {
         .build();
       app.setRiffsyComponent(netComponent);
     }
-
-    public TestApp getApplication() {
-      return (TestApp) getTargetContext().getApplicationContext();
-    }
-
-    public Context getTargetContext() {
-      return getInstrumentation().getTargetContext();
-    }
-
-    public Instrumentation getInstrumentation() {
-      return InstrumentationRegistry.getInstrumentation();
-    }
   };
+  @Rule public final MockWebServer server = new MockWebServer();
   String mockEndPoint;
 
-  @Before public void setUp() throws Exception {
+  @Before @Override public void setUp() throws Exception {
     initMocks(this);
 
     mockEndPoint = server.url("/").toString();
   }
 
-  @After public void tearDown() throws Exception {
+  @After @Override public void tearDown() throws Exception {
     server.shutdown();
   }
 
@@ -140,7 +122,8 @@ public class MainActivityTest {
     sendMockMessages("/trending_results.json");
 
     // Launch activity
-    launchActivity();
+    activityRule.launchActivity();
+    activityRule.keepScreenOn();
 
     // Click and make sure dialog is shown
     onView(withId(R.id.recycler_view))
@@ -157,7 +140,8 @@ public class MainActivityTest {
     sendMockMessages("/trending_results.json");
 
     // Launch activity
-    launchActivity();
+    activityRule.launchActivity();
+    activityRule.keepScreenOn();
 
     // Open menu
     onView(withId(R.id.menu_search))
@@ -170,59 +154,5 @@ public class MainActivityTest {
     // Assert
     onView(withId(R.id.recycler_view))
       .check(matches(isDisplayed()));
-  }
-
-  @FlakyTest
-  @Test public void testSearchResultsThenClickOpenDialog() throws Exception {
-    // Fake server response
-    sendMockMessages("/trending_results.json");
-
-    // Launch activity
-    launchActivity();
-
-    // Open menu
-    onView(withId(R.id.menu_search))
-      .perform(click());
-
-    // Type in search bar - mimic typing and filtering
-    onView(withId(R.id.search_src_text))
-      .perform(typeText("hel"));
-    sendMockMessages("/search_results.json");
-
-    onView(withId(R.id.search_src_text))
-      .perform(typeText("l"), closeSoftKeyboard());
-    sendMockMessages("/search_results.json");
-
-    onView(withId(R.id.search_src_text))
-      .perform(typeText("o"), closeSoftKeyboard());
-    sendMockMessages("/search_results.json");
-    sendMockMessages("/search_results.json");
-    sendMockMessages("/search_results.json");
-
-    // Click and make sure dialog is shown
-    onView(withId(R.id.recycler_view))
-      .perform(actionOnItemAtPosition(0, click())); // Select 0, the response only contains 1 item
-
-    // Assert
-    onView(withId(R.id.gif_dialog_image))
-      .inRoot(isDialog())
-      .check(matches(isDisplayed()));
-  }
-
-  private void launchActivity() {
-    activityRule.launchActivity(new Intent(Intent.ACTION_MAIN));
-
-    // Allows us to mock classes
-    System.setProperty("dexmaker.dexcache", activityRule.getActivity().getCacheDir().getPath());
-
-    keepScreenOn();
-  }
-
-  private void keepScreenOn() {
-    final Activity activity = activityRule.getActivity();
-    final Runnable wakeUpDevice = () -> activity.getWindow().addFlags(FLAG_TURN_SCREEN_ON
-      | FLAG_SHOW_WHEN_LOCKED
-      | FLAG_KEEP_SCREEN_ON);
-    activity.runOnUiThread(wakeUpDevice);
   }
 }

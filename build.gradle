@@ -255,14 +255,13 @@ dependencies {
   releaseCompile deps.leakcanaryAndroidNoOp
 
   androidTestCompile deps.junit
-  androidTestCompile deps.mockito
   androidTestCompile deps.assertjCore
+  androidTestCompile deps.dexmaker
+  androidTestCompile deps.dexmakerMockito
   androidTestCompile deps.runner
   androidTestCompile deps.espressoCore
   androidTestCompile deps.espressoIntents
-  androidTestCompile (deps.espressoContrib) { exclude group: "com.android.support"} // Causes compile issues
-  androidTestCompile deps.dexmaker
-  androidTestCompile deps.dexmakerMockito
+  androidTestCompile (deps.espressoContrib) { exclude group: "com.android.support"}
   androidTestCompile deps.mockwebserver
   androidTestCompile deps.dagger
 
