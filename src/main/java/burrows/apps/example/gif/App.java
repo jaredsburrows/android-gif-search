@@ -19,17 +19,7 @@ public class App extends Application {
     super.onCreate();
 
     // Setup components
-    initAppComponent();
-    initActivityComponent();
-  }
-
-  // App Component
-  public void initAppComponent() {
     appComponent = AppComponent.Initializer.init(this);
-  }
-
-  // Riffsy Component
-  public void initActivityComponent() {
     activityComponent = ActivityComponent.Initializer.init(appComponent);
   }
 }

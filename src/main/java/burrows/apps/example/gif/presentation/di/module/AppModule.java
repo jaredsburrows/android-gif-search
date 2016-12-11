@@ -1,6 +1,5 @@
 package burrows.apps.example.gif.presentation.di.module;
 
-
 import android.app.Application;
 import android.content.Context;
 import dagger.Module;

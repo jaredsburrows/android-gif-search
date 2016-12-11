@@ -1,6 +1,5 @@
 package burrows.apps.example.gif.presentation.di.module;
 
-
 import burrows.apps.example.gif.presentation.di.scope.PerActivity;
 import burrows.apps.example.gif.presentation.SchedulerProvider;
 import dagger.Module;
