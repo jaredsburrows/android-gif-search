@@ -144,7 +144,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     recyclerView.setAdapter(adapter);
     recyclerView.setHasFixedSize(true);
     // http://stackoverflow.com/questions/30511890/does-glide-queue-up-every-image-request-recyclerview-loads-are-very-slow-when-s#comment49135977_30511890
-    recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2);
+    recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2); // default 5
     recyclerView.setItemViewCacheSize(RiffsyRepository.DEFAULT_LIMIT_COUNT);
     recyclerView.setDrawingCacheEnabled(true);
     recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);

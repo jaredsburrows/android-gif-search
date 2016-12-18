@@ -58,7 +58,7 @@ public final class NetModule {
   @Provides @PerActivity OkHttpClient provideOkHttpClient(Cache cache) {
     return new OkHttpClient.Builder()
       .addInterceptor(new HttpLoggingInterceptor()
-        .setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY: HttpLoggingInterceptor.Level.NONE))
+        .setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
       .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)

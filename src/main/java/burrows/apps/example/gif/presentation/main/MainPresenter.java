@@ -6,6 +6,7 @@ import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
 import burrows.apps.example.gif.presentation.IBaseSchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
 
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
@@ -63,18 +64,24 @@ final class MainPresenter implements IMainPresenter {
     disposable.add(observable
       .subscribeOn(provider.io())
       .observeOn(provider.ui())
-      .subscribe(response -> {
-        // onNext
-        if (!view.isActive()) return;
+      .subscribeWith(new DisposableObserver<RiffsyResponse>() {
+        @Override public void onNext(RiffsyResponse value) {
+          // onNext
+          if (!view.isActive()) return;
 
-        // Iterate over data from response and grab the urls
-        view.addImages(response);
-      }, error -> {
-        // onError
-        Log.e(TAG, "onError", error); // java.lang.UnsatisfiedLinkError - unit tests
-      }, () -> {
-        // onComplete
-        Log.i(TAG, "Done loading!"); // java.lang.UnsatisfiedLinkError - unit tests
+          // Iterate over data from response and grab the urls
+          view.addImages(value);
+        }
+
+        @Override public void onError(Throwable e) {
+          // onError
+          Log.e(TAG, "onError", e); // java.lang.UnsatisfiedLinkError - unit tests
+        }
+
+        @Override public void onComplete() {
+          // onComplete
+          Log.i(TAG, "Done loading!"); // java.lang.UnsatisfiedLinkError - unit tests
+        }
       }));
   }
 }

@@ -39,20 +39,8 @@ public abstract class AndroidTestBase {
   protected static final Double DOUBLE_RANDOM = new Random().nextDouble();
 
   @Before public void setUp() throws Exception {
-    RxAndroidPlugins.reset();
-    RxAndroidPlugins.onMainThreadScheduler(Schedulers.trampoline());
-    RxAndroidPlugins.initMainThreadScheduler(new Callable<Scheduler>() {
-      @Override public Scheduler call() throws Exception {
-        return Schedulers.trampoline();
-      }
-    });
     RxAndroidPlugins.setInitMainThreadSchedulerHandler(new Function<Callable<Scheduler>, Scheduler>() {
       @Override public Scheduler apply(Callable<Scheduler> schedulerCallable) throws Exception {
-        return Schedulers.trampoline();
-      }
-    });
-    RxAndroidPlugins.setMainThreadSchedulerHandler(new Function<Scheduler, Scheduler>() {
-      @Override public Scheduler apply(Scheduler scheduler) throws Exception {
         return Schedulers.trampoline();
       }
     });
