@@ -2,13 +2,13 @@ package burrows.apps.example.gif.presentation.main;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
@@ -31,13 +31,10 @@ import burrows.apps.example.gif.data.rest.model.Result;
 import burrows.apps.example.gif.data.rest.model.RiffsyResponse;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
+import burrows.apps.example.gif.databinding.FragmentMainBinding;
 import burrows.apps.example.gif.presentation.adapter.GifAdapter;
 import burrows.apps.example.gif.presentation.adapter.GifItemDecoration;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel;
-import butterknife.BindString;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -59,7 +56,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
   private GifAdapter adapter;
   boolean hasSearched;
   private AppCompatDialog dialog;
-  private Unbinder unbinder;
+  private FragmentMainBinding binding;
   int previousTotal = 0;
   boolean loading = true;
   int visibleThreshold = 5;
@@ -71,8 +68,6 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
   ProgressBar progressBar;
   ImageView imageView;
   IMainPresenter presenter;
-  @BindView(R.id.recycler_view) RecyclerView recyclerView;
-  @BindString(R.string.search_gifs) String searchGifs;
   @Inject RefWatcher refWatcher;
   @Inject ImageRepository repository;
 
@@ -138,22 +133,19 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
   @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     super.onCreateView(inflater, container, savedInstanceState);
 
-    final View view = inflater.inflate(R.layout.fragment_main, container, false);
-
-    // Bind views
-    unbinder = ButterKnife.bind(this, view);
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
     // Setup RecyclerView
-    recyclerView.setLayoutManager(layoutManager);
-    recyclerView.addItemDecoration(itemOffsetDecoration);
-    recyclerView.setAdapter(adapter);
-    recyclerView.setHasFixedSize(true);
+    binding.recyclerView.setLayoutManager(layoutManager);
+    binding.recyclerView.addItemDecoration(itemOffsetDecoration);
+    binding.recyclerView.setAdapter(adapter);
+    binding.recyclerView.setHasFixedSize(true);
     // http://stackoverflow.com/questions/30511890/does-glide-queue-up-every-image-request-recyclerview-loads-are-very-slow-when-s#comment49135977_30511890
-    recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2); // default 5
-    recyclerView.setItemViewCacheSize(RiffsyRepository.DEFAULT_LIMIT_COUNT);
-    recyclerView.setDrawingCacheEnabled(true);
-    recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-    recyclerView.addOnScrollListener(new OnScrollListener() {
+    binding.recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2); // default 5
+    binding.recyclerView.setItemViewCacheSize(RiffsyRepository.DEFAULT_LIMIT_COUNT);
+    binding.recyclerView.setDrawingCacheEnabled(true);
+    binding.recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+    binding.recyclerView.addOnScrollListener(new OnScrollListener() {
       @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
@@ -193,14 +185,14 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     });
 
     // Dialog views
-    dialogText = ButterKnife.findById(dialogView, R.id.gif_dialog_title);
-    progressBar = ButterKnife.findById(dialogView, R.id.gif_dialog_progress);
-    imageView = ButterKnife.findById(dialogView, R.id.gif_dialog_image);
+    dialogText = (TextView) dialogView.findViewById(R.id.gif_dialog_title);
+    progressBar = (ProgressBar) dialogView.findViewById(R.id.gif_dialog_progress);
+    imageView = (ImageView) dialogView.findViewById(R.id.gif_dialog_image);
 
     // Load initial images
     presenter.loadTrendingImages(next);
 
-    return view;
+    return binding.getRoot();
   }
 
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -211,7 +203,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     final MenuItem menuItem = menu.findItem(R.id.menu_search);
 
     final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
-    searchView.setQueryHint(searchGifs);
+    searchView.setQueryHint(searchView.getContext().getString(R.string.search_gifs));
 
     // Set contextual action on search icon click
     MenuItemCompat.setOnActionExpandListener(menuItem, new OnActionExpandListener() {
@@ -260,13 +252,6 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     super.onPause();
 
     presenter.unsubscribe();
-  }
-
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-
-    // Unbind views
-    unbinder.unbind();
   }
 
   @Override public void onDestroy() {

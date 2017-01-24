@@ -1,16 +1,17 @@
 // Turn on all warnings and errors
 tasks.withType(JavaCompile) {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
+  sourceCompatibility = rootProject.ext.sourceCompatibilityVersion
+  targetCompatibility = rootProject.ext.sourceCompatibilityVersion
 
   // Show all warnings except boot classpath
   configure(options) {
-    compilerArgs << "-Xlint:all"            // Turn on all warnings
-    compilerArgs << "-Xlint:-options"       // Turn off "missing" bootclasspath warning
-    compilerArgs << "-Xlint:-path"          // Turn off warning - annotation processing
-    compilerArgs << "-Xlint:-processing"    // Turn off warning about not claiming annotations
-    compilerArgs << "-Werror"               // Turn warnings into errors
-    compilerArgs << "-Xdiags:verbose"       // Turn on verbose errors
+    compilerArgs << "-Xlint:all"                // Turn on all warnings
+    compilerArgs << "-Xlint:-options"           // Turn off "missing" bootclasspath warning
+    compilerArgs << "-Xlint:-path"              // Turn off warning - annotation processing
+    compilerArgs << "-Xlint:-processing"        // Turn off warning about not claiming annotations
+    compilerArgs << "-Xdiags:verbose"           // Turn on verbose errors
+    compilerArgs << "-Werror"                   // Turn warnings into errors
+    compilerArgs << "-Xep:MissingOverride:OFF"  // Databinding causes this issue
     encoding = "utf-8"
     incremental = true
     fork = true

@@ -36,7 +36,7 @@ public final class GifItemDecorationTest extends AndroidTestBase {
   private RecyclerView recyclerView;
   private GifItemDecoration sut;
 
-  @Before @Override public void setUp() throws Exception {
+  @Before @Override public void setUp() throws Throwable {
     super.setUp();
 
     initMocks(this);

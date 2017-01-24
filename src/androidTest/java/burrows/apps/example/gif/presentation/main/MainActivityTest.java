@@ -94,7 +94,7 @@ public final class MainActivityTest extends AndroidTestBase {
   @Rule public final MockWebServer server = new MockWebServer();
   String mockEndPoint;
 
-  @Before @Override public void setUp() throws Exception {
+  @Before @Override public void setUp() throws Throwable {
     super.setUp();
 
     initMocks(this);
@@ -102,7 +102,7 @@ public final class MainActivityTest extends AndroidTestBase {
     mockEndPoint = server.url("/").toString();
   }
 
-  @After @Override public void tearDown() throws Exception {
+  @After @Override public void tearDown() throws Throwable {
     super.tearDown();
 
     server.shutdown();

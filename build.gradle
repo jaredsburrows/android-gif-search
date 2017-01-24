@@ -133,6 +133,10 @@ android {
     }
   }
 
+  dataBinding {
+    enabled = true
+  }
+
   compileOptions {
     sourceCompatibility rootProject.ext.sourceCompatibilityVersion
     targetCompatibility rootProject.ext.sourceCompatibilityVersion
@@ -215,6 +219,16 @@ configurations.all {
 configurations.compile.dependencies.each { compileDependency ->
   configurations.androidTestCompile.dependencies.each { androidTestCompileDependency ->
     configurations.androidTestCompile.exclude module: "${compileDependency.name}"
+  }
+}
+
+tasks.withType(com.android.build.gradle.internal.tasks.databinding.DataBindingExportBuildInfoTask) { task ->
+  if (task.name.endsWith("AndroidTest")) {
+    task.finalizedBy(tasks.create("${task.name}Workaround") {
+      doLast {
+        task.output.deleteDir()
+      }
+    })
   }
 }
 
