@@ -134,6 +134,9 @@ public final class MainActivityTest extends AndroidTestBase {
     onView(withId(R.id.gif_dialog_image))
       .inRoot(isDialog())
       .check(matches(isDisplayed()));
+    onView(withId(R.id.gif_dialog_image))
+      .inRoot(isDialog())
+      .perform(pressBack());
   }
 
   @Test public void testTrendingResultsThenSearchThenBackToTrending() throws Exception {

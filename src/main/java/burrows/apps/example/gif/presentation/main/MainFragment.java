@@ -181,6 +181,8 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     // Customize Dialog
     dialog = new AppCompatDialog(getContext());
     dialog.setContentView(dialogView);
+    dialog.setCancelable(true);
+    dialog.setCanceledOnTouchOutside(true);
     dialog.setOnDismissListener(new OnDismissListener() {
       @Override public void onDismiss(DialogInterface dialog1) {
         // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
