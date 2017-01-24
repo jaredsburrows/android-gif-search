@@ -56,7 +56,6 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
   private GifAdapter adapter;
   boolean hasSearched;
   private AppCompatDialog dialog;
-  private FragmentMainBinding binding;
   int previousTotal = 0;
   boolean loading = true;
   int visibleThreshold = 5;
@@ -133,7 +132,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
   @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     super.onCreateView(inflater, container, savedInstanceState);
 
-    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
+    final FragmentMainBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
     // Setup RecyclerView
     binding.recyclerView.setLayoutManager(layoutManager);

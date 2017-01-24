@@ -97,7 +97,7 @@ ext.deps = [
   leakcanaryAndroid      : "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}",
   leakcanaryAndroidNoOp  : "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}",
   junit                  : "junit:junit:4.12",
-  mockitoCore            : "org.mockito:mockito-core:2.6.5",
+  mockitoCore            : "org.mockito:mockito-core:2.6.8",
   assertjCore            : "org.assertj:assertj-core:1.7.1",
   equalsverifier         : "nl.jqno.equalsverifier:equalsverifier:2.2",
   mockwebserver          : "com.squareup.okhttp3:mockwebserver:${okHttpVersion}",

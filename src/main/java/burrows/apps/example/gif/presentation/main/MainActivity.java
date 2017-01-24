@@ -37,7 +37,6 @@ public final class MainActivity extends AppCompatActivity {
     // Use Fragments
     MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
     if (fragment == null) fragment = new MainFragment();
-
     if (savedInstanceState == null) getSupportFragmentManager()
       .beginTransaction()
       .replace(R.id.content_frame, fragment, MainFragment.class.getSimpleName())
