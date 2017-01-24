@@ -132,6 +132,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     layoutManager = new GridLayoutManager(getActivity(), PORTRAIT_COLUMNS);
     itemOffsetDecoration = new GifItemDecoration(getActivity().getResources().getDimensionPixelSize(R.dimen.gif_adapter_item_offset), layoutManager.getSpanCount());
     adapter = new GifAdapter(this, repository);
+    adapter.setHasStableIds(true);
   }
 
   @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -145,7 +146,6 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     // Setup RecyclerView
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.addItemDecoration(itemOffsetDecoration);
-    recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(adapter);
     recyclerView.setHasFixedSize(true);
     // http://stackoverflow.com/questions/30511890/does-glide-queue-up-every-image-request-recyclerview-loads-are-very-slow-when-s#comment49135977_30511890

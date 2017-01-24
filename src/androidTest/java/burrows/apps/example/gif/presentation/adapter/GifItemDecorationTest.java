@@ -63,10 +63,11 @@ public final class GifItemDecorationTest extends AndroidTestBase {
   }
 
   @Test public void testGetItemOffsetsContextResId() {
-    // Item decoration with specified context and dimen
+    // Arrange
     sut = new GifItemDecoration(INTEGER_RANDOM, layoutManager.getSpanCount());
     recyclerView.addItemDecoration(sut);
 
+    // Act
     sut.getItemOffsets(rect, recyclerView, recyclerView, state);
   }
 }

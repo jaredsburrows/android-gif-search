@@ -121,40 +121,34 @@ public final class MainActivityTest extends AndroidTestBase {
   }
 
   @Test public void testTrendingThenClickOpenDialog() throws Exception {
-    // Fake server response
+    // Arrange
     sendMockMessages("/trending_results.json");
 
-    // Launch activity
+    // Act
     activityRule.launchActivity();
     activityRule.keepScreenOn();
 
-    // Click and make sure dialog is shown
+    // Assert
     onView(withId(R.id.recycler_view))
       .perform(actionOnItemAtPosition(0, click())); // Select 0, the response only contains 1 item
-
-    // Assert
     onView(withId(R.id.gif_dialog_image))
       .inRoot(isDialog())
       .check(matches(isDisplayed()));
   }
 
   @Test public void testTrendingResultsThenSearchThenBackToTrending() throws Exception {
-    // Fake server response
+    // Arrange
     sendMockMessages("/trending_results.json");
 
-    // Launch activity
+    // Act
     activityRule.launchActivity();
     activityRule.keepScreenOn();
 
-    // Open menu
+    // Assert
     onView(withId(R.id.menu_search))
       .perform(click());
-
-    // Type in search bar
     onView(withId(R.id.search_src_text))
       .perform(typeText("hello"), closeSoftKeyboard(), pressBack());
-
-    // Assert
     onView(withId(R.id.recycler_view))
       .check(matches(isDisplayed()));
   }

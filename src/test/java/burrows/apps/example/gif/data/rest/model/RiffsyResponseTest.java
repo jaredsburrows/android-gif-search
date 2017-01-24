@@ -16,24 +16,31 @@ public final class RiffsyResponseTest extends TestBase {
   private RiffsyResponse sut = new RiffsyResponse.Builder().results(results).next(FLOAT_RANDOM).build();
 
   @Test public void testGetResults() {
+    // Assert
     assertThat(sut.results()).isEqualTo(results);
   }
 
   @Test public void testSetResults() {
+    // Arrange
     final List<Result> expected = new ArrayList<>();
 
+    // Act
     sut = sut.newBuilder().results(expected).build();
 
+    // Assert
     assertThat(sut.results()).isEqualTo(expected);
   }
 
   @Test public void testGetNext() {
+    // Assert
     assertThat(sut.next()).isEqualTo(FLOAT_RANDOM);
   }
 
   @Test public void testSetNext() {
+    // Act
     sut = sut.newBuilder().next(FLOAT_RANDOM + 1).build();
 
+    // Assert
     assertThat(sut.next()).isEqualTo(FLOAT_RANDOM + 1);
   }
 }

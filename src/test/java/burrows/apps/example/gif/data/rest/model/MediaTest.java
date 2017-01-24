@@ -13,14 +13,18 @@ public final class MediaTest extends TestBase {
   private Media sut = new Media.Builder().gif(gif).build();
 
   @Test public void testGetGif() {
+    // Assert
     assertThat(sut.gif()).isEqualTo(gif);
   }
 
   @Test public void testSetGif() {
+    // Arrange
     final Gif expected = new Gif();
 
+    // Act
     sut = sut.newBuilder().gif(expected).build();
 
+    // Assert
     assertThat(sut.gif()).isEqualTo(expected);
   }
 }

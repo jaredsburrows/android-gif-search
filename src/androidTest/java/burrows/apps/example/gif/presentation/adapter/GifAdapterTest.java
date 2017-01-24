@@ -9,22 +9,19 @@ import burrows.apps.example.gif.DummyActivity;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.presentation.adapter.GifAdapter.OnItemClickListener;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import test.AndroidTestBase;
 import test.CustomTestRule;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -59,53 +56,54 @@ public final class GifAdapterTest extends AndroidTestBase {
     viewHolder = sut.onCreateViewHolder(new LinearLayout(activityTestRule.getTargetContext()), 0);
   }
 
-  @After @Override public void tearDown() throws Exception {
-    super.tearDown();
-
-    sut.clear();
-  }
-
   @Test public void testOnCreateViewHolder() throws Exception {
+    // Arrange
     final ViewGroup parent = new ViewGroup(activityTestRule.getTargetContext()) {
       @Override protected void onLayout(boolean b, int i, int i1, int i2, int i3) {
       }
     };
 
+    // Assert
     assertThat(sut.onCreateViewHolder(parent, 0)).isInstanceOf(GifAdapter.ViewHolder.class);
   }
 
   @Test public void testOnBindViewHolderOnAdapterItemClick() throws Throwable {
+    // Arrange
     sut.clear();
-
-    // must have one
     sut.add(imageInfoModel);
     sut.add(imageInfoModel2);
     sut.add(new ImageInfoModel());
 
+    // Act
     uiThreadTestRule.runOnUiThread(new Runnable() {
       @Override public void run() {
         sut.onBindViewHolder(viewHolder, 0);
       }
     });
 
+    // Assert
     assertThat(viewHolder.itemView.performClick()).isTrue();
-
-    verify(spyImageDownloader, atLeastOnce()).load(any());
-    verify(onItemClickListener).onClick(Mockito.<ImageInfoModel>any());
+    verify(spyImageDownloader, atLeastOnce()).load(eq(STRING_UNIQUE));
+    verify(onItemClickListener).onClick(eq(imageInfoModel));
   }
 
   @Test public void testGetItem() {
+    // Arrange
     sut.clear();
 
+    // Act
     final ImageInfoModel imageInfo = new ImageInfoModel();
     sut.add(imageInfo);
 
+    // Assert
     assertThat(sut.getItem(0)).isEqualTo(imageInfo);
   }
 
   @Test public void onViewRecycled() throws Throwable {
+    // Arrange
     sut.add(new ImageInfoModel());
 
+    // Act
     uiThreadTestRule.runOnUiThread(new Runnable() {
       @Override public void run() {
         sut.onBindViewHolder(viewHolder, 0);
@@ -115,31 +113,40 @@ public final class GifAdapterTest extends AndroidTestBase {
   }
 
   @Test public void testGetItemCountShouldReturnCorrectValues() {
+    // Assert
     assertThat(sut.getItemCount()).isEqualTo(2);
   }
 
   @Test public void testGetListCountShouldReturnCorrectValues() {
-    assertThat(sut.getList()).isEqualTo(Arrays.asList(imageInfoModel, imageInfoModel2));
+    // Assert
+    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel);
+    assertThat(sut.getItem(1)).isEqualTo(imageInfoModel2);
   }
 
   @Test public void testGetItemShouldReturnCorrectValues() {
+    // Assert
     assertThat(sut.getItem(1)).isEqualTo(imageInfoModel2);
   }
 
   @Test public void testGetLocationShouldReturnCorrectValues() {
+    // Assert
     assertThat(sut.getLocation(imageInfoModel2)).isEqualTo(1);
   }
 
   @Test public void testClearShouldClearAdapter() {
     sut.clear();
 
+    // Assert
     assertThat(sut.getItemCount()).isEqualTo(0);
   }
 
   @Test public void testAddObjectShouldReturnCorrectValues() {
     sut.add(imageInfoModel3);
 
-    assertThat(sut.getList()).isEqualTo(Arrays.asList(imageInfoModel, imageInfoModel2, imageInfoModel3));
+    // Assert
+    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel);
+    assertThat(sut.getItem(1)).isEqualTo(imageInfoModel2);
+    assertThat(sut.getItem(2)).isEqualTo(imageInfoModel3);
   }
 
   @Test public void testAddCollectionShouldReturnCorrectValues() {
@@ -147,30 +154,39 @@ public final class GifAdapterTest extends AndroidTestBase {
 
     sut.addAll(imageInfos);
 
-    assertThat(sut.getList()).isEqualTo(Arrays.asList(imageInfoModel, imageInfoModel2, imageInfoModel3));
+    // Assert
+    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel);
+    assertThat(sut.getItem(1)).isEqualTo(imageInfoModel2);
+    assertThat(sut.getItem(2)).isEqualTo(imageInfoModel3);
   }
 
   @Test public void testAddLocationObjectShouldReturnCorrectValues() {
     sut.add(0, new ImageInfoModel.Builder().url(STRING_UNIQUE3).build());
 
-    assertThat(sut.getList()).isEqualTo(Arrays.asList(imageInfoModel3, imageInfoModel, imageInfoModel2));
+    // Assert
+    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel3);
+    assertThat(sut.getItem(1)).isEqualTo(imageInfoModel);
+    assertThat(sut.getItem(2)).isEqualTo(imageInfoModel2);
   }
 
   @Test public void testRemoveLocationObjectShouldReturnCorrectValues() {
     sut.remove(0, imageInfoModel);
 
-    assertThat(sut.getList()).isEqualTo(Collections.singletonList(imageInfoModel2));
+    // Assert
+    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel2);
   }
 
   @Test public void testRemoveObjectShouldReturnCorrectValues() {
     sut.remove(imageInfoModel);
 
-    assertThat(sut.getList()).isEqualTo(Collections.singletonList(imageInfoModel2));
+    // Assert
+    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel2);
   }
 
   @Test public void testRemoveLocationShouldReturnCorrectValues() {
     sut.remove(0);
 
-    assertThat(sut.getList()).isEqualTo(Collections.singletonList(imageInfoModel2));
+    // Assert
+    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel2);
   }
 }

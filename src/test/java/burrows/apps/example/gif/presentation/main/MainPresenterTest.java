@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import test.TestBase;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,36 +35,45 @@ public final class MainPresenterTest extends TestBase {
   }
 
   @Test public void testLoadTrendingImagesNotActive() {
+    // Arrange
+    final RiffsyResponse response = new RiffsyResponse();
     when(view.isActive()).thenReturn(false);
     sut = new MainPresenter(view, repository, provider);
-    when(repository.getTrendingResults(any(Integer.class), any(Float.class))).thenReturn(Observable.just(new RiffsyResponse()));
+    when(repository.getTrendingResults(any(Integer.class), any(Float.class))).thenReturn(Observable.just(response));
 
+    // Act
     sut.loadTrendingImages(0f);
 
-    verify(repository).getTrendingResults(any(Integer.class), any(Float.class));
+    // Assert
     verify(view).isActive();
-    verify(view, times(0)).addImages(any(RiffsyResponse.class));
+    verify(view, times(0)).addImages(eq(response));
   }
 
   @Test public void testLoadTrendingImagesSuccess() {
+    // Arrange
+    final RiffsyResponse response = new RiffsyResponse();
     sut = new MainPresenter(view, repository, provider);
-    when(repository.getTrendingResults(any(Integer.class), any(Float.class))).thenReturn(Observable.just(new RiffsyResponse()));
+    when(repository.getTrendingResults(any(Integer.class), any(Float.class))).thenReturn(Observable.just(response));
 
+    // Act
     sut.loadTrendingImages(0f);
 
-    verify(repository).getTrendingResults(any(Integer.class), any(Float.class));
+    // Assert
     verify(view).isActive();
-    verify(view).addImages(any(RiffsyResponse.class));
+    verify(view).addImages(eq(response));
   }
 
   @Test public void testLoadSearchImagesSuccess() {
+    // Arrange
+    final RiffsyResponse response = new RiffsyResponse();
     sut = new MainPresenter(view, repository, provider);
-    when(repository.getSearchResults(any(String.class), any(Integer.class), any(Float.class))).thenReturn(Observable.just(new RiffsyResponse()));
+    when(repository.getSearchResults(any(String.class), any(Integer.class), any(Float.class))).thenReturn(Observable.just(response));
 
+    // Act
     sut.loadSearchImages("gifs", 0f);
 
-    verify(repository).getSearchResults(any(String.class), any(Integer.class), any(Float.class));
+    // Assert
     verify(view).isActive();
-    verify(view).addImages(any(RiffsyResponse.class));
+    verify(view).addImages(eq(response));
   }
 }

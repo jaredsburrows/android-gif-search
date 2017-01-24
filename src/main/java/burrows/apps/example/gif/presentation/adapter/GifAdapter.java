@@ -83,6 +83,24 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
   }
 
   /**
+   * Returns the number of elements in the data.
+   *
+   * @return the number of elements in the data.
+   */
+  @Override public int getItemCount() {
+    return data.size();
+  }
+
+  /**
+   * Returns the hashCode of the URL of image.
+   *
+   * @return the hashCode of the URL of image.
+   */
+  @Override public long getItemId(int position) {
+    return getItem(position).url().hashCode();
+  }
+
+  /**
    * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
    */
   final class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
@@ -101,24 +119,6 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    */
   public interface OnItemClickListener {
     void onClick(ImageInfoModel imageInfo);
-  }
-
-  /**
-   * Returns the number of elements in the data.
-   *
-   * @return the number of elements in the data.
-   */
-  @Override public int getItemCount() {
-    return data.size();
-  }
-
-  /**
-   * Returns the instance of the data.
-   *
-   * @return instance of the data.
-   */
-  public List<ImageInfoModel> getList() {
-    return data;
   }
 
   /**

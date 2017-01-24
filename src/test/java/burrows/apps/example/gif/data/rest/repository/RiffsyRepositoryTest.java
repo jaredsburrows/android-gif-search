@@ -59,53 +59,57 @@ public final class RiffsyRepositoryTest extends TestBase {
   }
 
   @Test public void testTrendingResultsUrlShouldParseCorrectly() throws Exception {
-    // Response
+    // Arrange
     sendMockMessages("/trending_results.json");
 
-    // Request
+    // Act
     final RiffsyResponse response = sut
       .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst();
 
+    // Assert
     assertThat(response.results().get(0).media().get(0).gif().url())
       .isEqualTo("https://media.riffsy.com/images/7d95a1f8a8750460a82b04451be26d69/raw");
   }
 
   @Test public void testTrendingResultsUrlPreviewShouldParseCorrectly() throws Exception {
-    // Response
+    // Arrange
     sendMockMessages("/trending_results.json");
 
-    // Request
+    // Act
     final RiffsyResponse response = sut
       .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst();
 
+    // Assert
     assertThat(response.results().get(0).media().get(0).gif().preview())
       .isEqualTo("https://media.riffsy.com/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw");
   }
 
   @Test public void testSearchResultsUrlShouldParseCorrectly() throws Exception {
-    // Response
+    // Arrange
     sendMockMessages("/search_results.json");
 
-    // Request
+    // Act
     final RiffsyResponse response = sut
       .getSearchResults("hello", RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst();
 
+    // Assert
     assertThat(response.results().get(0).media().get(0).gif().url())
       .isEqualTo("https://media.riffsy.com/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw");
   }
 
   @Test public void testSearchResultsUrlPreviewShouldParseCorrectly() throws Exception {
-    // Response
+    // Arrange
     sendMockMessages("/search_results.json");
 
-    // Request
+    // Act
     final RiffsyResponse response = sut
       .getSearchResults("hello", RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst();
 
+    // Assert
     assertThat(response.results().get(0).media().get(0).gif().preview())
       .isEqualTo("https://media.riffsy.com/images/6f2ed339fbdb5c1270e29945ee1f0d77/raw");
   }
