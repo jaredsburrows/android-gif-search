@@ -42,7 +42,7 @@ public final class GifAdapterTest extends AndroidTestBase {
   ImageRepository spyImageDownloader;
   GifAdapter sut;
 
-  @Before @Override public void setUp() throws Exception {
+  @Before @Override public void setUp() throws Throwable {
     super.setUp();
 
     activityTestRule.keepScreenOn();
@@ -53,10 +53,15 @@ public final class GifAdapterTest extends AndroidTestBase {
     sut = new GifAdapter(onItemClickListener, spyImageDownloader);
     sut.add(imageInfoModel);
     sut.add(imageInfoModel2);
-    viewHolder = sut.onCreateViewHolder(new LinearLayout(activityTestRule.getTargetContext()), 0);
+    // Must be created on UI thread
+    uiThreadTestRule.runOnUiThread(new Runnable() {
+      @Override public void run() {
+        viewHolder = sut.onCreateViewHolder(new LinearLayout(activityTestRule.getTargetContext()), 0);
+      }
+    });
   }
 
-  @Test public void testOnCreateViewHolder() throws Exception {
+  @Test public void testOnCreateViewHolder() throws Throwable {
     // Arrange
     final ViewGroup parent = new ViewGroup(activityTestRule.getTargetContext()) {
       @Override protected void onLayout(boolean b, int i, int i1, int i2, int i3) {
@@ -64,7 +69,12 @@ public final class GifAdapterTest extends AndroidTestBase {
     };
 
     // Assert
-    assertThat(sut.onCreateViewHolder(parent, 0)).isInstanceOf(GifAdapter.ViewHolder.class);
+    // Must be created on UI thread
+    uiThreadTestRule.runOnUiThread(new Runnable() {
+      @Override public void run() {
+        assertThat(sut.onCreateViewHolder(parent, 0)).isInstanceOf(GifAdapter.ViewHolder.class);
+      }
+    });
   }
 
   @Test public void testOnBindViewHolderOnAdapterItemClick() throws Throwable {

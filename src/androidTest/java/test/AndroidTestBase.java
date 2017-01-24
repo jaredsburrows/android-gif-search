@@ -38,7 +38,7 @@ public abstract class AndroidTestBase {
   protected static final Float FLOAT_RANDOM = new Random().nextFloat();
   protected static final Double DOUBLE_RANDOM = new Random().nextDouble();
 
-  @Before public void setUp() throws Exception {
+  @Before public void setUp() throws Throwable {
     RxAndroidPlugins.setInitMainThreadSchedulerHandler(new Function<Callable<Scheduler>, Scheduler>() {
       @Override public Scheduler apply(Callable<Scheduler> schedulerCallable) throws Exception {
         return Schedulers.trampoline();
@@ -46,7 +46,7 @@ public abstract class AndroidTestBase {
     });
   }
 
-  @After public void tearDown() throws Exception {
+  @After public void tearDown() throws Throwable {
     RxAndroidPlugins.reset();
   }
 }

@@ -97,7 +97,7 @@ ext.deps = [
   leakcanaryAndroid      : "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}",
   leakcanaryAndroidNoOp  : "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}",
   junit                  : "junit:junit:4.12",
-  mockitoCore            : "org.mockito:mockito-core:2.6.5",
+  mockitoCore            : "org.mockito:mockito-core:2.6.8",
   assertjCore            : "org.assertj:assertj-core:1.7.1",
   equalsverifier         : "nl.jqno.equalsverifier:equalsverifier:2.2",
   mockwebserver          : "com.squareup.okhttp3:mockwebserver:${okHttpVersion}",
@@ -131,6 +131,10 @@ android {
     vectorDrawables {
       useSupportLibrary = true
     }
+  }
+
+  dataBinding {
+    enabled = true
   }
 
   compileOptions {
@@ -215,6 +219,16 @@ configurations.all {
 configurations.compile.dependencies.each { compileDependency ->
   configurations.androidTestCompile.dependencies.each { androidTestCompileDependency ->
     configurations.androidTestCompile.exclude module: "${compileDependency.name}"
+  }
+}
+
+tasks.withType(com.android.build.gradle.internal.tasks.databinding.DataBindingExportBuildInfoTask) { task ->
+  if (task.name.endsWith("AndroidTest")) {
+    task.finalizedBy(tasks.create("${task.name}Workaround") {
+      doLast {
+        task.output.deleteDir()
+      }
+    })
   }
 }
 

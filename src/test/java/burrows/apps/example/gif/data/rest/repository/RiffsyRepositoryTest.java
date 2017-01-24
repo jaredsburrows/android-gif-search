@@ -28,17 +28,21 @@ public final class RiffsyRepositoryTest extends TestBase {
   @Rule public final MockWebServer server = new MockWebServer();
   private RiffsyRepository sut;
 
-  @Before @Override public void setUp() throws Exception {
+  @Before @Override public void setUp() throws Throwable {
+    super.setUp();
+
     final String mockEndPoint = server.url("/").toString();
 
     sut = getRetrofit(mockEndPoint).build().create(RiffsyRepository.class);
   }
 
-  @After @Override public void tearDown() throws Exception {
+  @After @Override public void tearDown() throws Throwable {
+    super.tearDown();
+
     server.shutdown();
   }
 
-  private void sendMockMessages(String fileName) throws Exception {
+  private void sendMockMessages(String fileName) throws Throwable {
     final InputStream stream = getClass().getResourceAsStream(fileName);
     final String mockResponse = new Scanner(stream, Charset.defaultCharset().name())
       .useDelimiter("\\A").next();
@@ -58,7 +62,7 @@ public final class RiffsyRepositoryTest extends TestBase {
       .client(new OkHttpClient());
   }
 
-  @Test public void testTrendingResultsUrlShouldParseCorrectly() throws Exception {
+  @Test public void testTrendingResultsUrlShouldParseCorrectly() throws Throwable {
     // Arrange
     sendMockMessages("/trending_results.json");
 
@@ -72,7 +76,7 @@ public final class RiffsyRepositoryTest extends TestBase {
       .isEqualTo("https://media.riffsy.com/images/7d95a1f8a8750460a82b04451be26d69/raw");
   }
 
-  @Test public void testTrendingResultsUrlPreviewShouldParseCorrectly() throws Exception {
+  @Test public void testTrendingResultsUrlPreviewShouldParseCorrectly() throws Throwable {
     // Arrange
     sendMockMessages("/trending_results.json");
 
@@ -86,7 +90,7 @@ public final class RiffsyRepositoryTest extends TestBase {
       .isEqualTo("https://media.riffsy.com/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw");
   }
 
-  @Test public void testSearchResultsUrlShouldParseCorrectly() throws Exception {
+  @Test public void testSearchResultsUrlShouldParseCorrectly() throws Throwable {
     // Arrange
     sendMockMessages("/search_results.json");
 
@@ -100,7 +104,7 @@ public final class RiffsyRepositoryTest extends TestBase {
       .isEqualTo("https://media.riffsy.com/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw");
   }
 
-  @Test public void testSearchResultsUrlPreviewShouldParseCorrectly() throws Exception {
+  @Test public void testSearchResultsUrlPreviewShouldParseCorrectly() throws Throwable {
     // Arrange
     sendMockMessages("/search_results.json");
 

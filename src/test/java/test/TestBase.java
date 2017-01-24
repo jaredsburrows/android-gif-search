@@ -33,9 +33,9 @@ public abstract class TestBase {
   protected static final Float FLOAT_RANDOM = new Random().nextFloat();
   protected static final Double DOUBLE_RANDOM = new Random().nextDouble();
 
-  @Before public void setUp() throws Exception {
+  @Before public void setUp() throws Throwable {
   }
 
-  @After public void tearDown() throws Exception {
+  @After public void tearDown() throws Throwable {
   }
 }

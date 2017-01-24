@@ -1,5 +1,6 @@
 package burrows.apps.example.gif.presentation.adapter;
 
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import burrows.apps.example.gif.R;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
+import burrows.apps.example.gif.databinding.ListItemBinding;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,11 +40,12 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
+    return new ViewHolder(DataBindingUtil.<ListItemBinding>inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item, parent, false));
   }
 
   @Override public void onBindViewHolder(final ViewHolder holder, int position) {
     final ImageInfoModel imageInfo = getItem(position);
+    final ListItemBinding binding = holder.binding;
 
     // Load images
     repository.load(imageInfo.url())
@@ -50,7 +53,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
       .listener(new RequestListener<Object, GifDrawable>() {
         @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
           // Hide progressbar
-          holder.progressBar.setVisibility(View.GONE);
+          binding.gifProgress.setVisibility(View.GONE);
           if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model);
 
           return false;
@@ -58,28 +61,30 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
 
         @Override public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
           // Hide progressbar
-          holder.progressBar.setVisibility(View.GONE);
+          binding.gifProgress.setVisibility(View.GONE);
           if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model);
 
           return false;
         }
       })
-      .into(holder.imageView);
+      .into(binding.gifImage);
 
     holder.itemView.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View view) {
         onItemClickListener.onClick(imageInfo);
       }
     });
+
+    binding.executePendingBindings();
   }
 
   @Override public void onViewRecycled(ViewHolder holder) {
     super.onViewRecycled(holder);
 
     // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
-    Glide.clear(holder.imageView);  // Forget view, try to free resources
-    holder.imageView.setImageDrawable(null);
-    holder.progressBar.setVisibility(View.VISIBLE); // Make sure to show progress when loading new view
+    Glide.clear(holder.binding.gifImage);  // Forget view, try to free resources
+    holder.binding.gifImage.setImageDrawable(null);
+    holder.binding.gifProgress.setVisibility(View.VISIBLE); // Make sure to show progress when loading new view
   }
 
   /**
@@ -103,14 +108,13 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
   /**
    * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
    */
-  final class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
-    @BindView(R.id.gif_progress) ProgressBar progressBar;
-    @BindView(R.id.gif_image) ImageView imageView;
+  final static class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
+    final ListItemBinding binding;
 
-    ViewHolder(View view) {
-      super(view);
+    ViewHolder(ListItemBinding binding) {
+      super(binding.getRoot());
 
-      ButterKnife.bind(this, view);
+      this.binding = binding;
     }
   }
 

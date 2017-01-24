@@ -26,7 +26,7 @@ public final class MainPresenterTest extends TestBase {
   @Mock private RiffsyRepository repository;
   private MainPresenter sut;
 
-  @Before @Override public void setUp() throws Exception {
+  @Before @Override public void setUp() throws Throwable {
     super.setUp();
 
     initMocks(this);

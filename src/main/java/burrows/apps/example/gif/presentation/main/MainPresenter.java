@@ -6,15 +6,14 @@ import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
 import burrows.apps.example.gif.presentation.IBaseSchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
-
-import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 final class MainPresenter implements IMainPresenter {
   private final CompositeDisposable disposable = new CompositeDisposable();
+  final static String TAG = MainPresenter.class.getSimpleName(); // Can't be longer than 23 chars
   final IMainView view;
   private final RiffsyRepository repository;
   private final IBaseSchedulerProvider provider;
@@ -64,23 +63,16 @@ final class MainPresenter implements IMainPresenter {
     disposable.add(observable
       .subscribeOn(provider.io())
       .observeOn(provider.ui())
-      .subscribeWith(new DisposableObserver<RiffsyResponse>() {
-        @Override public void onNext(RiffsyResponse value) {
-          // onNext
+      .subscribe(new Consumer<RiffsyResponse>() {
+        @Override public void accept(RiffsyResponse riffsyResponse) throws Exception {
           if (!view.isActive()) return;
 
           // Iterate over data from response and grab the urls
-          view.addImages(value);
+          view.addImages(riffsyResponse);
         }
-
-        @Override public void onError(Throwable e) {
-          // onError
-          Log.e(TAG, "onError", e); // java.lang.UnsatisfiedLinkError - unit tests
-        }
-
-        @Override public void onComplete() {
-          // onComplete
-          Log.i(TAG, "Done loading!"); // java.lang.UnsatisfiedLinkError - unit tests
+      }, new Consumer<Throwable>() {
+        @Override public void accept(Throwable throwable) throws Exception {
+          Log.e(TAG, "onError", throwable); // java.lang.UnsatisfiedLinkError - unit tests
         }
       }));
   }
