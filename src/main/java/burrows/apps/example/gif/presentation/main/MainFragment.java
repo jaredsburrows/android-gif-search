@@ -1,14 +1,19 @@
 package burrows.apps.example.gif.presentation.main;
 
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -148,7 +153,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     recyclerView.setItemViewCacheSize(RiffsyRepository.DEFAULT_LIMIT_COUNT);
     recyclerView.setDrawingCacheEnabled(true);
     recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+    recyclerView.addOnScrollListener(new OnScrollListener() {
       @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
@@ -176,11 +181,13 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     // Customize Dialog
     dialog = new AppCompatDialog(getContext());
     dialog.setContentView(dialogView);
-    dialog.setOnDismissListener(dialog1 -> {
-      // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
-      Glide.clear(imageView);  // Forget view, try to free resources
-      imageView.setImageDrawable(null);
-      progressBar.setVisibility(View.VISIBLE); // Make sure to show progress when loading new view
+    dialog.setOnDismissListener(new OnDismissListener() {
+      @Override public void onDismiss(DialogInterface dialog1) {
+        // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
+        Glide.clear(imageView);  // Forget view, try to free resources
+        imageView.setImageDrawable(null);
+        progressBar.setVisibility(View.VISIBLE); // Make sure to show progress when loading new view
+      }
     });
 
     // Dialog views
@@ -205,7 +212,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     searchView.setQueryHint(searchGifs);
 
     // Set contextual action on search icon click
-    MenuItemCompat.setOnActionExpandListener(menuItem, new MenuItemCompat.OnActionExpandListener() {
+    MenuItemCompat.setOnActionExpandListener(menuItem, new OnActionExpandListener() {
       @Override public boolean onMenuItemActionExpand(MenuItem item) {
         return true;
       }
@@ -223,7 +230,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     });
 
     // Query listener for search bar
-    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+    searchView.setOnQueryTextListener(new OnQueryTextListener() {
       @Override public boolean onQueryTextChange(String newText) {
         // Search on type
         if (!TextUtils.isEmpty(newText)) {

@@ -11,8 +11,7 @@ import javax.inject.Singleton;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-@Singleton
-@Component(modules = AppModule.class)
+@Singleton @Component(modules = AppModule.class)
 public interface AppComponent {
   // Injections
   void inject(App app);

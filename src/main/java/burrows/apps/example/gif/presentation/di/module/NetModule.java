@@ -1,7 +1,6 @@
 package burrows.apps.example.gif.presentation.di.module;
 
 import android.app.Application;
-import burrows.apps.example.gif.App;
 import burrows.apps.example.gif.BuildConfig;
 import burrows.apps.example.gif.presentation.di.scope.PerActivity;
 import com.google.gson.Gson;

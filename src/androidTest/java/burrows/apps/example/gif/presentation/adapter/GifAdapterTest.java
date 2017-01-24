@@ -15,6 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import test.AndroidTestBase;
 import test.CustomTestRule;
 
@@ -32,8 +33,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-@SmallTest
-@RunWith(AndroidJUnit4.class)
+@SmallTest @RunWith(AndroidJUnit4.class)
 public final class GifAdapterTest extends AndroidTestBase {
   @Rule public final CustomTestRule<DummyActivity> activityTestRule = new CustomTestRule<>(DummyActivity.class, true, true);
   @Rule public final UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
@@ -91,7 +91,7 @@ public final class GifAdapterTest extends AndroidTestBase {
     assertThat(viewHolder.itemView.performClick()).isTrue();
 
     verify(spyImageDownloader, atLeastOnce()).load(any());
-    verify(onItemClickListener).onClick(any());
+    verify(onItemClickListener).onClick(Mockito.<ImageInfoModel>any());
   }
 
   @Test public void testGetItem() {

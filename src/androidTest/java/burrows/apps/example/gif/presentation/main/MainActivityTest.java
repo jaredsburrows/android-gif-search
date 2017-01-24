@@ -48,8 +48,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 @SuppressWarnings("unchecked")
-@SmallTest
-@RunWith(AndroidJUnit4.class)
+@SmallTest @RunWith(AndroidJUnit4.class)
 public final class MainActivityTest extends AndroidTestBase {
   @Rule public final CustomTestRule<MainActivity> activityRule = new CustomTestRule<MainActivity>(MainActivity.class, true, false) {
     @Override protected void beforeActivityLaunched() {

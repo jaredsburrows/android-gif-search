@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -28,8 +29,8 @@ import java.util.List;
 public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder> {
   final static String TAG = GifAdapter.class.getSimpleName(); // Can't be longer than 23 chars
   private final List<ImageInfoModel> data = new ArrayList<>();
-  private OnItemClickListener onItemClickListener;
   private ImageRepository repository;
+  final OnItemClickListener onItemClickListener;
 
   public GifAdapter(OnItemClickListener onItemClickListener, ImageRepository repository) {
     this.onItemClickListener = onItemClickListener;
@@ -65,7 +66,11 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
       })
       .into(holder.imageView);
 
-    holder.itemView.setOnClickListener(view -> onItemClickListener.onClick(imageInfo));
+    holder.itemView.setOnClickListener(new OnClickListener() {
+      @Override public void onClick(View view) {
+        onItemClickListener.onClick(imageInfo);
+      }
+    });
   }
 
   @Override public void onViewRecycled(ViewHolder holder) {

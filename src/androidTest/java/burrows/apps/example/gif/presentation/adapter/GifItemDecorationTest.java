@@ -24,8 +24,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-@SmallTest
-@RunWith(AndroidJUnit4.class)
+@SmallTest @RunWith(AndroidJUnit4.class)
 public final class GifItemDecorationTest extends AndroidTestBase {
   @Rule public final CustomTestRule<DummyActivity> activityTestRule = new CustomTestRule<>(DummyActivity.class, true, true);
   @Mock private RecyclerView.State state;

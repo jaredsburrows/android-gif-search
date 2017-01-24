@@ -1,10 +1,8 @@
 package burrows.apps.example.gif.presentation.adapter;
 
-import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import burrows.apps.example.gif.R;
 
 /**
  * RecyclerView ItemDecoration for custom space divider.
