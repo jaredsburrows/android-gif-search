@@ -37,7 +37,6 @@ ext {
   // Common versions
   supportLibraryVersion = "25.1.0"
   firebaseVersion = "10.0.0"
-  butterKnifeVersion = "8.4.0"
   daggerVersion = "2.8"
   okHttpVersion = "3.5.0"
   retrofitVersion = "2.1.0"
@@ -62,7 +61,6 @@ ext.deps = [
   firebaseCrash          : "com.google.firebase:firebase-crash:${firebaseVersion}",
   firebaseAds            : "com.google.firebase:firebase-ads:${firebaseVersion}",
   // - Other
-  butterknife            : "com.jakewharton:butterknife:${butterKnifeVersion}",
   rxAndroid              : "io.reactivex.rxjava2:rxandroid:${rxJava2Version}",
   rxJava                 : "io.reactivex.rxjava2:rxjava:${rxJava2Version}",
   rxRelay                : "com.jakewharton.rxrelay2:rxrelay:2.0.0",
@@ -81,7 +79,6 @@ ext.deps = [
   okhttp3Integration     : "com.github.bumptech.glide:okhttp3-integration:1.4.0@aar",
 
   // annotationProcessor
-  butterknifeCompiler    : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
   daggerCompiler         : "com.google.dagger:dagger-compiler:${daggerVersion}",
 
   // androidTestCompile
@@ -128,6 +125,7 @@ android {
     testApplicationId "burrows.apps.example.gif.test"
     testInstrumentationRunner "test.CustomTestRunner"
     resConfigs "en" // Keep only english resource files for now
+
     vectorDrawables {
       useSupportLibrary = true
     }
@@ -212,23 +210,23 @@ configurations.all {
   resolutionStrategy.force "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
 }
 
-// All direct/transitive dependencies shared between your test and production APKs need to be
-// excluded from the test APK! This is necessary because both APKs will contain the same classes. Not
-// excluding these dependencies from your test configuration will result in an dex pre-verifier error
-// at runtime. More info in this tools bug: (https://code.google.com/p/android/issues/detail?id=192497)
+// Workaround for https://code.google.com/p/android/issues/detail?id=192497
 configurations.compile.dependencies.each { compileDependency ->
   configurations.androidTestCompile.dependencies.each { androidTestCompileDependency ->
     configurations.androidTestCompile.exclude module: "${compileDependency.name}"
   }
 }
 
+// Workaround for https://code.google.com/p/android/issues/detail?id=182715
 tasks.withType(com.android.build.gradle.internal.tasks.databinding.DataBindingExportBuildInfoTask) { task ->
   if (task.name.endsWith("AndroidTest")) {
-    task.finalizedBy(tasks.create("${task.name}Workaround") {
-      doLast {
-        task.output.deleteDir()
+    task.finalizedBy {
+      tasks.create("${task.name}Workaround") {
+        doLast {
+          task.output.deleteDir()
+        }
       }
-    })
+    }
   }
 }
 
@@ -240,7 +238,6 @@ dependencies {
   compile deps.recyclerviewv7
   compile deps.supportAnnotations
   // Other
-  compile deps.butterknife
   compile deps.okhttp
   compile deps.loggingInterceptor
   compile deps.retrofit2Rxjava2Adapter
@@ -253,7 +250,6 @@ dependencies {
   compile deps.okhttp3Integration
   compile deps.dagger
 
-  annotationProcessor deps.butterknifeCompiler
   annotationProcessor deps.daggerCompiler
 
   debugCompile deps.leakcanaryAndroid
