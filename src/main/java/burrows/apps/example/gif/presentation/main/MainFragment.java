@@ -31,6 +31,7 @@ import burrows.apps.example.gif.data.rest.model.Result;
 import burrows.apps.example.gif.data.rest.model.RiffsyResponse;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
+import burrows.apps.example.gif.databinding.DialogPreviewBinding;
 import burrows.apps.example.gif.databinding.FragmentMainBinding;
 import burrows.apps.example.gif.presentation.adapter.GifAdapter;
 import burrows.apps.example.gif.presentation.adapter.GifItemDecoration;
@@ -167,11 +168,11 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     });
 
     // Custom view for Dialog
-    final View dialogView = View.inflate(getContext(), R.layout.dialog_preview, null);
+    final DialogPreviewBinding previewBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_preview, null, false);
 
     // Customize Dialog
     dialog = new AppCompatDialog(getContext());
-    dialog.setContentView(dialogView);
+    dialog.setContentView(previewBinding.getRoot());
     dialog.setCancelable(true);
     dialog.setCanceledOnTouchOutside(true);
     dialog.setOnDismissListener(new OnDismissListener() {
@@ -184,9 +185,9 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     });
 
     // Dialog views
-    dialogText = (TextView) dialogView.findViewById(R.id.gif_dialog_title);
-    progressBar = (ProgressBar) dialogView.findViewById(R.id.gif_dialog_progress);
-    imageView = (ImageView) dialogView.findViewById(R.id.gif_dialog_image);
+    dialogText = previewBinding.gifDialogTitle;
+    progressBar = previewBinding.gifDialogProgress;
+    imageView = previewBinding.gifDialogImage;
 
     // Load initial images
     presenter.loadTrendingImages(next);
