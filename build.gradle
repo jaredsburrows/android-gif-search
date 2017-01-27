@@ -129,6 +129,10 @@ android {
     vectorDrawables {
       useSupportLibrary = true
     }
+
+    jackOptions {
+      enabled = true
+    }
   }
 
   dataBinding {
