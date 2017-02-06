@@ -7,7 +7,7 @@ buildscript {
 
   dependencies {
     classpath "com.android.tools.build:gradle:2.3.0-beta3"
-    classpath "com.novoda:gradle-android-command-plugin:1.7.0"
+    classpath "com.novoda:gradle-android-command-plugin:1.7.1"
     classpath "com.github.triplet.gradle:play-publisher:1.1.5"
     classpath "com.gradle:build-scan-plugin:1.4"
     classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.2"
@@ -35,10 +35,10 @@ ext {
   debugKeystorePass = "android"
 
   // Common versions
-  supportLibraryVersion = "25.1.0"
-  firebaseVersion = "10.0.0"
-  daggerVersion = "2.8"
-  okHttpVersion = "3.5.0"
+  supportLibraryVersion = "25.1.1"
+  firebaseVersion = "10.0.1"
+  daggerVersion = "2.9"
+  okHttpVersion = "3.6.0"
   retrofitVersion = "2.1.0"
   rxJava2Version = "2.0.1"
   rxJavaVersion = "1.2.2"
@@ -94,9 +94,9 @@ ext.deps = [
   leakcanaryAndroid      : "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}",
   leakcanaryAndroidNoOp  : "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}",
   junit                  : "junit:junit:4.12",
-  mockitoCore            : "org.mockito:mockito-core:2.6.8",
+  mockitoCore            : "org.mockito:mockito-core:2.7.2",
   assertjCore            : "org.assertj:assertj-core:1.7.1",
-  equalsverifier         : "nl.jqno.equalsverifier:equalsverifier:2.2",
+  equalsverifier         : "nl.jqno.equalsverifier:equalsverifier:2.2.1",
   mockwebserver          : "com.squareup.okhttp3:mockwebserver:${okHttpVersion}",
 ]
 
@@ -105,7 +105,7 @@ apply plugin: "com.android.application"
 apply plugin: "android-command"
 apply from: rootProject.file("gradle/compile.gradle")
 apply from: rootProject.file("gradle/codeQuality.gradle")
-apply from: rootProject.file("gradle/publishing.gradle")
+apply from: rootProject.file("gradle/publish.gradle")
 apply plugin: "com.github.triplet.play"
 apply plugin: "com.getkeepsafe.dexcount"
 apply plugin: "com.vanniktech.android.apk.size"
