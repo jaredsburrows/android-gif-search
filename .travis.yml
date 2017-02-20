@@ -30,14 +30,10 @@ before_script:
   - if [ "$TRAVIS_OS_NAME" = linux ]; then .buildscript/setup-emulator.sh; fi
 
 script:
-  - if [ "$TRAVIS_OS_NAME" = osx ]; then ./gradlew clean testDebug assembleDebugAndroidTest jacocoDebugReport -Pci -Dscan --stacktrace; fi
-  - if [ "$TRAVIS_OS_NAME" = linux ]; then ./gradlew clean testDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci -Dscan --stacktrace; fi
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then ./gradlew clean testDebug assembleDebugAndroidTest jacocoDebugReport -Pci --scan --stacktrace --parallel; fi
+  - if [ "$TRAVIS_OS_NAME" = linux ]; then ./gradlew clean testDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --scan --stacktrace --parallel; fi
 
 sudo: required
-
-before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 cache:
   directories:
