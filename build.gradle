@@ -128,6 +128,7 @@ android {
 
   dataBinding {
     enabled = true
+    enabledForTests = true
   }
 
   compileOptions {
@@ -182,8 +183,11 @@ android {
   }
 
   testOptions {
+    animationsDisabled = true
+
     unitTests {
       returnDefaultValues = true
+
       all {
         jacoco {
           includeNoLocationClasses = true
@@ -205,23 +209,23 @@ configurations.all {
   resolutionStrategy.force "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
 }
 
-// Workaround for https://code.google.com/p/android/issues/detail?id=192497
-configurations.compile.dependencies.each { compileDependency ->
-  configurations.androidTestCompile.dependencies.each { androidTestCompileDependency ->
-    configurations.androidTestCompile.exclude module: "${compileDependency.name}"
-  }
-}
-
-// Workaround for https://code.google.com/p/android/issues/detail?id=182715
-tasks.withType(com.android.build.gradle.internal.tasks.databinding.DataBindingExportBuildInfoTask) { task ->
-  if (task.name.endsWith("AndroidTest")) {
-    task.finalizedBy {
-      tasks.create("${task.name}Workaround") {
-        doLast { task.output.deleteDir() }
-      }
-    }
-  }
-}
+//// Workaround for https://code.google.com/p/android/issues/detail?id=192497
+//configurations.compile.dependencies.each { compileDependency ->
+//  configurations.androidTestCompile.dependencies.each { androidTestCompileDependency ->
+//    configurations.androidTestCompile.exclude module: "${compileDependency.name}"
+//  }
+//}
+//
+//// Workaround for https://code.google.com/p/android/issues/detail?id=182715
+//tasks.withType(com.android.build.gradle.internal.tasks.databinding.DataBindingExportBuildInfoTask) { task ->
+//  if (task.name.endsWith("AndroidTest")) {
+//    task.finalizedBy {
+//      tasks.create("${task.name}Workaround") {
+//        doLast { task.output.deleteDir() }
+//      }
+//    }
+//  }
+//}
 
 dependencies {
   // Android/Google
