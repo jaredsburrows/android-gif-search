@@ -6,8 +6,11 @@
     
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     
-    <application
-        android:name=".DebugApp"
-        tools:replace="android:name" />
+    <application android:name=".DebugApp">
+        <activity
+            android:name="burrows.apps.example.gif.DummyActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:windowSoftInputMode="adjustPan" />
+    </application>
 
 </manifest>

@@ -1,0 +1,87 @@
+// Variables for entire project
+ext {
+  // Setup
+  minSdkVersion = 16
+  targetSdkVersion = 25
+  compileSdkVersion = 25
+  buildToolsVersion = "25.0.1"
+  sourceCompatibilityVersion = JavaVersion.VERSION_1_7
+  targetCompatibilityVersion = JavaVersion.VERSION_1_7
+  debugKeystoreUser = "androiddebugkey"
+  debugKeystorePass = "android"
+
+  // Common versions
+  supportLibraryVersion = "25.1.1"
+  firebaseVersion = "10.2.0"
+  daggerVersion = "2.9"
+  okHttpVersion = "3.6.0"
+  retrofitVersion = "2.2.0"
+  rxJavaVersion = "2.0.1"
+  espressoVersion = "2.2.2"
+  leakCanaryVersion = "1.4"
+  dexmakerVersion = "1.2"
+}
+
+// Plugins
+ext.plugs = [
+  gradle                    : "com.android.tools.build:gradle:2.3.0-rc1",
+  gradleAndroidCommandPlugin: "com.novoda:gradle-android-command-plugin:1.7.1",
+  playPublisher             : "com.github.triplet.gradle:play-publisher:1.1.5",
+  buildScanPlugin           : "com.gradle:build-scan-plugin:1.4",
+  dexcountGradlePlugin      : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.2",
+  gradleAndroidApkSizePlugin: "com.vanniktech:gradle-android-apk-size-plugin:0.3.0",
+  coverallsGradlePlugin     : "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1",
+  gradleErrorpronePlugin    : "net.ltgt.gradle:gradle-errorprone-plugin:0.0.8",
+  gradleVersionsPlugin      : "com.github.ben-manes:gradle-versions-plugin:0.14.0"
+]
+
+// Dependencies
+ext.deps = [
+  // compile
+  // - Android/Google
+  design               : "com.android.support:design:$supportLibraryVersion",
+  appcompatv7          : "com.android.support:appcompat-v7:$supportLibraryVersion",
+  supportv4            : "com.android.support:support-v4:$supportLibraryVersion",
+  recyclerviewv7       : "com.android.support:recyclerview-v7:$supportLibraryVersion",
+  cardviewv7           : "com.android.support:cardview-v7:$supportLibraryVersion",
+  supportAnnotations   : "com.android.support:support-annotations:$supportLibraryVersion",
+  firebaseCore         : "com.google.firebase:firebase-core:$firebaseVersion",
+  firebaseCrash        : "com.google.firebase:firebase-crash:$firebaseVersion",
+  firebaseAds          : "com.google.firebase:firebase-ads:$firebaseVersion",
+  // - Other
+  rxAndroid            : "io.reactivex.rxjava2:rxandroid:$rxJavaVersion",
+  rxJava               : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
+  rxRelay              : "com.jakewharton.rxrelay2:rxrelay:2.0.0",
+  androidSdk           : "io.doorbell:android-sdk:0.2.6",
+  logger               : "com.orhanobut:logger:1.15",
+  dagger               : "com.google.dagger:dagger:$daggerVersion",
+  okhttp               : "com.squareup.okhttp3:okhttp:$okHttpVersion",
+  loggingInterceptor   : "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
+  retrofit             : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+  converterGson        : "com.squareup.retrofit2:converter-gson:$retrofitVersion",
+  adapterRxjava2       : "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
+  androidGifDrawable   : "pl.droidsonroids.gif:android-gif-drawable:1.2.3",
+  glide                : "com.github.bumptech.glide:glide:3.7.0",
+  okhttp3Integration   : "com.github.bumptech.glide:okhttp3-integration:1.4.0@aar",
+
+  // annotationProcessor
+  daggerCompiler       : "com.google.dagger:dagger-compiler:$daggerVersion",
+
+  // androidTestCompile
+  dexmaker             : "com.google.dexmaker:dexmaker:$dexmakerVersion",
+  dexmakerMockito      : "com.google.dexmaker:dexmaker-mockito:$dexmakerVersion",
+  espressoCore         : "com.android.support.test.espresso:espresso-core:$espressoVersion",
+  espressoIntents      : "com.android.support.test.espresso:espresso-intents:$espressoVersion",
+  espressoContrib      : "com.android.support.test.espresso:espresso-contrib:$espressoVersion",
+  testingSupportLib    : "com.android.support.test:testing-support-lib:0.1",
+  runner               : "com.android.support.test:runner:0.5",
+
+  // testCompile
+  leakcanaryAndroid    : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
+  leakcanaryAndroidNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion",
+  junit                : "junit:junit:4.12",
+  mockitoCore          : "org.mockito:mockito-core:2.7.11",
+  assertjCore          : "org.assertj:assertj-core:1.7.1",
+  equalsverifier       : "nl.jqno.equalsverifier:equalsverifier:2.2.1",
+  mockwebserver        : "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
+]
