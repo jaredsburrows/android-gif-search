@@ -21,9 +21,6 @@ install:
 build_script:
   - gradlew.bat clean testDebug assembleDebugAndroidTest -Pci -Dscan --stacktrace
 
-artifacts:
-  - path: "build\\reports\\"
-
 cache:
   - "%USERPROFILE%\\.m2"
   - "%USERPROFILE%\\.gradle"
