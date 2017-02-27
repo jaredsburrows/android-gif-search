@@ -4,14 +4,14 @@ ext {
   minSdkVersion = 16
   targetSdkVersion = 25
   compileSdkVersion = 25
-  buildToolsVersion = "25.0.1"
+  buildToolsVersion = "25.0.2"
   sourceCompatibilityVersion = JavaVersion.VERSION_1_7
   targetCompatibilityVersion = JavaVersion.VERSION_1_7
   debugKeystoreUser = "androiddebugkey"
   debugKeystorePass = "android"
 
   // Common versions
-  supportLibraryVersion = "25.1.1"
+  supportLibraryVersion = "25.2.0"
   firebaseVersion = "10.2.0"
   daggerVersion = "2.9"
   okHttpVersion = "3.6.0"
