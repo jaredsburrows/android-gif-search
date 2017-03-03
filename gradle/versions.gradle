@@ -24,7 +24,7 @@ ext {
 
 // Plugins
 ext.plugs = [
-  gradle                    : "com.android.tools.build:gradle:2.3.0-rc1",
+  gradle                    : "com.android.tools.build:gradle:2.3.0",
   gradleAndroidCommandPlugin: "com.novoda:gradle-android-command-plugin:1.7.1",
   playPublisher             : "com.github.triplet.gradle:play-publisher:1.1.5",
   buildScanPlugin           : "com.gradle:build-scan-plugin:1.4",
