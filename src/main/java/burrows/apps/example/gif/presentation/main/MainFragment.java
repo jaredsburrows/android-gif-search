@@ -85,7 +85,7 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
   }
 
   @Override public void addImages(RiffsyResponse response) {
-    next = response.next();
+    next = response.page();
     // Iterate over data from response and grab the urls
     for (Result result : response.results()) {
       final String url = result.media().get(0).gif().url();
