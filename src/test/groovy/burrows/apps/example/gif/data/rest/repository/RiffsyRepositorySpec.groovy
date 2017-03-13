@@ -16,7 +16,7 @@ import java.nio.charset.Charset
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-class RiffsyRepositorySpec extends BaseSpec {
+final class RiffsyRepositorySpec extends BaseSpec {
   @Rule MockWebServer server = new MockWebServer()
   RiffsyRepository sut
 

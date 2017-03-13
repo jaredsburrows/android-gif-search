@@ -16,7 +16,6 @@ ext {
   daggerVersion = "2.9"
   okHttpVersion = "3.6.0"
   retrofitVersion = "2.2.0"
-  rxJavaVersion = "2.0.1"
   espressoVersion = "2.2.2"
   leakCanaryVersion = "1.4"
   dexmakerVersion = "1.2"
@@ -50,8 +49,8 @@ ext.deps = [
   firebaseCrash        : "com.google.firebase:firebase-crash:$firebaseVersion",
   firebaseAds          : "com.google.firebase:firebase-ads:$firebaseVersion",
   // - Other
-  rxAndroid            : "io.reactivex.rxjava2:rxandroid:$rxJavaVersion",
-  rxJava               : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
+  rxAndroid            : "io.reactivex.rxjava2:rxandroid:2.0.1",
+  rxJava               : "io.reactivex.rxjava2:rxjava:2.0.7",
   rxRelay              : "com.jakewharton.rxrelay2:rxrelay:2.0.0",
   androidSdk           : "io.doorbell:android-sdk:0.2.6",
   logger               : "com.orhanobut:logger:1.15",
