@@ -1,14 +1,8 @@
 package test;
 
-import io.reactivex.Scheduler;
-import io.reactivex.android.plugins.RxAndroidPlugins;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
+import java.util.Random;
 import org.junit.After;
 import org.junit.Before;
-
-import java.util.Random;
-import java.util.concurrent.Callable;
 
 import static java.util.UUID.randomUUID;
 
@@ -39,14 +33,8 @@ public abstract class AndroidTestBase {
   protected static final Double DOUBLE_RANDOM = new Random().nextDouble();
 
   @Before public void setUp() throws Throwable {
-    RxAndroidPlugins.setInitMainThreadSchedulerHandler(new Function<Callable<Scheduler>, Scheduler>() {
-      @Override public Scheduler apply(Callable<Scheduler> schedulerCallable) throws Exception {
-        return Schedulers.trampoline();
-      }
-    });
   }
 
   @After public void tearDown() throws Throwable {
-    RxAndroidPlugins.reset();
   }
 }

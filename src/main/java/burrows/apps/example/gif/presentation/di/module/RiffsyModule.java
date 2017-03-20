@@ -11,7 +11,7 @@ import retrofit2.Retrofit;
  */
 @Module
 public class RiffsyModule {
-  @Provides @PerActivity protected RiffsyRepository provideRiffsyApi(Retrofit.Builder retrofit) {
-    return retrofit.baseUrl(RiffsyRepository.BASE_URL).build().create(RiffsyRepository.class);
+  @Provides @PerActivity protected RiffsyRepository provideRiffsyApi(Retrofit.Builder builder) {
+    return builder.baseUrl(RiffsyRepository.BASE_URL).build().create(RiffsyRepository.class);
   }
 }

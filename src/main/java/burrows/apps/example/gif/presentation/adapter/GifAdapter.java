@@ -25,10 +25,11 @@ import java.util.List;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder> {
-  final static String TAG = GifAdapter.class.getSimpleName(); // Can't be longer than 23 chars
+  // Can't be longer than 23 chars
+  private final static String TAG = GifAdapter.class.getSimpleName();
   private final List<ImageInfoModel> data = new ArrayList<>();
   private ImageRepository repository;
-  final OnItemClickListener onItemClickListener;
+  private final OnItemClickListener onItemClickListener;
 
   public GifAdapter(OnItemClickListener onItemClickListener, ImageRepository repository) {
     this.onItemClickListener = onItemClickListener;
@@ -36,7 +37,9 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    return new ViewHolder(DataBindingUtil.<ListItemBinding>inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item, parent, false));
+    return new ViewHolder(
+      DataBindingUtil.<ListItemBinding>inflate(LayoutInflater.from(parent.getContext()),
+        R.layout.list_item, parent, false));
   }
 
   @Override public void onBindViewHolder(final ViewHolder holder, int position) {
@@ -47,7 +50,8 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
     repository.load(imageInfo.url())
       .thumbnail(repository.load(imageInfo.previewUrl()))
       .listener(new RequestListener<Object, GifDrawable>() {
-        @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+        @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target,
+          boolean isFirstResource) {
           // Hide progressbar
           binding.gifProgress.setVisibility(View.GONE);
           if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model);
@@ -55,7 +59,8 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
           return false;
         }
 
-        @Override public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+        @Override public boolean onResourceReady(GifDrawable resource, Object model,
+          Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
           // Hide progressbar
           binding.gifProgress.setVisibility(View.GONE);
           if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model);
@@ -78,9 +83,11 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
     super.onViewRecycled(holder);
 
     // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
-    Glide.clear(holder.binding.gifImage);  // Forget view, try to free resources
+    // Forget view, try to free resources
+    Glide.clear(holder.binding.gifImage);
     holder.binding.gifImage.setImageDrawable(null);
-    holder.binding.gifProgress.setVisibility(View.VISIBLE); // Make sure to show progress when loading new view
+    // Make sure to show progress when loading new view
+    holder.binding.gifProgress.setVisibility(View.VISIBLE);
   }
 
   /**
@@ -137,8 +144,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    * first occurrence.
    *
    * @param object the object to search for.
-   * @return the index of the first occurrence of the object or -1 if the
-   * object was not found.
+   * @return the index of the first occurrence of the object or -1 if the object was not found.
    */
   public int getLocation(ImageInfoModel object) {
     return data.indexOf(object);
@@ -164,9 +170,8 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    * @param object the object to add.
    * @return always true.
    * @throws UnsupportedOperationException if adding to the data is not supported.
-   * @throws ClassCastException            if the class of the object is inappropriate for this
-   *                                       data.
-   * @throws IllegalArgumentException      if the object cannot be added to the data.
+   * @throws ClassCastException if the class of the object is inappropriate for this data.
+   * @throws IllegalArgumentException if the object cannot be added to the data.
    */
   public boolean add(ImageInfoModel object) {
     final boolean added = data.add(object);
@@ -180,12 +185,11 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    * collection's iterator.
    *
    * @param collection the collection of objects.
-   * @return {@code true} if the data is modified, {@code false} otherwise
-   * (i.e. if the passed collection was empty).
+   * @return {@code true} if the data is modified, {@code false} otherwise (i.e. if the passed
+   * collection was empty).
    * @throws UnsupportedOperationException if adding to the data is not supported.
-   * @throws ClassCastException            if the class of an object is inappropriate for this
-   *                                       data.
-   * @throws IllegalArgumentException      if an object cannot be added to the data.
+   * @throws ClassCastException if the class of an object is inappropriate for this data.
+   * @throws IllegalArgumentException if an object cannot be added to the data.
    */
   public boolean addAll(List<ImageInfoModel> collection) {
     final boolean added = data.addAll(collection);
@@ -202,12 +206,11 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    * location towards the end of the data.
    *
    * @param location the index at which to insert.
-   * @param object   the object to add.
+   * @param object the object to add.
    * @throws UnsupportedOperationException if adding to the data is not supported.
-   * @throws ClassCastException            if the class of the object is inappropriate for this
-   *                                       data.
-   * @throws IllegalArgumentException      if the object cannot be added to the data.
-   * @throws IndexOutOfBoundsException     if {@code location < 0 || location > size()}
+   * @throws ClassCastException if the class of the object is inappropriate for this data.
+   * @throws IllegalArgumentException if the object cannot be added to the data.
+   * @throws IndexOutOfBoundsException if {@code location < 0 || location > size()}
    */
   public void add(int location, ImageInfoModel object) {
     data.add(location, object);
@@ -218,8 +221,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    * Removes the first occurrence of the specified object from the data.
    *
    * @param object the object to remove.
-   * @return true if the data was modified by this operation, false
-   * otherwise.
+   * @return true if the data was modified by this operation, false otherwise.
    * @throws UnsupportedOperationException if removing from the data is not supported.
    */
   public boolean remove(int location, ImageInfoModel object) {
@@ -232,8 +234,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    * Removes the first occurrence of the specified object from the data.
    *
    * @param object the object to remove.
-   * @return true if the data was modified by this operation, false
-   * otherwise.
+   * @return true if the data was modified by this operation, false otherwise.
    * @throws UnsupportedOperationException if removing from the data is not supported.
    */
   public boolean remove(ImageInfoModel object) {
@@ -249,7 +250,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    * @param location the index of the object to remove.
    * @return the removed object.
    * @throws UnsupportedOperationException if removing from the data is not supported.
-   * @throws IndexOutOfBoundsException     if {@code location < 0 || location >= size()}
+   * @throws IndexOutOfBoundsException if {@code location < 0 || location >= size()}
    */
   public ImageInfoModel remove(int location) {
     final ImageInfoModel removedObject = data.remove(location);

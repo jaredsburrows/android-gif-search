@@ -48,10 +48,7 @@ android {
     testApplicationId "burrows.apps.example.gif.test"
     testInstrumentationRunner "test.CustomTestRunner"
     resConfigs "en" // Keep only english resource files for now
-
-    vectorDrawables {
-      useSupportLibrary = true
-    }
+    vectorDrawables.useSupportLibrary = true
   }
 
   sourceSets {

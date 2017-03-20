@@ -12,13 +12,15 @@ import io.reactivex.functions.Consumer;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 final class MainPresenter implements IMainPresenter {
+  // Can't be longer than 23 chars
+  private final static String TAG = MainPresenter.class.getSimpleName();
   private final CompositeDisposable disposable = new CompositeDisposable();
-  final static String TAG = MainPresenter.class.getSimpleName(); // Can't be longer than 23 chars
-  final IMainView view;
+  private final IMainView view;
   private final RiffsyRepository repository;
   private final IBaseSchedulerProvider provider;
 
-  public MainPresenter(IMainView view, RiffsyRepository repository, IBaseSchedulerProvider provider) {
+  public MainPresenter(IMainView view, RiffsyRepository repository,
+    IBaseSchedulerProvider provider) {
     this.view = view;
     this.repository = repository;
     this.provider = provider;
@@ -51,7 +53,8 @@ final class MainPresenter implements IMainPresenter {
    * @param searchString User input.
    */
   @Override public void loadSearchImages(String searchString, Float next) {
-    loadImages(repository.getSearchResults(searchString, RiffsyRepository.DEFAULT_LIMIT_COUNT, next));
+    loadImages(
+      repository.getSearchResults(searchString, RiffsyRepository.DEFAULT_LIMIT_COUNT, next));
   }
 
   /**

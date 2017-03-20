@@ -45,7 +45,8 @@ public final class NetModule {
   private static final String CLIENT_CACHE_DIRECTORY = "http";
 
   @Provides @PerActivity Cache provideCache(Application application) {
-    return new Cache(new File(application.getCacheDir(), CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE);
+    return new Cache(new File(application.getCacheDir(), CLIENT_CACHE_DIRECTORY),
+      CLIENT_CACHE_SIZE);
   }
 
   @Provides @PerActivity Gson provideGson() {
@@ -57,7 +58,9 @@ public final class NetModule {
   @Provides @PerActivity OkHttpClient provideOkHttpClient(Cache cache) {
     return new OkHttpClient.Builder()
       .addInterceptor(new HttpLoggingInterceptor()
-        .setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
+        .setLevel(BuildConfig.DEBUG
+          ? HttpLoggingInterceptor.Level.BODY
+          : HttpLoggingInterceptor.Level.NONE))
       .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
@@ -65,7 +68,8 @@ public final class NetModule {
       .build();
   }
 
-  @Provides @PerActivity Retrofit.Builder provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
+  @Provides @PerActivity Retrofit.Builder provideRetrofitBuilder(Gson gson,
+    OkHttpClient okHttpClient) {
     return new Retrofit.Builder()
       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
       .addConverterFactory(GsonConverterFactory.create(gson))

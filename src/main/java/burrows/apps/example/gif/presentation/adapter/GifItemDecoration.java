@@ -18,7 +18,8 @@ public final class GifItemDecoration extends RecyclerView.ItemDecoration {
     this.columns = columns;
   }
 
-  @Override public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+  @Override public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+    RecyclerView.State state) {
     super.getItemOffsets(outRect, view, parent, state);
 
     final int position = parent.getChildLayoutPosition(view);

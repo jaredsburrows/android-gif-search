@@ -34,13 +34,13 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public final class GifAdapterTest extends AndroidTestBase {
   @Rule public final CustomTestRule<DummyActivity> activityTestRule = new CustomTestRule<>(DummyActivity.class, true, true);
   @Rule public final UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
-  @Mock OnItemClickListener onItemClickListener;
+  @Mock private OnItemClickListener onItemClickListener;
   private final ImageInfoModel imageInfoModel = new ImageInfoModel.Builder().url(STRING_UNIQUE).build();
   private final ImageInfoModel imageInfoModel2 = new ImageInfoModel.Builder().url(STRING_UNIQUE2).build();
   private final ImageInfoModel imageInfoModel3 = new ImageInfoModel.Builder().url(STRING_UNIQUE3).build();
-  GifAdapter.ViewHolder viewHolder;
-  ImageRepository spyImageDownloader;
-  GifAdapter sut;
+  private GifAdapter.ViewHolder viewHolder;
+  private ImageRepository spyImageDownloader;
+  private GifAdapter sut;
 
   @Before @Override public void setUp() throws Throwable {
     super.setUp();

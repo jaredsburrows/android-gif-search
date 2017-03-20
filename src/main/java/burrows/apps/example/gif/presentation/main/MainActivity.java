@@ -24,7 +24,8 @@ public final class MainActivity extends AppCompatActivity {
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    final ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+    final ActivityMainBinding binding =
+      DataBindingUtil.setContentView(this, R.layout.activity_main);
 
     // Injection dependencies
     ((App) getApplication()).activityComponent.inject(this);
@@ -35,12 +36,15 @@ public final class MainActivity extends AppCompatActivity {
     setSupportActionBar(binding.toolBar);
 
     // Use Fragments
-    MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+    MainFragment fragment =
+      (MainFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
     if (fragment == null) fragment = new MainFragment();
-    if (savedInstanceState == null) getSupportFragmentManager()
-      .beginTransaction()
-      .replace(R.id.content_frame, fragment, MainFragment.class.getSimpleName())
-      .commit();
+    if (savedInstanceState == null) {
+      getSupportFragmentManager()
+        .beginTransaction()
+        .replace(R.id.content_frame, fragment, MainFragment.class.getSimpleName())
+        .commit();
+    }
 
     // Create presenter
     new MainPresenter(fragment, repository, schedulerProvider);

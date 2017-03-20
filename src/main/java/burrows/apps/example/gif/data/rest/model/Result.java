@@ -8,8 +8,8 @@ import java.util.List;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class Result {
-  @SerializedName("media") final List<Media> media;
-  @SerializedName("title") final String title;
+  @SerializedName("media") private final List<Media> media;
+  @SerializedName("title") private final String title;
 
   /**
    * No args constructor for use in serialization
@@ -36,8 +36,8 @@ public final class Result {
   }
 
   public static class Builder {
-    List<Media> media;
-    String title;
+    private List<Media> media;
+    private String title;
 
     public Builder() {
     }

@@ -49,25 +49,27 @@ import javax.inject.Inject;
  *
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public final class MainFragment extends Fragment implements IMainView, GifAdapter.OnItemClickListener {
-  static final String TAG = MainFragment.class.getSimpleName(); // Can't be longer than 23 chars
+public final class MainFragment extends Fragment
+  implements IMainView, GifAdapter.OnItemClickListener {
+  private static final String TAG = MainFragment.class.getSimpleName();
+  // Can't be longer than 23 chars
   private static final int PORTRAIT_COLUMNS = 3;
-  GridLayoutManager layoutManager;
+  private GridLayoutManager layoutManager;
   private GifItemDecoration itemOffsetDecoration;
   private GifAdapter adapter;
-  boolean hasSearched;
+  private boolean hasSearched;
   private AppCompatDialog dialog;
-  int previousTotal = 0;
-  boolean loading = true;
-  int visibleThreshold = 5;
-  int firstVisibleItem;
-  int visibleItemCount;
-  int totalItemCount;
-  Float next;
-  TextView dialogText;
-  ProgressBar progressBar;
-  ImageView imageView;
-  IMainPresenter presenter;
+  private int previousTotal = 0;
+  private boolean loading = true;
+  private int visibleThreshold = 5;
+  private int firstVisibleItem;
+  private int visibleItemCount;
+  private int totalItemCount;
+  private Float next;
+  private TextView dialogText;
+  private ProgressBar progressBar;
+  private ImageView imageView;
+  private IMainPresenter presenter;
   @Inject RefWatcher refWatcher;
   @Inject ImageRepository repository;
 
@@ -125,15 +127,19 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     setHasOptionsMenu(true);
 
     layoutManager = new GridLayoutManager(getActivity(), PORTRAIT_COLUMNS);
-    itemOffsetDecoration = new GifItemDecoration(getActivity().getResources().getDimensionPixelSize(R.dimen.gif_adapter_item_offset), layoutManager.getSpanCount());
+    itemOffsetDecoration = new GifItemDecoration(
+      getActivity().getResources().getDimensionPixelSize(R.dimen.gif_adapter_item_offset),
+      layoutManager.getSpanCount());
     adapter = new GifAdapter(this, repository);
     adapter.setHasStableIds(true);
   }
 
-  @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+  @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    @Nullable Bundle savedInstanceState) {
     super.onCreateView(inflater, container, savedInstanceState);
 
-    final FragmentMainBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
+    final FragmentMainBinding binding =
+      DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false);
 
     // Setup RecyclerView
     binding.recyclerView.setLayoutManager(layoutManager);
@@ -141,7 +147,8 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     binding.recyclerView.setAdapter(adapter);
     binding.recyclerView.setHasFixedSize(true);
     // http://stackoverflow.com/questions/30511890/does-glide-queue-up-every-image-request-recyclerview-loads-are-very-slow-when-s#comment49135977_30511890
-    binding.recyclerView.getRecycledViewPool().setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2); // default 5
+    binding.recyclerView.getRecycledViewPool()
+      .setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2); // default 5
     binding.recyclerView.setItemViewCacheSize(RiffsyRepository.DEFAULT_LIMIT_COUNT);
     binding.recyclerView.setDrawingCacheEnabled(true);
     binding.recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
@@ -159,7 +166,8 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
           previousTotal = totalItemCount;
         }
 
-        if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+        if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem
+          + visibleThreshold)) {
           presenter.loadTrendingImages(next);
 
           loading = true;
@@ -168,7 +176,8 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     });
 
     // Custom view for Dialog
-    final DialogPreviewBinding previewBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_preview, null, false);
+    final DialogPreviewBinding previewBinding =
+      DataBindingUtil.inflate(inflater, R.layout.dialog_preview, null, false);
 
     // Customize Dialog
     dialog = new AppCompatDialog(getContext());
@@ -273,7 +282,8 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
     repository.load(imageInfo.url())
       .thumbnail(repository.load(imageInfo.previewUrl()))
       .listener(new RequestListener<Object, GifDrawable>() {
-        @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+        @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target,
+          boolean isFirstResource) {
           // Hide progressbar
           progressBar.setVisibility(View.GONE);
           if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model);
@@ -281,7 +291,8 @@ public final class MainFragment extends Fragment implements IMainView, GifAdapte
           return false;
         }
 
-        @Override public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+        @Override public boolean onResourceReady(GifDrawable resource, Object model,
+          Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
           // Hide progressbar
           progressBar.setVisibility(View.GONE);
           if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model);

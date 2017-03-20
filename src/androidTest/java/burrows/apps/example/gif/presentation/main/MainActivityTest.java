@@ -50,49 +50,52 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @SuppressWarnings("unchecked")
 @SmallTest @RunWith(AndroidJUnit4.class)
 public final class MainActivityTest extends AndroidTestBase {
-  @Rule public final CustomTestRule<MainActivity> activityRule = new CustomTestRule<MainActivity>(MainActivity.class, true, false) {
-    @Override protected void beforeActivityLaunched() {
-      super.beforeActivityLaunched();
+  @Rule public final CustomTestRule<MainActivity> activityRule =
+    new CustomTestRule<MainActivity>(MainActivity.class, true, false) {
+      @Override protected void beforeActivityLaunched() {
+        super.beforeActivityLaunched();
 
-      final TestApp app = getApplication();
+        final TestApp app = getApplication();
 
-      // Override app component
-      final AppComponent appComponent = DaggerAppComponent.builder()
-        .appModule(new AppModule(getApplication()))
-        .build();
-      app.setAppComponent(appComponent);
+        // Override app component
+        final AppComponent appComponent = DaggerAppComponent.builder()
+          .appModule(new AppModule(getApplication()))
+          .build();
+        app.setAppComponent(appComponent);
 
-      // Override service component
-      final ActivityComponent netComponent = DaggerActivityComponent.builder()
-        .appComponent(appComponent)
-        .riffsyModule(new RiffsyModule() {
-          // Set custom endpoint for rest service
-          @Override protected RiffsyRepository provideRiffsyApi(Retrofit.Builder retrofit) {
-            return retrofit.baseUrl(mockEndPoint).build().create(RiffsyRepository.class);
-          }
-        })
-        .glideModule(new GlideModule() {
-          @Override protected ImageRepository provideImageDownloader(final Context context) {
-            return new ImageRepository(context) {
-              // Prevent Glide network call with custom override
-              @Override public <T> GifRequestBuilder<T> load(T url) {
-                return (GifRequestBuilder<T>) Glide.with(context)
-                  .load(R.mipmap.ic_launcher)
-                  .asGif()
-                  .placeholder(R.mipmap.ic_launcher)
-                  .fallback(R.mipmap.ic_launcher)
-                  .error(R.mipmap.ic_launcher)
-                  .override(200, 200);
-              }
-            };
-          }
-        })
-        .build();
-      app.setRiffsyComponent(netComponent);
-    }
-  };
+        // Override service component
+        final ActivityComponent netComponent = DaggerActivityComponent.builder()
+          .appComponent(appComponent)
+          .riffsyModule(new RiffsyModule() {
+            // Set custom endpoint for rest service
+            @Override protected RiffsyRepository provideRiffsyApi(Retrofit.Builder builder) {
+              return builder.baseUrl(mockEndPoint)
+                .build()
+                .create(RiffsyRepository.class);
+            }
+          })
+          .glideModule(new GlideModule() {
+            @Override protected ImageRepository provideImageDownloader(final Context context) {
+              return new ImageRepository(context) {
+                // Prevent Glide network call with custom override
+                @Override public <T> GifRequestBuilder<T> load(T url) {
+                  return (GifRequestBuilder<T>) Glide.with(context)
+                    .load(R.mipmap.ic_launcher)
+                    .asGif()
+                    .placeholder(R.mipmap.ic_launcher)
+                    .fallback(R.mipmap.ic_launcher)
+                    .error(R.mipmap.ic_launcher)
+                    .override(200, 200);
+                }
+              };
+            }
+          })
+          .build();
+        app.setRiffsyComponent(netComponent);
+      }
+    };
   @Rule public final MockWebServer server = new MockWebServer();
-  String mockEndPoint;
+  private String mockEndPoint;
 
   @Before @Override public void setUp() throws Throwable {
     super.setUp();

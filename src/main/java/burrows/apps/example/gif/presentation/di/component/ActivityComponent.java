@@ -14,14 +14,13 @@ import dagger.Component;
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-@PerActivity @Component(dependencies = AppComponent.class, modules = {NetModule.class, RiffsyModule.class,
+@PerActivity
+@Component(dependencies = AppComponent.class, modules = {NetModule.class, RiffsyModule.class,
   GlideModule.class, SchedulerProviderModule.class, LeakCanaryModule.class})
 public interface ActivityComponent {
   // Injections
   void inject(MainActivity mainActivity);
-
   void inject(MainFragment mainFragment);
-
   void inject(GifAdapter gifAdapter);
 
   // Setup components dependencies and modules

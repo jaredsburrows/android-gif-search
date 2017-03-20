@@ -28,9 +28,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public final class GifItemDecorationTest extends AndroidTestBase {
   @Rule public final CustomTestRule<DummyActivity> activityTestRule = new CustomTestRule<>(DummyActivity.class, true, true);
   @Mock private RecyclerView.State state;
-  @Mock GifAdapter.OnItemClickListener onItemClickListener;
-  @Mock ImageRepository imageDownloader;
-  @Mock RecyclerView.LayoutParams layoutParams;
+  @Mock private GifAdapter.OnItemClickListener onItemClickListener;
+  @Mock private ImageRepository imageDownloader;
+  @Mock private RecyclerView.LayoutParams layoutParams;
   private final Rect rect = new Rect(0, 0, 0, 0);
   private GridLayoutManager layoutManager;
   private RecyclerView recyclerView;

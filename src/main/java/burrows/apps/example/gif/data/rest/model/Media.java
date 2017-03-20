@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class Media {
-  @SerializedName("tinygif") final Gif gif;
+  @SerializedName("tinygif") private final Gif gif;
 
   /**
    * No args constructor for use in serialization
@@ -28,7 +28,7 @@ public final class Media {
   }
 
   public static class Builder {
-    Gif gif;
+    private Gif gif;
 
     public Builder() {
     }

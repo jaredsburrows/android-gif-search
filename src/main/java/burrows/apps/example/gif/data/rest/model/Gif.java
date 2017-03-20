@@ -6,8 +6,8 @@ import com.google.gson.annotations.SerializedName;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class Gif {
-  @SerializedName("url") final String url;
-  @SerializedName("preview") final String preview;
+  @SerializedName("url") private final String url;
+  @SerializedName("preview") private final String preview;
 
   /**
    * No args constructor for use in serialization
@@ -34,8 +34,8 @@ public final class Gif {
   }
 
   public static class Builder {
-    String url;
-    String preview;
+    private String url;
+    private String preview;
 
     public Builder() {
     }

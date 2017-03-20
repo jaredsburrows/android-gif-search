@@ -11,8 +11,8 @@ import java.util.List;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class RiffsyResponse {
-  @SerializedName("results") final List<Result> results;
-  @SerializedName("page") final Float page;
+  @SerializedName("results") private final List<Result> results;
+  @SerializedName("page") private final Float page;
 
   /**
    * No args constructor for use in serialization
@@ -39,8 +39,8 @@ public final class RiffsyResponse {
   }
 
   public static class Builder {
-    List<Result> results;
-    Float page;
+    private List<Result> results;
+    private Float page;
 
     public Builder() {
     }
