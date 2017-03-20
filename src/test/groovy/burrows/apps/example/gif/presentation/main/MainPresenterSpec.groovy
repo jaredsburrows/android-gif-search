@@ -1,7 +1,7 @@
 package burrows.apps.example.gif.presentation.main
 
 import burrows.apps.example.gif.data.rest.model.RiffsyResponse
-import burrows.apps.example.gif.data.rest.repository.RiffsyRepository
+import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.presentation.IBaseSchedulerProvider
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -13,7 +13,7 @@ import test.BaseSpec
 final class MainPresenterSpec extends BaseSpec {
   IMainView view = Mock()
   IBaseSchedulerProvider scheduler = Mock()
-  RiffsyRepository repository = Mock()
+  RiffsyApiClient repository = Mock()
   MainPresenter sut
 
   def "setup"() {

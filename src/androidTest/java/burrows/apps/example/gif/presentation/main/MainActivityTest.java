@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import burrows.apps.example.gif.R;
 import burrows.apps.example.gif.TestApp;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
-import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
+import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient;
 import burrows.apps.example.gif.presentation.di.component.ActivityComponent;
 import burrows.apps.example.gif.presentation.di.component.AppComponent;
 import burrows.apps.example.gif.presentation.di.component.DaggerActivityComponent;
@@ -16,10 +16,14 @@ import burrows.apps.example.gif.presentation.di.module.GlideModule;
 import burrows.apps.example.gif.presentation.di.module.RiffsyModule;
 import com.bumptech.glide.GifRequestBuilder;
 import com.bumptech.glide.Glide;
+import java.io.IOException;
+import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +32,6 @@ import test.AndroidTestBase;
 import test.CustomTestRule;
 
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
 import java.util.Scanner;
 
@@ -42,6 +45,9 @@ import static android.support.test.espresso.contrib.RecyclerViewActions.actionOn
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.API_KEY;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static java.net.HttpURLConnection.HTTP_OK;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -68,10 +74,10 @@ public final class MainActivityTest extends AndroidTestBase {
           .appComponent(appComponent)
           .riffsyModule(new RiffsyModule() {
             // Set custom endpoint for rest service
-            @Override protected RiffsyRepository provideRiffsyApi(Retrofit.Builder builder) {
+            @Override protected RiffsyApiClient provideRiffsyApi(Retrofit.Builder builder) {
               return builder.baseUrl(mockEndPoint)
                 .build()
-                .create(RiffsyRepository.class);
+                .create(RiffsyApiClient.class);
             }
           })
           .glideModule(new GlideModule() {
@@ -95,6 +101,15 @@ public final class MainActivityTest extends AndroidTestBase {
       }
     };
   @Rule public final MockWebServer server = new MockWebServer();
+  private final Dispatcher dispatcher = new Dispatcher() {
+    @Override public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+      if (("/v1/trending?key=" + API_KEY).equals(request.getPath())) {
+        return getMockResponse("/trending_results.json");
+      }
+
+      return new MockResponse().setResponseCode(HTTP_NOT_FOUND);
+    }
+  };
   private String mockEndPoint;
 
   @Before @Override public void setUp() throws Throwable {
@@ -103,6 +118,7 @@ public final class MainActivityTest extends AndroidTestBase {
     initMocks(this);
 
     mockEndPoint = server.url("/").toString();
+    server.setDispatcher(dispatcher);
   }
 
   @After @Override public void tearDown() throws Throwable {
@@ -111,22 +127,24 @@ public final class MainActivityTest extends AndroidTestBase {
     server.shutdown();
   }
 
-  private void sendMockMessages(String fileName) throws Exception {
+  private MockResponse getMockResponse(String fileName) {
     final InputStream stream = getClass().getResourceAsStream(fileName);
     final String mockResponse = new Scanner(stream, Charset.defaultCharset().name())
       .useDelimiter("\\A").next();
 
-    server.enqueue(new MockResponse()
-      .setResponseCode(HttpURLConnection.HTTP_OK)
-      .setBody(mockResponse));
+    final MockResponse response = new MockResponse().setResponseCode(HTTP_OK)
+      .setBody(mockResponse);
 
-    stream.close();
+    try {
+      stream.close();
+    } catch (IOException ignore) {
+    }
+
+    return response;
   }
 
+  @Ignore
   @Test public void testTrendingThenClickOpenDialog() throws Exception {
-    // Arrange
-    sendMockMessages("/trending_results.json");
-
     // Act
     activityRule.launchActivity();
     activityRule.keepScreenOn();
@@ -143,9 +161,6 @@ public final class MainActivityTest extends AndroidTestBase {
   }
 
   @Test public void testTrendingResultsThenSearchThenBackToTrending() throws Exception {
-    // Arrange
-    sendMockMessages("/trending_results.json");
-
     // Act
     activityRule.launchActivity();
     activityRule.keepScreenOn();

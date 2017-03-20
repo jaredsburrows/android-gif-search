@@ -30,7 +30,7 @@ import burrows.apps.example.gif.R;
 import burrows.apps.example.gif.data.rest.model.Result;
 import burrows.apps.example.gif.data.rest.model.RiffsyResponse;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
-import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
+import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient;
 import burrows.apps.example.gif.databinding.DialogPreviewBinding;
 import burrows.apps.example.gif.databinding.FragmentMainBinding;
 import burrows.apps.example.gif.presentation.adapter.GifAdapter;
@@ -149,7 +149,7 @@ public final class MainFragment extends Fragment
     // http://stackoverflow.com/questions/30511890/does-glide-queue-up-every-image-request-recyclerview-loads-are-very-slow-when-s#comment49135977_30511890
     binding.recyclerView.getRecycledViewPool()
       .setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2); // default 5
-    binding.recyclerView.setItemViewCacheSize(RiffsyRepository.DEFAULT_LIMIT_COUNT);
+    binding.recyclerView.setItemViewCacheSize(RiffsyApiClient.DEFAULT_LIMIT_COUNT);
     binding.recyclerView.setDrawingCacheEnabled(true);
     binding.recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
     binding.recyclerView.addOnScrollListener(new OnScrollListener() {

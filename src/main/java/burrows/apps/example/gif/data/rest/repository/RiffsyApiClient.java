@@ -12,7 +12,7 @@ import retrofit2.http.Query;
  *
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
-public interface RiffsyRepository {
+public interface RiffsyApiClient {
   /**
    * URL for Riffsy.
    */

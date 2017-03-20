@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import burrows.apps.example.gif.App;
 import burrows.apps.example.gif.R;
-import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
+import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient;
 import burrows.apps.example.gif.databinding.ActivityMainBinding;
 import burrows.apps.example.gif.presentation.SchedulerProvider;
 
@@ -18,7 +18,7 @@ import javax.inject.Inject;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class MainActivity extends AppCompatActivity {
-  @Inject RiffsyRepository repository;
+  @Inject RiffsyApiClient repository;
   @Inject SchedulerProvider schedulerProvider;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {

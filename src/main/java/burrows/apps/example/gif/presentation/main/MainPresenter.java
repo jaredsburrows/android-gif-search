@@ -2,7 +2,7 @@ package burrows.apps.example.gif.presentation.main;
 
 import android.util.Log;
 import burrows.apps.example.gif.data.rest.model.RiffsyResponse;
-import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
+import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient;
 import burrows.apps.example.gif.presentation.IBaseSchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
@@ -16,10 +16,10 @@ final class MainPresenter implements IMainPresenter {
   private final static String TAG = MainPresenter.class.getSimpleName();
   private final CompositeDisposable disposable = new CompositeDisposable();
   private final IMainView view;
-  private final RiffsyRepository repository;
+  private final RiffsyApiClient repository;
   private final IBaseSchedulerProvider provider;
 
-  public MainPresenter(IMainView view, RiffsyRepository repository,
+  public MainPresenter(IMainView view, RiffsyApiClient repository,
     IBaseSchedulerProvider provider) {
     this.view = view;
     this.repository = repository;
@@ -44,7 +44,7 @@ final class MainPresenter implements IMainPresenter {
    * Load gif trending images.
    */
   @Override public void loadTrendingImages(Float next) {
-    loadImages(repository.getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT, next));
+    loadImages(repository.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, next));
   }
 
   /**
@@ -54,7 +54,7 @@ final class MainPresenter implements IMainPresenter {
    */
   @Override public void loadSearchImages(String searchString, Float next) {
     loadImages(
-      repository.getSearchResults(searchString, RiffsyRepository.DEFAULT_LIMIT_COUNT, next));
+      repository.getSearchResults(searchString, RiffsyApiClient.DEFAULT_LIMIT_COUNT, next));
   }
 
   /**

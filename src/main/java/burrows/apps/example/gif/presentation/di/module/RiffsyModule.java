@@ -1,6 +1,6 @@
 package burrows.apps.example.gif.presentation.di.module;
 
-import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
+import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient;
 import burrows.apps.example.gif.presentation.di.scope.PerActivity;
 import dagger.Module;
 import dagger.Provides;
@@ -11,7 +11,7 @@ import retrofit2.Retrofit;
  */
 @Module
 public class RiffsyModule {
-  @Provides @PerActivity protected RiffsyRepository provideRiffsyApi(Retrofit.Builder builder) {
-    return builder.baseUrl(RiffsyRepository.BASE_URL).build().create(RiffsyRepository.class);
+  @Provides @PerActivity protected RiffsyApiClient provideRiffsyApi(Retrofit.Builder builder) {
+    return builder.baseUrl(RiffsyApiClient.BASE_URL).build().create(RiffsyApiClient.class);
   }
 }

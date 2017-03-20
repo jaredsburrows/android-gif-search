@@ -18,7 +18,7 @@ import java.nio.charset.Charset
  */
 final class RiffsyRepositorySpec extends BaseSpec {
   @Rule MockWebServer server = new MockWebServer()
-  RiffsyRepository sut
+  RiffsyApiClient sut
 
   def sendMockMessages(String fileName) throws Throwable {
     InputStream stream = getClass().getResourceAsStream(fileName)
@@ -43,7 +43,7 @@ final class RiffsyRepositorySpec extends BaseSpec {
   def "setup"() {
     String mockEndPoint = server.url("/").toString()
 
-    sut = getRetrofit(mockEndPoint).build().create(RiffsyRepository.class)
+    sut = getRetrofit(mockEndPoint).build().create(RiffsyApiClient.class)
   }
 
   def "cleanup"() {
@@ -56,7 +56,7 @@ final class RiffsyRepositorySpec extends BaseSpec {
 
     then:
     RiffsyResponse response = sut
-            .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
+            .getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
             .blockingFirst()
 
     expect:
@@ -70,7 +70,7 @@ final class RiffsyRepositorySpec extends BaseSpec {
 
     then:
     RiffsyResponse response = sut
-            .getTrendingResults(RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
+            .getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
             .blockingFirst()
 
     expect:
@@ -84,7 +84,7 @@ final class RiffsyRepositorySpec extends BaseSpec {
 
     then:
     RiffsyResponse response = sut
-            .getSearchResults("hello", RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
+            .getSearchResults("hello", RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
             .blockingFirst()
 
     expect:
@@ -98,7 +98,7 @@ final class RiffsyRepositorySpec extends BaseSpec {
 
     then:
     RiffsyResponse response = sut
-            .getSearchResults("hello", RiffsyRepository.DEFAULT_LIMIT_COUNT, null)
+            .getSearchResults("hello", RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
             .blockingFirst()
 
     expect:

@@ -8,7 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import burrows.apps.example.gif.DummyActivity;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
-import burrows.apps.example.gif.data.rest.repository.RiffsyRepository;
+import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel;
 import org.junit.Before;
 import org.junit.Rule;
@@ -51,7 +51,7 @@ public final class GifItemDecorationTest extends AndroidTestBase {
     recyclerView.setLayoutManager(layoutManager);
 
     // Add fake data
-    for (int i = 0; i < RiffsyRepository.DEFAULT_LIMIT_COUNT; i++) {
+    for (int i = 0; i < RiffsyApiClient.DEFAULT_LIMIT_COUNT; i++) {
       adapter.add(new ImageInfoModel());
     }
 
