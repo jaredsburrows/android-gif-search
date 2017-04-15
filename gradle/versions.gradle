@@ -11,9 +11,9 @@ ext {
   debugKeystorePass = "android"
 
   // Common versions
-  supportLibraryVersion = "25.2.0"
+  supportLibraryVersion = "25.3.1"
   firebaseVersion = "10.2.0"
-  daggerVersion = "2.9"
+  daggerVersion = "2.10"
   okHttpVersion = "3.6.0"
   retrofitVersion = "2.2.0"
   espressoVersion = "2.2.2"
@@ -23,16 +23,15 @@ ext {
 
 // Plugins
 ext.plugs = [
-  gradle                    : "com.android.tools.build:gradle:2.3.0",
+  gradle                    : "com.android.tools.build:gradle:2.3.1",
   gradleAndroidCommandPlugin: "com.novoda:gradle-android-command-plugin:1.7.1",
-  playPublisher             : "com.github.triplet.gradle:play-publisher:1.1.5",
-  buildScanPlugin           : "com.gradle:build-scan-plugin:1.4",
-  dexcountGradlePlugin      : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.2",
+  playPublisher             : "com.github.triplet.gradle:play-publisher:1.2.0",
+  buildScanPlugin           : "com.gradle:build-scan-plugin:1.6",
+  dexcountGradlePlugin      : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.4",
   gradleAndroidApkSizePlugin: "com.vanniktech:gradle-android-apk-size-plugin:0.3.0",
   coverallsGradlePlugin     : "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1",
-  gradleErrorpronePlugin    : "net.ltgt.gradle:gradle-errorprone-plugin:0.0.8",
-  gradleVersionsPlugin      : "com.github.ben-manes:gradle-versions-plugin:0.14.0",
-  groovyAndroidGradlePlugin : "org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0"
+  gradleErrorpronePlugin    : "net.ltgt.gradle:gradle-errorprone-plugin:0.0.10",
+  gradleVersionsPlugin      : "com.github.ben-manes:gradle-versions-plugin:0.14.0"
 ]
 
 // Dependencies
@@ -50,7 +49,7 @@ ext.deps = [
   firebaseAds          : "com.google.firebase:firebase-ads:$firebaseVersion",
   // - Other
   rxAndroid            : "io.reactivex.rxjava2:rxandroid:2.0.1",
-  rxJava               : "io.reactivex.rxjava2:rxjava:2.0.7",
+  rxJava               : "io.reactivex.rxjava2:rxjava:2.0.8",
   rxRelay              : "com.jakewharton.rxrelay2:rxrelay:2.0.0",
   androidSdk           : "io.doorbell:android-sdk:0.2.6",
   logger               : "com.orhanobut:logger:1.15",
@@ -82,11 +81,6 @@ ext.deps = [
   junit                : "junit:junit:4.12",
   mockitoCore          : "org.mockito:mockito-core:2.7.11",
   assertjCore          : "org.assertj:assertj-core:1.7.1",
-  equalsverifier       : "nl.jqno.equalsverifier:equalsverifier:2.2.1",
-  mockwebserver        : "com.squareup.okhttp3:mockwebserver:$okHttpVersion",
-
-  groovy                 : "org.codehaus.groovy:groovy:2.4.9:grooid",
-  spockCore              : "org.spockframework:spock-core:1.0-groovy-2.4",
-  cglibNodep             : "cglib:cglib-nodep:3.2.5",
-  objenesis              : "org.objenesis:objenesis:2.5.1"
+  equalsverifier       : "nl.jqno.equalsverifier:equalsverifier:2.2.2",
+  mockwebserver        : "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 ]

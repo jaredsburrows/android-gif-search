@@ -17,7 +17,6 @@ buildscript {
     classpath plugs.coverallsGradlePlugin
     classpath plugs.gradleErrorpronePlugin
     classpath plugs.gradleVersionsPlugin
-    classpath plugs.groovyAndroidGradlePlugin
   }
 }
 
@@ -33,7 +32,6 @@ apply plugin: "com.getkeepsafe.dexcount"
 apply plugin: "com.vanniktech.android.apk.size"
 apply plugin: "net.ltgt.errorprone"
 apply plugin: "com.github.ben-manes.versions"
-apply plugin: "groovyx.android"
 
 android {
   compileSdkVersion rootProject.ext.compileSdkVersion
@@ -49,10 +47,6 @@ android {
     testInstrumentationRunner "test.CustomTestRunner"
     resConfigs "en" // Keep only english resource files for now
     vectorDrawables.useSupportLibrary = true
-  }
-
-  sourceSets {
-    test.java.srcDirs += "src/test/groovy"
   }
 
   dataBinding {
@@ -176,11 +170,10 @@ dependencies {
 
   androidTestAnnotationProcessor deps.daggerCompiler
 
+  testCompile deps.junit
+  testCompile deps.assertjCore
+  testCompile deps.mockitoCore
   testCompile deps.leakcanaryAndroidNoOp
   testCompile deps.mockwebserver
   testCompile deps.equalsverifier
-  testCompile deps.groovy
-  testCompile deps.spockCore, { exclude module: "groovy-all" }
-  testCompile deps.cglibNodep
-  testCompile deps.objenesis
 }
