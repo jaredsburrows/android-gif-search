@@ -16,6 +16,9 @@ install:
   - echo y | android update sdk -u -a -t extra-google-m2repository
   - echo y | android update sdk -u -a -t extra-android-m2repository
 
+before_script:
+  - if [ "$TRAVIS_OS_NAME" = linux ]; then .buildscript/setup-emulator.sh; fi
+
 script:
   - ./gradlew clean testDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --scan --stacktrace --parallel
 
