@@ -1,8 +1,7 @@
 # Android RecyclerView Gif Example
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![TravisCI OSX/Linux Build](https://img.shields.io/travis/jaredsburrows/android-gif-example/master.svg?label=OSX/Linux%20Build)](https://travis-ci.org/jaredsburrows/android-gif-example)
-[![AppVeyor Windows Build](https://img.shields.io/appveyor/ci/jaredsburrows/android-gif-example/master.svg?label=Windows%20Build)](https://ci.appveyor.com/project/jaredsburrows/android-gif-example/branch/master)
+[![TravisCI  Build](https://img.shields.io/travis/jaredsburrows/android-gif-example/master.svg)](https://travis-ci.org/jaredsburrows/android-gif-example)
 [![Coveralls Code Coverage](https://img.shields.io/coveralls/jaredsburrows/android-gif-example/master.svg?label=Code%20Coverage)](https://coveralls.io/github/jaredsburrows/android-gif-example?branch=master)
 [![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
 

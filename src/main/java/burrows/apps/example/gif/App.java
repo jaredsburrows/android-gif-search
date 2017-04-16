@@ -1,10 +1,6 @@
 package burrows.apps.example.gif;
 
 import android.app.Application;
-import android.os.StrictMode;
-import android.os.StrictMode.ThreadPolicy;
-import android.os.StrictMode.VmPolicy;
-import android.support.v7.app.AppCompatDelegate;
 import burrows.apps.example.gif.presentation.di.component.ActivityComponent;
 import burrows.apps.example.gif.presentation.di.component.AppComponent;
 
