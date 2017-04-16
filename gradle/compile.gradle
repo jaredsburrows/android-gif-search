@@ -10,7 +10,7 @@ tasks.withType(JavaCompile) {
     compilerArgs << "-Xlint:-path"              // Turn off warning - annotation processing
     compilerArgs << "-Xlint:-processing"        // Turn off warning about not claiming annotations
     compilerArgs << "-Xdiags:verbose"           // Turn on verbose errors
-//    compilerArgs << "-Werror"                   // Turn warnings into errors
+    compilerArgs << "-Werror"                   // Turn warnings into errors
     compilerArgs << "-Xep:MissingOverride:OFF"  // Databinding causes this issue
     compilerArgs << "-Xep:ClassNewInstance:OFF" // Databinding causes this issue - http://b.android.com/234648
     encoding = "utf-8"
