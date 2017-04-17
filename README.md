@@ -10,20 +10,6 @@ Riffsy RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, RxJava 2 and Da
 
 <a href="http://i.imgur.com/zErC6JV.png" target="_blank"><img src="http://i.imgur.com/zErC6JV.png" width="250px" /></a>
 
-## Module(s)
- 
- - **android-gif-example** - Root module
-   - **src**
-     - **androidTest** - UI Tests
-     - **main** - Source Code
-     - **test** - Unit Tests
-
-## Building and Running
-
-
-This project builds with [Gradle](www.gradle.org) and the Android Build [tools](http://tools.android.com/tech-docs/new-build-system).
-
-
 **Build the APK:**
 
     $ gradlew assembleDebug
@@ -38,40 +24,32 @@ This project builds with [Gradle](www.gradle.org) and the Android Build [tools](
 
 ## Testing
 
-
-**Running the Unit Tests:**
-
-
-The [Junit](http://junit.org/junit4/) tests run on the JVM, no need for emulators or real devices.
-
+**Run [Junit](http://junit.org/junit4/) Unit Tests:**
 
     $ gradlew testDebug
     
-**Running the Instrumentation Tests:**
-
-
-The [Espresso](https://developer.android.com/training/testing/ui-testing/espresso-testing.html) instrumentation tests run on the device.
-
+**Run [Espresso](https://developer.android.com/training/testing/ui-testing/espresso-testing.html) Instrumentation Tests:**
 
     $ gradlew connectedDebugAndroidTest
-    
 
 ## Reports
 
+**Generate [PMD](https://pmd.github.io/) Report:**
 
-**Generate Lint Reports:**
+    $ gradlew pmdDebug
 
-
-The [Lint](http://developer.android.com/tools/help/lint.html) plugin generates reports based off the source code.
-
-
-    $ gradlew lintDebug
-
-
-**Generate Jacoco Test Coverage:**
-
-
-The [Jacoco](http://www.eclemma.org/jacoco/) plugin generates coverage reports based off the unit tests.
-
+**Generate [JacocoReport](http://www.eclemma.org/jacoco/) Test Coverage Report:**
 
     $ gradlew jacocoDebugReport
+
+**Generate [FindBugs](http://findbugs.sourceforge.net/) Report:**
+
+    $ gradlew findBugsDebug
+
+**Generate [Checkstyle](http://checkstyle.sourceforge.net/) Report:**
+
+    $ gradlew checkstyleDebug
+
+**Generate [Lint](http://developer.android.com/tools/help/lint.html) Report:**
+
+    $ gradlew lintDebug
