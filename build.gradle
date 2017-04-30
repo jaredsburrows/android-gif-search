@@ -135,9 +135,6 @@ dependencies {
   // Android/Google
   compile deps.design
   compile deps.cardviewv7
-  compile deps.supportv4
-  compile deps.recyclerviewv7
-  compile deps.supportAnnotations
   // Other
   compile deps.okhttp
   compile deps.loggingInterceptor
@@ -146,7 +143,6 @@ dependencies {
   compile deps.retrofit
   compile deps.rxAndroid
   compile deps.rxJava
-  compile deps.androidGifDrawable
   compile deps.glide
   compile deps.okhttp3Integration
   compile deps.dagger
