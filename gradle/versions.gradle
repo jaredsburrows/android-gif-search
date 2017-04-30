@@ -5,8 +5,8 @@ ext {
   targetSdkVersion = 25
   compileSdkVersion = 25
   buildToolsVersion = "25.0.2"
-  sourceCompatibilityVersion = JavaVersion.VERSION_1_7
-  targetCompatibilityVersion = JavaVersion.VERSION_1_7
+  sourceCompatibilityVersion = JavaVersion.VERSION_1_8
+  targetCompatibilityVersion = JavaVersion.VERSION_1_8
   debugKeystoreUser = "androiddebugkey"
   debugKeystorePass = "android"
 
@@ -23,7 +23,7 @@ ext {
 
 // Plugins
 ext.plugs = [
-  gradle                    : "com.android.tools.build:gradle:2.3.1",
+  gradle                    : "com.android.tools.build:gradle:2.4.0-alpha6",
   gradleAndroidCommandPlugin: "com.novoda:gradle-android-command-plugin:1.7.1",
   playPublisher             : "com.github.triplet.gradle:play-publisher:1.2.0",
   buildScanPlugin           : "com.gradle:build-scan-plugin:1.6",

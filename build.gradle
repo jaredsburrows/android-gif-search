@@ -77,6 +77,7 @@ android {
     disable "ResourceType"                 // Annotation binding
     disable "GradleDependency"
     disable "NewerVersionAvailable"
+    disable "PrivateApi"                   // Databinding issue
   }
 
   // Debug - testing and letting others use
