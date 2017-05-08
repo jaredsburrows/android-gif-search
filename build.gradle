@@ -1,4 +1,5 @@
 buildscript {
+  System.properties["com.android.build.gradle.overrideVersionCheck"] = "true"
   apply from: rootProject.file("gradle/versions.gradle")
 
   rootProject.ext.ci = rootProject.hasProperty("ci")
@@ -28,8 +29,8 @@ apply from: rootProject.file("gradle/quality.gradle")
 apply from: rootProject.file("gradle/publish.gradle")
 apply from: rootProject.file("gradle/wrapper.gradle")
 apply plugin: "com.github.triplet.play"
-apply plugin: "com.getkeepsafe.dexcount"
-apply plugin: "com.vanniktech.android.apk.size"
+//apply plugin: "com.getkeepsafe.dexcount"
+//apply plugin: "com.vanniktech.android.apk.size"
 apply plugin: "net.ltgt.errorprone"
 apply plugin: "com.github.ben-manes.versions"
 
@@ -77,6 +78,7 @@ android {
     disable "ResourceType"                 // Annotation binding
     disable "GradleDependency"
     disable "NewerVersionAvailable"
+    abortOnError false
   }
 
   // Debug - testing and letting others use
@@ -133,42 +135,42 @@ configurations.all {
 
 dependencies {
   // Android/Google
-  compile deps.design
-  compile deps.cardviewv7
+  implementation deps.design
+  implementation deps.cardviewv7
   // Other
-  compile deps.okhttp
-  compile deps.loggingInterceptor
-  compile deps.adapterRxjava2
-  compile deps.converterGson
-  compile deps.retrofit
-  compile deps.rxAndroid
-  compile deps.rxJava
-  compile deps.glide
-  compile deps.okhttp3Integration
-  compile deps.dagger
+  implementation deps.okhttp
+  implementation deps.loggingInterceptor
+  implementation deps.adapterRxjava2
+  implementation deps.converterGson
+  implementation deps.retrofit
+  implementation deps.rxAndroid
+  implementation deps.rxJava
+  implementation deps.glide
+  implementation deps.okhttp3Integration
+  implementation deps.dagger
 
   annotationProcessor deps.daggerCompiler
 
-  debugCompile deps.leakcanaryAndroid
-  releaseCompile deps.leakcanaryAndroidNoOp
+  debugImplementation deps.leakcanaryAndroid
+  releaseImplementation deps.leakcanaryAndroidNoOp
 
-  androidTestCompile deps.junit
-  androidTestCompile deps.assertjCore
-  androidTestCompile deps.dexmaker
-  androidTestCompile deps.dexmakerMockito
-  androidTestCompile deps.runner
-  androidTestCompile deps.espressoCore
-  androidTestCompile deps.espressoIntents
-  androidTestCompile(deps.espressoContrib) { exclude group: "com.android.support" }
-  androidTestCompile deps.mockwebserver
-  androidTestCompile deps.dagger
+  androidTestImplementation deps.junit
+  androidTestImplementation deps.assertjCore
+  androidTestImplementation deps.dexmaker
+  androidTestImplementation deps.dexmakerMockito
+  androidTestImplementation deps.runner
+  androidTestImplementation deps.espressoCore
+  androidTestImplementation deps.espressoIntents
+  androidTestImplementation(deps.espressoContrib) { exclude group: "com.android.support" }
+  androidTestImplementation deps.mockwebserver
+  androidTestImplementation deps.dagger
 
   androidTestAnnotationProcessor deps.daggerCompiler
 
-  testCompile deps.junit
-  testCompile deps.assertjCore
-  testCompile deps.mockitoCore
-  testCompile deps.leakcanaryAndroidNoOp
-  testCompile deps.mockwebserver
-  testCompile deps.equalsverifier
+  testImplementation deps.junit
+  testImplementation deps.assertjCore
+  testImplementation deps.mockitoCore
+  testImplementation deps.leakcanaryAndroidNoOp
+  testImplementation deps.mockwebserver
+  testImplementation deps.equalsverifier
 }
