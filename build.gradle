@@ -3,13 +3,13 @@ buildscript {
 
   rootProject.ext.ci = rootProject.hasProperty("ci")
 
-  configure([buildscript.repositories, project.repositories]) {
+  repositories {
     maven { url "https://plugins.gradle.org/m2/" }
-    maven { url "https://maven.google.com" }
   }
 
   dependencies {
     classpath plugs.gradle
+    classpath plugs.kotlinGradlePlugin
     classpath plugs.gradleAndroidCommandPlugin
     classpath plugs.playPublisher
     classpath plugs.buildScanPlugin
@@ -22,8 +22,14 @@ buildscript {
   }
 }
 
+repositories {
+  jcenter()
+}
+
 apply from: rootProject.file("gradle/scan.gradle")
 apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-kapt"
 apply plugin: "android-command"
 apply from: rootProject.file("gradle/compile.gradle")
 apply from: rootProject.file("gradle/quality.gradle")
@@ -93,14 +99,15 @@ android {
   buildTypes {
     debug {
       debuggable true
-      testCoverageEnabled true // generated coverage for android tests
+      if (rootProject.ext.ci) testCoverageEnabled true // generated coverage for android tests
       applicationIdSuffix ".debug"
     }
 
     release {
-      minifyEnabled false
+      minifyEnabled true
+      shrinkResources true
       proguardFile getDefaultProguardFile("proguard-android-optimize.txt")
-      proguardFile "proguard-rules.txt"
+      proguardFile rootProject.file("config/proguard/proguard-rules.txt")
       signingConfig signingConfigs.debug
     }
   }
@@ -137,6 +144,7 @@ dependencies {
   compile deps.design
   compile deps.cardviewv7
   // Other
+  compile deps.kotlinStdlib
   compile deps.okhttp
   compile deps.loggingInterceptor
   compile deps.adapterRxjava2
@@ -148,7 +156,8 @@ dependencies {
   compile deps.okhttp3Integration
   compile deps.dagger
 
-  annotationProcessor deps.daggerCompiler
+  kapt deps.daggerCompiler
+  kapt deps.compiler
 
   debugCompile deps.leakcanaryAndroid
   releaseCompile deps.leakcanaryAndroidNoOp
@@ -164,7 +173,7 @@ dependencies {
   androidTestCompile deps.mockwebserver
   androidTestCompile deps.dagger
 
-  androidTestAnnotationProcessor deps.daggerCompiler
+  kaptAndroidTest deps.daggerCompiler
 
   testCompile deps.junit
   testCompile deps.assertjCore

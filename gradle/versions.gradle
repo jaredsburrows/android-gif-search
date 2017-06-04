@@ -11,6 +11,8 @@ ext {
   debugKeystorePass = "android"
 
   // Common versions
+  androidGradleVersion = "2.3.2"
+  kotlinVersion = "1.1.2-3" // Breaks with 1.1.2-4
   supportLibraryVersion = "25.3.1"
   firebaseVersion = "10.2.4"
   daggerVersion = "2.11"
@@ -23,7 +25,8 @@ ext {
 
 // Plugins
 ext.plugs = [
-  "gradle"                    : "com.android.tools.build:gradle:2.3.2",
+  "gradle"                    : "com.android.tools.build:gradle:$androidGradleVersion",
+  "kotlinGradlePlugin"        : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
   "gradleAndroidCommandPlugin": "com.novoda:gradle-android-command-plugin:1.7.1",
   "playPublisher"             : "com.github.triplet.gradle:play-publisher:1.2.0",
   "buildScanPlugin"           : "com.gradle:build-scan-plugin:1.7.2",
@@ -39,6 +42,7 @@ ext.plugs = [
 ext.deps = [
   // compile
   // - Android/Google
+  "compiler"             : "com.android.databinding:compiler:$androidGradleVersion",
   "design"               : "com.android.support:design:$supportLibraryVersion",
   "appcompatv7"          : "com.android.support:appcompat-v7:$supportLibraryVersion",
   "supportv4"            : "com.android.support:support-v4:$supportLibraryVersion",
@@ -49,6 +53,7 @@ ext.deps = [
   "firebaseCrash"        : "com.google.firebase:firebase-crash:$firebaseVersion",
   "firebaseAds"          : "com.google.firebase:firebase-ads:$firebaseVersion",
   // - Other
+  "kotlinStdlib"         : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
   "rxAndroid"            : "io.reactivex.rxjava2:rxandroid:2.0.1",
   "rxJava"               : "io.reactivex.rxjava2:rxjava:2.1.0",
   "rxRelay"              : "com.jakewharton.rxrelay2:rxrelay:2.0.0",

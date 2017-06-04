@@ -21,6 +21,7 @@ before_script:
 
 script:
   - ./gradlew clean testDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --scan --stacktrace --parallel
+  - ./gradlew assembleRelease -Pci --scan --stacktrace --parallel
 
 branches:
   except:
