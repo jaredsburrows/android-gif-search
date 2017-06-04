@@ -3,7 +3,7 @@ package burrows.apps.example.gif.data.rest.model
 import com.google.gson.annotations.SerializedName
 
 /**
- * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
+ * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class Gif {
     @SerializedName("url") private var url: String? = null
