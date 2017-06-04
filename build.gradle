@@ -18,6 +18,7 @@ buildscript {
     classpath plugs.coverallsGradlePlugin
     classpath plugs.gradleErrorpronePlugin
     classpath plugs.gradleVersionsPlugin
+    classpath plugs.gradleLicensePlugin
   }
 }
 
@@ -33,6 +34,7 @@ apply plugin: "com.getkeepsafe.dexcount"
 apply plugin: "com.vanniktech.android.apk.size"
 apply plugin: "net.ltgt.errorprone"
 apply plugin: "com.github.ben-manes.versions"
+apply plugin: "com.jaredsburrows.license"
 
 android {
   compileSdkVersion rootProject.ext.compileSdkVersion
@@ -69,8 +71,6 @@ android {
     textOutput "stdout"
     checkAllWarnings true
     warningsAsErrors true
-    showAll true
-    explainIssues true
     disable "UnusedResources"              // Unused will be removed on release
     disable "IconExpectedSize"             // Using the material icons provided from Google
     disable "GoogleAppIndexingApiWarning"  // We might want to index our app later

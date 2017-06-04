@@ -23,63 +23,64 @@ ext {
 
 // Plugins
 ext.plugs = [
-  gradle                    : "com.android.tools.build:gradle:2.3.2",
-  gradleAndroidCommandPlugin: "com.novoda:gradle-android-command-plugin:1.7.1",
-  playPublisher             : "com.github.triplet.gradle:play-publisher:1.2.0",
-  buildScanPlugin           : "com.gradle:build-scan-plugin:1.7.2",
-  dexcountGradlePlugin      : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.4",
-  gradleAndroidApkSizePlugin: "com.vanniktech:gradle-android-apk-size-plugin:0.3.0",
-  coverallsGradlePlugin     : "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1",
-  gradleErrorpronePlugin    : "net.ltgt.gradle:gradle-errorprone-plugin:0.0.10",
-  gradleVersionsPlugin      : "com.github.ben-manes:gradle-versions-plugin:0.14.0"
+  "gradle"                    : "com.android.tools.build:gradle:2.3.2",
+  "gradleAndroidCommandPlugin": "com.novoda:gradle-android-command-plugin:1.7.1",
+  "playPublisher"             : "com.github.triplet.gradle:play-publisher:1.2.0",
+  "buildScanPlugin"           : "com.gradle:build-scan-plugin:1.7.2",
+  "dexcountGradlePlugin"      : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.4",
+  "gradleAndroidApkSizePlugin": "com.vanniktech:gradle-android-apk-size-plugin:0.3.0",
+  "coverallsGradlePlugin"     : "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1",
+  "gradleErrorpronePlugin"    : "net.ltgt.gradle:gradle-errorprone-plugin:0.0.10",
+  "gradleVersionsPlugin"      : "com.github.ben-manes:gradle-versions-plugin:0.14.0",
+  "gradleLicensePlugin"       : "com.jaredsburrows:gradle-license-plugin:0.6.0"
 ]
 
 // Dependencies
 ext.deps = [
   // compile
   // - Android/Google
-  design               : "com.android.support:design:$supportLibraryVersion",
-  appcompatv7          : "com.android.support:appcompat-v7:$supportLibraryVersion",
-  supportv4            : "com.android.support:support-v4:$supportLibraryVersion",
-  recyclerviewv7       : "com.android.support:recyclerview-v7:$supportLibraryVersion",
-  cardviewv7           : "com.android.support:cardview-v7:$supportLibraryVersion",
-  supportAnnotations   : "com.android.support:support-annotations:$supportLibraryVersion",
-  firebaseCore         : "com.google.firebase:firebase-core:$firebaseVersion",
-  firebaseCrash        : "com.google.firebase:firebase-crash:$firebaseVersion",
-  firebaseAds          : "com.google.firebase:firebase-ads:$firebaseVersion",
+  "design"               : "com.android.support:design:$supportLibraryVersion",
+  "appcompatv7"          : "com.android.support:appcompat-v7:$supportLibraryVersion",
+  "supportv4"            : "com.android.support:support-v4:$supportLibraryVersion",
+  "recyclerviewv7"       : "com.android.support:recyclerview-v7:$supportLibraryVersion",
+  "cardviewv7"           : "com.android.support:cardview-v7:$supportLibraryVersion",
+  "supportAnnotations"   : "com.android.support:support-annotations:$supportLibraryVersion",
+  "firebaseCore"         : "com.google.firebase:firebase-core:$firebaseVersion",
+  "firebaseCrash"        : "com.google.firebase:firebase-crash:$firebaseVersion",
+  "firebaseAds"          : "com.google.firebase:firebase-ads:$firebaseVersion",
   // - Other
-  rxAndroid            : "io.reactivex.rxjava2:rxandroid:2.0.1",
-  rxJava               : "io.reactivex.rxjava2:rxjava:2.1.0",
-  rxRelay              : "com.jakewharton.rxrelay2:rxrelay:2.0.0",
-  androidSdk           : "io.doorbell:android-sdk:0.2.6",
-  logger               : "com.orhanobut:logger:1.15",
-  dagger               : "com.google.dagger:dagger:$daggerVersion",
-  okhttp               : "com.squareup.okhttp3:okhttp:$okHttpVersion",
-  loggingInterceptor   : "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
-  retrofit             : "com.squareup.retrofit2:retrofit:$retrofitVersion",
-  converterGson        : "com.squareup.retrofit2:converter-gson:$retrofitVersion",
-  adapterRxjava2       : "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
-  glide                : "com.github.bumptech.glide:glide:3.8.0",
-  okhttp3Integration   : "com.github.bumptech.glide:okhttp3-integration:1.4.0@aar",
+  "rxAndroid"            : "io.reactivex.rxjava2:rxandroid:2.0.1",
+  "rxJava"               : "io.reactivex.rxjava2:rxjava:2.1.0",
+  "rxRelay"              : "com.jakewharton.rxrelay2:rxrelay:2.0.0",
+  "androidSdk"           : "io.doorbell:android-sdk:0.2.6",
+  "logger"               : "com.orhanobut:logger:1.15",
+  "dagger"               : "com.google.dagger:dagger:$daggerVersion",
+  "okhttp"               : "com.squareup.okhttp3:okhttp:$okHttpVersion",
+  "loggingInterceptor"   : "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
+  "retrofit"             : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+  "converterGson"        : "com.squareup.retrofit2:converter-gson:$retrofitVersion",
+  "adapterRxjava2"       : "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
+  "glide"                : "com.github.bumptech.glide:glide:3.8.0",
+  "okhttp3Integration"   : "com.github.bumptech.glide:okhttp3-integration:1.4.0@aar",
 
   // annotationProcessor
-  daggerCompiler       : "com.google.dagger:dagger-compiler:$daggerVersion",
+  "daggerCompiler"       : "com.google.dagger:dagger-compiler:$daggerVersion",
 
   // androidTestCompile
-  dexmaker             : "com.google.dexmaker:dexmaker:$dexmakerVersion",
-  dexmakerMockito      : "com.google.dexmaker:dexmaker-mockito:$dexmakerVersion",
-  espressoCore         : "com.android.support.test.espresso:espresso-core:$espressoVersion",
-  espressoIntents      : "com.android.support.test.espresso:espresso-intents:$espressoVersion",
-  espressoContrib      : "com.android.support.test.espresso:espresso-contrib:$espressoVersion",
-  testingSupportLib    : "com.android.support.test:testing-support-lib:0.1",
-  runner               : "com.android.support.test:runner:0.5",
+  "dexmaker"             : "com.google.dexmaker:dexmaker:$dexmakerVersion",
+  "dexmakerMockito"      : "com.google.dexmaker:dexmaker-mockito:$dexmakerVersion",
+  "espressoCore"         : "com.android.support.test.espresso:espresso-core:$espressoVersion",
+  "espressoIntents"      : "com.android.support.test.espresso:espresso-intents:$espressoVersion",
+  "espressoContrib"      : "com.android.support.test.espresso:espresso-contrib:$espressoVersion",
+  "testingSupportLib"    : "com.android.support.test:testing-support-lib:0.1",
+  "runner"               : "com.android.support.test:runner:0.5",
 
   // testCompile
-  leakcanaryAndroid    : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
-  leakcanaryAndroidNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion",
-  junit                : "junit:junit:4.12",
-  mockitoCore          : "org.mockito:mockito-core:2.8.9",
-  assertjCore          : "org.assertj:assertj-core:1.7.1",
-  equalsverifier       : "nl.jqno.equalsverifier:equalsverifier:2.2.2",
-  mockwebserver        : "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
+  "leakcanaryAndroid"    : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
+  "leakcanaryAndroidNoOp": "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion",
+  "junit"                : "junit:junit:4.12",
+  "mockitoCore"          : "org.mockito:mockito-core:2.8.9",
+  "assertjCore"          : "org.assertj:assertj-core:1.7.1",
+  "equalsverifier"       : "nl.jqno.equalsverifier:equalsverifier:2.2.2",
+  "mockwebserver"        : "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 ]
