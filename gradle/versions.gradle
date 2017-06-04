@@ -13,7 +13,7 @@ ext {
   // Common versions
   supportLibraryVersion = "25.3.1"
   firebaseVersion = "10.2.4"
-  daggerVersion = "2.10"
+  daggerVersion = "2.11"
   okHttpVersion = "3.8.0"
   retrofitVersion = "2.3.0"
   espressoVersion = "2.2.2"
@@ -31,7 +31,7 @@ ext.plugs = [
   "gradleAndroidApkSizePlugin": "com.vanniktech:gradle-android-apk-size-plugin:0.3.0",
   "coverallsGradlePlugin"     : "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1",
   "gradleErrorpronePlugin"    : "net.ltgt.gradle:gradle-errorprone-plugin:0.0.10",
-  "gradleVersionsPlugin"      : "com.github.ben-manes:gradle-versions-plugin:0.14.0",
+  "gradleVersionsPlugin"      : "com.github.ben-manes:gradle-versions-plugin:0.15.0",
   "gradleLicensePlugin"       : "com.jaredsburrows:gradle-license-plugin:0.6.0"
 ]
 
@@ -81,6 +81,6 @@ ext.deps = [
   "junit"                : "junit:junit:4.12",
   "mockitoCore"          : "org.mockito:mockito-core:2.8.9",
   "assertjCore"          : "org.assertj:assertj-core:1.7.1",
-  "equalsverifier"       : "nl.jqno.equalsverifier:equalsverifier:2.2.2",
+  "equalsverifier"       : "nl.jqno.equalsverifier:equalsverifier:2.3",
   "mockwebserver"        : "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 ]
