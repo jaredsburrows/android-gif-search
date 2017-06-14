@@ -1,4 +1,4 @@
 task wrapper(type: Wrapper) {
-  gradleVersion = "4.0-rc-2"
+  gradleVersion = "4.0"
   distributionType = Wrapper.DistributionType.ALL
 }
