@@ -72,7 +72,7 @@ public final class RiffsyApiClientTest extends TestBase {
       .blockingFirst();
 
     // Assert
-    assertThat(response.results().get(0).media().get(0).gif().url())
+    assertThat(response.results().get(0).media().get(0).gif().getUrl())
       .isEqualTo("https://media.riffsy.com/images/7d95a1f8a8750460a82b04451be26d69/raw");
   }
 
@@ -86,7 +86,7 @@ public final class RiffsyApiClientTest extends TestBase {
       .blockingFirst();
 
     // Assert
-    assertThat(response.results().get(0).media().get(0).gif().preview())
+    assertThat(response.results().get(0).media().get(0).gif().getPreview())
       .isEqualTo("https://media.riffsy.com/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw");
   }
 
@@ -100,7 +100,7 @@ public final class RiffsyApiClientTest extends TestBase {
       .blockingFirst();
 
     // Assert
-    assertThat(response.results().get(0).media().get(0).gif().url())
+    assertThat(response.results().get(0).media().get(0).gif().getUrl())
       .isEqualTo("https://media.riffsy.com/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw");
   }
 
@@ -114,7 +114,7 @@ public final class RiffsyApiClientTest extends TestBase {
       .blockingFirst();
 
     // Assert
-    assertThat(response.results().get(0).media().get(0).gif().preview())
+    assertThat(response.results().get(0).media().get(0).gif().getPreview())
       .isEqualTo("https://media.riffsy.com/images/6f2ed339fbdb5c1270e29945ee1f0d77/raw");
   }
 }

@@ -11,8 +11,8 @@ import java.util.List;
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
  */
 public final class RiffsyResponse {
-  @SerializedName("results") private final List<Result> results;
-  @SerializedName("page") private final Float page;
+  @SerializedName("results") private List<Result> results;
+  @SerializedName("page") private Float page;
 
   /**
    * No args constructor for use in serialization

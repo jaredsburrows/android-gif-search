@@ -90,7 +90,7 @@ public final class MainFragment extends Fragment
     next = response.page();
     // Iterate over data from response and grab the urls
     for (Result result : response.results()) {
-      final String url = result.media().get(0).gif().url();
+      final String url = result.media().get(0).gif().getUrl();
 
       adapter.add(new ImageInfoModel.Builder().url(url).build());
 
