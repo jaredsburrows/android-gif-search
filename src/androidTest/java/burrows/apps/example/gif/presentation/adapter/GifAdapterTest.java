@@ -9,6 +9,8 @@ import burrows.apps.example.gif.DummyActivity;
 import burrows.apps.example.gif.data.rest.repository.ImageRepository;
 import burrows.apps.example.gif.presentation.adapter.GifAdapter.OnItemClickListener;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel;
+import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,9 +18,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import test.AndroidTestBase;
 import test.CustomTestRule;
-
-import java.util.Collections;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
@@ -32,12 +31,13 @@ import static org.mockito.MockitoAnnotations.initMocks;
  */
 @SmallTest @RunWith(AndroidJUnit4.class)
 public final class GifAdapterTest extends AndroidTestBase {
-  @Rule public final CustomTestRule<DummyActivity> activityTestRule = new CustomTestRule<>(DummyActivity.class, true, true);
+  @Rule public final CustomTestRule<DummyActivity> activityTestRule =
+    new CustomTestRule<>(DummyActivity.class, true, true);
   @Rule public final UiThreadTestRule uiThreadTestRule = new UiThreadTestRule();
   @Mock private OnItemClickListener onItemClickListener;
-  private final ImageInfoModel imageInfoModel = new ImageInfoModel.Builder().url(STRING_UNIQUE).build();
-  private final ImageInfoModel imageInfoModel2 = new ImageInfoModel.Builder().url(STRING_UNIQUE2).build();
-  private final ImageInfoModel imageInfoModel3 = new ImageInfoModel.Builder().url(STRING_UNIQUE3).build();
+  private final ImageInfoModel imageInfoModel = new ImageInfoModel(STRING_UNIQUE, null);
+  private final ImageInfoModel imageInfoModel2 = new ImageInfoModel(STRING_UNIQUE2, null);
+  private final ImageInfoModel imageInfoModel3 = new ImageInfoModel(STRING_UNIQUE3, null);
   private GifAdapter.ViewHolder viewHolder;
   private ImageRepository spyImageDownloader;
   private GifAdapter sut;
@@ -56,7 +56,8 @@ public final class GifAdapterTest extends AndroidTestBase {
     // Must be created on UI thread
     uiThreadTestRule.runOnUiThread(new Runnable() {
       @Override public void run() {
-        viewHolder = sut.onCreateViewHolder(new LinearLayout(activityTestRule.getTargetContext()), 0);
+        viewHolder =
+          sut.onCreateViewHolder(new LinearLayout(activityTestRule.getTargetContext()), 0);
       }
     });
   }
@@ -171,7 +172,7 @@ public final class GifAdapterTest extends AndroidTestBase {
   }
 
   @Test public void testAddLocationObjectShouldReturnCorrectValues() {
-    sut.add(0, new ImageInfoModel.Builder().url(STRING_UNIQUE3).build());
+    sut.add(0, new ImageInfoModel(STRING_UNIQUE3, null));
 
     // Assert
     assertThat(sut.getItem(0)).isEqualTo(imageInfoModel3);

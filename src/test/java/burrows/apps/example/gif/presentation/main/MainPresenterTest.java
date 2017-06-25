@@ -3,7 +3,7 @@ package burrows.apps.example.gif.presentation.main;
 import burrows.apps.example.gif.data.rest.model.RiffsyResponse;
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient;
 import burrows.apps.example.gif.presentation.IBaseSchedulerProvider;
-import burrows.apps.example.gif.presentation.ImmediateSchedulerProvider;
+import test.ImmediateSchedulerProvider;
 import io.reactivex.Observable;
 import org.junit.Before;
 import org.junit.Test;

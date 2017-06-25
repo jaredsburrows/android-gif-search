@@ -47,8 +47,8 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
     final ListItemBinding binding = holder.binding;
 
     // Load images
-    repository.load(imageInfo.url())
-      .thumbnail(repository.load(imageInfo.previewUrl()))
+    repository.load(imageInfo.getUrl())
+      .thumbnail(repository.load(imageInfo.getPreviewUrl()))
       .listener(new RequestListener<Object, GifDrawable>() {
         @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target,
           boolean isFirstResource) {
@@ -105,7 +105,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
    * @return the hashCode of the URL of image.
    */
   @Override public long getItemId(int position) {
-    return getItem(position).url().hashCode();
+    return getItem(position).getUrl().hashCode();
   }
 
   /**

@@ -92,7 +92,7 @@ public final class MainFragment extends Fragment
     for (Result result : response.results()) {
       final String url = result.media().get(0).gif().getUrl();
 
-      adapter.add(new ImageInfoModel.Builder().url(url).build());
+      adapter.add(new ImageInfoModel(url, null));
 
       if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url);
     }
@@ -275,12 +275,12 @@ public final class MainFragment extends Fragment
     dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
 
     // Load associated text
-    dialogText.setText(imageInfo.url());
+    dialogText.setText(imageInfo.getUrl());
     dialogText.setVisibility(View.VISIBLE);
 
     // Load image
-    repository.load(imageInfo.url())
-      .thumbnail(repository.load(imageInfo.previewUrl()))
+    repository.load(imageInfo.getUrl())
+      .thumbnail(repository.load(imageInfo.getPreviewUrl()))
       .listener(new RequestListener<Object, GifDrawable>() {
         @Override public boolean onException(Exception e, Object model, Target<GifDrawable> target,
           boolean isFirstResource) {

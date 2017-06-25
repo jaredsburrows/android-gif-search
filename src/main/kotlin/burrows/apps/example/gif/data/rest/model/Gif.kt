@@ -8,6 +8,6 @@ import com.google.gson.annotations.SerializedName
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class Gif {
-    @SerializedName("url") var url: String? = null
-    @SerializedName("preview") var preview: String? = null
+  @SerializedName("url") var url: String? = null
+  @SerializedName("preview") var preview: String? = null
 }
