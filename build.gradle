@@ -52,7 +52,7 @@ android {
     applicationId "burrows.apps.example.gif"
     versionCode 1
     versionName "1.0"
-    minSdkVersion rootProject.ext.minSdkVersion
+    minSdkVersion rootProject.ext.ci ? rootProject.ext.minSdkVersion : 21
     targetSdkVersion rootProject.ext.targetSdkVersion
     testApplicationId "burrows.apps.example.gif.test"
     testInstrumentationRunner "test.CustomTestRunner"
@@ -68,6 +68,10 @@ android {
   compileOptions {
     sourceCompatibility rootProject.ext.sourceCompatibilityVersion
     targetCompatibility rootProject.ext.sourceCompatibilityVersion
+  }
+
+  aaptOptions {
+    cruncherEnabled rootProject.ext.ci
   }
 
   dexOptions {
@@ -136,6 +140,8 @@ android {
   }
 
   packagingOptions {
+    exclude "/META-INF/*.kotlin_module"
+    exclude "**/kotlin/**"
     exclude "**/*.txt"
     exclude "**/*.xml"
     exclude "**/*.properties"
