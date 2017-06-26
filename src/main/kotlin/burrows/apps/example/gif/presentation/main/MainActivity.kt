@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 /**
  * Main activity that will load our Fragments via the Support Fragment Manager.
-
+ *
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class MainActivity : AppCompatActivity() {
