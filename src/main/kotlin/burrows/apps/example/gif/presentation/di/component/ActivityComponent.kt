@@ -26,8 +26,8 @@ interface ActivityComponent {
   fun inject(gifAdapter: GifAdapter)
 
   // Setup components dependencies and modules
-  companion object Initializer {
-    fun init(appComponent: AppComponent): ActivityComponent {
+  companion object {
+    fun init(appComponent: AppComponent?): ActivityComponent {
       return DaggerActivityComponent.builder()
         .appComponent(appComponent)
         .build()

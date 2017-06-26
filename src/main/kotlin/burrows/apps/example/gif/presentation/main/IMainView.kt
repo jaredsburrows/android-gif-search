@@ -7,9 +7,9 @@ import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-internal interface IMainView : IBaseView<IMainPresenter> {
+interface IMainView : IBaseView<IMainPresenter> {
   fun clearImages()
   fun addImages(response: RiffsyResponse?)
-  fun showDialog(url: ImageInfoModel?)
+  fun showDialog(url: ImageInfoModel)
   val isActive: Boolean
 }

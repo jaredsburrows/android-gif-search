@@ -37,8 +37,8 @@ class MainPresenterTest : TestBase() {
     val next = 0f
     val response = RiffsyResponse()
     `when`(view!!.isActive).thenReturn(false)
-    sut = MainPresenter(view, repository, provider)
-    `when`(repository!!.getTrendingResults(eq(RiffsyApiClient.DEFAULT_LIMIT_COUNT), eq(next)))
+    sut = MainPresenter(view, repository!!, provider)
+    `when`(repository.getTrendingResults(eq(RiffsyApiClient.DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
 
     // Act
@@ -53,8 +53,8 @@ class MainPresenterTest : TestBase() {
     // Arrange
     val next = 0f
     val response = RiffsyResponse()
-    sut = MainPresenter(view, repository, provider)
-    `when`(repository!!.getTrendingResults(eq(RiffsyApiClient.DEFAULT_LIMIT_COUNT), eq(next)))
+    sut = MainPresenter(view!!, repository!!, provider)
+    `when`(repository.getTrendingResults(eq(RiffsyApiClient.DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
 
     // Act
@@ -70,8 +70,8 @@ class MainPresenterTest : TestBase() {
     val searchString = "gifs"
     val next = 0f
     val response = RiffsyResponse()
-    sut = MainPresenter(view, repository, provider)
-    `when`(repository!!.getSearchResults(eq(searchString), eq(RiffsyApiClient.DEFAULT_LIMIT_COUNT), eq(next)))
+    sut = MainPresenter(view!!, repository!!, provider)
+    `when`(repository.getSearchResults(eq(searchString), eq(RiffsyApiClient.DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
 
     // Act

@@ -8,10 +8,10 @@ import burrows.apps.example.gif.presentation.di.component.ActivityComponent;
  */
 public class TestApp extends App {
   public void setAppComponent(AppComponent appComponent) {
-    this.appComponent = appComponent;
+    this.setAppComponent(appComponent);
   }
 
   public void setRiffsyComponent(ActivityComponent netComponent) {
-    this.activityComponent = netComponent;
+    this.setActivityComponent(netComponent);
   }
 }

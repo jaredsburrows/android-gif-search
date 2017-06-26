@@ -19,11 +19,10 @@ interface AppComponent {
 
   // Expose to subgraphs
   fun application(): Application
-
   fun context(): Context
 
   // Setup components dependencies and modules
-  companion object Initializer {
+  companion object {
     fun init(application: Application): AppComponent {
       return DaggerAppComponent.builder()
         .appModule(AppModule(application))

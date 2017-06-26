@@ -122,7 +122,7 @@ public final class MainFragment extends Fragment
     super.onCreate(savedInstanceState);
 
     // Injection dependencies
-    ((App) getActivity().getApplication()).activityComponent.inject(this);
+    ((App) getActivity().getApplication()).getActivityComponent().inject(this);
 
     setHasOptionsMenu(true);
 

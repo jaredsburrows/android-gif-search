@@ -68,7 +68,7 @@ class RiffsyApiClientTest : TestBase() {
 
     // Act
     val response = sut!!
-      .getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)!!
+      .getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst()
 
     // Assert
@@ -83,7 +83,7 @@ class RiffsyApiClientTest : TestBase() {
 
     // Act
     val response = sut!!
-      .getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)!!
+      .getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst()
 
     // Assert
@@ -98,7 +98,7 @@ class RiffsyApiClientTest : TestBase() {
 
     // Act
     val response = sut!!
-      .getSearchResults("hello", RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)!!
+      .getSearchResults("hello", RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst()
 
     // Assert
@@ -113,7 +113,7 @@ class RiffsyApiClientTest : TestBase() {
 
     // Act
     val response = sut!!
-      .getSearchResults("hello", RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)!!
+      .getSearchResults("hello", RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
       .blockingFirst()
 
     // Assert

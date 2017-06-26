@@ -74,14 +74,14 @@ public final class MainActivityTest extends AndroidTestBase {
           .appComponent(appComponent)
           .riffsyModule(new RiffsyModule() {
             // Set custom endpoint for rest service
-            @Override protected RiffsyApiClient provideRiffsyApi(Retrofit.Builder builder) {
+            @Override public RiffsyApiClient provideRiffsyApi(Retrofit.Builder builder) {
               return builder.baseUrl(mockEndPoint)
                 .build()
                 .create(RiffsyApiClient.class);
             }
           })
           .glideModule(new GlideModule() {
-            @Override protected ImageRepository provideImageDownloader(final Context context) {
+            @Override public ImageRepository provideImageDownloader(final Context context) {
               return new ImageRepository(context) {
                 // Prevent Glide network call with custom override
                 @Override public <T> GifRequestBuilder<T> load(T url) {
