@@ -7,15 +7,15 @@ import com.google.gson.annotations.SerializedName
  *
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class Gif {
-  @SerializedName("url") var url: String? = null
-  @SerializedName("preview") var preview: String? = null
+class Result {
+  @SerializedName("media") var media: List<Media>? = null
+  @SerializedName("title") var title: String? = null
 
-  fun url(): String? {
-    return url
+  fun media(): List<Media>? {
+    return media
   }
 
-  fun preview(): String? {
-    return preview
+  fun title(): String? {
+    return title
   }
 }

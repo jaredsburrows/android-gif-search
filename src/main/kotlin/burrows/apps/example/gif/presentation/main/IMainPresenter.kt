@@ -8,5 +8,5 @@ import burrows.apps.example.gif.presentation.IBasePresenter
 internal interface IMainPresenter : IBasePresenter {
   fun clearImages()
   fun loadTrendingImages(next: Float?)
-  fun loadSearchImages(searchString: String, next: Float?)
+  fun loadSearchImages(searchString: String?, next: Float?)
 }
