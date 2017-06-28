@@ -26,11 +26,11 @@ abstract class AndroidTestBase {
     val STRING_UNIQUE = randomUUID().toString()
     val STRING_UNIQUE2 = randomUUID().toString() + randomUUID().toString()
     val STRING_UNIQUE3 = randomUUID().toString()
-    val INTEGER_RANDOM: Int? = Random().nextInt()
-    val INTEGER_RANDOM_POSITIVE: Int? = Random().nextInt(Integer.SIZE - 1)
-    val LONG_RANDOM: Long? = Random().nextLong()
-    val FLOAT_RANDOM: Float? = Random().nextFloat()
-    val DOUBLE_RANDOM: Double? = Random().nextDouble()
+    val INTEGER_RANDOM: Int = Random().nextInt()
+    val INTEGER_RANDOM_POSITIVE: Int = Random().nextInt(Integer.SIZE - 1)
+    val LONG_RANDOM: Long = Random().nextLong()
+    val FLOAT_RANDOM: Float = Random().nextFloat()
+    val DOUBLE_RANDOM: Double = Random().nextDouble()
   }
 
   @Before @Throws(Throwable::class)

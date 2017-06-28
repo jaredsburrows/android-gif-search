@@ -11,7 +11,7 @@ import burrows.apps.example.gif.presentation.di.component.AppComponent
 @SuppressLint("Registered")
 open class App : Application() {
   open var appComponent: AppComponent? = null
-  var activityComponent: ActivityComponent? = null
+  open var activityComponent: ActivityComponent? = null
 
   override fun onCreate() {
     super.onCreate()

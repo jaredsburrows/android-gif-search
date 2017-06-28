@@ -15,8 +15,6 @@ import burrows.apps.example.gif.TestApp
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 open class CustomTestRule<T : Activity> : ActivityTestRule<T> {
-  inline fun <reified T : Activity> activityTestRule(initialTouchMode: Boolean = false, launchActivity: Boolean = true) =
-    ActivityTestRule(T::class.java, initialTouchMode, launchActivity)
   constructor(activityClass: Class<T>) : super(activityClass)
   constructor(activityClass: Class<T>, initialTouchMode: Boolean) : super(activityClass, initialTouchMode)
   constructor(activityClass: Class<T>, initialTouchMode: Boolean, launchActivity: Boolean) : super(activityClass, initialTouchMode, launchActivity)

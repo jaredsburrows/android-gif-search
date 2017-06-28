@@ -30,7 +30,7 @@ import test.CustomTestRule
 @RunWith(AndroidJUnit4::class)
 class GifAdapterTest : AndroidTestBase() {
   @Rule @JvmField val activityTestRule = CustomTestRule(DummyActivity::class.java, true, true)
-  @Rule val uiThreadTestRule = UiThreadTestRule()
+  @Rule @JvmField val uiThreadTestRule = UiThreadTestRule()
   @Mock private val onItemClickListener: OnItemClickListener? = null
   private val imageInfoModel = ImageInfoModel(AndroidTestBase.Companion.STRING_UNIQUE, null)
   private val imageInfoModel2 = ImageInfoModel(AndroidTestBase.Companion.STRING_UNIQUE2, null)
@@ -49,10 +49,10 @@ class GifAdapterTest : AndroidTestBase() {
 
     spyImageDownloader = spy(ImageRepository(activityTestRule.targetContext))
     sut = GifAdapter(onItemClickListener, spyImageDownloader)
-    sut!!.add(imageInfoModel)
-    sut!!.add(imageInfoModel2)
+    sut?.add(imageInfoModel)
+    sut?.add(imageInfoModel2)
     // Must be created on UI thread
-    uiThreadTestRule.runOnUiThread { viewHolder = sut!!.onCreateViewHolder(LinearLayout(activityTestRule.targetContext), 0) }
+    uiThreadTestRule.runOnUiThread { viewHolder = sut?.onCreateViewHolder(LinearLayout(activityTestRule.targetContext), 0) }
   }
 
   @Test @Throws(Throwable::class)
@@ -64,125 +64,125 @@ class GifAdapterTest : AndroidTestBase() {
 
     // Assert
     // Must be created on UI thread
-    uiThreadTestRule.runOnUiThread { assertThat(sut!!.onCreateViewHolder(parent, 0)).isInstanceOf(GifAdapter.ViewHolder::class.java) }
+    uiThreadTestRule.runOnUiThread { assertThat(sut?.onCreateViewHolder(parent, 0)).isInstanceOf(GifAdapter.ViewHolder::class.java) }
   }
 
   @Test @Throws(Throwable::class)
   fun testOnBindViewHolderOnAdapterItemClick() {
     // Arrange
-    sut!!.clear()
-    sut!!.add(imageInfoModel)
-    sut!!.add(imageInfoModel2)
-    sut!!.add(ImageInfoModel())
+    sut?.clear()
+    sut?.add(imageInfoModel)
+    sut?.add(imageInfoModel2)
+    sut?.add(ImageInfoModel())
 
     // Act
-    uiThreadTestRule.runOnUiThread { sut!!.onBindViewHolder(viewHolder, 0) }
+    uiThreadTestRule.runOnUiThread { sut?.onBindViewHolder(viewHolder, 0) }
 
     // Assert
-    assertThat(viewHolder!!.itemView.performClick()).isTrue()
-    verify<ImageRepository>(spyImageDownloader, atLeastOnce()).load<Any>(eq(AndroidTestBase.Companion.STRING_UNIQUE))
-    verify<OnItemClickListener>(onItemClickListener).onClick(eq(imageInfoModel))
+    assertThat(viewHolder?.itemView?.performClick()).isTrue()
+    verify(spyImageDownloader, atLeastOnce())?.load(eq(AndroidTestBase.Companion.STRING_UNIQUE))
+    verify(onItemClickListener)?.onClick(eq(imageInfoModel))
   }
 
   @Test fun testGetItem() {
     // Arrange
-    sut!!.clear()
+    sut?.clear()
 
     // Act
     val imageInfo = ImageInfoModel()
-    sut!!.add(imageInfo)
+    sut?.add(imageInfo)
 
     // Assert
-    assertThat(sut!!.getItem(0)).isEqualTo(imageInfo)
+    assertThat(sut?.getItem(0)).isEqualTo(imageInfo)
   }
 
   @Test @Throws(Throwable::class)
   fun onViewRecycled() {
     // Arrange
-    sut!!.add(ImageInfoModel())
+    sut?.add(ImageInfoModel())
 
     // Act
     uiThreadTestRule.runOnUiThread {
-      sut!!.onBindViewHolder(viewHolder, 0)
-      sut!!.onViewRecycled(viewHolder)
+      sut?.onBindViewHolder(viewHolder, 0)
+      sut?.onViewRecycled(viewHolder)
     }
   }
 
   @Test fun testGetItemCountShouldReturnCorrectValues() {
     // Assert
-    assertThat(sut!!.itemCount).isEqualTo(2)
+    assertThat(sut?.itemCount).isEqualTo(2)
   }
 
   @Test fun testGetListCountShouldReturnCorrectValues() {
     // Assert
-    assertThat(sut!!.getItem(0)).isEqualTo(imageInfoModel)
-    assertThat(sut!!.getItem(1)).isEqualTo(imageInfoModel2)
+    assertThat(sut?.getItem(0)).isEqualTo(imageInfoModel)
+    assertThat(sut?.getItem(1)).isEqualTo(imageInfoModel2)
   }
 
   @Test fun testGetItemShouldReturnCorrectValues() {
     // Assert
-    assertThat(sut!!.getItem(1)).isEqualTo(imageInfoModel2)
+    assertThat(sut?.getItem(1)).isEqualTo(imageInfoModel2)
   }
 
   @Test fun testGetLocationShouldReturnCorrectValues() {
     // Assert
-    assertThat(sut!!.getLocation(imageInfoModel2)).isEqualTo(1)
+    assertThat(sut?.getLocation(imageInfoModel2)).isEqualTo(1)
   }
 
   @Test fun testClearShouldClearAdapter() {
-    sut!!.clear()
+    sut?.clear()
 
     // Assert
-    assertThat(sut!!.itemCount).isEqualTo(0)
+    assertThat(sut?.itemCount).isEqualTo(0)
   }
 
   @Test fun testAddObjectShouldReturnCorrectValues() {
-    sut!!.add(imageInfoModel3)
+    sut?.add(imageInfoModel3)
 
     // Assert
-    assertThat(sut!!.getItem(0)).isEqualTo(imageInfoModel)
-    assertThat(sut!!.getItem(1)).isEqualTo(imageInfoModel2)
-    assertThat(sut!!.getItem(2)).isEqualTo(imageInfoModel3)
+    assertThat(sut?.getItem(0)).isEqualTo(imageInfoModel)
+    assertThat(sut?.getItem(1)).isEqualTo(imageInfoModel2)
+    assertThat(sut?.getItem(2)).isEqualTo(imageInfoModel3)
   }
 
   @Test fun testAddCollectionShouldReturnCorrectValues() {
     val imageInfos = listOf(imageInfoModel3)
 
-    sut!!.addAll(imageInfos)
+    sut?.addAll(imageInfos)
 
     // Assert
-    assertThat(sut!!.getItem(0)).isEqualTo(imageInfoModel)
-    assertThat(sut!!.getItem(1)).isEqualTo(imageInfoModel2)
-    assertThat(sut!!.getItem(2)).isEqualTo(imageInfoModel3)
+    assertThat(sut?.getItem(0)).isEqualTo(imageInfoModel)
+    assertThat(sut?.getItem(1)).isEqualTo(imageInfoModel2)
+    assertThat(sut?.getItem(2)).isEqualTo(imageInfoModel3)
   }
 
   @Test fun testAddLocationObjectShouldReturnCorrectValues() {
-    sut!!.add(0, ImageInfoModel(AndroidTestBase.Companion.STRING_UNIQUE3, null))
+    sut?.add(0, ImageInfoModel(AndroidTestBase.Companion.STRING_UNIQUE3, null))
 
     // Assert
-    assertThat(sut!!.getItem(0)).isEqualTo(imageInfoModel3)
-    assertThat(sut!!.getItem(1)).isEqualTo(imageInfoModel)
-    assertThat(sut!!.getItem(2)).isEqualTo(imageInfoModel2)
+    assertThat(sut?.getItem(0)).isEqualTo(imageInfoModel3)
+    assertThat(sut?.getItem(1)).isEqualTo(imageInfoModel)
+    assertThat(sut?.getItem(2)).isEqualTo(imageInfoModel2)
   }
 
   @Test fun testRemoveLocationObjectShouldReturnCorrectValues() {
-    sut!!.remove(0, imageInfoModel)
+    sut?.remove(0, imageInfoModel)
 
     // Assert
-    assertThat(sut!!.getItem(0)).isEqualTo(imageInfoModel2)
+    assertThat(sut?.getItem(0)).isEqualTo(imageInfoModel2)
   }
 
   @Test fun testRemoveObjectShouldReturnCorrectValues() {
-    sut!!.remove(imageInfoModel)
+    sut?.remove(imageInfoModel)
 
     // Assert
-    assertThat(sut!!.getItem(0)).isEqualTo(imageInfoModel2)
+    assertThat(sut?.getItem(0)).isEqualTo(imageInfoModel2)
   }
 
   @Test fun testRemoveLocationShouldReturnCorrectValues() {
-    sut!!.remove(0)
+    sut?.remove(0)
 
     // Assert
-    assertThat(sut!!.getItem(0)).isEqualTo(imageInfoModel2)
+    assertThat(sut?.getItem(0)).isEqualTo(imageInfoModel2)
   }
 }

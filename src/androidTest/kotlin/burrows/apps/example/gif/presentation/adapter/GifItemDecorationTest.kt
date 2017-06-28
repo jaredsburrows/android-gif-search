@@ -26,7 +26,7 @@ import test.CustomTestRule
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class GifItemDecorationTest : AndroidTestBase() {
-  @Rule val activityTestRule = CustomTestRule(DummyActivity::class.java, true, true)
+  @Rule @JvmField val activityTestRule = CustomTestRule(DummyActivity::class.java, true, true)
   @Mock private val state: RecyclerView.State? = null
   @Mock private val onItemClickListener: GifAdapter.OnItemClickListener? = null
   @Mock private val imageDownloader: ImageRepository? = null
@@ -48,8 +48,8 @@ class GifItemDecorationTest : AndroidTestBase() {
     recyclerView = RecyclerView(activityTestRule.targetContext)
 
     // Setup RecyclerView
-    recyclerView!!.adapter = adapter
-    recyclerView!!.layoutManager = layoutManager
+    recyclerView?.adapter = adapter
+    recyclerView?.layoutManager = layoutManager
 
     // Add fake data
     for (i in 0..RiffsyApiClient.DEFAULT_LIMIT_COUNT - 1) {
@@ -57,18 +57,18 @@ class GifItemDecorationTest : AndroidTestBase() {
     }
 
     // Increase the childcount
-    recyclerView!!.addView(AppCompatTextView(activityTestRule.targetContext))
+    recyclerView?.addView(AppCompatTextView(activityTestRule.targetContext))
 
-    `when`(layoutParams!!.viewLayoutPosition).thenReturn(0)
-    recyclerView!!.layoutParams = layoutParams
+    `when`(layoutParams?.viewLayoutPosition).thenReturn(0)
+    recyclerView?.layoutParams = layoutParams
   }
 
   @Test fun testGetItemOffsetsContextResId() {
     // Arrange
-    sut = GifItemDecoration(AndroidTestBase.Companion.INTEGER_RANDOM!!, layoutManager!!.spanCount)
-    recyclerView!!.addItemDecoration(sut)
+    sut = GifItemDecoration(AndroidTestBase.Companion.INTEGER_RANDOM, layoutManager!!.spanCount)
+    recyclerView?.addItemDecoration(sut)
 
     // Act
-    sut!!.getItemOffsets(rect, recyclerView!!, recyclerView!!, state)
+    sut?.getItemOffsets(rect, recyclerView!!, recyclerView!!, state)
   }
 }

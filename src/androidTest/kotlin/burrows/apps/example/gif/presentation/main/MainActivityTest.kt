@@ -48,11 +48,12 @@ import java.util.Scanner
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
+@Ignore
 @Suppress("UNCHECKED_CAST")
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest : AndroidTestBase() {
-  @Rule val activityRule: CustomTestRule<MainActivity> = object : CustomTestRule<MainActivity>(MainActivity::class.java, true, false) {
+  @Rule @JvmField val activityRule: CustomTestRule<MainActivity> = object : CustomTestRule<MainActivity>(MainActivity::class.java, true, false) {
     override fun beforeActivityLaunched() {
       super.beforeActivityLaunched()
 
