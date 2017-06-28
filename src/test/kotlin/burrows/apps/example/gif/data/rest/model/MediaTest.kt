@@ -13,6 +13,6 @@ class MediaTest : TestBase() {
 
   @Test fun testGetGif() {
     // Assert
-    assertThat(sut.gif()).isEqualTo(gifTest)
+    assertThat(sut.gif).isEqualTo(gifTest)
   }
 }

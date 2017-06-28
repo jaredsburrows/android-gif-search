@@ -10,12 +10,4 @@ import com.google.gson.annotations.SerializedName
 class Result {
   @SerializedName("media") var media: List<Media>? = null
   @SerializedName("title") var title: String? = null
-
-  fun media(): List<Media>? {
-    return media
-  }
-
-  fun title(): String? {
-    return title
-  }
 }

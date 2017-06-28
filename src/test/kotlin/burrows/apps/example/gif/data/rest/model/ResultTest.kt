@@ -13,11 +13,11 @@ class ResultTest : TestBase() {
 
   @Test fun testGetMedia() {
     // Assert
-    assertThat(sut.media()).isEqualTo(testMedias)
+    assertThat(sut.media).isEqualTo(testMedias)
   }
 
   @Test fun testGetTitle() {
     // Assert
-    assertThat(sut.title()).isEqualTo(TestBase.STRING_UNIQUE)
+    assertThat(sut.title).isEqualTo(TestBase.STRING_UNIQUE)
   }
 }

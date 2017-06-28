@@ -9,8 +9,4 @@ import com.google.gson.annotations.SerializedName
  */
 class Media {
   @SerializedName("tinygif") var gif: Gif? = null
-
-  fun gif(): Gif? {
-    return gif
-  }
 }

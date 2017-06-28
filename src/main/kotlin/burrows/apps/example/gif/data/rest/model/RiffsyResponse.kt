@@ -11,14 +11,6 @@ import com.google.gson.annotations.SerializedName
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class RiffsyResponse {
-  @SerializedName("results") internal var results: List<Result>? = null
-  @SerializedName("page") internal var page: Float? = null
-
-  fun results(): List<Result>? {
-    return results
-  }
-
-  fun page(): Float? {
-    return page
-  }
+  @SerializedName("results") var results: List<Result>? = null
+  @SerializedName("page") var page: Float? = null
 }

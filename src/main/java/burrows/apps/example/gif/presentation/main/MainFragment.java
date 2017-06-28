@@ -87,10 +87,10 @@ public final class MainFragment extends Fragment
   }
 
   @Override public void addImages(RiffsyResponse response) {
-    next = response.page();
+    next = response.getPage();
     // Iterate over data from response and grab the urls
-    for (Result result : response.results()) {
-      final String url = result.media().get(0).gif().getUrl();
+    for (Result result : response.getResults()) {
+      final String url = result.getMedia().get(0).getGif().getUrl();
 
       adapter.add(new ImageInfoModel(url, null));
 
@@ -221,7 +221,7 @@ public final class MainFragment extends Fragment
       }
 
       @Override public boolean onMenuItemActionCollapse(MenuItem item) {
-        // When search is closed, go back to trending results
+        // When search is closed, go back to trending getResults
         if (hasSearched) {
           // Reset
           presenter.clearImages();

@@ -17,8 +17,8 @@ import dagger.Component
 @PerActivity
 @Component(
   dependencies = arrayOf(AppComponent::class),
-  modules = arrayOf(NetModule::class, RiffsyModule::class,
-    GlideModule::class, SchedulerProviderModule::class, LeakCanaryModule::class))
+  modules = arrayOf(NetModule::class, RiffsyModule::class, GlideModule::class,
+    SchedulerProviderModule::class, LeakCanaryModule::class))
 interface ActivityComponent {
   // Injections
   fun inject(mainActivity: MainActivity)

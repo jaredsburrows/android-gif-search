@@ -13,11 +13,11 @@ class RiffsyResponseTest : TestBase() {
 
   @Test fun testGetResults() {
     // Assert
-    assertThat(sut.results()).isEqualTo(resultsTest)
+    assertThat(sut.results).isEqualTo(resultsTest)
   }
 
   @Test fun testGetNext() {
     // Assert
-    assertThat(sut.page()).isEqualTo(TestBase.FLOAT_RANDOM)
+    assertThat(sut.page).isEqualTo(TestBase.FLOAT_RANDOM)
   }
 }
