@@ -1,11 +1,12 @@
 package burrows.apps.example.gif.presentation.adapter
 
+import android.content.Context
+import android.support.test.InstrumentationRegistry
 import android.support.test.filters.SmallTest
 import android.support.test.rule.UiThreadTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import burrows.apps.example.gif.DummyActivity
 import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.presentation.adapter.GifAdapter.OnItemClickListener
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
@@ -14,14 +15,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Matchers.eq
+import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mock
 import org.mockito.Mockito.atLeastOnce
 import org.mockito.Mockito.spy
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations.initMocks
 import test.AndroidTestBase
-import test.CustomTestRule
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
@@ -29,12 +29,12 @@ import test.CustomTestRule
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class GifAdapterTest : AndroidTestBase() {
-  @Rule @JvmField val activityTestRule = CustomTestRule(DummyActivity::class.java, true, true)
+  private val targetContext: Context = InstrumentationRegistry.getTargetContext()
+  private val imageInfoModel = ImageInfoModel().apply { url = STRING_UNIQUE }
+  private val imageInfoModel2 = ImageInfoModel().apply { url = STRING_UNIQUE2 }
+  private val imageInfoModel3 = ImageInfoModel().apply { url = STRING_UNIQUE3 }
   @Rule @JvmField val uiThreadTestRule = UiThreadTestRule()
   @Mock private lateinit var onItemClickListener: OnItemClickListener
-  private val imageInfoModel = ImageInfoModel(AndroidTestBase.STRING_UNIQUE, null)
-  private val imageInfoModel2 = ImageInfoModel(AndroidTestBase.STRING_UNIQUE2, null)
-  private val imageInfoModel3 = ImageInfoModel(AndroidTestBase.STRING_UNIQUE3, null)
   private lateinit var viewHolder: GifAdapter.ViewHolder
   private lateinit var spyImageDownloader: ImageApiRepository
   private lateinit var sut: GifAdapter
@@ -42,21 +42,19 @@ class GifAdapterTest : AndroidTestBase() {
   @Before override fun setUp() {
     super.setUp()
 
-    activityTestRule.keepScreenOn()
-
     initMocks(this)
 
-    spyImageDownloader = spy(ImageApiRepository(activityTestRule.targetContext))
+    spyImageDownloader = spy(ImageApiRepository(targetContext))
     sut = GifAdapter(onItemClickListener, spyImageDownloader)
     sut.add(imageInfoModel)
     sut.add(imageInfoModel2)
     // Must be created on UI thread
-    uiThreadTestRule.runOnUiThread { viewHolder = sut.onCreateViewHolder(LinearLayout(activityTestRule.targetContext), 0) }
+    uiThreadTestRule.runOnUiThread { viewHolder = sut.onCreateViewHolder(LinearLayout(targetContext), 0) }
   }
 
   @Test fun testOnCreateViewHolder() {
     // Arrange
-    val parent = object : ViewGroup(activityTestRule.targetContext) {
+    val parent = object : ViewGroup(targetContext) {
       override fun onLayout(b: Boolean, i: Int, i1: Int, i2: Int, i3: Int) {}
     }
 
@@ -77,7 +75,7 @@ class GifAdapterTest : AndroidTestBase() {
 
     // Assert
     assertThat(viewHolder.itemView.performClick()).isTrue()
-    verify(spyImageDownloader, atLeastOnce()).load(eq(AndroidTestBase.STRING_UNIQUE))
+    verify(spyImageDownloader, atLeastOnce()).load(eq(STRING_UNIQUE))
     verify(onItemClickListener).onClick(eq(imageInfoModel))
   }
 
@@ -126,6 +124,7 @@ class GifAdapterTest : AndroidTestBase() {
   }
 
   @Test fun testClearShouldClearAdapter() {
+    // Act
     sut.clear()
 
     // Assert
@@ -133,6 +132,7 @@ class GifAdapterTest : AndroidTestBase() {
   }
 
   @Test fun testAddObjectShouldReturnCorrectValues() {
+    // Act
     sut.add(imageInfoModel3)
 
     // Assert
@@ -142,8 +142,10 @@ class GifAdapterTest : AndroidTestBase() {
   }
 
   @Test fun testAddCollectionShouldReturnCorrectValues() {
+    // Arrange
     val imageInfos = listOf(imageInfoModel3)
 
+    // Act
     sut.addAll(imageInfos)
 
     // Assert
@@ -153,7 +155,8 @@ class GifAdapterTest : AndroidTestBase() {
   }
 
   @Test fun testAddLocationObjectShouldReturnCorrectValues() {
-    sut.add(0, ImageInfoModel(AndroidTestBase.STRING_UNIQUE3, null))
+    // Act
+    sut.add(0, ImageInfoModel(STRING_UNIQUE3, null))
 
     // Assert
     assertThat(sut.getItem(0)).isEqualTo(imageInfoModel3)
@@ -162,6 +165,7 @@ class GifAdapterTest : AndroidTestBase() {
   }
 
   @Test fun testRemoveLocationObjectShouldReturnCorrectValues() {
+    // Act
     sut.remove(0, imageInfoModel)
 
     // Assert
@@ -169,6 +173,7 @@ class GifAdapterTest : AndroidTestBase() {
   }
 
   @Test fun testRemoveObjectShouldReturnCorrectValues() {
+    // Act
     sut.remove(imageInfoModel)
 
     // Assert
@@ -176,6 +181,7 @@ class GifAdapterTest : AndroidTestBase() {
   }
 
   @Test fun testRemoveLocationShouldReturnCorrectValues() {
+    // Act
     sut.remove(0)
 
     // Assert

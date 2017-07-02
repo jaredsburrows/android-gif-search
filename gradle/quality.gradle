@@ -22,10 +22,6 @@ android.applicationVariants.all { variant ->
                        '**/*Dagger*.*',
                        '**/*MembersInjector*.*',
                        '**/*_Provide*Factory*.*']
-
-  // Generates Lint reports based off the source code.
-  variant.assemble.dependsOn "lint$variantName"
-
   /**
    * Generates Lint reports based off the source code.
    */

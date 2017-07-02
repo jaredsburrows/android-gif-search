@@ -6,6 +6,4 @@ package burrows.apps.example.gif.presentation.adapter.model
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 data class ImageInfoModel(var url: String? = null,
-                          var previewUrl: String? = null) {
-  constructor() : this(null, null)
-}
+                          var previewUrl: String? = null)

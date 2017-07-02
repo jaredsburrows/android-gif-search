@@ -1,6 +1,7 @@
 package burrows.apps.example.gif.presentation.main
 
 import android.content.Context
+import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
@@ -12,9 +13,11 @@ import android.support.test.espresso.matcher.RootMatchers.isDialog
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.filters.SmallTest
+import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
 import burrows.apps.example.gif.R
+import burrows.apps.example.gif.TestApp
 import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.API_KEY
@@ -38,7 +41,6 @@ import org.junit.runner.RunWith
 import org.mockito.MockitoAnnotations.initMocks
 import retrofit2.Retrofit
 import test.AndroidTestBase
-import test.CustomTestRule
 import java.io.IOException
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import java.net.HttpURLConnection.HTTP_OK
@@ -53,17 +55,16 @@ import java.util.Scanner
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest : AndroidTestBase() {
-  @Rule @JvmField val activityRule: CustomTestRule<MainActivity> = object : CustomTestRule<MainActivity>(MainActivity::class.java, true, false) {
+  private val testApp = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestApp
+  @Rule @JvmField val activityRule: ActivityTestRule<MainActivity> = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
     override fun beforeActivityLaunched() {
       super.beforeActivityLaunched()
 
-      val app = application
-
       // Override app component
       val appComponent = DaggerAppComponent.builder()
-        .appModule(AppModule(application))
+        .appModule(AppModule(testApp))
         .build()
-      app.appComponent = appComponent
+      testApp.appComponent = appComponent
 
       // Override service component
       val netComponent = DaggerActivityComponent.builder()
@@ -93,10 +94,10 @@ class MainActivityTest : AndroidTestBase() {
           }
         })
         .build()
-      app.setRiffsyComponent(netComponent)
+      testApp.setRiffsyComponent(netComponent)
     }
   }
-  @Rule val server = MockWebServer()
+  @Rule @JvmField val server = MockWebServer()
   private var mockEndPoint: String? = null
 
   private val dispatcher = object : Dispatcher() {
@@ -142,10 +143,6 @@ class MainActivityTest : AndroidTestBase() {
 
   @Ignore
   @Test fun testTrendingThenClickOpenDialog() {
-    // Act
-    activityRule.launchActivity()
-    activityRule.keepScreenOn()
-
     // Assert
     onView(withId(R.id.recycler_view))
       .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click())) // Select 0, the response only contains 1 item
@@ -158,10 +155,6 @@ class MainActivityTest : AndroidTestBase() {
   }
 
   @Test fun testTrendingResultsThenSearchThenBackToTrending() {
-    // Act
-    activityRule.launchActivity()
-    activityRule.keepScreenOn()
-
     // Assert
     onView(withId(R.id.menu_search))
       .perform(click())
