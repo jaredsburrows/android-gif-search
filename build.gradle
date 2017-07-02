@@ -52,12 +52,12 @@ android {
     applicationId "burrows.apps.example.gif"
     versionCode 1
     versionName "1.0"
-    minSdkVersion rootProject.ext.ci ? rootProject.ext.minSdkVersion : 21
+    minSdkVersion rootProject.ext.ci ? rootProject.ext.minSdkVersion : 21 // Optimize build speed - build with minSdk 21 if using multidex
     targetSdkVersion rootProject.ext.targetSdkVersion
     testApplicationId "burrows.apps.example.gif.test"
     testInstrumentationRunner "test.CustomTestRunner"
-    resConfigs "en" // Keep only english resource files for now
-    vectorDrawables.useSupportLibrary = true
+    resConfigs "en"                                                       // Optimize APK size - keep only english resource files for now
+    vectorDrawables.useSupportLibrary = true                              // Optimize APK size - use vector drawables
   }
 
   dataBinding {
@@ -70,15 +70,17 @@ android {
     targetCompatibility rootProject.ext.sourceCompatibilityVersion
   }
 
+  // Optimize local build speed - disable aapt PNG crunching
   aaptOptions {
     cruncherEnabled rootProject.ext.ci
   }
 
+  // Optimize ci build speed - disable dexing on ci
   dexOptions {
     preDexLibraries !rootProject.ext.ci
   }
 
-  // Shouldn"t the plugin be doing this for us?
+  // Add Kotlin source sets - shouldn't "kotlin-android" be doing this for us?
   sourceSets {
     androidTest.java.srcDirs += "src/androidTest/kotlin"
     debug.java.srcDirs += "src/debug/kotlin"
@@ -100,7 +102,7 @@ android {
     disable "NewerVersionAvailable"
   }
 
-  // Debug - testing and letting others use
+  // Add "debug.keystore" so developers can share APKs with same signatures locally
   signingConfigs {
     debug {
       storeFile rootProject.file(".buildscript/debug.keystore")
@@ -112,14 +114,15 @@ android {
 
   buildTypes {
     debug {
-      if (rootProject.ext.ci) testCoverageEnabled true // generated coverage for android tests
+      if (rootProject.ext.ci) testCoverageEnabled true                          // https://issuetracker.google.com/issues/37019591
       applicationIdSuffix ".debug"
     }
 
+    // Apply fake signing config to release to test "assembleRelease" locally
     release {
-      minifyEnabled true
-      shrinkResources true
-      proguardFile getDefaultProguardFile("proguard-android-optimize.txt")
+      minifyEnabled true                                                        // Optimize APK size - remove/optimize DEX file(s)
+      shrinkResources true                                                      // Optimize APK size - remove unused resources
+      proguardFile getDefaultProguardFile("proguard-android-optimize.txt")      // Optimize APK size - use optimized proguard rules
       proguardFile rootProject.file("config/proguard/proguard-rules.txt")
       signingConfig signingConfigs.debug
     }
@@ -137,6 +140,7 @@ android {
     }
   }
 
+  // Optimize APK size - remove excess files in the manifest and APK
   packagingOptions {
     exclude "/META-INF/*.kotlin_module"
     exclude "**/kotlin/**"
