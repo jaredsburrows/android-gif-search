@@ -1,12 +1,12 @@
 package burrows.apps.example.gif.data.rest.model
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class Media {
-  @SerializedName("tinygif") var gif: Gif? = null
+  @field:Json(name = "tinygif") var gif: Gif? = null // Bug in 1.5.0
 
   /**
    * No args constructor for use in serialization.

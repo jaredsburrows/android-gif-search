@@ -1,6 +1,6 @@
 package burrows.apps.example.gif.data.rest.model
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 /**
  * Riffsy Api Response.
@@ -9,8 +9,8 @@ import com.google.gson.annotations.SerializedName
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class RiffsyResponse {
-  @SerializedName("results") var results: List<Result>? = null
-  @SerializedName("page") var page: Float? = null
+  @Json(name = "results") var results: List<Result>? = null
+  @Json(name = "page") var page: Float? = null
 
   /**
    * No args constructor for use in serialization.

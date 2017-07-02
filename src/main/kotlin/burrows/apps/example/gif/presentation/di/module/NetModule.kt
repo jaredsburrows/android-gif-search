@@ -3,8 +3,8 @@ package burrows.apps.example.gif.presentation.di.module
 import android.app.Application
 import burrows.apps.example.gif.BuildConfig
 import burrows.apps.example.gif.presentation.di.scope.PerActivity
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Rfc3339DateJsonAdapter
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -12,9 +12,9 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
-
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.File
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 /**
@@ -36,11 +36,6 @@ class NetModule {
     private val CLIENT_CACHE_SIZE = 10 * 1024 * 1024 // 10 MiB
 
     /**
-     * OkHttp request date format. Eg. 2016-06-19T13:07:45.139Z
-     */
-    private val CLIENT_DATE_FORMAT = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'"
-
-    /**
      * OkHttp cache directory.
      */
     private val CLIENT_CACHE_DIRECTORY = "http"
@@ -51,10 +46,10 @@ class NetModule {
       CLIENT_CACHE_SIZE.toLong())
   }
 
-  @Provides @PerActivity fun providesGson(): Gson {
-    return GsonBuilder()
-      .setDateFormat(CLIENT_DATE_FORMAT)
-      .create()
+  @Provides @PerActivity fun providesMoshi(): Moshi {
+    return Moshi.Builder()
+      .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
+      .build()
   }
 
   @Provides @PerActivity fun providesOkHttpClient(cache: Cache): OkHttpClient {
@@ -71,11 +66,11 @@ class NetModule {
       .build()
   }
 
-  @Provides @PerActivity fun providesRetrofit(gson: Gson,
+  @Provides @PerActivity fun providesRetrofit(moshi: Moshi,
                                               okHttpClient: OkHttpClient): Retrofit {
     return Retrofit.Builder()
       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-      .addConverterFactory(GsonConverterFactory.create(gson))
+      .addConverterFactory(MoshiConverterFactory.create(moshi))
       .client(okHttpClient)
       .build()
   }

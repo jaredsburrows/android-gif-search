@@ -165,7 +165,8 @@ dependencies {
   compile deps.okhttp
   compile deps.loggingInterceptor
   compile deps.adapterRxjava2
-  compile deps.converterGson
+  compile deps.converterMoshi
+  compile deps.moshiAdapters
   compile deps.retrofit
   compile deps.rxAndroid
   compile deps.rxJava

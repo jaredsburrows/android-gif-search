@@ -1,7 +1,6 @@
 package burrows.apps.example.gif.data.rest.repository
 
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
-import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -12,7 +11,7 @@ import org.junit.Rule
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import test.TestBase
 import java.net.HttpURLConnection.HTTP_OK
 import java.nio.charset.Charset
@@ -51,11 +50,11 @@ class RiffsyApiClientTest : TestBase() {
     stream.close()
   }
 
-  private fun getRetrofit(endPoint: String): Retrofit.Builder {
+  private fun getRetrofit(baseUrl: String): Retrofit.Builder {
     return Retrofit.Builder()
-      .baseUrl(endPoint)
+      .baseUrl(baseUrl)
       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-      .addConverterFactory(GsonConverterFactory.create(Gson()))
+      .addConverterFactory(MoshiConverterFactory.create())
       .client(OkHttpClient())
   }
 

@@ -31,7 +31,7 @@ interface RiffsyApiClient {
   }
 
   /**
-   * Get trending gif getResults.
+   * Get trending gif results.
    *
    * URL: https://api.riffsy.com/
    * Path: /v1/trending
@@ -48,7 +48,7 @@ interface RiffsyApiClient {
                                                              @Query("pos") pos: Float?): Observable<RiffsyResponse> // Allow passing null
 
   /**
-   * Get search gif getResults by a search string.
+   * Get search gif results by a search string.
    *
    * URL: https://api.riffsy.com/
    * Path: /v1/search
