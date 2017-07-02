@@ -8,8 +8,8 @@ import test.TestBase
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class ResultTest : TestBase() {
-  private val testMedias = ArrayList<Media>()
-  private var sut = Result().apply { media = testMedias; title = TestBase.STRING_UNIQUE }
+  private val testMedias = arrayListOf<Media>()
+  private var sut = Result().apply { media = testMedias; title = STRING_UNIQUE }
 
   @Test fun testGetMedia() {
     // Assert
@@ -18,6 +18,6 @@ class ResultTest : TestBase() {
 
   @Test fun testGetTitle() {
     // Assert
-    assertThat(sut.title).isEqualTo(TestBase.STRING_UNIQUE)
+    assertThat(sut.title).isEqualTo(STRING_UNIQUE)
   }
 }

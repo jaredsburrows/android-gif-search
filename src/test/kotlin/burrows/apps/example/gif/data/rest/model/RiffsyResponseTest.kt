@@ -8,8 +8,8 @@ import test.TestBase
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class RiffsyResponseTest : TestBase() {
-  private val resultsTest = ArrayList<Result>()
-  private var sut = RiffsyResponse().apply { results = resultsTest; page = TestBase.FLOAT_RANDOM }
+  private val resultsTest = arrayListOf<Result>()
+  private var sut = RiffsyResponse().apply { results = resultsTest; page = FLOAT_RANDOM }
 
   @Test fun testGetResults() {
     // Assert
@@ -18,6 +18,6 @@ class RiffsyResponseTest : TestBase() {
 
   @Test fun testGetNext() {
     // Assert
-    assertThat(sut.page).isEqualTo(TestBase.FLOAT_RANDOM)
+    assertThat(sut.page).isEqualTo(FLOAT_RANDOM)
   }
 }

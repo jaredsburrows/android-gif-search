@@ -39,8 +39,7 @@ class GifAdapterTest : AndroidTestBase() {
   private var spyImageDownloader: ImageRepository? = null
   private var sut: GifAdapter? = null
 
-  @Before @Throws(Throwable::class)
-  override fun setUp() {
+  @Before @Throws(Throwable::class) override fun setUp() {
     super.setUp()
 
     activityTestRule.keepScreenOn()
@@ -55,8 +54,7 @@ class GifAdapterTest : AndroidTestBase() {
     uiThreadTestRule.runOnUiThread { viewHolder = sut?.onCreateViewHolder(LinearLayout(activityTestRule.targetContext), 0) }
   }
 
-  @Test @Throws(Throwable::class)
-  fun testOnCreateViewHolder() {
+  @Test fun testOnCreateViewHolder() {
     // Arrange
     val parent = object : ViewGroup(activityTestRule.targetContext) {
       override fun onLayout(b: Boolean, i: Int, i1: Int, i2: Int, i3: Int) {}
@@ -67,8 +65,7 @@ class GifAdapterTest : AndroidTestBase() {
     uiThreadTestRule.runOnUiThread { assertThat(sut?.onCreateViewHolder(parent, 0)).isInstanceOf(GifAdapter.ViewHolder::class.java) }
   }
 
-  @Test @Throws(Throwable::class)
-  fun testOnBindViewHolderOnAdapterItemClick() {
+  @Test fun testOnBindViewHolderOnAdapterItemClick() {
     // Arrange
     sut?.clear()
     sut?.add(imageInfoModel)
@@ -96,8 +93,7 @@ class GifAdapterTest : AndroidTestBase() {
     assertThat(sut?.getItem(0)).isEqualTo(imageInfo)
   }
 
-  @Test @Throws(Throwable::class)
-  fun onViewRecycled() {
+  @Test fun onViewRecycled() {
     // Arrange
     sut?.add(ImageInfoModel())
 

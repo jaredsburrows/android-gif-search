@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.ACTION_MAIN
 import android.support.test.InstrumentationRegistry
 import android.support.test.rule.ActivityTestRule
 import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
@@ -29,7 +30,7 @@ open class CustomTestRule<T : Activity> : ActivityTestRule<T> {
     get() = InstrumentationRegistry.getInstrumentation()
 
   fun launchActivity() {
-    launchActivity(Intent(Intent.ACTION_MAIN))
+    launchActivity(Intent(ACTION_MAIN))
   }
 
   // Lambda causes test to fail here, expanded for now

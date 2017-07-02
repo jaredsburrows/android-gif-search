@@ -17,7 +17,7 @@ interface RiffsyApiClient {
     /**
      * URL for Riffsy.
      */
-    const val BASE_URL = "https://api.riffsy.com/"
+    val BASE_URL = "https://api.riffsy.com/"
 
     /**
      * Riffsy public API key.

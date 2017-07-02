@@ -96,8 +96,9 @@ class MainActivityTest : AndroidTestBase() {
       app.setRiffsyComponent(netComponent)
     }
   }
-
   @Rule val server = MockWebServer()
+  private var mockEndPoint: String? = null
+
   private val dispatcher = object : Dispatcher() {
     @Throws(InterruptedException::class)
     override fun dispatch(request: RecordedRequest): MockResponse {
@@ -108,10 +109,8 @@ class MainActivityTest : AndroidTestBase() {
       return MockResponse().setResponseCode(HTTP_NOT_FOUND)
     }
   }
-  private var mockEndPoint: String? = null
 
-  @Before @Throws(Throwable::class)
-  override fun setUp() {
+  @Before @Throws(Throwable::class) override fun setUp() {
     super.setUp()
 
     initMocks(this)
@@ -120,8 +119,7 @@ class MainActivityTest : AndroidTestBase() {
     server.setDispatcher(dispatcher)
   }
 
-  @After @Throws(Throwable::class)
-  override fun tearDown() {
+  @After @Throws(Throwable::class) override fun tearDown() {
     super.tearDown()
 
     server.shutdown()
@@ -144,9 +142,7 @@ class MainActivityTest : AndroidTestBase() {
   }
 
   @Ignore
-  @Test
-  @Throws(Exception::class)
-  fun testTrendingThenClickOpenDialog() {
+  @Test fun testTrendingThenClickOpenDialog() {
     // Act
     activityRule.launchActivity()
     activityRule.keepScreenOn()
@@ -162,8 +158,7 @@ class MainActivityTest : AndroidTestBase() {
       .perform(pressBack())
   }
 
-  @Test @Throws(Exception::class)
-  fun testTrendingResultsThenSearchThenBackToTrending() {
+  @Test fun testTrendingResultsThenSearchThenBackToTrending() {
     // Act
     activityRule.launchActivity()
     activityRule.keepScreenOn()

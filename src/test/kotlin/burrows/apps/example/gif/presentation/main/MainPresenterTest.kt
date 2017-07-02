@@ -2,6 +2,7 @@ package burrows.apps.example.gif.presentation.main
 
 import burrows.apps.example.gif.data.rest.model.RiffsyResponse
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
+import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
 import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
@@ -19,30 +20,29 @@ import test.TestBase
  */
 class MainPresenterTest : TestBase() {
   private val provider = ImmediateSchedulerProvider()
-  @Mock private val view: IMainView? = null
-  @Mock private val repository: RiffsyApiClient? = null
-  private var sut: MainPresenter? = null
+  @Mock private lateinit var view: IMainView
+  @Mock private lateinit var repository: RiffsyApiClient
+  private lateinit var sut: MainPresenter
 
-  @Before @Throws(Throwable::class)
-  override fun setUp() {
+  @Before @Throws(Throwable::class) override fun setUp() {
     super.setUp()
 
     initMocks(this)
 
-    `when`(view!!.isActive).thenReturn(true)
+    `when`(view.isActive).thenReturn(true)
   }
 
   @Test fun testLoadTrendingImagesNotActive() {
     // Arrange
     val next = 0f
     val response = RiffsyResponse()
-    `when`(view!!.isActive).thenReturn(false)
-    sut = MainPresenter(view, repository!!, provider)
-    `when`(repository.getTrendingResults(eq(RiffsyApiClient.DEFAULT_LIMIT_COUNT), eq(next)))
+    `when`(view.isActive).thenReturn(false)
+    sut = MainPresenter(view, repository, provider)
+    `when`(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
 
     // Act
-    sut!!.loadTrendingImages(next)
+    sut.loadTrendingImages(next)
 
     // Assert
     verify(view).isActive
@@ -53,16 +53,16 @@ class MainPresenterTest : TestBase() {
     // Arrange
     val next = 0f
     val response = RiffsyResponse()
-    sut = MainPresenter(view!!, repository!!, provider)
-    `when`(repository.getTrendingResults(eq(RiffsyApiClient.DEFAULT_LIMIT_COUNT), eq(next)))
+    sut = MainPresenter(view, repository, provider)
+    `when`(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
 
     // Act
-    sut!!.loadTrendingImages(next)
+    sut.loadTrendingImages(next)
 
     // Assert
-    verify(view)!!.isActive
-    verify(view)!!.addImages(eq(response))
+    verify(view).isActive
+    verify(view).addImages(eq(response))
   }
 
   @Test fun testLoadSearchImagesSuccess() {
@@ -70,15 +70,15 @@ class MainPresenterTest : TestBase() {
     val searchString = "gifs"
     val next = 0f
     val response = RiffsyResponse()
-    sut = MainPresenter(view!!, repository!!, provider)
-    `when`(repository.getSearchResults(eq(searchString), eq(RiffsyApiClient.DEFAULT_LIMIT_COUNT), eq(next)))
+    sut = MainPresenter(view, repository, provider)
+    `when`(repository.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
 
     // Act
-    sut!!.loadSearchImages(searchString, next)
+    sut.loadSearchImages(searchString, next)
 
     // Assert
-    verify(view)!!.isActive
-    verify(view)!!.addImages(eq(response))
+    verify(view).isActive
+    verify(view).addImages(eq(response))
   }
 }

@@ -36,8 +36,7 @@ class GifItemDecorationTest : AndroidTestBase() {
   private var recyclerView: RecyclerView? = null
   private var sut: GifItemDecoration? = null
 
-  @Before @Throws(Throwable::class)
-  override fun setUp() {
+  @Before @Throws(Throwable::class) override fun setUp() {
     super.setUp()
 
     initMocks(this)
