@@ -33,11 +33,9 @@ abstract class AndroidTestBase {
     val DOUBLE_RANDOM: Double = Random().nextDouble()
   }
 
-  @Before @Throws(Throwable::class)
-  open fun setUp() {
+  @Before open fun setUp() {
   }
 
-  @After @Throws(Throwable::class)
-  open fun tearDown() {
+  @After open fun tearDown() {
   }
 }

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import burrows.apps.example.gif.R;
-import burrows.apps.example.gif.data.rest.repository.ImageRepository;
+import burrows.apps.example.gif.data.rest.repository.ImageApiRepository;
 import burrows.apps.example.gif.databinding.ListItemBinding;
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel;
 import com.bumptech.glide.Glide;
@@ -28,10 +28,10 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
   // Can't be longer than 23 chars
   private final static String TAG = GifAdapter.class.getSimpleName();
   private final List<ImageInfoModel> data = new ArrayList<>();
-  private ImageRepository repository;
+  private ImageApiRepository repository;
   private final OnItemClickListener onItemClickListener;
 
-  public GifAdapter(OnItemClickListener onItemClickListener, ImageRepository repository) {
+  public GifAdapter(OnItemClickListener onItemClickListener, ImageApiRepository repository) {
     this.onItemClickListener = onItemClickListener;
     this.repository = repository;
   }

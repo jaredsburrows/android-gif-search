@@ -29,7 +29,7 @@ import burrows.apps.example.gif.App;
 import burrows.apps.example.gif.R;
 import burrows.apps.example.gif.data.rest.model.Result;
 import burrows.apps.example.gif.data.rest.model.RiffsyResponse;
-import burrows.apps.example.gif.data.rest.repository.ImageRepository;
+import burrows.apps.example.gif.data.rest.repository.ImageApiRepository;
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient;
 import burrows.apps.example.gif.databinding.DialogPreviewBinding;
 import burrows.apps.example.gif.databinding.FragmentMainBinding;
@@ -71,7 +71,7 @@ public final class MainFragment extends Fragment
   private ImageView imageView;
   private IMainPresenter presenter;
   @Inject RefWatcher refWatcher;
-  @Inject ImageRepository repository;
+  @Inject ImageApiRepository repository;
 
   //
   // Contract

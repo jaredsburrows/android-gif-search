@@ -15,5 +15,6 @@ class RiffsyResponse {
   /**
    * No args constructor for use in serialization.
    */
+  @Suppress("ConvertSecondaryConstructorToPrimary")
   constructor()
 }

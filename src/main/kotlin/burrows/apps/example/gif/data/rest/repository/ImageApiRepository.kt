@@ -9,7 +9,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-open class ImageRepository(val context: Context) {
+open class ImageApiRepository(val context: Context) {
   private val imageHeight: Int = context.resources.getDimensionPixelSize(R.dimen.gif_image_width)
   private val imageWidth: Int
 

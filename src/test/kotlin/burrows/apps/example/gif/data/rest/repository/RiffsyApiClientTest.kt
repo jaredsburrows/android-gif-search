@@ -25,7 +25,7 @@ class RiffsyApiClientTest : TestBase() {
   @Rule @JvmField val server = MockWebServer()
   private lateinit var sut: RiffsyApiClient
 
-  @Before @Throws(Throwable::class) override fun setUp() {
+  @Before override fun setUp() {
     super.setUp()
 
     val mockEndPoint = server.url("/").toString()
@@ -33,7 +33,7 @@ class RiffsyApiClientTest : TestBase() {
     sut = getRetrofit(mockEndPoint).build().create(RiffsyApiClient::class.java)
   }
 
-  @After @Throws(Throwable::class) override fun tearDown() {
+  @After override fun tearDown() {
     super.tearDown()
 
     server.shutdown()

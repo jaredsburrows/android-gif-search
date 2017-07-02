@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import burrows.apps.example.gif.DummyActivity
-import burrows.apps.example.gif.data.rest.repository.ImageRepository
+import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.presentation.adapter.GifAdapter.OnItemClickListener
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 import org.assertj.core.api.Assertions.assertThat
@@ -32,21 +32,21 @@ class GifAdapterTest : AndroidTestBase() {
   @Rule @JvmField val activityTestRule = CustomTestRule(DummyActivity::class.java, true, true)
   @Rule @JvmField val uiThreadTestRule = UiThreadTestRule()
   @Mock private lateinit var onItemClickListener: OnItemClickListener
-  private val imageInfoModel = ImageInfoModel(AndroidTestBase.Companion.STRING_UNIQUE, null)
-  private val imageInfoModel2 = ImageInfoModel(AndroidTestBase.Companion.STRING_UNIQUE2, null)
-  private val imageInfoModel3 = ImageInfoModel(AndroidTestBase.Companion.STRING_UNIQUE3, null)
+  private val imageInfoModel = ImageInfoModel(AndroidTestBase.STRING_UNIQUE, null)
+  private val imageInfoModel2 = ImageInfoModel(AndroidTestBase.STRING_UNIQUE2, null)
+  private val imageInfoModel3 = ImageInfoModel(AndroidTestBase.STRING_UNIQUE3, null)
   private lateinit var viewHolder: GifAdapter.ViewHolder
-  private lateinit var spyImageDownloader: ImageRepository
+  private lateinit var spyImageDownloader: ImageApiRepository
   private lateinit var sut: GifAdapter
 
-  @Before @Throws(Throwable::class) override fun setUp() {
+  @Before override fun setUp() {
     super.setUp()
 
     activityTestRule.keepScreenOn()
 
     initMocks(this)
 
-    spyImageDownloader = spy(ImageRepository(activityTestRule.targetContext))
+    spyImageDownloader = spy(ImageApiRepository(activityTestRule.targetContext))
     sut = GifAdapter(onItemClickListener, spyImageDownloader)
     sut.add(imageInfoModel)
     sut.add(imageInfoModel2)
@@ -77,7 +77,7 @@ class GifAdapterTest : AndroidTestBase() {
 
     // Assert
     assertThat(viewHolder.itemView.performClick()).isTrue()
-    verify(spyImageDownloader, atLeastOnce()).load(eq(AndroidTestBase.Companion.STRING_UNIQUE))
+    verify(spyImageDownloader, atLeastOnce()).load(eq(AndroidTestBase.STRING_UNIQUE))
     verify(onItemClickListener).onClick(eq(imageInfoModel))
   }
 
@@ -153,7 +153,7 @@ class GifAdapterTest : AndroidTestBase() {
   }
 
   @Test fun testAddLocationObjectShouldReturnCorrectValues() {
-    sut.add(0, ImageInfoModel(AndroidTestBase.Companion.STRING_UNIQUE3, null))
+    sut.add(0, ImageInfoModel(AndroidTestBase.STRING_UNIQUE3, null))
 
     // Assert
     assertThat(sut.getItem(0)).isEqualTo(imageInfoModel3)

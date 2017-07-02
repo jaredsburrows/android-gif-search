@@ -112,7 +112,6 @@ android {
 
   buildTypes {
     debug {
-      debuggable true
       if (rootProject.ext.ci) testCoverageEnabled true // generated coverage for android tests
       applicationIdSuffix ".debug"
     }
@@ -128,10 +127,8 @@ android {
 
   testOptions {
     animationsDisabled = true
-
     unitTests {
       returnDefaultValues = true
-
       all {
         jacoco {
           includeNoLocationClasses = true

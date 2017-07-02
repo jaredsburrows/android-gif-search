@@ -24,7 +24,7 @@ class MainPresenterTest : TestBase() {
   @Mock private lateinit var repository: RiffsyApiClient
   private lateinit var sut: MainPresenter
 
-  @Before @Throws(Throwable::class) override fun setUp() {
+  @Before override fun setUp() {
     super.setUp()
 
     initMocks(this)

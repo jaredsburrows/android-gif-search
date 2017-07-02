@@ -15,7 +15,7 @@ import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
 import burrows.apps.example.gif.R
-import burrows.apps.example.gif.data.rest.repository.ImageRepository
+import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.API_KEY
 import burrows.apps.example.gif.presentation.di.component.DaggerActivityComponent
@@ -70,15 +70,15 @@ class MainActivityTest : AndroidTestBase() {
         .appComponent(appComponent)
         .riffsyModule(object : RiffsyModule() {
           // Set custom endpoint for rest service
-          override fun provideRiffsyApi(builder: Retrofit.Builder): RiffsyApiClient {
+          override fun providesRiffsyApi(builder: Retrofit.Builder): RiffsyApiClient {
             return builder.baseUrl(mockEndPoint!!)
               .build()
               .create(RiffsyApiClient::class.java)
           }
         })
         .glideModule(object : GlideModule() {
-          override fun provideImageDownloader(context: Context): ImageRepository {
-            return object : ImageRepository(context) {
+          override fun providesImageDownloader(context: Context): ImageApiRepository {
+            return object : ImageApiRepository(context) {
               // Prevent Glide network call with custom override
               override fun <T> load(url: T): GifRequestBuilder<T> {
                 return Glide.with(context)
@@ -100,7 +100,6 @@ class MainActivityTest : AndroidTestBase() {
   private var mockEndPoint: String? = null
 
   private val dispatcher = object : Dispatcher() {
-    @Throws(InterruptedException::class)
     override fun dispatch(request: RecordedRequest): MockResponse {
       if ("/v1/trending?key=" + API_KEY == request.path) {
         return getMockResponse("/trending_results.json")
@@ -110,7 +109,7 @@ class MainActivityTest : AndroidTestBase() {
     }
   }
 
-  @Before @Throws(Throwable::class) override fun setUp() {
+  @Before override fun setUp() {
     super.setUp()
 
     initMocks(this)
@@ -119,7 +118,7 @@ class MainActivityTest : AndroidTestBase() {
     server.setDispatcher(dispatcher)
   }
 
-  @After @Throws(Throwable::class) override fun tearDown() {
+  @After override fun tearDown() {
     super.tearDown()
 
     server.shutdown()

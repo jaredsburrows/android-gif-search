@@ -7,7 +7,7 @@ import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import burrows.apps.example.gif.DummyActivity
-import burrows.apps.example.gif.data.rest.repository.ImageRepository
+import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 import org.junit.Before
@@ -29,14 +29,14 @@ class GifItemDecorationTest : AndroidTestBase() {
   @Rule @JvmField val activityTestRule = CustomTestRule(DummyActivity::class.java, true, true)
   @Mock private lateinit var state: RecyclerView.State
   @Mock private lateinit var onItemClickListener: GifAdapter.OnItemClickListener
-  @Mock private lateinit var imageDownloader: ImageRepository
+  @Mock private lateinit var imageDownloader: ImageApiRepository
   @Mock private lateinit var layoutParams: RecyclerView.LayoutParams
   private val rect = Rect(0, 0, 0, 0)
   private lateinit var layoutManager: GridLayoutManager
   private lateinit var recyclerView: RecyclerView
   private lateinit var sut: GifItemDecoration
 
-  @Before @Throws(Throwable::class) override fun setUp() {
+  @Before override fun setUp() {
     super.setUp()
 
     initMocks(this)
@@ -64,7 +64,7 @@ class GifItemDecorationTest : AndroidTestBase() {
 
   @Test fun testGetItemOffsetsContextResId() {
     // Arrange
-    sut = GifItemDecoration(AndroidTestBase.Companion.INTEGER_RANDOM, layoutManager.spanCount)
+    sut = GifItemDecoration(AndroidTestBase.INTEGER_RANDOM, layoutManager.spanCount)
     recyclerView.addItemDecoration(sut)
 
     // Act

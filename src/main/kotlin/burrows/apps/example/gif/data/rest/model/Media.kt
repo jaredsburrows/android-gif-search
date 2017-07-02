@@ -11,5 +11,6 @@ class Media {
   /**
    * No args constructor for use in serialization.
    */
+  @Suppress("ConvertSecondaryConstructorToPrimary")
   constructor()
 }
