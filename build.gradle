@@ -177,14 +177,12 @@ dependencies {
 
   androidTestCompile deps.junit
   androidTestCompile deps.assertjCore
-  androidTestCompile deps.dexmaker
-  androidTestCompile deps.dexmakerMockito
+  androidTestCompile deps.dexmakerMockito, { exclude group: "net.bytebuddy" }
   androidTestCompile deps.runner
   androidTestCompile deps.espressoCore
   androidTestCompile deps.espressoIntents
-  androidTestCompile(deps.espressoContrib) { exclude group: "com.android.support" }
+  androidTestCompile deps.espressoContrib, { exclude group: "com.android.support" }
   androidTestCompile deps.mockwebserver
-  androidTestCompile deps.dagger
 
   kaptAndroidTest deps.daggerCompiler
 

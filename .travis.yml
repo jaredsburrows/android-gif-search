@@ -20,8 +20,8 @@ before_script:
   - if [ "$TRAVIS_OS_NAME" = linux ]; then .buildscript/setup-emulator.sh; fi
 
 script:
-  - ./gradlew clean testDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --build-cache --configure-on-demand --parallel --stacktrace --scan
-  - ./gradlew assembleRelease -Pci --build-cache --configure-on-demand --parallel --stacktrace --scan
+  - ./gradlew clean testDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan
+  - ./gradlew assembleRelease -Pci --stacktrace --scan
 
 branches:
   except:
