@@ -103,23 +103,19 @@ class GifAdapterTest : AndroidTestBase() {
   }
 
   @Test fun testGetItemCountShouldReturnCorrectValues() {
-    // Assert
     assertThat(sut.itemCount).isEqualTo(2)
   }
 
   @Test fun testGetListCountShouldReturnCorrectValues() {
-    // Assert
     assertThat(sut.getItem(0)).isEqualTo(imageInfoModel)
     assertThat(sut.getItem(1)).isEqualTo(imageInfoModel2)
   }
 
   @Test fun testGetItemShouldReturnCorrectValues() {
-    // Assert
     assertThat(sut.getItem(1)).isEqualTo(imageInfoModel2)
   }
 
   @Test fun testGetLocationShouldReturnCorrectValues() {
-    // Assert
     assertThat(sut.getLocation(imageInfoModel2)).isEqualTo(1)
   }
 

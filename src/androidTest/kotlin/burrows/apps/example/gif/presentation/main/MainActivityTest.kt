@@ -16,8 +16,8 @@ import android.support.test.filters.SmallTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
+import burrows.apps.example.gif.App
 import burrows.apps.example.gif.R
-import burrows.apps.example.gif.TestApp
 import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.API_KEY
@@ -41,7 +41,6 @@ import org.junit.runner.RunWith
 import org.mockito.MockitoAnnotations.initMocks
 import retrofit2.Retrofit
 import test.AndroidTestBase
-import java.io.IOException
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import java.net.HttpURLConnection.HTTP_OK
 import java.nio.charset.Charset
@@ -55,24 +54,26 @@ import java.util.Scanner
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest : AndroidTestBase() {
-  private val testApp = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestApp
+  @Rule @JvmField val server = MockWebServer()
   @Rule @JvmField val activityRule: ActivityTestRule<MainActivity> = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
     override fun beforeActivityLaunched() {
       super.beforeActivityLaunched()
 
       // Override app component
+      val testApp = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as App
       val appComponent = DaggerAppComponent.builder()
         .appModule(AppModule(testApp))
         .build()
       testApp.appComponent = appComponent
 
-      // Override service component
-      val netComponent = DaggerActivityComponent.builder()
+      // Override activity component
+      val activityComponent = DaggerActivityComponent.builder()
         .appComponent(appComponent)
         .riffsyModule(object : RiffsyModule() {
           // Set custom endpoint for rest service
-          override fun providesRiffsyApi(builder: Retrofit.Builder): RiffsyApiClient {
-            return builder.baseUrl(mockEndPoint!!)
+          override fun providesRiffsyApi(retrofit: Retrofit): RiffsyApiClient {
+            return retrofit.newBuilder()
+              .baseUrl(mockEndPoint)
               .build()
               .create(RiffsyApiClient::class.java)
           }
@@ -94,21 +95,10 @@ class MainActivityTest : AndroidTestBase() {
           }
         })
         .build()
-      testApp.setRiffsyComponent(netComponent)
+      testApp.activityComponent = activityComponent
     }
   }
-  @Rule @JvmField val server = MockWebServer()
   private var mockEndPoint: String? = null
-
-  private val dispatcher = object : Dispatcher() {
-    override fun dispatch(request: RecordedRequest): MockResponse {
-      if ("/v1/trending?key=" + API_KEY == request.path) {
-        return getMockResponse("/trending_results.json")
-      }
-
-      return MockResponse().setResponseCode(HTTP_NOT_FOUND)
-    }
-  }
 
   @Before override fun setUp() {
     super.setUp()
@@ -129,21 +119,14 @@ class MainActivityTest : AndroidTestBase() {
     val stream = javaClass.getResourceAsStream(fileName)
     val mockResponse = Scanner(stream, Charset.defaultCharset().name())
       .useDelimiter("\\A").next()
-
     val response = MockResponse().setResponseCode(HTTP_OK)
       .setBody(mockResponse)
-
-    try {
-      stream.close()
-    } catch (ignore: IOException) {
-    }
-
+    stream.close()
     return response
   }
 
   @Ignore
   @Test fun testTrendingThenClickOpenDialog() {
-    // Assert
     onView(withId(R.id.recycler_view))
       .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click())) // Select 0, the response only contains 1 item
     onView(withId(R.id.gif_dialog_image))
@@ -155,12 +138,19 @@ class MainActivityTest : AndroidTestBase() {
   }
 
   @Test fun testTrendingResultsThenSearchThenBackToTrending() {
-    // Assert
     onView(withId(R.id.menu_search))
       .perform(click())
     onView(withId(R.id.search_src_text))
       .perform(typeText("hello"), closeSoftKeyboard(), pressBack())
     onView(withId(R.id.recycler_view))
       .check(matches(isDisplayed()))
+  }
+
+  private val dispatcher = object : Dispatcher() {
+    override fun dispatch(request: RecordedRequest): MockResponse {
+      if ("/v1/trending?key=" + API_KEY == request.path) return getMockResponse("/trending_results.json")
+
+      return MockResponse().setResponseCode(HTTP_NOT_FOUND)
+    }
   }
 }

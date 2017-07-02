@@ -55,7 +55,7 @@ android {
     minSdkVersion rootProject.ext.ci ? rootProject.ext.minSdkVersion : 21 // Optimize build speed - build with minSdk 21 if using multidex
     targetSdkVersion rootProject.ext.targetSdkVersion
     testApplicationId "burrows.apps.example.gif.test"
-    testInstrumentationRunner "test.CustomTestRunner"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     resConfigs "en"                                                       // Optimize APK size - keep only english resource files for now
     vectorDrawables.useSupportLibrary = true                              // Optimize APK size - use vector drawables
   }

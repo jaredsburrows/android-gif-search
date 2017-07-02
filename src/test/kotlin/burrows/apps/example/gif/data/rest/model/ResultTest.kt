@@ -12,12 +12,10 @@ class ResultTest : TestBase() {
   private var sut = Result().apply { media = testMedias; title = STRING_UNIQUE }
 
   @Test fun testGetMedia() {
-    // Assert
     assertThat(sut.media).isEqualTo(testMedias)
   }
 
   @Test fun testGetTitle() {
-    // Assert
     assertThat(sut.title).isEqualTo(STRING_UNIQUE)
   }
 }

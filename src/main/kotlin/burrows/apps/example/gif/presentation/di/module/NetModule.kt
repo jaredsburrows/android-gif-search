@@ -71,11 +71,12 @@ class NetModule {
       .build()
   }
 
-  @Provides @PerActivity fun providesRetrofitBuilder(gson: Gson,
-                                                     okHttpClient: OkHttpClient): Retrofit.Builder {
+  @Provides @PerActivity fun providesRetrofit(gson: Gson,
+                                              okHttpClient: OkHttpClient): Retrofit {
     return Retrofit.Builder()
       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
       .addConverterFactory(GsonConverterFactory.create(gson))
       .client(okHttpClient)
+      .build()
   }
 }

@@ -12,7 +12,6 @@ class MediaTest : TestBase() {
   private var sut = Media().apply { gif = gifTest }
 
   @Test fun testGetGif() {
-    // Assert
     assertThat(sut.gif).isEqualTo(gifTest)
   }
 }

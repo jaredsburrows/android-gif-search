@@ -12,12 +12,10 @@ class RiffsyResponseTest : TestBase() {
   private var sut = RiffsyResponse().apply { results = resultsTest; page = FLOAT_RANDOM }
 
   @Test fun testGetResults() {
-    // Assert
     assertThat(sut.results).isEqualTo(resultsTest)
   }
 
   @Test fun testGetNext() {
-    // Assert
     assertThat(sut.page).isEqualTo(FLOAT_RANDOM)
   }
 }
