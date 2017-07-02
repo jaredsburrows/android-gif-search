@@ -21,6 +21,7 @@ tasks.withType(JavaCompile) {
 
 // Turn on logging for all tests, filter to show failures/skips only
 tasks.withType(Test) {
+  maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
   testLogging {
     exceptionFormat "full"
     showCauses true
