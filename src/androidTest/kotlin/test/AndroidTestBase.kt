@@ -10,6 +10,7 @@ import java.util.UUID.randomUUID
  *
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
+@Suppress("unused")
 abstract class AndroidTestBase {
   companion object {
     val NUMBER_NEGATIVE_ONE = -1

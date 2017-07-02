@@ -54,6 +54,7 @@ public final class MainFragment extends Fragment
   private static final String TAG = MainFragment.class.getSimpleName();
   // Can't be longer than 23 chars
   private static final int PORTRAIT_COLUMNS = 3;
+  private static final int VISIBLE_THRESHOLD = 5;
   private GridLayoutManager layoutManager;
   private GifItemDecoration itemOffsetDecoration;
   private GifAdapter adapter;
@@ -61,7 +62,6 @@ public final class MainFragment extends Fragment
   private AppCompatDialog dialog;
   private int previousTotal = 0;
   private boolean loading = true;
-  private int visibleThreshold = 5;
   private int firstVisibleItem;
   private int visibleItemCount;
   private int totalItemCount;
@@ -167,7 +167,7 @@ public final class MainFragment extends Fragment
         }
 
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem
-          + visibleThreshold)) {
+          + VISIBLE_THRESHOLD)) {
           presenter.loadTrendingImages(next);
 
           loading = true;

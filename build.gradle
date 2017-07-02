@@ -105,7 +105,7 @@ android {
   // Add "debug.keystore" so developers can share APKs with same signatures locally
   signingConfigs {
     debug {
-      storeFile rootProject.file(".buildscript/debug.keystore")
+      storeFile rootProject.file("config/signing/debug.keystore")
       storePassword rootProject.ext.debugKeystorePass
       keyAlias rootProject.ext.debugKeystoreUser
       keyPassword rootProject.ext.debugKeystorePass

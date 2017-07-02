@@ -28,7 +28,7 @@ public final class GifAdapter extends RecyclerView.Adapter<GifAdapter.ViewHolder
   // Can't be longer than 23 chars
   private final static String TAG = GifAdapter.class.getSimpleName();
   private final List<ImageInfoModel> data = new ArrayList<>();
-  private ImageApiRepository repository;
+  private final ImageApiRepository repository;
   private final OnItemClickListener onItemClickListener;
 
   public GifAdapter(OnItemClickListener onItemClickListener, ImageApiRepository repository) {

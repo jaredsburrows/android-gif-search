@@ -91,7 +91,7 @@ android.applicationVariants.all { variant ->
     ignoreFailures = true
     reports.html.enabled = true
 
-    configFile = rootProject.file("./.buildscript/checkstyle-hard.xml")
+    configFile = rootProject.file("config/checkstyle/checkstyle-hard.xml")
     source = files(android.sourceSets.main.java.srcDirs)
     classpath = files(configurations.compile.files)
   }
