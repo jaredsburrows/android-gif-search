@@ -46,18 +46,18 @@ class NetModule {
     private val CLIENT_CACHE_DIRECTORY = "http"
   }
 
-  @Provides @PerActivity internal fun provideCache(application: Application): Cache {
+  @Provides @PerActivity fun provideCache(application: Application): Cache {
     return Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY),
       CLIENT_CACHE_SIZE.toLong())
   }
 
-  @Provides @PerActivity internal fun provideGson(): Gson {
+  @Provides @PerActivity fun provideGson(): Gson {
     return GsonBuilder()
       .setDateFormat(CLIENT_DATE_FORMAT)
       .create()
   }
 
-  @Provides @PerActivity internal fun provideOkHttpClient(cache: Cache): OkHttpClient {
+  @Provides @PerActivity fun provideOkHttpClient(cache: Cache): OkHttpClient {
     return OkHttpClient.Builder()
       .addInterceptor(HttpLoggingInterceptor()
         .setLevel(if (BuildConfig.DEBUG)
@@ -71,8 +71,8 @@ class NetModule {
       .build()
   }
 
-  @Provides @PerActivity internal fun provideRetrofitBuilder(gson: Gson,
-                                                             okHttpClient: OkHttpClient): Retrofit.Builder {
+  @Provides @PerActivity fun provideRetrofitBuilder(gson: Gson,
+                                                    okHttpClient: OkHttpClient): Retrofit.Builder {
     return Retrofit.Builder()
       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
       .addConverterFactory(GsonConverterFactory.create(gson))

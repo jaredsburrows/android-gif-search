@@ -11,11 +11,11 @@ import android.view.View
  */
 class GifItemDecoration(val offSet: Int, val columns: Int) : RecyclerView.ItemDecoration() {
   override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView,
-                              state: RecyclerView.State?) {
+                              state: RecyclerView.State) {
     super.getItemOffsets(outRect, view, parent, state)
 
     val position = parent.getChildLayoutPosition(view)
-    val dataSize = state!!.itemCount
+    val dataSize = state.itemCount
 
     // Apply inner right
     if (position % columns < columns - 1) outRect.right = offSet

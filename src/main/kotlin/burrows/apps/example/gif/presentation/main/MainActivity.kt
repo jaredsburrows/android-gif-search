@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
     // Injection dependencies
-    (application as App).activityComponent?.inject(this)
+    (application as App).activityComponent.inject(this)
 
     // Setup Toolbar
     binding.toolBar.setNavigationIcon(R.mipmap.ic_launcher)

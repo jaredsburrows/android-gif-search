@@ -10,8 +10,8 @@ import burrows.apps.example.gif.presentation.di.component.AppComponent
  */
 @SuppressLint("Registered")
 open class App : Application() {
-  open var appComponent: AppComponent? = null
-  open var activityComponent: ActivityComponent? = null
+  open lateinit var appComponent: AppComponent
+  open lateinit var activityComponent: ActivityComponent
 
   override fun onCreate() {
     super.onCreate()

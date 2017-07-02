@@ -19,7 +19,6 @@ class MainPresenter(val view: IMainView,
     // Can't be longer than 23 chars
     private val TAG = MainPresenter::class.java.simpleName
   }
-
   private val disposable = CompositeDisposable()
 
   init {
@@ -61,8 +60,8 @@ class MainPresenter(val view: IMainView,
   fun loadImages(observable: Observable<RiffsyResponse>) {
     disposable.add(observable
       .subscribeOn(provider.io())
-      ?.observeOn(provider.ui())
-      ?.subscribe(Consumer<RiffsyResponse> { riffsyResponse ->
+      .observeOn(provider.ui())
+      .subscribe(Consumer<RiffsyResponse> { riffsyResponse ->
         if (!view.isActive) return@Consumer
 
         // Iterate over data from response and grab the urls

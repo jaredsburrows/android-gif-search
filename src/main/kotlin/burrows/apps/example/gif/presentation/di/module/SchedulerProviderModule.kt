@@ -10,7 +10,7 @@ import dagger.Provides
  */
 @Module
 class SchedulerProviderModule {
-  @Provides @PerActivity internal fun providerSchedulerProvider(): SchedulerProvider {
+  @Provides @PerActivity fun providerSchedulerProvider(): SchedulerProvider {
     return SchedulerProvider()
   }
 }

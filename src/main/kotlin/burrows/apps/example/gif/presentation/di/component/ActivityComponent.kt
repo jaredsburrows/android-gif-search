@@ -27,7 +27,7 @@ interface ActivityComponent {
 
   // Setup components dependencies and modules
   companion object {
-    fun init(appComponent: AppComponent?): ActivityComponent {
+    fun init(appComponent: AppComponent): ActivityComponent {
       return DaggerActivityComponent.builder()
         .appComponent(appComponent)
         .build()
