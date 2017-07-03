@@ -11,8 +11,8 @@ import retrofit2.Retrofit
  */
 @Module
 open class RiffsyModule {
-  @Provides @PerActivity open fun providesRiffsyApi(retrofit: Retrofit): RiffsyApiClient {
-    return retrofit.newBuilder()
+  @Provides @PerActivity open fun providesRiffsyApi(retrofit: Retrofit.Builder): RiffsyApiClient {
+    return retrofit
       .baseUrl(RiffsyApiClient.BASE_URL)
       .build()
       .create(RiffsyApiClient::class.java)

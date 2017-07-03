@@ -67,11 +67,10 @@ class NetModule {
   }
 
   @Provides @PerActivity fun providesRetrofit(moshi: Moshi,
-                                              okHttpClient: OkHttpClient): Retrofit {
+                                              okHttpClient: OkHttpClient): Retrofit.Builder {
     return Retrofit.Builder()
       .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
       .addConverterFactory(MoshiConverterFactory.create(moshi))
       .client(okHttpClient)
-      .build()
   }
 }

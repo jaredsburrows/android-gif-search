@@ -33,7 +33,7 @@ class GifAdapterTest : AndroidTestBase() {
   private val imageInfoModel = ImageInfoModel().apply { url = STRING_UNIQUE }
   private val imageInfoModel2 = ImageInfoModel().apply { url = STRING_UNIQUE2 }
   private val imageInfoModel3 = ImageInfoModel().apply { url = STRING_UNIQUE3 }
-  @Rule @JvmField val uiThreadTestRule = UiThreadTestRule()
+  @get:Rule val uiThreadTestRule = UiThreadTestRule()
   @Mock private lateinit var onItemClickListener: OnItemClickListener
   private lateinit var viewHolder: GifAdapter.ViewHolder
   private lateinit var spyImageDownloader: ImageApiRepository

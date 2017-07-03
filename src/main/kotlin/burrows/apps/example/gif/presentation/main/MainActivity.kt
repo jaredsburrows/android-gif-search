@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     setSupportActionBar(binding.toolBar)
 
     // Use Fragments
-    var fragment: MainFragment? = supportFragmentManager.findFragmentById(R.id.content_frame) as MainFragment
+    var fragment: MainFragment? = supportFragmentManager.findFragmentById(R.id.content_frame) as MainFragment?
     if (fragment == null) fragment = MainFragment()
     if (savedInstanceState == null) {
       supportFragmentManager

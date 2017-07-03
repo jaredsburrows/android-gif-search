@@ -20,7 +20,6 @@ import burrows.apps.example.gif.App
 import burrows.apps.example.gif.R
 import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
-import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.API_KEY
 import burrows.apps.example.gif.presentation.di.component.DaggerActivityComponent
 import burrows.apps.example.gif.presentation.di.component.DaggerAppComponent
 import burrows.apps.example.gif.presentation.di.module.AppModule
@@ -54,8 +53,8 @@ import java.util.Scanner
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest : AndroidTestBase() {
-  @Rule @JvmField val server = MockWebServer()
-  @Rule @JvmField val activityRule: ActivityTestRule<MainActivity> = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
+  @get:Rule val server = MockWebServer()
+  @get:Rule val activityRule: ActivityTestRule<MainActivity> = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
     override fun beforeActivityLaunched() {
       super.beforeActivityLaunched()
 
@@ -71,8 +70,8 @@ class MainActivityTest : AndroidTestBase() {
         .appComponent(appComponent)
         .riffsyModule(object : RiffsyModule() {
           // Set custom endpoint for rest service
-          override fun providesRiffsyApi(retrofit: Retrofit): RiffsyApiClient {
-            return retrofit.newBuilder()
+          override fun providesRiffsyApi(retrofit: Retrofit.Builder): RiffsyApiClient {
+            return retrofit
               .baseUrl(mockEndPoint)
               .build()
               .create(RiffsyApiClient::class.java)
@@ -98,14 +97,13 @@ class MainActivityTest : AndroidTestBase() {
       testApp.activityComponent = activityComponent
     }
   }
-  private var mockEndPoint: String? = null
+  private val mockEndPoint = server.url("/").toString()
 
   @Before override fun setUp() {
     super.setUp()
 
     initMocks(this)
 
-    mockEndPoint = server.url("/").toString()
     server.setDispatcher(dispatcher)
   }
 
@@ -148,7 +146,7 @@ class MainActivityTest : AndroidTestBase() {
 
   private val dispatcher = object : Dispatcher() {
     override fun dispatch(request: RecordedRequest): MockResponse {
-      if ("/v1/trending?key=" + API_KEY == request.path) return getMockResponse("/trending_results.json")
+      if (request.path.contains("/v1/trending")) return getMockResponse("/trending_results.json")
 
       return MockResponse().setResponseCode(HTTP_NOT_FOUND)
     }

@@ -21,7 +21,7 @@ import java.util.Scanner
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class RiffsyApiClientTest : TestBase() {
-  @Rule @JvmField val server = MockWebServer()
+  @get:Rule val server = MockWebServer()
   private lateinit var sut: RiffsyApiClient
 
   @Before override fun setUp() {
