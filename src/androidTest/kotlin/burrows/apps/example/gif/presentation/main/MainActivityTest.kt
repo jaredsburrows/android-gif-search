@@ -44,12 +44,10 @@ import java.net.HttpURLConnection.HTTP_OK
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-@Ignore
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest : AndroidTestBase() {
-  @get:Rule val server = MockWebServer()
-  @get:Rule val activityRule: ActivityTestRule<MainActivity> = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
+  @get:Rule val activityRule: ActivityTestRule<MainActivity> = object : ActivityTestRule<MainActivity>(MainActivity::class.java, true, false) {
     override fun beforeActivityLaunched() {
       super.beforeActivityLaunched()
 
@@ -76,11 +74,13 @@ class MainActivityTest : AndroidTestBase() {
       testApp.activityComponent = activityComponent
     }
   }
-  private val mockEndPoint = server.url("/").toString()
+  @get:Rule val server = MockWebServer()
+  private lateinit var mockEndPoint: String
 
   @Before override fun setUp() {
     super.setUp()
 
+    mockEndPoint = server.url("/").toString()
     server.setDispatcher(dispatcher)
   }
 
@@ -92,6 +92,10 @@ class MainActivityTest : AndroidTestBase() {
 
   @Ignore
   @Test fun testTrendingThenClickOpenDialog() {
+    // Act
+    activityRule.launchActivity(null)
+
+    // Assert
     onView(withId(R.id.recycler_view))
       .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click())) // Select 0, the response only contains 1 item
     onView(withId(R.id.gif_dialog_image))
@@ -103,6 +107,10 @@ class MainActivityTest : AndroidTestBase() {
   }
 
   @Test fun testTrendingResultsThenSearchThenBackToTrending() {
+    // Act
+    activityRule.launchActivity(null)
+
+    // Assert
     onView(withId(R.id.menu_search))
       .perform(click())
     onView(withId(R.id.search_src_text))
@@ -138,7 +146,7 @@ class MainActivityTest : AndroidTestBase() {
       when {
         request.path.contains("/v1/trending") -> return getMockResponse("/trending_results.json")
         request.path.contains("/v1/search") -> return getMockResponse("/search_results.json")
-        request.path.contains("media.riffsy.com") -> return getMockFileResponse("/ic_launcher.png")
+        request.path.contains("/images") -> return getMockFileResponse("/ic_launcher.png")
         else -> return MockResponse().setResponseCode(HTTP_NOT_FOUND)
       }
     }
