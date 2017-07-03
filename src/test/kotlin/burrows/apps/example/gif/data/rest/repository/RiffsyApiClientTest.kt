@@ -1,9 +1,14 @@
 package burrows.apps.example.gif.data.rest.repository
 
+import burrows.apps.example.gif.data.rest.model.RiffsyResponse
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
+import io.reactivex.observers.TestObserver
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.RecordedRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -13,9 +18,9 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import test.TestBase
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
 import java.net.HttpURLConnection.HTTP_OK
-import java.nio.charset.Charset
-import java.util.Scanner
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
@@ -27,9 +32,9 @@ class RiffsyApiClientTest : TestBase() {
   @Before override fun setUp() {
     super.setUp()
 
-    val mockEndPoint = server.url("/").toString()
+    sut = getRetrofit(server.url("/").toString()).build().create(RiffsyApiClient::class.java)
 
-    sut = getRetrofit(mockEndPoint).build().create(RiffsyApiClient::class.java)
+    server.setDispatcher(dispatcher)
   }
 
   @After override fun tearDown() {
@@ -38,34 +43,14 @@ class RiffsyApiClientTest : TestBase() {
     server.shutdown()
   }
 
-  private fun sendMockMessages(fileName: String) {
-    val stream = javaClass.getResourceAsStream(fileName)
-    val mockResponse = Scanner(stream, Charset.defaultCharset().name())
-      .useDelimiter("\\A").next()
-
-    server.enqueue(MockResponse()
-      .setResponseCode(HTTP_OK)
-      .setBody(mockResponse))
-
-    stream.close()
-  }
-
-  private fun getRetrofit(baseUrl: String): Retrofit.Builder {
-    return Retrofit.Builder()
-      .baseUrl(baseUrl)
-      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-      .addConverterFactory(MoshiConverterFactory.create())
-      .client(OkHttpClient())
-  }
-
   @Test fun testTrendingResultsUrlShouldParseCorrectly() {
     // Arrange
-    sendMockMessages("/trending_results.json")
+    val observer = TestObserver<RiffsyResponse>()
 
     // Act
-    val response = sut
-      .getTrendingResults(DEFAULT_LIMIT_COUNT, null)
-      .blockingFirst()
+    val observable = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
+    val response = observable.blockingFirst()
+    observer.assertNoErrors()
 
     // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.url)
@@ -74,12 +59,12 @@ class RiffsyApiClientTest : TestBase() {
 
   @Test fun testTrendingResultsUrlPreviewShouldParseCorrectly() {
     // Arrange
-    sendMockMessages("/trending_results.json")
+    val observer = TestObserver<RiffsyResponse>()
 
     // Act
-    val response = sut
-      .getTrendingResults(DEFAULT_LIMIT_COUNT, null)
-      .blockingFirst()
+    val observable = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
+    val response = observable.blockingFirst()
+    observer.assertNoErrors()
 
     // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.preview)
@@ -88,12 +73,12 @@ class RiffsyApiClientTest : TestBase() {
 
   @Test fun testSearchResultsUrlShouldParseCorrectly() {
     // Arrange
-    sendMockMessages("/search_results.json")
+    val observer = TestObserver<RiffsyResponse>()
 
     // Act
-    val response = sut
-      .getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
-      .blockingFirst()
+    val observable = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
+    val response = observable.blockingFirst()
+    observer.assertNoErrors()
 
     // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.url)
@@ -102,15 +87,45 @@ class RiffsyApiClientTest : TestBase() {
 
   @Test fun testSearchResultsUrlPreviewShouldParseCorrectly() {
     // Arrange
-    sendMockMessages("/search_results.json")
+    val observer = TestObserver<RiffsyResponse>()
 
     // Act
-    val response = sut
-      .getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
-      .blockingFirst()
+    val observable = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
+    val response = observable.blockingFirst()
+    observer.assertNoErrors()
 
     // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.preview)
       .isEqualTo("https://media.riffsy.com/images/6f2ed339fbdb5c1270e29945ee1f0d77/raw")
+  }
+
+  private fun getRetrofit(baseUrl: String): Retrofit.Builder {
+    return Retrofit.Builder()
+      .baseUrl(baseUrl)
+      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+      .addConverterFactory(MoshiConverterFactory.create())
+      .client(OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor()
+          .setLevel(HttpLoggingInterceptor.Level.BODY))
+        .build()
+      )
+  }
+
+  private fun getMockResponse(fileName: String): MockResponse {
+    return MockResponse()
+      .setStatus("HTTP/1.1 200")
+      .setResponseCode(HTTP_OK)
+      .setBody(InputStreamReader(javaClass.getResourceAsStream(fileName)).readText())
+      .addHeader("content-type: text/plain; charset=utf-8")
+  }
+
+  private val dispatcher = object : Dispatcher() {
+    override fun dispatch(request: RecordedRequest): MockResponse {
+      when {
+        request.path.contains("/v1/trending") -> return getMockResponse("/trending_results.json")
+        request.path.contains("/v1/search") -> return getMockResponse("/search_results.json")
+        else -> return MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND)
+      }
+    }
   }
 }

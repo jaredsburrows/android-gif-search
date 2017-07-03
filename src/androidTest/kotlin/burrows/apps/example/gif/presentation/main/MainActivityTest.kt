@@ -1,6 +1,5 @@
 package burrows.apps.example.gif.presentation.main
 
-import android.content.Context
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
@@ -18,38 +17,34 @@ import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
 import burrows.apps.example.gif.App
 import burrows.apps.example.gif.R
-import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.presentation.di.component.DaggerActivityComponent
 import burrows.apps.example.gif.presentation.di.component.DaggerAppComponent
 import burrows.apps.example.gif.presentation.di.module.AppModule
-import burrows.apps.example.gif.presentation.di.module.GlideModule
 import burrows.apps.example.gif.presentation.di.module.RiffsyModule
-import com.bumptech.glide.GifRequestBuilder
-import com.bumptech.glide.Glide
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import okio.Buffer
+import okio.Okio
 import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.MockitoAnnotations.initMocks
 import retrofit2.Retrofit
 import test.AndroidTestBase
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import java.net.HttpURLConnection.HTTP_OK
-import java.nio.charset.Charset
-import java.util.Scanner
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 @Ignore
-@Suppress("UNCHECKED_CAST")
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest : AndroidTestBase() {
@@ -77,22 +72,6 @@ class MainActivityTest : AndroidTestBase() {
               .create(RiffsyApiClient::class.java)
           }
         })
-        .glideModule(object : GlideModule() {
-          override fun providesImageDownloader(context: Context): ImageApiRepository {
-            return object : ImageApiRepository(context) {
-              // Prevent Glide network call with custom override
-              override fun <T> load(url: T): GifRequestBuilder<T> {
-                return Glide.with(context)
-                  .load(R.mipmap.ic_launcher)
-                  .asGif()
-                  .placeholder(R.mipmap.ic_launcher)
-                  .fallback(R.mipmap.ic_launcher)
-                  .error(R.mipmap.ic_launcher)
-                  .override(200, 200) as GifRequestBuilder<T>
-              }
-            }
-          }
-        })
         .build()
       testApp.activityComponent = activityComponent
     }
@@ -102,8 +81,6 @@ class MainActivityTest : AndroidTestBase() {
   @Before override fun setUp() {
     super.setUp()
 
-    initMocks(this)
-
     server.setDispatcher(dispatcher)
   }
 
@@ -111,16 +88,6 @@ class MainActivityTest : AndroidTestBase() {
     super.tearDown()
 
     server.shutdown()
-  }
-
-  private fun getMockResponse(fileName: String): MockResponse {
-    val stream = javaClass.getResourceAsStream(fileName)
-    val mockResponse = Scanner(stream, Charset.defaultCharset().name())
-      .useDelimiter("\\A").next()
-    val response = MockResponse().setResponseCode(HTTP_OK)
-      .setBody(mockResponse)
-    stream.close()
-    return response
   }
 
   @Ignore
@@ -144,11 +111,36 @@ class MainActivityTest : AndroidTestBase() {
       .check(matches(isDisplayed()))
   }
 
+  private fun getMockResponse(fileName: String): MockResponse {
+    return MockResponse()
+      .setStatus("HTTP/1.1 200")
+      .setResponseCode(HTTP_OK)
+      .setBody(InputStreamReader(javaClass.getResourceAsStream(fileName)).readText())
+      .addHeader("content-type: text/plain; charset=utf-8")
+  }
+
+  private fun getMockFileResponse(fileName: String): MockResponse {
+    return MockResponse()
+      .setStatus("HTTP/1.1 200")
+      .setResponseCode(HTTP_OK)
+      .setBody(fileToBytes(javaClass.getResourceAsStream(fileName)))
+      .addHeader("content-type: image/png")
+  }
+
+  private fun fileToBytes(file: InputStream): Buffer {
+    val result = Buffer()
+    result.writeAll(Okio.source(file))
+    return result
+  }
+
   private val dispatcher = object : Dispatcher() {
     override fun dispatch(request: RecordedRequest): MockResponse {
-      if (request.path.contains("/v1/trending")) return getMockResponse("/trending_results.json")
-
-      return MockResponse().setResponseCode(HTTP_NOT_FOUND)
+      when {
+        request.path.contains("/v1/trending") -> return getMockResponse("/trending_results.json")
+        request.path.contains("/v1/search") -> return getMockResponse("/search_results.json")
+        request.path.contains("media.riffsy.com") -> return getMockFileResponse("/ic_launcher.png")
+        else -> return MockResponse().setResponseCode(HTTP_NOT_FOUND)
+      }
     }
   }
 }

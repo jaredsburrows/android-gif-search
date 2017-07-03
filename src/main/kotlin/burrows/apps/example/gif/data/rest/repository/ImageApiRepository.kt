@@ -5,19 +5,25 @@ import burrows.apps.example.gif.R
 import com.bumptech.glide.GifRequestBuilder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import javax.inject.Inject
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-open class ImageApiRepository(val context: Context) {
-  private val imageHeight: Int = context.resources.getDimensionPixelSize(R.dimen.gif_image_width)
+class ImageApiRepository {
+  private val context: Context
+  private val imageHeight: Int
   private val imageWidth: Int
 
-  init {
+  @Suppress("ConvertSecondaryConstructorToPrimary")
+  @Inject constructor(context: Context) {
+    this.context = context
+
+    this.imageHeight = context.resources.getDimensionPixelSize(R.dimen.gif_image_width)
     this.imageWidth = imageHeight
   }
 
-  open fun <T> load(url: T): GifRequestBuilder<T> {
+  fun <T> load(url: T): GifRequestBuilder<T> {
     return Glide.with(context)
       .load(url)
       .asGif()

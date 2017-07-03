@@ -96,7 +96,7 @@ class GifAdapter(val onItemClickListener: GifAdapter.OnItemClickListener, val re
    * @return the hashCode of the URL of image.
    */
   override fun getItemId(position: Int): Long {
-    return getItem(position).url?.hashCode()?.toLong() ?: 0
+    return getItem(position).url?.hashCode()?.toLong() ?: 0L
   }
 
   /**

@@ -28,12 +28,12 @@ class NetModule {
     /**
      * OkHttp client request time out.
      */
-    private val CLIENT_TIME_OUT = 10
+    private val CLIENT_TIME_OUT = 10L
 
     /**
      * OkHttp cache size.
      */
-    private val CLIENT_CACHE_SIZE = 10 * 1024 * 1024 // 10 MiB
+    private val CLIENT_CACHE_SIZE = 10 * 1024 * 1024L // 10 MiB
 
     /**
      * OkHttp cache directory.
@@ -42,8 +42,7 @@ class NetModule {
   }
 
   @Provides @PerActivity fun providesCache(application: Application): Cache {
-    return Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY),
-      CLIENT_CACHE_SIZE.toLong())
+    return Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
   }
 
   @Provides @PerActivity fun providesMoshi(): Moshi {
@@ -59,9 +58,9 @@ class NetModule {
           HttpLoggingInterceptor.Level.BODY
         else
           HttpLoggingInterceptor.Level.NONE))
-      .connectTimeout(CLIENT_TIME_OUT.toLong(), TimeUnit.SECONDS)
-      .writeTimeout(CLIENT_TIME_OUT.toLong(), TimeUnit.SECONDS)
-      .readTimeout(CLIENT_TIME_OUT.toLong(), TimeUnit.SECONDS)
+      .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+      .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+      .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .cache(cache)
       .build()
   }

@@ -1,7 +1,6 @@
 package burrows.apps.example.gif.presentation.di.component
 
 import burrows.apps.example.gif.presentation.adapter.GifAdapter
-import burrows.apps.example.gif.presentation.di.module.GlideModule
 import burrows.apps.example.gif.presentation.di.module.LeakCanaryModule
 import burrows.apps.example.gif.presentation.di.module.NetModule
 import burrows.apps.example.gif.presentation.di.module.RiffsyModule
@@ -16,8 +15,7 @@ import dagger.Component
 @PerActivity
 @Component(
   dependencies = arrayOf(AppComponent::class),
-  modules = arrayOf(NetModule::class, RiffsyModule::class, GlideModule::class,
-    LeakCanaryModule::class))
+  modules = arrayOf(NetModule::class, RiffsyModule::class, LeakCanaryModule::class))
 interface ActivityComponent {
   // Injections
   fun inject(mainActivity: MainActivity)
