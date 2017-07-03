@@ -37,12 +37,12 @@ class GifAdapter(val onItemClickListener: GifAdapter.OnItemClickListener, val re
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val imageInfo = getItem(position)
+    val imageInfoModel = getItem(position)
     val binding = holder.binding
 
     // Load images
-    repository.load(imageInfo.url)
-      .thumbnail(repository.load(imageInfo.previewUrl))
+    repository.load(imageInfoModel.url)
+      .thumbnail(repository.load(imageInfoModel.previewUrl))
       .listener(object : RequestListener<Any?, GifDrawable> {
         override fun onException(e: Exception, model: Any?, target: Target<GifDrawable>,
                                  isFirstResource: Boolean): Boolean {
@@ -65,7 +65,7 @@ class GifAdapter(val onItemClickListener: GifAdapter.OnItemClickListener, val re
       })
       .into(binding.gifImage)
 
-    holder.itemView.setOnClickListener { onItemClickListener.onClick(imageInfo) }
+    holder.itemView.setOnClickListener { onItemClickListener.onClick(imageInfoModel) }
 
     binding.executePendingBindings()
   }
@@ -108,7 +108,7 @@ class GifAdapter(val onItemClickListener: GifAdapter.OnItemClickListener, val re
    * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
    */
   interface OnItemClickListener {
-    fun onClick(imageInfo: ImageInfoModel?)
+    fun onClick(imageInfoModel: ImageInfoModel?)
   }
 
   /**
