@@ -152,7 +152,7 @@ class GifAdapterTest : AndroidTestBase() {
 
   @Test fun testAddLocationObjectShouldReturnCorrectValues() {
     // Act
-    sut.add(0, ImageInfoModel(STRING_UNIQUE3, null))
+    sut.add(0, imageInfoModel3)
 
     // Assert
     assertThat(sut.getItem(0)).isEqualTo(imageInfoModel3)

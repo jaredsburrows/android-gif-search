@@ -10,7 +10,7 @@ import javax.inject.Inject
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class ImageApiRepository {
+open class ImageApiRepository { // dexmaker-mockito bug, leave open
   private val context: Context
   private val imageHeight: Int
   private val imageWidth: Int
@@ -23,7 +23,7 @@ class ImageApiRepository {
     this.imageWidth = imageHeight
   }
 
-  fun <T> load(url: T): GifRequestBuilder<T> {
+  open fun <T> load(url: T): GifRequestBuilder<T> {
     return Glide.with(context)
       .load(url)
       .asGif()

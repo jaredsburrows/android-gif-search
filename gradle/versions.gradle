@@ -80,7 +80,7 @@ ext.deps = [
 
   // testCompile
   "junit"                : "junit:junit:4.12",
-  "mockitoCore"          : "org.mockito:mockito-core:2.8.9",
+  "mockitoCore"          : "org.mockito:mockito-core:2.8.47",
   "assertjCore"          : "org.assertj:assertj-core:1.7.1",
   "equalsverifier"       : "nl.jqno.equalsverifier:equalsverifier:2.3",
   "mockwebserver"        : "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
