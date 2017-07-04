@@ -36,7 +36,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import retrofit2.Retrofit
 import test.AndroidTestBase
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import java.net.HttpURLConnection.HTTP_OK
@@ -123,21 +122,32 @@ class MainActivityTest : AndroidTestBase() {
     return MockResponse()
       .setStatus("HTTP/1.1 200")
       .setResponseCode(HTTP_OK)
-      .setBody(InputStreamReader(javaClass.getResourceAsStream(fileName)).readText())
-      .addHeader("content-type: text/plain; charset=utf-8")
+      .setBody(parseText(fileName))
+      .addHeader("Content-type: application/json; charset=utf-8")
+  }
+
+  private fun parseText(fileName: String): String {
+    val inputStream = javaClass.getResourceAsStream(fileName)
+    val text = InputStreamReader(inputStream).readText()
+    inputStream.close()
+    return text
   }
 
   private fun getMockFileResponse(fileName: String): MockResponse {
     return MockResponse()
       .setStatus("HTTP/1.1 200")
       .setResponseCode(HTTP_OK)
-      .setBody(fileToBytes(javaClass.getResourceAsStream(fileName)))
+      .setBody(parseImage(fileName))
       .addHeader("content-type: image/png")
   }
 
-  private fun fileToBytes(file: InputStream): Buffer {
+  private fun parseImage(fileName: String): Buffer? {
+    val inputStream = javaClass.getResourceAsStream(fileName)
+    val source = Okio.source(inputStream)
     val result = Buffer()
-    result.writeAll(Okio.source(file))
+    result.writeAll(source)
+    inputStream.close()
+    source.close()
     return result
   }
 

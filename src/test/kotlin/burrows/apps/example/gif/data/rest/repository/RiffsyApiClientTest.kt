@@ -115,8 +115,15 @@ class RiffsyApiClientTest : TestBase() {
     return MockResponse()
       .setStatus("HTTP/1.1 200")
       .setResponseCode(HTTP_OK)
-      .setBody(InputStreamReader(javaClass.getResourceAsStream(fileName)).readText())
-      .addHeader("content-type: text/plain; charset=utf-8")
+      .setBody(parseText(fileName))
+      .addHeader("Content-type: application/json; charset=utf-8")
+  }
+
+  private fun parseText(fileName: String): String {
+    val inputStream = javaClass.getResourceAsStream(fileName)
+    val text = InputStreamReader(inputStream).readText()
+    inputStream.close()
+    return text
   }
 
   private val dispatcher = object : Dispatcher() {
