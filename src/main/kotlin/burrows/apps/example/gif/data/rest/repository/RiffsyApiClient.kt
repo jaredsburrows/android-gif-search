@@ -22,7 +22,7 @@ interface RiffsyApiClient {
     /**
      * Riffsy public API key.
      */
-    const val API_KEY = "LIVDSRZULELA"
+    private const val API_KEY = "LIVDSRZULELA"
 
     /**
      * Riffsy limit getResults.

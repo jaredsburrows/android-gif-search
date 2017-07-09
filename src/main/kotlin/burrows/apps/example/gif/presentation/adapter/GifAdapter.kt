@@ -100,7 +100,7 @@ class GifAdapter(
   /**
    * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
    */
-  class ViewHolder(val binding: ListItemBinding) : android.support.v7.widget.RecyclerView.ViewHolder(binding.root)
+  inner class ViewHolder(val binding: ListItemBinding) : android.support.v7.widget.RecyclerView.ViewHolder(binding.root)
 
   /**
    * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)

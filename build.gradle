@@ -80,14 +80,6 @@ android {
     preDexLibraries !rootProject.ext.ci
   }
 
-  // Add Kotlin source sets - shouldn't "kotlin-android" be doing this for us?
-  sourceSets {
-    androidTest.java.srcDirs += "src/androidTest/kotlin"
-    debug.java.srcDirs += "src/debug/kotlin"
-    main.java.srcDirs += "src/main/kotlin"
-    test.java.srcDirs += "src/test/kotlin"
-  }
-
   lintOptions {
     textReport true
     textOutput "stdout"
