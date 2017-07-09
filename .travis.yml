@@ -20,7 +20,7 @@ before_script:
   - .buildscript/setup-emulator.sh
 
 script:
-  - ./gradlew clean testDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan
+  - ./gradlew clean testDebug lintDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan
   - ./gradlew assembleRelease -Pci --stacktrace --scan
 
 branches:

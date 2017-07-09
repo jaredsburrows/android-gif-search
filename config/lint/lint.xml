@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<lint>
+  <!-- Unused will be removed on release -->
+  <issue id="UnusedResources" severity="ignore"/>
+
+  <!-- Ignore indexing through Google APIs -->
+  <issue id="GoogleAppIndexingApiWarning" severity="ignore"/>
+
+  <!-- okio -->
+  <issue id="InvalidPackage" severity="ignore"/>
+
+  <!-- Annotation binding -->
+  <issue id="ResourceType" severity="ignore"/>
+
+  <!-- Manual upgrades -->
+  <issue id="GradleDependency" severity="ignore"/>
+  <issue id="NewerVersionAvailable" severity="ignore"/>
+
+  <!-- Kotlin issues -->
+  <issue id="UnusedIds" severity="ignore"/>
+</lint>

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        tools:context=".presentation.main.MainActivity">
+  xmlns:tools="http://schemas.android.com/tools">
 
-        <ProgressBar
-            android:id="@+id/gif_progress"
-            android:layout_width="match_parent"
-            android:layout_height="128dp"
-            android:layout_gravity="center"
-            android:padding="24dp" />
-        
-        <ImageView
-            android:id="@+id/gif_image"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/gif_image_width"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/gif_image"
-            tools:src="@mipmap/ic_launcher" />
-    </RelativeLayout>
+  <RelativeLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    tools:context=".presentation.main.MainActivity">
+
+    <ProgressBar
+      android:id="@+id/gif_progress"
+      android:layout_width="match_parent"
+      android:layout_height="128dp"
+      android:layout_gravity="center"
+      android:padding="24dp"/>
+
+    <ImageView
+      android:id="@+id/gif_image"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/gif_image_width"
+      android:layout_gravity="center"
+      android:scaleType="centerCrop"
+      android:adjustViewBounds="true"
+      android:contentDescription="@string/gif_image"
+      tools:src="@mipmap/ic_launcher"/>
+  </RelativeLayout>
 </layout>
