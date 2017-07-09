@@ -29,14 +29,14 @@ class MainPresenterTest : TestBase() {
 
     initMocks(this)
 
-    `when`(view.isActive).thenReturn(true)
+    `when`(view.isActive()).thenReturn(true)
   }
 
   @Test fun testLoadTrendingImagesNotActive() {
     // Arrange
     val next = 0f
     val response = RiffsyResponse()
-    `when`(view.isActive).thenReturn(false)
+    `when`(view.isActive()).thenReturn(false)
     sut = MainPresenter(view, repository, provider)
     `when`(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
@@ -45,7 +45,7 @@ class MainPresenterTest : TestBase() {
     sut.loadTrendingImages(next)
 
     // Assert
-    verify(view).isActive
+    verify(view).isActive()
     verify(view, times(0)).addImages(eq(response))
   }
 
@@ -61,7 +61,7 @@ class MainPresenterTest : TestBase() {
     sut.loadTrendingImages(next)
 
     // Assert
-    verify(view).isActive
+    verify(view).isActive()
     verify(view).addImages(eq(response))
   }
 
@@ -78,7 +78,7 @@ class MainPresenterTest : TestBase() {
     sut.loadSearchImages(searchString, next)
 
     // Assert
-    verify(view).isActive
+    verify(view).isActive()
     verify(view).addImages(eq(response))
   }
 }

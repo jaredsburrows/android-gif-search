@@ -141,7 +141,7 @@ class MainActivityTest : AndroidTestBase() {
       .addHeader("content-type: image/png")
   }
 
-  private fun parseImage(fileName: String): Buffer? {
+  private fun parseImage(fileName: String): Buffer {
     val inputStream = javaClass.getResourceAsStream(fileName)
     val source = Okio.source(inputStream)
     val result = Buffer()

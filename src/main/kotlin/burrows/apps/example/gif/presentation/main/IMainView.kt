@@ -11,5 +11,5 @@ interface IMainView : IBaseView<IMainPresenter> {
   fun clearImages()
   fun addImages(response: RiffsyResponse?)
   fun showDialog(imageInfoModel: ImageInfoModel?)
-  val isActive: Boolean
+  fun isActive(): Boolean
 }

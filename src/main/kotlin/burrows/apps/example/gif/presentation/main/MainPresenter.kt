@@ -15,10 +15,7 @@ import io.reactivex.functions.Consumer
 class MainPresenter(val view: IMainView,
                     val repository: RiffsyApiClient,
                     val provider: IBaseSchedulerProvider) : IMainPresenter {
-  companion object {
-    // Can't be longer than 23 chars
-    private val TAG = MainPresenter::class.java.simpleName
-  }
+  private val TAG = MainPresenter::class.java.simpleName // Can't be longer than 23 chars
   private val disposable = CompositeDisposable()
 
   init {
@@ -62,7 +59,7 @@ class MainPresenter(val view: IMainView,
       .subscribeOn(provider.io())
       .observeOn(provider.ui())
       .subscribe(Consumer<RiffsyResponse> { riffsyResponse ->
-        if (!view.isActive) return@Consumer
+        if (!view.isActive()) return@Consumer
 
         // Iterate over data from response and grab the urls
         view.addImages(riffsyResponse)

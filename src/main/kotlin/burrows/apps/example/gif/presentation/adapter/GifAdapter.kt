@@ -21,13 +21,11 @@ import java.lang.Exception
  *
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class GifAdapter(val onItemClickListener: GifAdapter.OnItemClickListener, val repository: ImageApiRepository)
-  : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
-  companion object {
-    // Can't be longer than 23 chars
-    private val TAG = GifAdapter::class.java.simpleName
-  }
-
+class GifAdapter(
+  val onItemClickListener: GifAdapter.OnItemClickListener,
+  val repository: ImageApiRepository) : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
+  // Can't be longer than 23 chars
+  private val TAG = GifAdapter::class.java.simpleName
   private val data = arrayListOf<ImageInfoModel>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

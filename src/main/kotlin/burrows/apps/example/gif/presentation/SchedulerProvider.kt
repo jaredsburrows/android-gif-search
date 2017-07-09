@@ -8,10 +8,7 @@ import javax.inject.Inject
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class SchedulerProvider : IBaseSchedulerProvider {
-  @Suppress("ConvertSecondaryConstructorToPrimary")
-  @Inject constructor()
-
+class SchedulerProvider @Inject constructor() : IBaseSchedulerProvider {
   override fun io(): Scheduler {
     return Schedulers.io()
   }

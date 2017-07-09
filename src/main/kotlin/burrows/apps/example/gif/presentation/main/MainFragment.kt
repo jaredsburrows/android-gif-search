@@ -46,15 +46,9 @@ import javax.inject.Inject
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
-  companion object {
-    private val TAG = MainFragment::class.java.simpleName
-    // Can't be longer than 23 chars
-    private val PORTRAIT_COLUMNS = 3
-    private val VISIBLE_THRESHOLD = 5
-  }
-
-  @Inject lateinit var refWatcher: RefWatcher
-  @Inject lateinit var repository: ImageApiRepository
+  private val TAG = MainFragment::class.java.simpleName // Can't be longer than 23 chars
+  private val PORTRAIT_COLUMNS = 3
+  private val VISIBLE_THRESHOLD = 5
   private lateinit var layoutManager: GridLayoutManager
   private lateinit var itemOffsetDecoration: GifItemDecoration
   private lateinit var adapter: GifAdapter
@@ -70,6 +64,8 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
   private var visibleItemCount = 0
   private var totalItemCount = 0
   private var next = 0f
+  @Inject lateinit var refWatcher: RefWatcher
+  @Inject lateinit var repository: ImageApiRepository
 
   //
   // Contract
@@ -103,7 +99,9 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     showImageDialog(imageInfoModel)
   }
 
-  override val isActive = isAdded
+  override fun isActive(): Boolean {
+    return isAdded
+  }
 
   //
   // GifAdapter

@@ -16,12 +16,6 @@ abstract class AndroidTestBase {
     val NUMBER_NEGATIVE_ONE = -1
     val NUMBER_ZERO = 0
     val NUMBER_ONE = 1
-    val DENSITY_LDPI = 36
-    val DENSITY_MDPI = 48
-    val DENSITY_HDPI = 72
-    val DENSITY_XHDPI = 96
-    val DENSITY_XXHDPI = 144
-    val DENSITY_XXXHDPI = 192
     val STRING_EMPTY = ""
     val STRING_NULL: String? = null
     val STRING_UNIQUE = randomUUID().toString()
