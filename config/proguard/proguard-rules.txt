@@ -19,7 +19,7 @@
 
 ##########################################################################################
 # Okhttp3
-# https://github.com/square/okhttp
+# https://github.com/square/okhttp#proguard
 ##########################################################################################
 -dontwarn javax.annotation.Nullable
 -dontwarn javax.annotation.ParametersAreNonnullByDefault
@@ -28,13 +28,17 @@
 
 ##########################################################################################
 # Okio
+# https://github.com/square/okio#proguard
 ##########################################################################################
+-dontwarn javax.annotation.Nullable
+-dontwarn javax.annotation.ParametersAreNonnullByDefault
 -dontwarn okio.**
 
 ##########################################################################################
 # Moshi
 # https://github.com/square/moshi#proguard
 ##########################################################################################
+-dontwarn okio.**
 -dontwarn javax.annotation.Nullable
 -dontwarn javax.annotation.ParametersAreNonnullByDefault
 -keepclasseswithmembers class * {
