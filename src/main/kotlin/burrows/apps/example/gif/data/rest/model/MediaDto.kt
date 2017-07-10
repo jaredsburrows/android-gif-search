@@ -5,9 +5,8 @@ import com.squareup.moshi.Json
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class Gif {
-  @Json(name = "url") var url: String? = null
-  @Json(name = "preview") var preview: String? = null
+class MediaDto {
+  @field:Json(name = "tinygif") var gif: GifDto? = null // Bug in 1.5.0
 
   /**
    * No args constructor for use in serialization.

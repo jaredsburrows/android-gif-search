@@ -8,8 +8,8 @@ import com.squareup.moshi.Json
  *
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class RiffsyResponse {
-  @Json(name = "results") var results: List<Result>? = null
+class RiffsyResponseDto {
+  @Json(name = "results") var results: List<ResultDto>? = null
   @Json(name = "page") var page: Float? = null
 
   /**

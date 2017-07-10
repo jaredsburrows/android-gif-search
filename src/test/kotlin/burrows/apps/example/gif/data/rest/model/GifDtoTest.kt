@@ -7,8 +7,8 @@ import test.TestBase
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class GifTest : TestBase() {
-  private var sut = Gif().apply { url = STRING_UNIQUE; preview = STRING_UNIQUE2 }
+class GifDtoTest : TestBase() {
+  private var sut = GifDto().apply { url = STRING_UNIQUE; preview = STRING_UNIQUE2 }
 
   @Test fun testGetUrl() {
     assertThat(sut.url).isEqualTo(STRING_UNIQUE)

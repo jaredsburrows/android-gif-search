@@ -7,9 +7,9 @@ import test.TestBase
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class ResultTest : TestBase() {
-  private val testMedias = arrayListOf<Media>()
-  private var sut = Result().apply { media = testMedias; title = STRING_UNIQUE }
+class ResultDtoTest : TestBase() {
+  private val testMedias = arrayListOf<MediaDto>()
+  private var sut = ResultDto().apply { media = testMedias; title = STRING_UNIQUE }
 
   @Test fun testGetMedia() {
     assertThat(sut.media).isEqualTo(testMedias)

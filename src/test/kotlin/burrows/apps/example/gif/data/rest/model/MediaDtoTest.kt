@@ -7,9 +7,9 @@ import test.TestBase
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class MediaTest : TestBase() {
-  private val gifTest = Gif()
-  private var sut = Media().apply { gif = gifTest }
+class MediaDtoTest : TestBase() {
+  private val gifTest = GifDto()
+  private var sut = MediaDto().apply { gif = gifTest }
 
   @Test fun testGetGif() {
     assertThat(sut.gif).isEqualTo(gifTest)

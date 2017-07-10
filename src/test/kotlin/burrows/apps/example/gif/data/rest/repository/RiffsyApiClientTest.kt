@@ -1,6 +1,6 @@
 package burrows.apps.example.gif.data.rest.repository
 
-import burrows.apps.example.gif.data.rest.model.RiffsyResponse
+import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
 import io.reactivex.observers.TestObserver
 import okhttp3.OkHttpClient
@@ -45,7 +45,7 @@ class RiffsyApiClientTest : TestBase() {
 
   @Test fun testTrendingResultsUrlShouldParseCorrectly() {
     // Arrange
-    val observer = TestObserver<RiffsyResponse>()
+    val observer = TestObserver<RiffsyResponseDto>()
 
     // Act
     val observable = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
@@ -59,7 +59,7 @@ class RiffsyApiClientTest : TestBase() {
 
   @Test fun testTrendingResultsUrlPreviewShouldParseCorrectly() {
     // Arrange
-    val observer = TestObserver<RiffsyResponse>()
+    val observer = TestObserver<RiffsyResponseDto>()
 
     // Act
     val observable = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
@@ -73,7 +73,7 @@ class RiffsyApiClientTest : TestBase() {
 
   @Test fun testSearchResultsUrlShouldParseCorrectly() {
     // Arrange
-    val observer = TestObserver<RiffsyResponse>()
+    val observer = TestObserver<RiffsyResponseDto>()
 
     // Act
     val observable = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
@@ -87,7 +87,7 @@ class RiffsyApiClientTest : TestBase() {
 
   @Test fun testSearchResultsUrlPreviewShouldParseCorrectly() {
     // Arrange
-    val observer = TestObserver<RiffsyResponse>()
+    val observer = TestObserver<RiffsyResponseDto>()
 
     // Act
     val observable = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)

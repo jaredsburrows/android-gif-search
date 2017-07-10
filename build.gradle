@@ -80,6 +80,14 @@ android {
     preDexLibraries !rootProject.ext.ci
   }
 
+  // Need this to help IDE recognize Kotlin
+  sourceSets {
+    androidTest.java.srcDirs += "src/androidTest/kotlin"
+    debug.java.srcDirs += "src/debug/kotlin"
+    main.java.srcDirs += "src/main/kotlin"
+    test.java.srcDirs += "src/test/kotlin"
+  }
+
   lintOptions {
     textReport true
     textOutput "stdout"
@@ -184,4 +192,5 @@ dependencies {
   testCompile deps.leakcanaryAndroidNoOp
   testCompile deps.mockwebserver
   testCompile deps.equalsverifier
+  testCompile deps.reflections
 }

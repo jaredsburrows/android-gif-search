@@ -1,7 +1,7 @@
 package burrows.apps.example.gif.presentation.main
 
 import android.util.Log
-import burrows.apps.example.gif.data.rest.model.RiffsyResponse
+import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.presentation.IBaseSchedulerProvider
 import io.reactivex.Observable
@@ -54,11 +54,11 @@ class MainPresenter(val view: IMainView,
    *
    * @param observable Observable to added to the subscription.
    */
-  fun loadImages(observable: Observable<RiffsyResponse>) {
+  fun loadImages(observable: Observable<RiffsyResponseDto>) {
     disposable.add(observable
       .subscribeOn(provider.io())
       .observeOn(provider.ui())
-      .subscribe(Consumer<RiffsyResponse> { riffsyResponse ->
+      .subscribe(Consumer<RiffsyResponseDto> { riffsyResponse ->
         if (!view.isActive()) return@Consumer
 
         // Iterate over data from response and grab the urls

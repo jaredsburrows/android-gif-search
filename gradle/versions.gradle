@@ -83,5 +83,6 @@ ext.deps = [
   "mockitoCore"          : "org.mockito:mockito-core:2.8.47",
   "assertjCore"          : "org.assertj:assertj-core:1.7.1",
   "equalsverifier"       : "nl.jqno.equalsverifier:equalsverifier:2.3.1",
-  "mockwebserver"        : "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
+  "mockwebserver"        : "com.squareup.okhttp3:mockwebserver:$okHttpVersion",
+  "reflections"          : "org.reflections:reflections:0.9.11"
 ]

@@ -7,9 +7,9 @@ import test.TestBase
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class RiffsyResponseTest : TestBase() {
-  private val resultsTest = arrayListOf<Result>()
-  private var sut = RiffsyResponse().apply { results = resultsTest; page = FLOAT_RANDOM }
+class RiffsyResponseDtoTest : TestBase() {
+  private val resultsTest = arrayListOf<ResultDto>()
+  private var sut = RiffsyResponseDto().apply { results = resultsTest; page = FLOAT_RANDOM }
 
   @Test fun testGetResults() {
     assertThat(sut.results).isEqualTo(resultsTest)

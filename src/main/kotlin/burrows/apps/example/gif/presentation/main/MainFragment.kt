@@ -24,8 +24,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import burrows.apps.example.gif.App
 import burrows.apps.example.gif.R
-import burrows.apps.example.gif.data.rest.model.Result
-import burrows.apps.example.gif.data.rest.model.RiffsyResponse
+import burrows.apps.example.gif.data.rest.model.ResultDto
+import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.databinding.DialogPreviewBinding
@@ -80,12 +80,12 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     adapter.clear()
   }
 
-  override fun addImages(response: RiffsyResponse?) {
+  override fun addImages(response: RiffsyResponseDto?) {
     next = response?.page ?: 0f
 
     response?.results?.let {
       // Iterate over data from response and grab the urls
-      for (result in response.results as List<Result>) {
+      for (result in response.results as List<ResultDto>) {
         val url = result.media?.get(0)?.gif?.url
 
         adapter.add(ImageInfoModel(url, null))

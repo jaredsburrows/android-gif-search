@@ -1,6 +1,6 @@
 package burrows.apps.example.gif.presentation.main
 
-import burrows.apps.example.gif.data.rest.model.RiffsyResponse
+import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.presentation.IBaseView
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 
@@ -9,7 +9,7 @@ import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
  */
 interface IMainView : IBaseView<IMainPresenter> {
   fun clearImages()
-  fun addImages(response: RiffsyResponse?)
+  fun addImages(response: RiffsyResponseDto?)
   fun showDialog(imageInfoModel: ImageInfoModel?)
   fun isActive(): Boolean
 }

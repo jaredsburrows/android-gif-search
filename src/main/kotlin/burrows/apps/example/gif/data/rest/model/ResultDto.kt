@@ -5,8 +5,8 @@ import com.squareup.moshi.Json
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class Result {
-  @Json(name = "media") var media: List<Media>? = null
+class ResultDto {
+  @Json(name = "media") var media: List<MediaDto>? = null
   @Json(name = "title") var title: String? = null
 
   /**

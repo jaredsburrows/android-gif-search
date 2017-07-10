@@ -1,6 +1,6 @@
 package burrows.apps.example.gif.data.rest.repository
 
-import burrows.apps.example.gif.data.rest.model.RiffsyResponse
+import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -45,7 +45,7 @@ interface RiffsyApiClient {
    * @return Response of trending getResults.
    */
   @GET("/v1/trending?key=" + API_KEY) fun getTrendingResults(@Query("limit") limit: Int,
-                                                             @Query("pos") pos: Float?): Observable<RiffsyResponse> // Allow passing null
+                                                             @Query("pos") pos: Float?): Observable<RiffsyResponseDto> // Allow passing null
 
   /**
    * Get search gif results by a search string.
@@ -65,5 +65,5 @@ interface RiffsyApiClient {
    */
   @GET("/v1/search?key=" + API_KEY) fun getSearchResults(@Query("tag") tag: String?,
                                                          @Query("limit") limit: Int,
-                                                         @Query("pos") pos: Float?): Observable<RiffsyResponse>  // Allow passing null
+                                                         @Query("pos") pos: Float?): Observable<RiffsyResponseDto>  // Allow passing null
 }

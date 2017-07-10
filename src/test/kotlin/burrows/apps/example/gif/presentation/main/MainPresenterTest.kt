@@ -1,6 +1,6 @@
 package burrows.apps.example.gif.presentation.main
 
-import burrows.apps.example.gif.data.rest.model.RiffsyResponse
+import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
 import io.reactivex.Observable
@@ -35,7 +35,7 @@ class MainPresenterTest : TestBase() {
   @Test fun testLoadTrendingImagesNotActive() {
     // Arrange
     val next = 0f
-    val response = RiffsyResponse()
+    val response = RiffsyResponseDto()
     `when`(view.isActive()).thenReturn(false)
     sut = MainPresenter(view, repository, provider)
     `when`(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
@@ -52,7 +52,7 @@ class MainPresenterTest : TestBase() {
   @Test fun testLoadTrendingImagesSuccess() {
     // Arrange
     val next = 0f
-    val response = RiffsyResponse()
+    val response = RiffsyResponseDto()
     sut = MainPresenter(view, repository, provider)
     `when`(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
@@ -69,7 +69,7 @@ class MainPresenterTest : TestBase() {
     // Arrange
     val searchString = "gifs"
     val next = 0f
-    val response = RiffsyResponse()
+    val response = RiffsyResponseDto()
     sut = MainPresenter(view, repository, provider)
     `when`(repository.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
