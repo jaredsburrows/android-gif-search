@@ -36,15 +36,12 @@ import java.net.HttpURLConnection.HTTP_NOT_FOUND
 class MainActivityTest : AndroidTestBase() {
   @get:Rule val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java, true, false)
   private val server = MockWebServer()
-  private lateinit var mockEndPoint: String
 
   @Before override fun setUp() {
     super.setUp()
 
     server.start(MOCK_SERVER_PORT)
     server.setDispatcher(dispatcher)
-
-    mockEndPoint = server.url("/").toString()
   }
 
   @After override fun tearDown() {

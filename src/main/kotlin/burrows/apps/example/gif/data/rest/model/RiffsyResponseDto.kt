@@ -8,13 +8,6 @@ import com.squareup.moshi.Json
  *
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class RiffsyResponseDto {
-  @Json(name = "results") var results: List<ResultDto>? = null
-  @Json(name = "page") var page: Float? = null
-
-  /**
-   * No args constructor for use in serialization.
-   */
-  @Suppress("ConvertSecondaryConstructorToPrimary")
-  constructor()
-}
+data class RiffsyResponseDto(
+  @Json(name = "results") var results: List<ResultDto>? = null,
+  @Json(name = "page") var page: Float? = null)

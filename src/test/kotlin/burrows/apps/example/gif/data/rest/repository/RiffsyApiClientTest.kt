@@ -52,7 +52,7 @@ class RiffsyApiClientTest : TestBase() {
 
     // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.url)
-      .isEqualTo("https://media.riffsy.com/images/7d95a1f8a8750460a82b04451be26d69/raw")
+      .contains("/images/7d95a1f8a8750460a82b04451be26d69/raw")
   }
 
   @Test fun testTrendingResultsUrlPreviewShouldParseCorrectly() {
@@ -66,7 +66,7 @@ class RiffsyApiClientTest : TestBase() {
 
     // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.preview)
-      .isEqualTo("https://media.riffsy.com/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw")
+      .contains("/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw")
   }
 
   @Test fun testSearchResultsUrlShouldParseCorrectly() {
@@ -80,7 +80,7 @@ class RiffsyApiClientTest : TestBase() {
 
     // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.url)
-      .isEqualTo("https://media.riffsy.com/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw")
+      .contains("/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw")
   }
 
   @Test fun testSearchResultsUrlPreviewShouldParseCorrectly() {
@@ -94,7 +94,7 @@ class RiffsyApiClientTest : TestBase() {
 
     // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.preview)
-      .isEqualTo("https://media.riffsy.com/images/6f2ed339fbdb5c1270e29945ee1f0d77/raw")
+      .contains("/images/6f2ed339fbdb5c1270e29945ee1f0d77/raw")
   }
 
   private fun getRetrofit(baseUrl: String): Retrofit.Builder {
