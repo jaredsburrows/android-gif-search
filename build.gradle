@@ -195,8 +195,6 @@ dependencies {
   androidTestCompile deps.espressoContrib, { exclude group: "com.android.support" }
   androidTestCompile deps.mockwebserver
 
-  kaptAndroidTest deps.daggerCompiler
-
   testCompile deps.junit
   testCompile deps.assertjCore
   testCompile deps.mockitoKotlin

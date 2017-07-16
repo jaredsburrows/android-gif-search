@@ -28,7 +28,7 @@ ext.plugs = [
   "gradleAndroidCommandPlugin": "com.novoda:gradle-android-command-plugin:1.7.1",
   "playPublisher"             : "com.github.triplet.gradle:play-publisher:1.2.0",
   "buildScanPlugin"           : "com.gradle:build-scan-plugin:1.8",
-  "dexcountGradlePlugin"      : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.7.1",
+  "dexcountGradlePlugin"      : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.7.2",
   "gradleAndroidApkSizePlugin": "com.vanniktech:gradle-android-apk-size-plugin:0.3.0",
   "coverallsGradlePlugin"     : "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1",
   "gradleErrorpronePlugin"    : "net.ltgt.gradle:gradle-errorprone-plugin:0.0.10",

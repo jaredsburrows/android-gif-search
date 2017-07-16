@@ -1,13 +1,13 @@
 {
-  "weburl": "https://www.riffsy.com/search/hello",
+  "weburl": "http://localhost:8080/search/hello",
   "results": [
     {
       "created": 1470833834.230003,
-      "url": "http://gif.co/ytel.gif",
+      "url": "http://localhost:8080/ytel.gif",
       "media": [
         {
           "nanomp4": {
-            "url": "https://media.riffsy.com/videos/a53597e91c5d5ee989bce52fcb1ff142/mp4",
+            "url": "http://localhost:8080/videos/a53597e91c5d5ee989bce52fcb1ff142/mp4",
             "dims": [
               150,
               138
@@ -16,7 +16,7 @@
             "preview": "http://localhost:8080/images/21accb6fe0c3d2ab562b9d429c7af88c/raw"
           },
           "nanowebm": {
-            "url": "https://media.riffsy.com/videos/9e54e727e3f615c52f611ce94ccfa400/webm",
+            "url": "http://localhost:8080/videos/9e54e727e3f615c52f611ce94ccfa400/webm",
             "dims": [
               150,
               138
@@ -33,7 +33,7 @@
             "size": 18228
           },
           "tinymp4": {
-            "url": "https://media.riffsy.com/videos/c927a84e57c7952aaeb4dd125cc898ed/mp4",
+            "url": "http://localhost:8080/videos/c927a84e57c7952aaeb4dd125cc898ed/mp4",
             "dims": [
               320,
               296
@@ -42,7 +42,7 @@
             "preview": "http://localhost:8080/images/21accb6fe0c3d2ab562b9d429c7af88c/raw"
           },
           "tinywebm": {
-            "url": "https://media.riffsy.com/videos/b69f65ebe587be24c2786f264dde63d3/webm",
+            "url": "http://localhost:8080/videos/b69f65ebe587be24c2786f264dde63d3/webm",
             "dims": [
               320,
               296
@@ -50,7 +50,7 @@
             "preview": "http://localhost:8080/images/21accb6fe0c3d2ab562b9d429c7af88c/raw"
           },
           "webm": {
-            "url": "https://media.riffsy.com/videos/01a8443eb106065b258391878c9f326b/webm",
+            "url": "http://localhost:8080/videos/01a8443eb106065b258391878c9f326b/webm",
             "dims": [
               540,
               500
@@ -67,7 +67,7 @@
             "size": 985952
           },
           "mp4": {
-            "url": "https://media.riffsy.com/videos/2127f26330edefc0a04fed944d15bfb1/mp4",
+            "url": "http://localhost:8080/videos/2127f26330edefc0a04fed944d15bfb1/mp4",
             "dims": [
               540,
               500
@@ -85,7 +85,7 @@
             "size": 8338
           },
           "loopedmp4": {
-            "url": "https://media.riffsy.com/videos/26346a73f80b1e24c03d32599c72be77/mp4",
+            "url": "http://localhost:8080/videos/26346a73f80b1e24c03d32599c72be77/mp4",
             "dims": [
               540,
               500
@@ -97,7 +97,7 @@
       ],
       "tags": [],
       "shares": 490519,
-      "itemurl": "https://www.riffsy.com/view/riff/5793167/hi-GIF",
+      "itemurl": "http://localhost:8080/view/riff/5793167/hi-GIF",
       "composite": null,
       "hasaudio": false,
       "title": "hi",

@@ -2,11 +2,11 @@
   "results": [
     {
       "created": 1454870314.184911,
-      "url": "http://gif.co/vi8i.gif",
+      "url": "http://localhost:8080/vi8i.gif",
       "media": [
         {
           "nanomp4": {
-            "url": "https://media.riffsy.com/videos/4426ee04396194236e08d9ea92d097da/mp4",
+            "url": "http://localhost:8080/videos/4426ee04396194236e08d9ea92d097da/mp4",
             "dims": [
               134,
               134
@@ -15,7 +15,7 @@
             "preview": "http://localhost:8080/images/3b44a20650e913466d6739fb05698c8c/raw"
           },
           "nanowebm": {
-            "url": "https://media.riffsy.com/videos/a9c580354c1cf9c7fe508d833b149a2b/webm",
+            "url": "http://localhost:8080/videos/a9c580354c1cf9c7fe508d833b149a2b/webm",
             "dims": [
               134,
               134
@@ -32,7 +32,7 @@
             "size": 254129
           },
           "tinymp4": {
-            "url": "https://media.riffsy.com/videos/3a1c084de1515358253ccf9de65b13ad/mp4",
+            "url": "http://localhost:8080/videos/3a1c084de1515358253ccf9de65b13ad/mp4",
             "dims": [
               258,
               258
@@ -41,7 +41,7 @@
             "preview": "http://localhost:8080/images/3b44a20650e913466d6739fb05698c8c/raw"
           },
           "tinywebm": {
-            "url": "https://media.riffsy.com/videos/f744fec958ab37549aced389efb17f26/webm",
+            "url": "http://localhost:8080/videos/f744fec958ab37549aced389efb17f26/webm",
             "dims": [
               258,
               258
@@ -49,7 +49,7 @@
             "preview": "http://localhost:8080/images/3b44a20650e913466d6739fb05698c8c/raw"
           },
           "webm": {
-            "url": "https://media.riffsy.com/videos/bda518316415c4760fe83ff6c12c03b6/webm",
+            "url": "http://localhost:8080/videos/bda518316415c4760fe83ff6c12c03b6/webm",
             "dims": [
               480,
               480
@@ -66,7 +66,7 @@
             "size": 3023910
           },
           "mp4": {
-            "url": "https://media.riffsy.com/videos/13acb847a95f79110ad7d18398aafc3b/mp4",
+            "url": "http://localhost:8080/videos/13acb847a95f79110ad7d18398aafc3b/mp4",
             "dims": [
               480,
               480
@@ -84,7 +84,7 @@
             "size": 54199
           },
           "loopedmp4": {
-            "url": "https://media.riffsy.com/videos/16833746a1b70265a185f74de420c313/mp4",
+            "url": "http://localhost:8080/videos/16833746a1b70265a185f74de420c313/mp4",
             "dims": [
               480,
               480
@@ -96,7 +96,7 @@
       ],
       "tags": [],
       "shares": 590182,
-      "itemurl": "https://www.riffsy.com/view/riff/5039368/miss-you-GIF",
+      "itemurl": "http://localhost:8080/view/riff/5039368/miss-you-GIF",
       "composite": null,
       "hasaudio": false,
       "title": "miss you",

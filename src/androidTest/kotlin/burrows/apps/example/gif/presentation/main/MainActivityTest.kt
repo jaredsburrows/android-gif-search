@@ -73,7 +73,7 @@ class MainActivityTest : AndroidTestBase() {
     // Assert
     onView(withId(R.id.menu_search))
       .perform(click())
-    onView(withId(R.id.search_src_text))
+    onView(withId(android.support.v7.appcompat.R.id.search_src_text))
       .perform(typeText("hello"), closeSoftKeyboard(), pressBack())
     onView(withId(R.id.recycler_view))
       .check(matches(isDisplayed()))
