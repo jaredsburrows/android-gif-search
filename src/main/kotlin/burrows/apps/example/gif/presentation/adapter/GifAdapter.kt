@@ -41,7 +41,7 @@ class GifAdapter(
     repository.load(imageInfoModel.url)
       .thumbnail(repository.load(imageInfoModel.previewUrl))
       .listener(object : RequestListener<Any?, GifDrawable> {
-        override fun onException(e: Exception, model: Any?, target: Target<GifDrawable>,
+        override fun onException(e: Exception?, model: Any?, target: Target<GifDrawable>,
                                  isFirstResource: Boolean): Boolean {
           // Hide progressbar
           binding.gifProgress.visibility = View.GONE

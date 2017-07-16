@@ -12,7 +12,7 @@
               134
             ],
             "duration": 2.8,
-            "preview": "https://media.riffsy.com/images/3b44a20650e913466d6739fb05698c8c/raw"
+            "preview": "http://localhost:8080/images/3b44a20650e913466d6739fb05698c8c/raw"
           },
           "nanowebm": {
             "url": "https://media.riffsy.com/videos/a9c580354c1cf9c7fe508d833b149a2b/webm",
@@ -20,15 +20,15 @@
               134,
               134
             ],
-            "preview": "https://media.riffsy.com/images/3b44a20650e913466d6739fb05698c8c/raw"
+            "preview": "http://localhost:8080/images/3b44a20650e913466d6739fb05698c8c/raw"
           },
           "tinygif": {
-            "url": "https://media.riffsy.com/images/7d95a1f8a8750460a82b04451be26d69/raw",
+            "url": "http://localhost:8080/images/7d95a1f8a8750460a82b04451be26d69/raw",
             "dims": [
               220,
               220
             ],
-            "preview": "https://media.riffsy.com/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw",
+            "preview": "http://localhost:8080/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw",
             "size": 254129
           },
           "tinymp4": {
@@ -38,7 +38,7 @@
               258
             ],
             "duration": 2.8,
-            "preview": "https://media.riffsy.com/images/3b44a20650e913466d6739fb05698c8c/raw"
+            "preview": "http://localhost:8080/images/3b44a20650e913466d6739fb05698c8c/raw"
           },
           "tinywebm": {
             "url": "https://media.riffsy.com/videos/f744fec958ab37549aced389efb17f26/webm",
@@ -46,7 +46,7 @@
               258,
               258
             ],
-            "preview": "https://media.riffsy.com/images/3b44a20650e913466d6739fb05698c8c/raw"
+            "preview": "http://localhost:8080/images/3b44a20650e913466d6739fb05698c8c/raw"
           },
           "webm": {
             "url": "https://media.riffsy.com/videos/bda518316415c4760fe83ff6c12c03b6/webm",
@@ -54,15 +54,15 @@
               480,
               480
             ],
-            "preview": "https://media.riffsy.com/images/3b44a20650e913466d6739fb05698c8c/raw"
+            "preview": "http://localhost:8080/images/3b44a20650e913466d6739fb05698c8c/raw"
           },
           "gif": {
-            "url": "https://media.riffsy.com/images/f54932e6b9553a5538f31a5ddd78a9f3/raw",
+            "url": "http://localhost:8080/images/f54932e6b9553a5538f31a5ddd78a9f3/raw",
             "dims": [
               480,
               480
             ],
-            "preview": "https://media.riffsy.com/images/3b44a20650e913466d6739fb05698c8c/raw",
+            "preview": "http://localhost:8080/images/3b44a20650e913466d6739fb05698c8c/raw",
             "size": 3023910
           },
           "mp4": {
@@ -72,15 +72,15 @@
               480
             ],
             "duration": 2.8,
-            "preview": "https://media.riffsy.com/images/3b44a20650e913466d6739fb05698c8c/raw"
+            "preview": "http://localhost:8080/images/3b44a20650e913466d6739fb05698c8c/raw"
           },
           "nanogif": {
-            "url": "https://media.riffsy.com/images/578079cc0d23a71797f5d407b4613196/raw",
+            "url": "http://localhost:8080/images/578079cc0d23a71797f5d407b4613196/raw",
             "dims": [
               90,
               90
             ],
-            "preview": "https://media.riffsy.com/images/c24f05bea63e87419a895c30b424ab64/raw",
+            "preview": "http://localhost:8080/images/c24f05bea63e87419a895c30b424ab64/raw",
             "size": 54199
           },
           "loopedmp4": {
@@ -90,7 +90,7 @@
               480
             ],
             "duration": 8.4,
-            "preview": "https://media.riffsy.com/images/3b44a20650e913466d6739fb05698c8c/raw"
+            "preview": "http://localhost:8080/images/3b44a20650e913466d6739fb05698c8c/raw"
           }
         }
       ],

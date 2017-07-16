@@ -12,29 +12,27 @@ import okhttp3.mockwebserver.RecordedRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import test.TestBase
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.HttpURLConnection.HTTP_OK
+import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class RiffsyApiClientTest : TestBase() {
-  @get:Rule val server = MockWebServer()
+  private val server = MockWebServer()
   private lateinit var sut: RiffsyApiClient
 
   @Before override fun setUp() {
     super.setUp()
 
-    sut = getRetrofit(server.url("/").toString()).build().create(RiffsyApiClient::class.java)
-
+    server.start(TestBase.MOCK_SERVER_PORT)
     server.setDispatcher(dispatcher)
+
+    sut = getRetrofit(server.url("/").toString()).build().create(RiffsyApiClient::class.java)
   }
 
   @After override fun tearDown() {
@@ -111,27 +109,12 @@ class RiffsyApiClientTest : TestBase() {
       )
   }
 
-  private fun getMockResponse(fileName: String): MockResponse {
-    return MockResponse()
-      .setStatus("HTTP/1.1 200")
-      .setResponseCode(HTTP_OK)
-      .setBody(parseText(fileName))
-      .addHeader("Content-type: application/json; charset=utf-8")
-  }
-
-  private fun parseText(fileName: String): String {
-    val inputStream = javaClass.getResourceAsStream(fileName)
-    val text = InputStreamReader(inputStream).readText()
-    inputStream.close()
-    return text
-  }
-
   private val dispatcher = object : Dispatcher() {
     override fun dispatch(request: RecordedRequest): MockResponse {
       when {
         request.path.contains("/v1/trending") -> return getMockResponse("/trending_results.json")
         request.path.contains("/v1/search") -> return getMockResponse("/search_results.json")
-        else -> return MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND)
+        else -> return MockResponse().setResponseCode(HTTP_NOT_FOUND)
       }
     }
   }

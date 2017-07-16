@@ -1,7 +1,12 @@
 package test
 
+import okhttp3.mockwebserver.MockResponse
+import okio.Buffer
+import okio.Okio
 import org.junit.After
 import org.junit.Before
+import java.io.InputStreamReader
+import java.net.HttpURLConnection.HTTP_OK
 import java.util.Random
 import java.util.UUID.randomUUID
 
@@ -13,6 +18,7 @@ import java.util.UUID.randomUUID
 @Suppress("unused")
 abstract class AndroidTestBase {
   companion object {
+    val MOCK_SERVER_PORT = 8080
     val NUMBER_NEGATIVE_ONE = -1
     val NUMBER_ZERO = 0
     val NUMBER_ONE = 1
@@ -32,5 +38,38 @@ abstract class AndroidTestBase {
   }
 
   @After open fun tearDown() {
+  }
+
+  fun getMockResponse(fileName: String): MockResponse {
+    return MockResponse()
+      .setStatus("HTTP/1.1 200")
+      .setResponseCode(HTTP_OK)
+      .setBody(parseText(fileName))
+      .addHeader("Content-type: application/json; charset=utf-8")
+  }
+
+  fun parseText(fileName: String): String {
+    val inputStream = javaClass.getResourceAsStream(fileName)
+    val text = InputStreamReader(inputStream).readText()
+    inputStream.close()
+    return text
+  }
+
+  fun getMockFileResponse(fileName: String): MockResponse {
+    return MockResponse()
+      .setStatus("HTTP/1.1 200")
+      .setResponseCode(HTTP_OK)
+      .setBody(parseImage(fileName))
+      .addHeader("content-type: image/png")
+  }
+
+  fun parseImage(fileName: String): Buffer {
+    val inputStream = javaClass.getResourceAsStream(fileName)
+    val source = Okio.source(inputStream)
+    val result = Buffer()
+    result.writeAll(source)
+    inputStream.close()
+    source.close()
+    return result
   }
 }

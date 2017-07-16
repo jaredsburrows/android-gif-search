@@ -1,7 +1,10 @@
 package test
 
+import okhttp3.mockwebserver.MockResponse
 import org.junit.After
 import org.junit.Before
+import java.io.InputStreamReader
+import java.net.HttpURLConnection.HTTP_OK
 import java.util.Random
 import java.util.UUID.randomUUID
 
@@ -13,6 +16,7 @@ import java.util.UUID.randomUUID
 @Suppress("unused")
 abstract class TestBase {
   companion object {
+    val MOCK_SERVER_PORT = 8080
     val NUMBER_NEGATIVE_ONE = -1
     val NUMBER_ZERO = 0
     val NUMBER_ONE = 1
@@ -32,5 +36,20 @@ abstract class TestBase {
   }
 
   @After open fun tearDown() {
+  }
+
+  fun getMockResponse(fileName: String): MockResponse {
+    return MockResponse()
+      .setStatus("HTTP/1.1 200")
+      .setResponseCode(HTTP_OK)
+      .setBody(parseText(fileName))
+      .addHeader("Content-type: application/json; charset=utf-8")
+  }
+
+  fun parseText(fileName: String): String {
+    val inputStream = javaClass.getResourceAsStream(fileName)
+    val text = InputStreamReader(inputStream).readText()
+    inputStream.close()
+    return text
   }
 }

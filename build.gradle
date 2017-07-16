@@ -2,6 +2,7 @@ buildscript {
   apply from: rootProject.file("gradle/versions.gradle")
 
   rootProject.ext.ci = rootProject.hasProperty("ci")
+  rootProject.ext.lollipop = rootProject.hasProperty("lollipop")
 
   repositories {
     google()
@@ -52,12 +53,12 @@ android {
     applicationId "burrows.apps.example.gif"
     versionCode 1
     versionName "1.0"
-    minSdkVersion rootProject.ext.ci ? rootProject.ext.minSdkVersion : 21 // Optimize build speed - build with minSdk 21 if using multidex
+    minSdkVersion rootProject.ext.lollipop ? 21 : rootProject.ext.minSdkVersion // Optimize build speed - build with minSdk 21 if using multidex
     targetSdkVersion rootProject.ext.targetSdkVersion
     testApplicationId "burrows.apps.example.gif.test"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    resConfigs "en"                                                       // Optimize APK size - keep only english resource files for now
-    vectorDrawables.useSupportLibrary = true                              // Optimize APK size - use vector drawables
+    resConfigs "en"                                                             // Optimize APK size - keep only english resource files for now
+    vectorDrawables.useSupportLibrary = true                                    // Optimize APK size - use vector drawables
   }
 
   dataBinding {
@@ -110,6 +111,12 @@ android {
     debug {
       if (rootProject.ext.ci) testCoverageEnabled true                          // https://issuetracker.google.com/issues/37019591
       applicationIdSuffix ".debug"
+
+      if (rootProject.ext.ci) {
+        buildConfigField "String", "BASE_URL", "\"http://localhost:8080\""
+      } else {
+        buildConfigField "String", "BASE_URL", "\"https://api.riffsy.com\""
+      }
     }
 
     // Apply fake signing config to release to test "assembleRelease" locally
@@ -119,6 +126,8 @@ android {
       proguardFile getDefaultProguardFile("proguard-android-optimize.txt")      // Optimize APK size - use optimized proguard rules
       proguardFile rootProject.file("config/proguard/proguard-rules.txt")
       signingConfig signingConfigs.debug
+
+      buildConfigField "String", "BASE_URL", "\"https://api.riffsy.com\""
     }
   }
 
@@ -147,7 +156,7 @@ android {
 // Resolves dependency versions across test and production APKs, specifically, transitive
 // dependencies. This is required since Espresso internally has a dependency on support-annotations.
 configurations.all {
-  resolutionStrategy.force "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
+  resolutionStrategy.force deps.supportAnnotations
   resolutionStrategy.force deps.kotlinStdlib
 }
 
@@ -177,9 +186,9 @@ dependencies {
 
   androidTestCompile deps.junit
   androidTestCompile deps.assertjCore
-  androidTestCompile deps.mockitoKotlin, { exclude group: "net.bytebuddy" } // DexMaker has it"s own MockMaker
-  androidTestCompile deps.mockitoCore, { exclude group: "net.bytebuddy" } // DexMaker has it"s own MockMaker
-  androidTestCompile deps.dexmakerMockito, { exclude group: "net.bytebuddy" } // DexMaker has it"s own MockMaker
+  androidTestCompile deps.mockitoKotlin, { exclude group: "net.bytebuddy" }     // DexMaker has it"s own MockMaker
+  androidTestCompile deps.mockitoCore, { exclude group: "net.bytebuddy" }       // DexMaker has it"s own MockMaker
+  androidTestCompile deps.dexmakerMockito, { exclude group: "net.bytebuddy" }   // DexMaker has it"s own MockMaker
   androidTestCompile deps.runner
   androidTestCompile deps.espressoCore
   androidTestCompile deps.espressoIntents
