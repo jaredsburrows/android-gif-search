@@ -36,7 +36,7 @@ class MainPresenter(val view: IMainView,
   /**
    * Load gif trending images.
    */
-  override fun loadTrendingImages(next: Float?) {
+  override fun loadTrendingImages(next: Float) {
     loadImages(repository.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
   }
 
@@ -45,7 +45,7 @@ class MainPresenter(val view: IMainView,
    *
    * @param searchString User input.
    */
-  override fun loadSearchImages(searchString: String, next: Float?) {
+  override fun loadSearchImages(searchString: String, next: Float) {
     loadImages(repository.getSearchResults(searchString, RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
   }
 

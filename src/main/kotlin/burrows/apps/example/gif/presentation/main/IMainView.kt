@@ -9,7 +9,7 @@ import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
  */
 interface IMainView : IBaseView<IMainPresenter> {
   fun clearImages()
-  fun addImages(response: RiffsyResponseDto?)
-  fun showDialog(imageInfoModel: ImageInfoModel?)
+  fun addImages(response: RiffsyResponseDto)
+  fun showDialog(imageInfoModel: ImageInfoModel)
   fun isActive(): Boolean
 }

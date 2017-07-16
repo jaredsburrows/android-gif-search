@@ -148,6 +148,7 @@ android {
 // dependencies. This is required since Espresso internally has a dependency on support-annotations.
 configurations.all {
   resolutionStrategy.force "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
+  resolutionStrategy.force deps.kotlinStdlib
 }
 
 dependencies {
@@ -176,8 +177,9 @@ dependencies {
 
   androidTestCompile deps.junit
   androidTestCompile deps.assertjCore
-  androidTestCompile deps.mockitoCore, { exclude group: "net.bytebuddy" } // DexMaker has its own MockMaker
-  androidTestCompile deps.dexmakerMockito, { exclude group: "net.bytebuddy" } // DexMaker has its own MockMaker
+  androidTestCompile deps.mockitoKotlin, { exclude group: "net.bytebuddy" } // DexMaker has it"s own MockMaker
+  androidTestCompile deps.mockitoCore, { exclude group: "net.bytebuddy" } // DexMaker has it"s own MockMaker
+  androidTestCompile deps.dexmakerMockito, { exclude group: "net.bytebuddy" } // DexMaker has it"s own MockMaker
   androidTestCompile deps.runner
   androidTestCompile deps.espressoCore
   androidTestCompile deps.espressoIntents
@@ -188,6 +190,7 @@ dependencies {
 
   testCompile deps.junit
   testCompile deps.assertjCore
+  testCompile deps.mockitoKotlin
   testCompile deps.mockitoCore
   testCompile deps.leakcanaryAndroidNoOp
   testCompile deps.mockwebserver

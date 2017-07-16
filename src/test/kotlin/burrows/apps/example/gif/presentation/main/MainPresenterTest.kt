@@ -3,10 +3,10 @@ package burrows.apps.example.gif.presentation.main
 import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
+import com.nhaarman.mockito_kotlin.eq
 import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.times

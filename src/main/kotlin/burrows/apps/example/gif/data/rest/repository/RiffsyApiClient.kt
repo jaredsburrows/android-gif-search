@@ -63,7 +63,7 @@ interface RiffsyApiClient {
    * @param pos   Position of getResults.
    * @return Response of search getResults.
    */
-  @GET("/v1/search?key=" + API_KEY) fun getSearchResults(@Query("tag") tag: String?,
+  @GET("/v1/search?key=" + API_KEY) fun getSearchResults(@Query("tag") tag: String,
                                                          @Query("limit") limit: Int,
                                                          @Query("pos") pos: Float?): Observable<RiffsyResponseDto>  // Allow passing null
 }

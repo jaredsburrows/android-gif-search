@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import java.lang.Exception
 
 /**
  * RecyclerView adapter for handling Gif Images in a Grid format.
@@ -106,7 +105,7 @@ class GifAdapter(
    * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
    */
   interface OnItemClickListener {
-    fun onClick(imageInfoModel: ImageInfoModel?)
+    fun onClick(imageInfoModel: ImageInfoModel)
   }
 
   /**

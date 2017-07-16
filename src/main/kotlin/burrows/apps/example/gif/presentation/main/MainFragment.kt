@@ -80,10 +80,10 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     adapter.clear()
   }
 
-  override fun addImages(response: RiffsyResponseDto?) {
-    next = response?.page ?: 0f
+  override fun addImages(response: RiffsyResponseDto) {
+    next = response.page ?: 0f
 
-    response?.results?.let {
+    response.results?.let {
       // Iterate over data from response and grab the urls
       for (result in response.results as List<ResultDto>) {
         val url = result.media?.get(0)?.gif?.url
@@ -95,7 +95,7 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     }
   }
 
-  override fun showDialog(imageInfoModel: ImageInfoModel?) {
+  override fun showDialog(imageInfoModel: ImageInfoModel) {
     showImageDialog(imageInfoModel)
   }
 
@@ -107,7 +107,7 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
   // GifAdapter
   //
 
-  override fun onClick(imageInfoModel: ImageInfoModel?) {
+  override fun onClick(imageInfoModel: ImageInfoModel) {
     showDialog(imageInfoModel)
   }
 
@@ -260,18 +260,18 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     refWatcher.watch(this, TAG)
   }
 
-  private fun showImageDialog(imageInfoModel: ImageInfoModel?) {
+  private fun showImageDialog(imageInfoModel: ImageInfoModel) {
     dialog.show()
     // Remove "white" background for dialog
     dialog.window.decorView.setBackgroundResource(android.R.color.transparent)
 
     // Load associated text
-    dialogText.text = imageInfoModel?.url
+    dialogText.text = imageInfoModel.url
     dialogText.visibility = View.VISIBLE
 
     // Load image
-    repository.load(imageInfoModel?.url)
-      .thumbnail(repository.load(imageInfoModel?.previewUrl))
+    repository.load(imageInfoModel.url)
+      .thumbnail(repository.load(imageInfoModel.previewUrl))
       .listener(object : RequestListener<Any?, GifDrawable> {
         override fun onException(e: Exception, model: Any?, target: Target<GifDrawable>,
                                  isFirstResource: Boolean): Boolean {
