@@ -10,7 +10,7 @@ import javax.inject.Inject
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-open class ImageApiRepository @Inject constructor(private val context: Context) { // dexmaker-mockito bug, leave open
+open class ImageApiRepository @Inject constructor(private val context: Context) { // dexmaker-mockito issue, leave open
   private val imageHeight: Int = context.resources.getDimensionPixelSize(R.dimen.gif_image_width)
   private val imageWidth: Int
 

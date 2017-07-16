@@ -26,22 +26,19 @@ import java.util.concurrent.TimeUnit
  */
 @Module
 class NetModule {
-  companion object {
-    /**
-     * OkHttp client request time out.
-     */
-    private val CLIENT_TIME_OUT = 10L
+  /**
+   * OkHttp client request time out.
+   */
+  private val CLIENT_TIME_OUT = 10L
+  /**
+   * OkHttp cache size.
+   */
+  private val CLIENT_CACHE_SIZE = 10 * 1024 * 1024L // 10 MiB
 
-    /**
-     * OkHttp cache size.
-     */
-    private val CLIENT_CACHE_SIZE = 10 * 1024 * 1024L // 10 MiB
-
-    /**
-     * OkHttp cache directory.
-     */
-    private val CLIENT_CACHE_DIRECTORY = "http"
-  }
+  /**
+   * OkHttp cache directory.
+   */
+  private val CLIENT_CACHE_DIRECTORY = "http"
 
   @Provides @PerActivity fun providesCache(application: Application): Cache {
     return Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)

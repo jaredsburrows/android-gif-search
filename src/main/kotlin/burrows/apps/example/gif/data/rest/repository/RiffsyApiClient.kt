@@ -15,11 +15,6 @@ import retrofit2.http.Query
 interface RiffsyApiClient {
   companion object {
     /**
-     * URL for Riffsy.
-     */
-    val BASE_URL = "https://api.riffsy.com/"
-
-    /**
      * Riffsy public API key.
      */
     private const val API_KEY = "LIVDSRZULELA"

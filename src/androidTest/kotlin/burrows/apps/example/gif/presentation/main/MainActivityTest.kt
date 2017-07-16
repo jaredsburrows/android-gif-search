@@ -1,6 +1,5 @@
 package burrows.apps.example.gif.presentation.main
 
-import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
@@ -15,30 +14,19 @@ import android.support.test.filters.SmallTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
-import burrows.apps.example.gif.App
 import burrows.apps.example.gif.R
-import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
-import burrows.apps.example.gif.presentation.di.component.DaggerActivityComponent
-import burrows.apps.example.gif.presentation.di.component.DaggerAppComponent
-import burrows.apps.example.gif.presentation.di.module.AppModule
-import burrows.apps.example.gif.presentation.di.module.RiffsyModule
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import okio.Buffer
-import okio.Okio
 import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import retrofit2.Retrofit
 import test.AndroidTestBase
-import java.io.InputStreamReader
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
-import java.net.HttpURLConnection.HTTP_OK
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
@@ -46,40 +34,13 @@ import java.net.HttpURLConnection.HTTP_OK
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest : AndroidTestBase() {
-  @get:Rule val activityRule: ActivityTestRule<MainActivity> = object : ActivityTestRule<MainActivity>(MainActivity::class.java, true, false) {
-    override fun beforeActivityLaunched() {
-      super.beforeActivityLaunched()
-
-      // Override app component
-      val testApp = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as App
-      val appComponent = DaggerAppComponent.builder()
-        .appModule(AppModule(testApp))
-        .build()
-      testApp.appComponent = appComponent
-
-      // Override activity component
-      val activityComponent = DaggerActivityComponent.builder()
-        .appComponent(appComponent)
-        .riffsyModule(object : RiffsyModule() {
-          // Set custom endpoint for rest service
-          override fun providesRiffsyApi(retrofit: Retrofit.Builder): RiffsyApiClient {
-            return retrofit
-              .baseUrl(mockEndPoint)
-              .build()
-              .create(RiffsyApiClient::class.java)
-          }
-        })
-        .build()
-      testApp.activityComponent = activityComponent
-    }
-  }
-  @get:Rule val server = MockWebServer()
-  private lateinit var mockEndPoint: String
+  @get:Rule val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java, true, false)
+  private val server = MockWebServer()
 
   @Before override fun setUp() {
     super.setUp()
 
-    mockEndPoint = server.url("/").toString()
+    server.start(MOCK_SERVER_PORT)
     server.setDispatcher(dispatcher)
   }
 
@@ -116,39 +77,6 @@ class MainActivityTest : AndroidTestBase() {
       .perform(typeText("hello"), closeSoftKeyboard(), pressBack())
     onView(withId(R.id.recycler_view))
       .check(matches(isDisplayed()))
-  }
-
-  private fun getMockResponse(fileName: String): MockResponse {
-    return MockResponse()
-      .setStatus("HTTP/1.1 200")
-      .setResponseCode(HTTP_OK)
-      .setBody(parseText(fileName))
-      .addHeader("Content-type: application/json; charset=utf-8")
-  }
-
-  private fun parseText(fileName: String): String {
-    val inputStream = javaClass.getResourceAsStream(fileName)
-    val text = InputStreamReader(inputStream).readText()
-    inputStream.close()
-    return text
-  }
-
-  private fun getMockFileResponse(fileName: String): MockResponse {
-    return MockResponse()
-      .setStatus("HTTP/1.1 200")
-      .setResponseCode(HTTP_OK)
-      .setBody(parseImage(fileName))
-      .addHeader("content-type: image/png")
-  }
-
-  private fun parseImage(fileName: String): Buffer {
-    val inputStream = javaClass.getResourceAsStream(fileName)
-    val source = Okio.source(inputStream)
-    val result = Buffer()
-    result.writeAll(source)
-    inputStream.close()
-    source.close()
-    return result
   }
 
   private val dispatcher = object : Dispatcher() {

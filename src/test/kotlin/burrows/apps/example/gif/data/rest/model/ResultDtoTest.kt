@@ -8,11 +8,11 @@ import test.TestBase
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class ResultDtoTest : TestBase() {
-  private val testMedias = arrayListOf<MediaDto>()
-  private var sut = ResultDto().apply { media = testMedias; title = STRING_UNIQUE }
+  private val TEST_MEDIAS = arrayListOf<MediaDto>()
+  private var sut = ResultDto().apply { media = TEST_MEDIAS; title = STRING_UNIQUE }
 
   @Test fun testGetMedia() {
-    assertThat(sut.media).isEqualTo(testMedias)
+    assertThat(sut.media).isEqualTo(TEST_MEDIAS)
   }
 
   @Test fun testGetTitle() {

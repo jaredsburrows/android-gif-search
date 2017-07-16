@@ -29,14 +29,14 @@ import test.AndroidTestBase
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class GifAdapterTest : AndroidTestBase() {
+  @get:Rule val uiThreadTestRule = UiThreadTestRule()
   private val targetContext: Context = InstrumentationRegistry.getTargetContext()
   private val imageInfoModel = ImageInfoModel().apply { url = STRING_UNIQUE }
   private val imageInfoModel2 = ImageInfoModel().apply { url = STRING_UNIQUE2 }
   private val imageInfoModel3 = ImageInfoModel().apply { url = STRING_UNIQUE3 }
-  @get:Rule val uiThreadTestRule = UiThreadTestRule()
   @Mock private lateinit var onItemClickListener: OnItemClickListener
   private lateinit var viewHolder: GifAdapter.ViewHolder
-  private lateinit var spyImageDownloader: ImageApiRepository
+  private lateinit var imageApiRepository: ImageApiRepository
   private lateinit var sut: GifAdapter
 
   @Before override fun setUp() {
@@ -44,8 +44,8 @@ class GifAdapterTest : AndroidTestBase() {
 
     initMocks(this)
 
-    spyImageDownloader = spy(ImageApiRepository(targetContext))
-    sut = GifAdapter(onItemClickListener, spyImageDownloader)
+    imageApiRepository = spy(ImageApiRepository(targetContext))
+    sut = GifAdapter(onItemClickListener, imageApiRepository)
     sut.add(imageInfoModel)
     sut.add(imageInfoModel2)
     // Must be created on UI thread
@@ -75,7 +75,7 @@ class GifAdapterTest : AndroidTestBase() {
 
     // Assert
     assertThat(viewHolder.itemView.performClick()).isTrue()
-    verify(spyImageDownloader, atLeastOnce()).load(eq(STRING_UNIQUE))
+    verify(imageApiRepository, atLeastOnce()).load(eq(STRING_UNIQUE))
     verify(onItemClickListener).onClick(eq(imageInfoModel))
   }
 

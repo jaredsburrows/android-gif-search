@@ -8,11 +8,11 @@ import test.TestBase
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class RiffsyResponseDtoTest : TestBase() {
-  private val resultsTest = arrayListOf<ResultDto>()
-  private var sut = RiffsyResponseDto().apply { results = resultsTest; page = FLOAT_RANDOM }
+  private val TEST_RESULTS = arrayListOf<ResultDto>()
+  private var sut = RiffsyResponseDto().apply { results = TEST_RESULTS; page = FLOAT_RANDOM }
 
   @Test fun testGetResults() {
-    assertThat(sut.results).isEqualTo(resultsTest)
+    assertThat(sut.results).isEqualTo(TEST_RESULTS)
   }
 
   @Test fun testGetNext() {
