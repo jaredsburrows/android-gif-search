@@ -21,7 +21,6 @@ tasks.withType(JavaCompile) {
 
 // Turn on logging for all tests, filter to show failures/skips only
 tasks.withType(Test) {
-  maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
   testLogging {
     exceptionFormat "full"
     showCauses true
@@ -29,6 +28,9 @@ tasks.withType(Test) {
     showStackTraces true
     events "failed", "skipped"
   }
+
+  def maxWorkerCount = gradle.startParameter.maxWorkerCount
+  maxParallelForks = maxWorkerCount < 2 ? 1 : maxWorkerCount / 2
 }
 
 // Prevent forked processes from stealing focus (on MacOS at least)

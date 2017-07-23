@@ -72,14 +72,10 @@ android {
   }
 
   // Optimize local build speed - disable aapt PNG crunching
-  aaptOptions {
-    cruncherEnabled rootProject.ext.ci
-  }
+  aaptOptions.cruncherEnabled rootProject.ext.ci
 
   // Optimize ci build speed - disable dexing on ci
-  dexOptions {
-    preDexLibraries !rootProject.ext.ci
-  }
+  dexOptions.preDexLibraries !rootProject.ext.ci
 
   // Need this to help IDE recognize Kotlin
   sourceSets {
@@ -161,10 +157,8 @@ configurations.all {
 }
 
 dependencies {
-  // Android/Google
   compile deps.design
   compile deps.cardviewv7
-  // Other
   compile deps.kotlinStdlib
   compile deps.okhttp
   compile deps.loggingInterceptor
@@ -199,6 +193,7 @@ dependencies {
   testCompile deps.assertjCore
   testCompile deps.mockitoKotlin
   testCompile deps.mockitoCore
+  testCompile deps.mockitoInline
   testCompile deps.leakcanaryAndroidNoOp
   testCompile deps.mockwebserver
   testCompile deps.equalsverifier
