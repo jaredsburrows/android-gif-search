@@ -190,13 +190,13 @@ dependencies {
 
   androidTestCompile(extra["junit"])
   androidTestCompile(extra["assertjCore"])
-  (androidTestCompile(extra["mockitoKotlin"]) as ModuleDependency).apply { exclude(mapOf("group" to "net.bytebuddy")) }     // DexMaker has it"s own MockMaker
-  (androidTestCompile(extra["mockitoCore"]) as ModuleDependency).apply { exclude(mapOf("group" to "net.bytebuddy")) }       // DexMaker has it"s own MockMaker
-  (androidTestCompile(extra["dexmakerMockito"]) as ModuleDependency).apply { exclude(mapOf("group" to "net.bytebuddy")) }   // DexMaker has it"s own MockMaker
+  androidTestCompile(extra["mockitoKotlin"] as String) { exclude(group = "net.bytebuddy") }     // DexMaker has it"s own MockMaker
+  androidTestCompile(extra["mockitoCore"] as String) { exclude(group = "net.bytebuddy") }       // DexMaker has it"s own MockMaker
+  androidTestCompile(extra["dexmakerMockito"] as String) { exclude(group = "net.bytebuddy") }   // DexMaker has it"s own MockMaker
   androidTestCompile(extra["runner"])
   androidTestCompile(extra["espressoCore"])
   androidTestCompile(extra["espressoIntents"])
-  (androidTestCompile(extra["espressoContrib"]) as ModuleDependency).apply { exclude(mapOf("group" to "com.android.support")) }
+  androidTestCompile(extra["espressoContrib"] as String) { exclude(group = "com.android.support") }
   androidTestCompile(extra["mockwebserver"])
 
   testCompile(extra["junit"])
