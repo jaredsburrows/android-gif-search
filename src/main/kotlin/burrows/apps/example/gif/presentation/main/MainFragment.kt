@@ -3,8 +3,6 @@ package burrows.apps.example.gif.presentation.main
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.MenuItemCompat
-import android.support.v4.view.MenuItemCompat.OnActionExpandListener
 import android.support.v7.app.AppCompatDialog
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -17,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.MenuItem.OnActionExpandListener
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -85,8 +84,8 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
 
     response.results?.let {
       // Iterate over data from response and grab the urls
-      for (result in response.results as List<ResultDto>) {
-        val url = result.media?.get(0)?.gif?.url
+      for ((media) in response.results as List<ResultDto>) {
+        val url = media?.get(0)?.gif?.url
 
         adapter.add(ImageInfoModel(url, null))
 
@@ -201,12 +200,11 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     inflater?.inflate(R.menu.menu_fragment_main, menu)
 
     val menuItem = menu?.findItem(R.id.menu_search)
-
-    val searchView = MenuItemCompat.getActionView(menuItem) as SearchView
-    searchView.queryHint = searchView.context.getString(R.string.search_gifs)
+    val searchView = menuItem?.actionView as SearchView?
+    searchView?.queryHint = searchView?.context?.getString(R.string.search_gifs)
 
     // Set contextual action on search icon click
-    MenuItemCompat.setOnActionExpandListener(menuItem, object : OnActionExpandListener {
+    menuItem?.setOnActionExpandListener(object : OnActionExpandListener {
       override fun onMenuItemActionExpand(item: MenuItem): Boolean {
         return true
       }
@@ -224,7 +222,7 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     })
 
     // Query listener for search bar
-    searchView.setOnQueryTextListener(object : OnQueryTextListener {
+    searchView?.setOnQueryTextListener(object : OnQueryTextListener {
       override fun onQueryTextChange(newText: String): Boolean {
         // Search on type
         if (!TextUtils.isEmpty(newText)) {
