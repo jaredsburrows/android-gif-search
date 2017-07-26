@@ -84,14 +84,12 @@ android {
   }
 
   // Need this to help IDE recognize Kotlin
-//  sourceSets {
-//    androidTest.java.srcDirs += "src/androidTest/kotlin"
-//    debug.java.srcDirs += "src/debug/kotlin"
-//    main.java.srcDirs += "src/main/kotlin"
-//    test.java.srcDirs += "src/test/kotlin"
-//  }
-//  sourceSets["main"].java.srcDirs.add("src/main/kotlin")
-//  println(sourceSets["main"].java.srcDirs)
+  sourceSets {
+    getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
+    getByName("debug").java.srcDirs("src/debug/kotlin")
+    getByName("main").java.srcDirs("src/main/kotlin")
+    getByName("test").java.srcDirs("src/test/kotlin")
+  }
 
   lintOptions {
     textReport = true
