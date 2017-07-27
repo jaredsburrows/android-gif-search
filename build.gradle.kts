@@ -111,7 +111,7 @@ android {
 
   buildTypes {
     getByName("debug") {
-      if (extra["ci"] as Boolean) isTestCoverageEnabled = true                      // https://issuetracker.google.com/issues/37019591
+      if (extra["ci"] as Boolean) isTestCoverageEnabled = true                                // https://issuetracker.google.com/issues/37019591
       applicationIdSuffix = ".debug"
 
       if (extra["ci"] as Boolean) {
@@ -123,9 +123,9 @@ android {
 
     // Apply fake signing config to release to test "assembleRelease" locally
     getByName("release") {
-      isMinifyEnabled = true                                                        // Optimize APK size - remove/optimize DEX file(s)
-      isShrinkResources = true                                                      // Optimize APK size - remove unused resources
-      proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))         // Optimize APK size - use optimized proguard rules
+      isMinifyEnabled = true                                                                  // Optimize APK size - remove/optimize DEX file(s)
+      isShrinkResources = true                                                                // Optimize APK size - remove unused resources
+      proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))             // Optimize APK size - use optimized proguard rules
       proguardFile(rootProject.file("config/proguard/proguard-rules.txt"))
       signingConfig = signingConfigs.getByName("debug")
 

@@ -32,44 +32,44 @@ abstract class AndroidTestBase {
     val LONG_RANDOM: Long = Random().nextLong()
     val FLOAT_RANDOM: Float = Random().nextFloat()
     val DOUBLE_RANDOM: Double = Random().nextDouble()
+
+    @JvmStatic fun getMockResponse(fileName: String): MockResponse {
+      return MockResponse()
+        .setStatus("HTTP/1.1 200")
+        .setResponseCode(HTTP_OK)
+        .setBody(parseText(fileName))
+        .addHeader("Content-type: application/json; charset=utf-8")
+    }
+
+    @JvmStatic fun parseText(fileName: String): String {
+      val inputStream = AndroidTestBase::class.java.getResourceAsStream(fileName)
+      val text = InputStreamReader(inputStream).readText()
+      inputStream.close()
+      return text
+    }
+
+    @JvmStatic fun getMockFileResponse(fileName: String): MockResponse {
+      return MockResponse()
+        .setStatus("HTTP/1.1 200")
+        .setResponseCode(HTTP_OK)
+        .setBody(parseImage(fileName))
+        .addHeader("content-type: image/png")
+    }
+
+    @JvmStatic fun parseImage(fileName: String): Buffer {
+      val inputStream = AndroidTestBase::class.java.getResourceAsStream(fileName)
+      val source = Okio.source(inputStream)
+      val result = Buffer()
+      result.writeAll(source)
+      inputStream.close()
+      source.close()
+      return result
+    }
   }
 
   @Before open fun setUp() {
   }
 
   @After open fun tearDown() {
-  }
-
-  fun getMockResponse(fileName: String): MockResponse {
-    return MockResponse()
-      .setStatus("HTTP/1.1 200")
-      .setResponseCode(HTTP_OK)
-      .setBody(parseText(fileName))
-      .addHeader("Content-type: application/json; charset=utf-8")
-  }
-
-  fun parseText(fileName: String): String {
-    val inputStream = javaClass.getResourceAsStream(fileName)
-    val text = InputStreamReader(inputStream).readText()
-    inputStream.close()
-    return text
-  }
-
-  fun getMockFileResponse(fileName: String): MockResponse {
-    return MockResponse()
-      .setStatus("HTTP/1.1 200")
-      .setResponseCode(HTTP_OK)
-      .setBody(parseImage(fileName))
-      .addHeader("content-type: image/png")
-  }
-
-  fun parseImage(fileName: String): Buffer {
-    val inputStream = javaClass.getResourceAsStream(fileName)
-    val source = Okio.source(inputStream)
-    val result = Buffer()
-    result.writeAll(source)
-    inputStream.close()
-    source.close()
-    return result
   }
 }

@@ -10,8 +10,9 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
+import org.junit.AfterClass
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -23,22 +24,35 @@ import java.net.HttpURLConnection.HTTP_NOT_FOUND
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class RiffsyApiClientTest : TestBase() {
-  private val server = MockWebServer()
+  companion object {
+    private val server = MockWebServer()
+
+    @BeforeClass @JvmStatic fun setUpClass() {
+      server.start(MOCK_SERVER_PORT)
+      server.setDispatcher(dispatcher)
+    }
+
+    @AfterClass @JvmStatic fun tearDownClass() {
+      server.shutdown()
+    }
+
+    private val dispatcher = object : Dispatcher() {
+      override fun dispatch(request: RecordedRequest): MockResponse {
+        when {
+          request.path.contains("/v1/trending") -> return getMockResponse("/trending_results.json")
+          request.path.contains("/v1/search") -> return getMockResponse("/search_results.json")
+          else -> return MockResponse().setResponseCode(HTTP_NOT_FOUND)
+        }
+      }
+    }
+  }
+
   private lateinit var sut: RiffsyApiClient
 
   @Before override fun setUp() {
     super.setUp()
 
-    server.start(TestBase.MOCK_SERVER_PORT)
-    server.setDispatcher(dispatcher)
-
     sut = getRetrofit(server.url("/").toString()).build().create(RiffsyApiClient::class.java)
-  }
-
-  @After override fun tearDown() {
-    super.tearDown()
-
-    server.shutdown()
   }
 
   @Test fun testTrendingResultsUrlShouldParseCorrectly() {
@@ -107,15 +121,5 @@ class RiffsyApiClientTest : TestBase() {
           .setLevel(HttpLoggingInterceptor.Level.BODY))
         .build()
       )
-  }
-
-  private val dispatcher = object : Dispatcher() {
-    override fun dispatch(request: RecordedRequest): MockResponse {
-      when {
-        request.path.contains("/v1/trending") -> return getMockResponse("/trending_results.json")
-        request.path.contains("/v1/search") -> return getMockResponse("/search_results.json")
-        else -> return MockResponse().setResponseCode(HTTP_NOT_FOUND)
-      }
-    }
   }
 }

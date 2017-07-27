@@ -30,26 +30,26 @@ abstract class TestBase {
     val LONG_RANDOM: Long = Random().nextLong()
     val FLOAT_RANDOM: Float = Random().nextFloat()
     val DOUBLE_RANDOM: Double = Random().nextDouble()
+
+    @JvmStatic fun getMockResponse(fileName: String): MockResponse {
+      return MockResponse()
+        .setStatus("HTTP/1.1 200")
+        .setResponseCode(HTTP_OK)
+        .setBody(parseText(fileName))
+        .addHeader("Content-type: application/json; charset=utf-8")
+    }
+
+    @JvmStatic fun parseText(fileName: String): String {
+      val inputStream = TestBase::class.java.getResourceAsStream(fileName)
+      val text = InputStreamReader(inputStream).readText()
+      inputStream.close()
+      return text
+    }
   }
 
   @Before open fun setUp() {
   }
 
   @After open fun tearDown() {
-  }
-
-  fun getMockResponse(fileName: String): MockResponse {
-    return MockResponse()
-      .setStatus("HTTP/1.1 200")
-      .setResponseCode(HTTP_OK)
-      .setBody(parseText(fileName))
-      .addHeader("Content-type: application/json; charset=utf-8")
-  }
-
-  fun parseText(fileName: String): String {
-    val inputStream = javaClass.getResourceAsStream(fileName)
-    val text = InputStreamReader(inputStream).readText()
-    inputStream.close()
-    return text
   }
 }
