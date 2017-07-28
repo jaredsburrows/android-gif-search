@@ -1,9 +1,11 @@
-apply plugin: "com.android.application"
-apply plugin: "pmd"
-apply plugin: "jacoco"
-apply plugin: "findbugs"
-apply plugin: "checkstyle"
-apply plugin: "com.github.kt3k.coveralls"
+apply {
+  plugin("com.android.application")
+  plugin("pmd")
+  plugin("jacoco")
+  plugin("findbugs")
+  plugin("checkstyle")
+  plugin("com.github.kt3k.coveralls")
+}
 
 // Creates tasks based on the application build variant (productFlavor + buildType = variant)
 android.applicationVariants.all { variant ->
