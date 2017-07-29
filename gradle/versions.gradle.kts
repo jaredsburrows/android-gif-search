@@ -5,7 +5,7 @@ val supportLibraryVersion           = "26.0.0"
 val daggerVersion                   = "2.11"
 val okHttpVersion                   = "3.8.1"
 val retrofitVersion                 = "2.3.0"
-val espressoVersion                 = "2.2.2"
+val espressoVersion                 = "3.0.0"
 val leakCanaryVersion               = "1.5"
 val multidexVersion                 = "1.0.2"
 
@@ -70,7 +70,7 @@ extra["espressoCore"]               = "com.android.support.test.espresso:espress
 extra["espressoIntents"]            = "com.android.support.test.espresso:espresso-intents:$espressoVersion"
 extra["espressoContrib"]            = "com.android.support.test.espresso:espresso-contrib:$espressoVersion"
 extra["testingSupportLib"]          = "com.android.support.test:testing-support-lib:0.1"
-extra["runner"]                     = "com.android.support.test:runner:0.5"
+extra["runner"]                     = "com.android.support.test:runner:1.0.0"
 
 // testCompile
 extra["junit"]                      = "junit:junit:4.12"

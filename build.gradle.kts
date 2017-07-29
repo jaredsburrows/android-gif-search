@@ -59,6 +59,8 @@ android {
     targetSdkVersion(rootProject.extra["targetSdkVersion"] as Int)
     testApplicationId = "burrows.apps.example.gif.test"
     testInstrumentationRunner = "test.CustomTestRunner"
+    testInstrumentationRunnerArgument("notClass", "com.android.dex.DexIndexOverflowException") // https://github.com/linkedin/dexmaker/issues/65
+    testInstrumentationRunnerArgument("disableAnalytics", "true")
     resConfigs("en")                                                            // Optimize APK size - keep only english resource files for now
     vectorDrawables.useSupportLibrary = true                                    // Optimize APK size - use vector drawables
     multiDexEnabled = true
