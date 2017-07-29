@@ -7,6 +7,7 @@ val okHttpVersion                   = "3.8.1"
 val retrofitVersion                 = "2.3.0"
 val espressoVersion                 = "2.2.2"
 val leakCanaryVersion               = "1.5"
+val multidexVersion                 = "1.0.2"
 
 // Android plugin
 extra["minSdkVersion"]              = 19
@@ -38,6 +39,8 @@ extra["supportv4"]                  = "com.android.support:support-v4:$supportLi
 extra["recyclerviewv7"]             = "com.android.support:recyclerview-v7:$supportLibraryVersion"
 extra["cardviewv7"]                 = "com.android.support:cardview-v7:$supportLibraryVersion"
 extra["supportAnnotations"]         = "com.android.support:support-annotations:$supportLibraryVersion"
+extra["multidex"]                   = "com.android.support:multidex:$multidexVersion"
+extra["multidexInstrumentation"]    = "com.android.support:multidex-instrumentation:$multidexVersion"
 extra["kotlinStdlib"]               = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 extra["rxAndroid"]                  = "io.reactivex.rxjava2:rxandroid:2.0.1"
 extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.1.2"

@@ -58,9 +58,10 @@ android {
     minSdkVersion(if (rootProject.extra["lollipop"] as Boolean) 21 else rootProject.extra["minSdkVersion"] as Int) // Optimize build speed - build with minSdk 21 if using multidex
     targetSdkVersion(rootProject.extra["targetSdkVersion"] as Int)
     testApplicationId = "burrows.apps.example.gif.test"
-    testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner = "test.CustomTestRunner"
     resConfigs("en")                                                            // Optimize APK size - keep only english resource files for now
     vectorDrawables.useSupportLibrary = true                                    // Optimize APK size - use vector drawables
+    multiDexEnabled = true
   }
 
   dataBinding {
@@ -162,6 +163,8 @@ android {
 configurations.all {
   resolutionStrategy.force(extra["supportAnnotations"])
   resolutionStrategy.force(extra["kotlinStdlib"])
+  resolutionStrategy.force(extra["multidex"])
+  resolutionStrategy.force(extra["multidexInstrumentation"])
 }
 
 dependencies {
