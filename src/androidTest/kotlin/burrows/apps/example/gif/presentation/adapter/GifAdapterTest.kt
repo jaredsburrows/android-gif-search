@@ -2,8 +2,8 @@ package burrows.apps.example.gif.presentation.adapter
 
 import android.content.Context
 import android.support.test.InstrumentationRegistry
+import android.support.test.annotation.UiThreadTest
 import android.support.test.filters.SmallTest
-import android.support.test.rule.UiThreadTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -13,7 +13,6 @@ import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 import com.nhaarman.mockito_kotlin.eq
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
@@ -29,7 +28,6 @@ import test.AndroidTestBase
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class GifAdapterTest : AndroidTestBase() {
-  @get:Rule val uiThreadTestRule = UiThreadTestRule()
   private val targetContext: Context = InstrumentationRegistry.getTargetContext()
   private val imageInfoModel = ImageInfoModel().apply { url = STRING_UNIQUE }
   private val imageInfoModel2 = ImageInfoModel().apply { url = STRING_UNIQUE2 }
@@ -39,7 +37,7 @@ class GifAdapterTest : AndroidTestBase() {
   private lateinit var imageApiRepository: ImageApiRepository
   private lateinit var sut: GifAdapter
 
-  @Before override fun setUp() {
+  @Before @UiThreadTest override fun setUp() {
     super.setUp()
 
     initMocks(this)
@@ -48,22 +46,20 @@ class GifAdapterTest : AndroidTestBase() {
     sut = GifAdapter(onItemClickListener, imageApiRepository)
     sut.add(imageInfoModel)
     sut.add(imageInfoModel2)
-    // Must be created on UI thread
-    uiThreadTestRule.runOnUiThread { viewHolder = sut.onCreateViewHolder(LinearLayout(targetContext), 0) }
+    viewHolder = sut.onCreateViewHolder(LinearLayout(targetContext), 0)
   }
 
-  @Test fun testOnCreateViewHolder() {
+  @Test @UiThreadTest fun testOnCreateViewHolder() {
     // Arrange
     val parent = object : ViewGroup(targetContext) {
       override fun onLayout(b: Boolean, i: Int, i1: Int, i2: Int, i3: Int) {}
     }
 
     // Assert
-    // Must be created on UI thread
-    uiThreadTestRule.runOnUiThread { assertThat(sut.onCreateViewHolder(parent, 0)).isInstanceOf(GifAdapter.ViewHolder::class.java) }
+    assertThat(sut.onCreateViewHolder(parent, 0)).isInstanceOf(GifAdapter.ViewHolder::class.java)
   }
 
-  @Test fun testOnBindViewHolderOnAdapterItemClick() {
+  @Test @UiThreadTest fun testOnBindViewHolderOnAdapterItemClick() {
     // Arrange
     sut.clear()
     sut.add(imageInfoModel)
@@ -71,7 +67,7 @@ class GifAdapterTest : AndroidTestBase() {
     sut.add(ImageInfoModel())
 
     // Act
-    uiThreadTestRule.runOnUiThread { sut.onBindViewHolder(viewHolder, 0) }
+    sut.onBindViewHolder(viewHolder, 0)
 
     // Assert
     assertThat(viewHolder.itemView.performClick()).isTrue()
@@ -91,15 +87,13 @@ class GifAdapterTest : AndroidTestBase() {
     assertThat(sut.getItem(0)).isEqualTo(imageInfo)
   }
 
-  @Test fun onViewRecycled() {
+  @Test @UiThreadTest fun onViewRecycled() {
     // Arrange
     sut.add(ImageInfoModel())
 
     // Act
-    uiThreadTestRule.runOnUiThread {
-      sut.onBindViewHolder(viewHolder, 0)
-      sut.onViewRecycled(viewHolder)
-    }
+    sut.onBindViewHolder(viewHolder, 0)
+    sut.onViewRecycled(viewHolder)
   }
 
   @Test fun testGetItemCountShouldReturnCorrectValues() {
