@@ -77,14 +77,10 @@ android {
   }
 
   // Optimize local build speed - disable aapt PNG crunching
-  aaptOptions {
-    cruncherEnabled = extra["ci"] as Boolean
-  }
+  aaptOptions.cruncherEnabled = extra["ci"] as Boolean
 
   // Optimize ci build speed - disable dexing on ci
-  dexOptions {
-    preDexLibraries = !(extra["ci"] as Boolean)
-  }
+  dexOptions.preDexLibraries = !(extra["ci"] as Boolean)
 
   // Need this to help IDE recognize Kotlin
   sourceSets {
@@ -99,7 +95,7 @@ android {
     textOutput("stdout")
     isCheckAllWarnings = true
     isWarningsAsErrors = true
-    setLintConfig(rootProject.file("${project.rootDir}/config/lint/lint.xml"))
+    lintConfig = rootProject.file("${project.rootDir}/config/lint/lint.xml")
   }
 
   // Add "debug.keystore" so developers can share APKs with same signatures locally
