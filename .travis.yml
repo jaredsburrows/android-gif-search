@@ -41,8 +41,8 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew clean testDebug lintDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan
-  - ./gradlew assembleRelease -Pci --stacktrace --scan
+  - ./gradlew clean testDebug lintDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan -Dorg.gradle.workers.max=4
+  - ./gradlew assembleRelease -Pci --stacktrace --scan -Dorg.gradle.workers.max=4
 
 branches:
   except:
