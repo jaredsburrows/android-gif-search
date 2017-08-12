@@ -42,7 +42,7 @@ before_script:
 
 script:
   - ./gradlew clean testDebug lintDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan -Dorg.gradle.workers.max=4
-  - ./gradlew assembleRelease -Pci --stacktrace --scan -Dorg.gradle.workers.max=4
+  - ./gradlew assembleRelease -Pci --stacktrace --scan
 
 branches:
   except:
