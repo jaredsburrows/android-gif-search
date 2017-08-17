@@ -1,4 +1,4 @@
-# Android RecyclerView Gif Example in Kotlin
+# Android RecyclerView Gif Example in Kotlin with Kotlin DSL
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![TravisCI  Build](https://img.shields.io/travis/jaredsburrows/android-gif-example/master.svg)](https://travis-ci.org/jaredsburrows/android-gif-example)
@@ -34,21 +34,9 @@ Riffsy RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2
 
 ## Reports
 
-**Generate [PMD](https://pmd.github.io/) Report:**
-
-    $ gradlew pmdDebug
-
 **Generate [JacocoReport](http://www.eclemma.org/jacoco/) Test Coverage Report:**
 
     $ gradlew jacocoDebugReport
-
-**Generate [FindBugs](http://findbugs.sourceforge.net/) Report:**
-
-    $ gradlew findBugsDebug
-
-**Generate [Checkstyle](http://checkstyle.sourceforge.net/) Report:**
-
-    $ gradlew checkstyleDebug
 
 **Generate [Lint](http://developer.android.com/tools/help/lint.html) Report:**
 
