@@ -1,6 +1,6 @@
 // Common versions
 val androidGradleVersion            = "2.3.3"
-val kotlinVersion                   = "1.1.4"
+val kotlinVersion                   = "1.1.4-2"
 val supportLibraryVersion           = "26.0.1"
 val daggerVersion                   = "2.11"
 val okHttpVersion                   = "3.8.1"
@@ -8,6 +8,8 @@ val retrofitVersion                 = "2.3.0"
 val espressoVersion                 = "3.0.0"
 val leakCanaryVersion               = "1.5"
 val multidexVersion                 = "1.0.2"
+val glideVersion                    = "4.0.0"
+val mocktioVersion                  = "2.8.47"
 
 // Android plugin
 extra["minSdkVersion"]              = 19
@@ -51,8 +53,9 @@ extra["retrofit"]                   = "com.squareup.retrofit2:retrofit:$retrofit
 extra["converterMoshi"]             = "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
 extra["moshiAdapters"]              = "com.squareup.moshi:moshi-adapters:1.5.0"
 extra["adapterRxjava2"]             = "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-extra["glide"]                      = "com.github.bumptech.glide:glide:3.8.0"
-extra["okhttp3Integration"]         = "com.github.bumptech.glide:okhttp3-integration:1.5.0@aar"
+extra["glide"]                      = "com.github.bumptech.glide:glide:$glideVersion"
+extra["okhttp3Compiler"]            = "com.github.bumptech.glide:compiler:$glideVersion"
+extra["okhttp3Integration"]         = "com.github.bumptech.glide:okhttp3-integration:$glideVersion@aar"
 
 // debugCompile
 extra["leakcanaryAndroid"]          = "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
@@ -74,7 +77,8 @@ extra["runner"]                     = "com.android.support.test:runner:1.0.0"
 
 // testCompile
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoCore"]                = "org.mockito:mockito-core:2.8.47"
+extra["mockitoCore"]                = "org.mockito:mockito-core:$mocktioVersion"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:$mocktioVersion"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["assertjCore"]                = "org.assertj:assertj-core:1.7.1"
 extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.3.2"

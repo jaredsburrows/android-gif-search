@@ -183,6 +183,7 @@ dependencies {
 
   kapt(extra["daggerCompiler"])
   kapt(extra["compiler"])
+  kapt(extra["okhttp3Compiler"])
 
   debugCompile(extra["leakcanaryAndroid"])
   releaseCompile(extra["leakcanaryAndroidNoOp"])
@@ -201,7 +202,7 @@ dependencies {
   testCompile(extra["junit"])
   testCompile(extra["assertjCore"])
   testCompile(extra["mockitoKotlin"])
-  testCompile(extra["mockitoCore"])
+  testCompile(extra["mockitoInline"])
   testCompile(extra["leakcanaryAndroidNoOp"])
   testCompile(extra["mockwebserver"])
   testCompile(extra["equalsverifier"])

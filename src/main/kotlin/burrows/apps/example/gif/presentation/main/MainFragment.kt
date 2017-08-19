@@ -33,6 +33,8 @@ import burrows.apps.example.gif.presentation.adapter.GifAdapter
 import burrows.apps.example.gif.presentation.adapter.GifItemDecoration
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -178,7 +180,7 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     dialog.setCanceledOnTouchOutside(true)
     dialog.setOnDismissListener {
       // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
-      Glide.clear(imageView)  // Forget view, try to free resources
+      Glide.with(imageView.context).clear(imageView)  // Forget view, try to free resources
       imageView.setImageDrawable(null)
       progressBar.visibility = View.VISIBLE // Make sure to show progress when loading new view
     }
@@ -270,18 +272,18 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     // Load image
     repository.load(imageInfoModel.url)
       .thumbnail(repository.load(imageInfoModel.previewUrl))
-      .listener(object : RequestListener<Any?, GifDrawable> {
-        override fun onException(e: Exception?, model: Any?, target: Target<GifDrawable>,
-                                 isFirstResource: Boolean): Boolean {
+      .listener(object : RequestListener<GifDrawable> {
+        override fun onResourceReady(resource: GifDrawable?, model: Any?,
+                                     target: Target<GifDrawable>?, dataSource: DataSource?,
+                                     isFirstResource: Boolean): Boolean {
           // Hide progressbar
           progressBar.visibility = View.GONE
           if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model)
-
           return false
         }
 
-        override fun onResourceReady(resource: GifDrawable, model: Any?,
-                                     target: Target<GifDrawable>, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
+        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?,
+                                  isFirstResource: Boolean): Boolean {
           // Hide progressbar
           progressBar.visibility = View.GONE
           if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model)
