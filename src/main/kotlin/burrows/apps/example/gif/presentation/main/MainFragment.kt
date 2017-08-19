@@ -28,7 +28,6 @@ import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.databinding.DialogPreviewBinding
-import burrows.apps.example.gif.databinding.FragmentMainBinding
 import burrows.apps.example.gif.presentation.adapter.GifAdapter
 import burrows.apps.example.gif.presentation.adapter.GifItemDecoration
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
@@ -40,6 +39,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.squareup.leakcanary.RefWatcher
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_main.*
 
 /**
  * Main Fragment of the application that displays the Recylcerview of Gif images.
@@ -135,20 +135,23 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     super.onCreateView(inflater, container, savedInstanceState)
+    return inflater?.inflate(R.layout.fragment_main, container, false)
+  }
 
-    val binding = DataBindingUtil.inflate<FragmentMainBinding>(inflater, R.layout.fragment_main, container, false)
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
 
     // Setup RecyclerView
-    binding.recyclerView.layoutManager = layoutManager
-    binding.recyclerView.addItemDecoration(itemOffsetDecoration)
-    binding.recyclerView.adapter = adapter
-    binding.recyclerView.setHasFixedSize(true)
+    recyclerView.layoutManager = layoutManager
+    recyclerView.addItemDecoration(itemOffsetDecoration)
+    recyclerView.adapter = adapter
+    recyclerView.setHasFixedSize(true)
     // http://stackoverflow.com/questions/30511890/does-glide-queue-up-every-image-request-recyclerview-loads-are-very-slow-when-s#comment49135977_30511890
-    binding.recyclerView.recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
-    binding.recyclerView.setItemViewCacheSize(RiffsyApiClient.DEFAULT_LIMIT_COUNT)
-    binding.recyclerView.isDrawingCacheEnabled = true
-    binding.recyclerView.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
-    binding.recyclerView.addOnScrollListener(object : OnScrollListener() {
+    recyclerView.recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
+    recyclerView.setItemViewCacheSize(RiffsyApiClient.DEFAULT_LIMIT_COUNT)
+    recyclerView.isDrawingCacheEnabled = true
+    recyclerView.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
+    recyclerView.addOnScrollListener(object : OnScrollListener() {
       override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
 
@@ -171,7 +174,7 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     })
 
     // Custom view for Dialog
-    val previewBinding = DataBindingUtil.inflate<DialogPreviewBinding>(inflater, R.layout.dialog_preview, null, false)
+    val previewBinding = DataBindingUtil.inflate<DialogPreviewBinding>(LayoutInflater.from(context), R.layout.dialog_preview, null, false)
 
     // Customize Dialog
     dialog = AppCompatDialog(context)
@@ -193,7 +196,6 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     // Load initial images
     presenter.loadTrendingImages(next)
 
-    return binding.root
   }
 
   override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

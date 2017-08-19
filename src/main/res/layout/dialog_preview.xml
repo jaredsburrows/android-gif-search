@@ -10,7 +10,7 @@
     android:foreground="?selectableItemBackgroundBorderless"
     app:cardCornerRadius="2dp"
     app:cardUseCompatPadding="true"
-    tools:context=".presentation.main.MainActivity">
+    tools:context="burrows.apps.example.gif.presentation.main.MainActivity">
 
     <RelativeLayout
       android:layout_width="wrap_content"
@@ -19,14 +19,14 @@
       android:orientation="vertical">
 
       <ProgressBar
-        android:id="@+id/gif_dialog_progress"
+        android:id="@+id/gifDialogProgress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:padding="24dp"/>
 
       <ImageView
-        android:id="@+id/gif_dialog_image"
+        android:id="@+id/gifDialogImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -36,7 +36,7 @@
         tools:src="@mipmap/ic_launcher"/>
 
       <TextView
-        android:id="@+id/gif_dialog_title"
+        android:id="@+id/gifDialogTitle"
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

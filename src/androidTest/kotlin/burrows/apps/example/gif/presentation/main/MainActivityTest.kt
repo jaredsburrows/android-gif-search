@@ -49,9 +49,9 @@ class MainActivityTest : AndroidTestBase() {
     private val dispatcher = object : Dispatcher() {
       override fun dispatch(request: RecordedRequest): MockResponse {
         when {
-          request.path.contains("/v1/trending") -> return getMockResponse("/trending_results.json")
-          request.path.contains("/v1/search") -> return getMockResponse("/search_results.json")
-          request.path.contains("/images") -> return getMockFileResponse("/ic_launcher.png")
+          request.path.contains("v1/trending") -> return getMockResponse("/trending_results.json")
+          request.path.contains("v1/search") -> return getMockResponse("/search_results.json")
+          request.path.contains("images") -> return getMockFileResponse("/ic_launcher.png")
           else -> return MockResponse().setResponseCode(HTTP_NOT_FOUND)
         }
       }
@@ -66,12 +66,12 @@ class MainActivityTest : AndroidTestBase() {
     activityRule.launchActivity(null)
 
     // Assert
-    onView(withId(R.id.recycler_view))
+    onView(withId(R.id.recyclerView))
       .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click())) // Select 0, the response only contains 1 item
-    onView(withId(R.id.gif_dialog_image))
+    onView(withId(R.id.gifDialogImage))
       .inRoot(isDialog())
       .check(matches(isDisplayed()))
-    onView(withId(R.id.gif_dialog_image))
+    onView(withId(R.id.gifDialogImage))
       .inRoot(isDialog())
       .perform(pressBack())
   }
@@ -85,7 +85,7 @@ class MainActivityTest : AndroidTestBase() {
       .perform(click())
     onView(withId(android.support.v7.appcompat.R.id.search_src_text))
       .perform(typeText("hello"), closeSoftKeyboard(), pressBack())
-    onView(withId(R.id.recycler_view))
+    onView(withId(R.id.recyclerView))
       .check(matches(isDisplayed()))
   }
 }

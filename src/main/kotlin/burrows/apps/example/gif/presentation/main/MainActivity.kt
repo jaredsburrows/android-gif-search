@@ -26,18 +26,18 @@ class MainActivity : AppCompatActivity() {
     (application as App).activityComponent.inject(this)
 
     // Setup Toolbar
-    tool_bar.setNavigationIcon(R.mipmap.ic_launcher)
-    tool_bar.setNavigationIcon(R.mipmap.ic_launcher)
-    tool_bar.setTitle(R.string.main_screen_title)
-    setSupportActionBar(tool_bar)
+    toolBar.setNavigationIcon(R.mipmap.ic_launcher)
+    toolBar.setNavigationIcon(R.mipmap.ic_launcher)
+    toolBar.setTitle(R.string.main_screen_title)
+    setSupportActionBar(toolBar)
 
     // Use Fragments
-    var fragment: MainFragment? = supportFragmentManager.findFragmentById(R.id.content_frame) as MainFragment?
+    var fragment: MainFragment? = supportFragmentManager.findFragmentById(R.id.contentFrame) as MainFragment?
     if (fragment == null) fragment = MainFragment()
     if (savedInstanceState == null) {
       supportFragmentManager
         .beginTransaction()
-        .replace(R.id.content_frame, fragment, MainFragment::class.java.simpleName)
+        .replace(R.id.contentFrame, fragment, MainFragment::class.java.simpleName)
         .commit()
     }
 
