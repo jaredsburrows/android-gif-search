@@ -14,6 +14,7 @@ buildscript {
   dependencies {
     classpath(extra["gradle"])
     classpath(extra["kotlinGradlePlugin"])
+    classpath(extra["kotlinAndroidExtensions"])
     classpath(extra["gradleAndroidCommandPlugin"])
     classpath(extra["playPublisher"])
     classpath(extra["buildScanPlugin"])
@@ -34,6 +35,7 @@ apply {
   from(rootProject.file("gradle/scan.gradle"))
   plugin("com.android.application")
   plugin("kotlin-android")
+  plugin("kotlin-android-extensions")
   plugin("kotlin-kapt")
   plugin("android-command")
   plugin("com.github.triplet.play")

@@ -6,7 +6,7 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
 
 
-Riffsy RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2 and Databinding with Junit and Espresso tests!
+Riffsy RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2, Junit and Espresso tests with Kotlin DSL!
 
 <a href="http://i.imgur.com/zErC6JV.png" target="_blank"><img src="http://i.imgur.com/zErC6JV.png" width="250px" /></a>
 
