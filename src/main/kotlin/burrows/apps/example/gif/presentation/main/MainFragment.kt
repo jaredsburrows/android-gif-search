@@ -1,6 +1,5 @@
 package burrows.apps.example.gif.presentation.main
 
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatDialog
@@ -27,7 +26,6 @@ import burrows.apps.example.gif.data.rest.model.ResultDto
 import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
-import burrows.apps.example.gif.databinding.DialogPreviewBinding
 import burrows.apps.example.gif.presentation.adapter.GifAdapter
 import burrows.apps.example.gif.presentation.adapter.GifItemDecoration
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
@@ -40,6 +38,7 @@ import com.bumptech.glide.request.target.Target
 import com.squareup.leakcanary.RefWatcher
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.dialog_preview.view.*
 
 /**
  * Main Fragment of the application that displays the Recylcerview of Gif images.
@@ -174,11 +173,11 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     })
 
     // Custom view for Dialog
-    val previewBinding = DataBindingUtil.inflate<DialogPreviewBinding>(LayoutInflater.from(context), R.layout.dialog_preview, null, false)
+    val dialogView = View.inflate(context, R.layout.dialog_preview, null)
 
     // Customize Dialog
     dialog = AppCompatDialog(context)
-    dialog.setContentView(previewBinding.root)
+    dialog.setContentView(dialogView)
     dialog.setCancelable(true)
     dialog.setCanceledOnTouchOutside(true)
     dialog.setOnDismissListener {
@@ -189,13 +188,12 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     }
 
     // Dialog views
-    dialogText = previewBinding.gifDialogTitle
-    progressBar = previewBinding.gifDialogProgress
-    imageView = previewBinding.gifDialogImage
+    dialogText = dialogView.gifDialogTitle
+    progressBar = dialogView.gifDialogProgress
+    imageView = dialogView.gifDialogImage
 
     // Load initial images
     presenter.loadTrendingImages(next)
-
   }
 
   override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

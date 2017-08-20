@@ -68,10 +68,6 @@ android {
     multiDexEnabled = true
   }
 
-  dataBinding {
-    isEnabled = true
-  }
-
   compileOptions {
     setSourceCompatibility(extra["sourceCompatibilityVersion"])
     setTargetCompatibility(extra["targetCompatibilityVersion"])
@@ -184,7 +180,6 @@ dependencies {
 
   kapt(extra["daggerCompiler"])
   kapt(extra["compiler"])
-  kapt(extra["okhttp3Compiler"])
 
   debugCompile(extra["leakcanaryAndroid"])
   releaseCompile(extra["leakcanaryAndroidNoOp"])

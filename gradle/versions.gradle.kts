@@ -55,7 +55,6 @@ extra["converterMoshi"]             = "com.squareup.retrofit2:converter-moshi:$r
 extra["moshiAdapters"]              = "com.squareup.moshi:moshi-adapters:1.5.0"
 extra["adapterRxjava2"]             = "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 extra["glide"]                      = "com.github.bumptech.glide:glide:$glideVersion"
-extra["okhttp3Compiler"]            = "com.github.bumptech.glide:compiler:$glideVersion"
 extra["okhttp3Integration"]         = "com.github.bumptech.glide:okhttp3-integration:$glideVersion@aar"
 
 // debugCompile
@@ -65,8 +64,8 @@ extra["leakcanaryAndroid"]          = "com.squareup.leakcanary:leakcanary-androi
 extra["leakcanaryAndroidNoOp"]      = "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
 // kapt
-extra["compiler"]                   = "com.android.databinding:compiler:$androidGradleVersion"
 extra["daggerCompiler"]             = "com.google.dagger:dagger-compiler:$daggerVersion"
+extra["compiler"]                   = "com.github.bumptech.glide:compiler:$glideVersion"
 
 // androidTestCompile
 extra["dexmakerMockito"]            = "com.linkedin.dexmaker:dexmaker-mockito:2.2.0"
