@@ -70,7 +70,6 @@ android {
 
   dataBinding {
     isEnabled = true
-    isEnabledForTests = true
   }
 
   compileOptions {
