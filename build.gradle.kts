@@ -92,7 +92,7 @@ android {
     textOutput("stdout")
     isCheckAllWarnings = true
     isWarningsAsErrors = true
-    lintConfig = rootProject.file("${project.rootDir}/config/lint/lint.xml")
+    setLintConfig(rootProject.file("${project.rootDir}/config/lint/lint.xml"))
   }
 
   // Add "debug.keystore" so developers can share APKs with same signatures locally
@@ -179,7 +179,7 @@ dependencies {
   compile(extra["dagger"])
 
   kapt(extra["daggerCompiler"])
-  kapt(extra["compiler"])
+  kapt(extra["glideCompiler"])
 
   debugCompile(extra["leakcanaryAndroid"])
   releaseCompile(extra["leakcanaryAndroidNoOp"])

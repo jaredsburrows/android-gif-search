@@ -65,7 +65,7 @@ extra["leakcanaryAndroidNoOp"]      = "com.squareup.leakcanary:leakcanary-androi
 
 // kapt
 extra["daggerCompiler"]             = "com.google.dagger:dagger-compiler:$daggerVersion"
-extra["compiler"]                   = "com.github.bumptech.glide:compiler:$glideVersion"
+extra["glideCompiler"]              = "com.github.bumptech.glide:compiler:$glideVersion"
 
 // androidTestCompile
 extra["dexmakerMockito"]            = "com.linkedin.dexmaker:dexmaker-mockito:2.2.0"
