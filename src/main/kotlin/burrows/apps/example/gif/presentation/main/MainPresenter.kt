@@ -58,13 +58,13 @@ class MainPresenter(val view: IMainView,
     disposable.add(observable
       .subscribeOn(provider.io())
       .observeOn(provider.ui())
-      .subscribe(Consumer<RiffsyResponseDto> { riffsyResponse ->
-        if (!view.isActive()) return@Consumer
+      .subscribe({ riffsyResponse ->
+        if (!view.isActive()) return@subscribe
 
         // Iterate over data from response and grab the urls
         view.addImages(riffsyResponse)
-      }, Consumer<Throwable> { throwable ->
+      }, { throwable ->
         Log.e(TAG, "onError", throwable) // java.lang.UnsatisfiedLinkError - unit tests
-      }) as Disposable)
+      }))
   }
 }
