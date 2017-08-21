@@ -28,7 +28,7 @@ abstract class TestBase {
     val INTEGER_RANDOM: Int = Random().nextInt()
     val INTEGER_RANDOM_POSITIVE: Int = Random().nextInt(Integer.SIZE - 1)
     val LONG_RANDOM: Long = Random().nextLong()
-    val FLOAT_RANDOM: Float = Random().nextFloat()
+    val INT_RANDOM: Int = Random().nextInt()
     val DOUBLE_RANDOM: Double = Random().nextDouble()
 
     @JvmStatic fun getMockResponse(fileName: String): MockResponse {

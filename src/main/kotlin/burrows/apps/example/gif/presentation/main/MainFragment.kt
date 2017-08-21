@@ -63,7 +63,7 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
   private var firstVisibleItem = 0
   private var visibleItemCount = 0
   private var totalItemCount = 0
-  private var next = 0f
+  private var next = 0
   @Inject lateinit var refWatcher: RefWatcher
   @Inject lateinit var repository: ImageApiRepository
 
@@ -81,7 +81,7 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
   }
 
   override fun addImages(response: RiffsyResponseDto) {
-    next = response.page ?: 0f
+    next = response.page ?: 0
 
     response.results?.forEach {
       val url = it.media?.first()?.gif?.url

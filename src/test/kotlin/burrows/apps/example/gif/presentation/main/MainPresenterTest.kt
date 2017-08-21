@@ -34,7 +34,7 @@ class MainPresenterTest : TestBase() {
 
   @Test fun testLoadTrendingImagesNotActive() {
     // Arrange
-    val next = 0f
+    val next = 0
     val response = RiffsyResponseDto()
     `when`(view.isActive()).thenReturn(false)
     sut = MainPresenter(view, repository, provider)
@@ -51,7 +51,7 @@ class MainPresenterTest : TestBase() {
 
   @Test fun testLoadTrendingImagesSuccess() {
     // Arrange
-    val next = 0f
+    val next = 0
     val response = RiffsyResponseDto()
     sut = MainPresenter(view, repository, provider)
     `when`(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
@@ -68,7 +68,7 @@ class MainPresenterTest : TestBase() {
   @Test fun testLoadSearchImagesSuccess() {
     // Arrange
     val searchString = "gifs"
-    val next = 0f
+    val next = 0
     val response = RiffsyResponseDto()
     sut = MainPresenter(view, repository, provider)
     `when`(repository.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
