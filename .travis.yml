@@ -8,31 +8,34 @@ env:
 jdk:
   - oraclejdk8
 
-install:
+before_install:
+  # Setup SDK
   - echo y | android update sdk -u -a -t tools
   - echo y | android update sdk -u -a -t platform-tools
   - echo y | android update sdk -u -a -t build-tools-26.0.1
   - echo y | android update sdk -u -a -t android-26
   - echo y | android update sdk -u -a -t extra-google-m2repository
   - echo y | android update sdk -u -a -t extra-android-m2repository
-
-before_script:
-  # Emulator
+  # Setup emulator
   - echo y | android update sdk -u -a -t android-19
   - echo y | android update sdk -u -a -t sys-img-armeabi-v7a-android-19
-
-  # Setup emulator
-  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a --sdcard 200M
+  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window &
+
+install:
+  # Build debug and release(run proguard)
+  - ./gradlew clean assemble assembleAndroidTest -Pci --stacktrace --scan
+
+before_script:
+  # Make sure the emulator is available
   - android-wait-for-emulator
-  - sleep 30
 
   # Turn off animations
   - adb shell settings put global window_animation_scale 0 &
   - adb shell settings put global transition_animation_scale 0 &
   - adb shell settings put global animator_duration_scale 0 &
 
-  # Fix for devices API < 19
+  # For Multidex issue for devices API < 19
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
   - adb shell stop installd
   - adb shell start installd
@@ -41,8 +44,8 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew clean testDebug lintDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan -Dorg.gradle.workers.max=4
-  - ./gradlew assembleRelease -Pci --stacktrace --scan
+  # Run all checks
+  - ./gradlew check connectedCheck createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan
 
 branches:
   except:
