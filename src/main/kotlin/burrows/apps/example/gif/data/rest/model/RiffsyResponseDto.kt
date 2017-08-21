@@ -10,4 +10,4 @@ import com.squareup.moshi.Json
  */
 data class RiffsyResponseDto(
   @Json(name = "results") var results: List<ResultDto>? = null,
-  @Json(name = "page") var page: Float? = null)
+  @Json(name = "page") var page: Int? = null)

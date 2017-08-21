@@ -36,7 +36,7 @@ class MainPresenter(val view: IMainView,
   /**
    * Load gif trending images.
    */
-  override fun loadTrendingImages(next: Float) {
+  override fun loadTrendingImages(next: Int) {
     loadImages(repository.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
   }
 
@@ -45,7 +45,7 @@ class MainPresenter(val view: IMainView,
    *
    * @param searchString User input.
    */
-  override fun loadSearchImages(searchString: String, next: Float) {
+  override fun loadSearchImages(searchString: String, next: Int) {
     loadImages(repository.getSearchResults(searchString, RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
   }
 
@@ -58,13 +58,13 @@ class MainPresenter(val view: IMainView,
     disposable.add(observable
       .subscribeOn(provider.io())
       .observeOn(provider.ui())
-      .subscribe(Consumer<RiffsyResponseDto> { riffsyResponse ->
-        if (!view.isActive()) return@Consumer
+      .subscribe({ riffsyResponse ->
+        if (!view.isActive()) return@subscribe
 
         // Iterate over data from response and grab the urls
         view.addImages(riffsyResponse)
-      }, Consumer<Throwable> { throwable ->
+      }, { throwable ->
         Log.e(TAG, "onError", throwable) // java.lang.UnsatisfiedLinkError - unit tests
-      }) as Disposable)
+      }))
   }
 }

@@ -3,7 +3,9 @@ package burrows.apps.example.gif.presentation.main
 import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.eq
+import com.nhaarman.mockito_kotlin.never
 import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
@@ -34,7 +36,7 @@ class MainPresenterTest : TestBase() {
 
   @Test fun testLoadTrendingImagesNotActive() {
     // Arrange
-    val next = 0f
+    val next = 0
     val response = RiffsyResponseDto()
     `when`(view.isActive()).thenReturn(false)
     sut = MainPresenter(view, repository, provider)
@@ -51,7 +53,7 @@ class MainPresenterTest : TestBase() {
 
   @Test fun testLoadTrendingImagesSuccess() {
     // Arrange
-    val next = 0f
+    val next = 0
     val response = RiffsyResponseDto()
     sut = MainPresenter(view, repository, provider)
     `when`(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
@@ -68,7 +70,7 @@ class MainPresenterTest : TestBase() {
   @Test fun testLoadSearchImagesSuccess() {
     // Arrange
     val searchString = "gifs"
-    val next = 0f
+    val next = 0
     val response = RiffsyResponseDto()
     sut = MainPresenter(view, repository, provider)
     `when`(repository.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
@@ -80,5 +82,19 @@ class MainPresenterTest : TestBase() {
     // Assert
     verify(view).isActive()
     verify(view).addImages(eq(response))
+  }
+
+  @Test fun testLoadSearchImagesViewInactive() {
+    // Arrange
+    `when`(view.isActive()).thenReturn(false)
+    sut = MainPresenter(view, repository, provider)
+    val response = RiffsyResponseDto()
+    val observable = Observable.just(response)
+
+    // Act
+    sut.loadImages(observable)
+
+    // Assert
+    verify(view, never()).addImages(any())
   }
 }
