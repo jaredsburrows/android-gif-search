@@ -16,7 +16,6 @@
             "annotationProcessor",
             "apk",
             "archives",
-            "checkstyle",
             "compile",
             "debugAnnotationProcessor",
             "debugApk",
@@ -27,8 +26,6 @@
             "default",
             "default-mapping",
             "default-metadata",
-            "findbugs",
-            "findbugsPlugins",
             "jackPlugin",
             "jacocoAgent",
             "jacocoAnt",
@@ -39,7 +36,6 @@
             "kaptTest",
             "kaptTestDebug",
             "kaptTestRelease",
-            "pmd",
             "provided",
             "releaseAnnotationProcessor",
             "releaseApk",
@@ -75,12 +71,10 @@
             "android": "com.android.build.gradle.AppExtension",
             "kotlin": "org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension",
             "kapt": "org.jetbrains.kotlin.gradle.plugin.KaptExtension",
+            "androidExtensions": "org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension",
             "play": "de.triplet.gradle.play.PlayPublisherPluginExtension",
             "dexcount": "com.getkeepsafe.dexcount.DexMethodCountExtension",
-            "pmd": "org.gradle.api.plugins.quality.PmdExtension",
             "jacoco": "org.gradle.testing.jacoco.plugins.JacocoPluginExtension",
-            "findbugs": "org.gradle.api.plugins.quality.FindBugsExtension",
-            "checkstyle": "org.gradle.api.plugins.quality.CheckstyleExtension",
             "coveralls": "org.kt3k.gradle.plugin.CoverallsPluginExtension"
         }
     }
