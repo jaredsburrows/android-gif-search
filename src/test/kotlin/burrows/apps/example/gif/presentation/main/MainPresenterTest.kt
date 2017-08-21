@@ -6,7 +6,6 @@ import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.D
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verifyZeroInteractions
 import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
