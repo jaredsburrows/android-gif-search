@@ -15,7 +15,9 @@ import io.reactivex.functions.Consumer
 class MainPresenter(val view: IMainView,
                     val repository: RiffsyApiClient,
                     val provider: IBaseSchedulerProvider) : IMainPresenter {
-  private val TAG = MainPresenter::class.java.simpleName // Can't be longer than 23 chars
+  companion object {
+    private val TAG = MainPresenter::class.java.simpleName // Can't be longer than 23 chars
+  }
   private val disposable = CompositeDisposable()
 
   init {

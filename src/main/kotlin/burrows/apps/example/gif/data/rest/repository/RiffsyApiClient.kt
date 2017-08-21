@@ -14,15 +14,8 @@ import retrofit2.http.Query
  */
 interface RiffsyApiClient {
   companion object {
-    /**
-     * Riffsy public API key.
-     */
-    private const val API_KEY = "LIVDSRZULELA"
-
-    /**
-     * Riffsy limit getResults.
-     */
-    const val DEFAULT_LIMIT_COUNT = 24
+    const val API_KEY = "LIVDSRZULELA"
+    val DEFAULT_LIMIT_COUNT = 24
   }
 
   /**

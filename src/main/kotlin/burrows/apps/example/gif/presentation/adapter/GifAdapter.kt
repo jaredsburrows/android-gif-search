@@ -24,8 +24,9 @@ import kotlinx.android.synthetic.main.list_item.view.*
 class GifAdapter(
   val onItemClickListener: GifAdapter.OnItemClickListener,
   val repository: ImageApiRepository) : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
-  // Can't be longer than 23 chars
-  private val TAG = GifAdapter::class.java.simpleName
+  companion object {
+    private val TAG = GifAdapter::class.java.simpleName // Can't be longer than 23 chars
+  }
   private val data = arrayListOf<ImageInfoModel>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
