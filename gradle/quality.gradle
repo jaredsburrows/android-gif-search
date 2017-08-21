@@ -2,6 +2,7 @@ apply {
   plugin("com.android.application")
   plugin("jacoco")
   plugin("com.github.kt3k.coveralls")
+  plugin("io.gitlab.arturbosch.detekt")
 }
 
 // Creates tasks based on the application build variant (productFlavor + buildType = variant)
@@ -44,7 +45,18 @@ android.applicationVariants.all { variant ->
   }
 }
 
-// Only allows specifying of a single file
+detekt {
+  profile("main") {
+    input = "$projectDir/src/main/kotlin"
+    config = rootProject.file("${project.rootDir}/config/detekt/detekt.yml")
+    filters = ".*Test.*,.*/resources/.*,.*/tmp/.*"
+  }
+}
+
 coveralls {
   jacocoReportPath = "${buildDir}/reports/jacoco/jacocoDebugReport/jacocoDebugReport.xml"
+}
+
+afterEvaluate {
+  tasks.findByName("check").dependsOn("detektCheck")
 }

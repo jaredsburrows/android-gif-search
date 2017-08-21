@@ -8,6 +8,7 @@ buildscript {
 
   repositories {
     google()
+    jcenter()
     maven { setUrl("https://plugins.gradle.org/m2/") }
   }
 
@@ -23,6 +24,7 @@ buildscript {
     classpath(extra["coverallsGradlePlugin"])
     classpath(extra["gradleVersionsPlugin"])
     classpath(extra["gradleLicensePlugin"])
+    classpath("gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC3")
   }
 }
 
