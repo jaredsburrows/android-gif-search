@@ -83,15 +83,12 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
   override fun addImages(response: RiffsyResponseDto) {
     next = response.page ?: 0f
 
-    response.results?.let {
-      // Iterate over data from response and grab the urls
-      for ((media) in response.results as List<ResultDto>) {
-        val url = media?.get(0)?.gif?.url
+    response.results?.forEach {
+      val url = it.media?.first()?.gif?.url
 
-        adapter.add(ImageInfoModel(url, null))
+      adapter.add(ImageInfoModel(url, null))
 
-        if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url)
-      }
+      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url)
     }
   }
 
