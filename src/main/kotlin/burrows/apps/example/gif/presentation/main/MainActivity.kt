@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     // Setup Toolbar
     toolBar.setNavigationIcon(R.mipmap.ic_launcher)
-    toolBar.setNavigationIcon(R.mipmap.ic_launcher)
     toolBar.setTitle(R.string.main_screen_title)
     setSupportActionBar(toolBar)
 
