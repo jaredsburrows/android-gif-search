@@ -1,1 +1,2 @@
+rootProject.setBuildFileName("build.gradle.kts")
 rootProject.setName("android-gif-example")
