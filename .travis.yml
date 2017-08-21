@@ -8,18 +8,20 @@ jdk:
   - oraclejdk8
 
 before_install:
-  # Setup SDK
-  - echo y | android update sdk -u -a -t tools
-  - echo y | android update sdk -u -a -t platform-tools
-  - echo y | android update sdk -u -a -t build-tools-26.0.1
-  - echo y | android update sdk -u -a -t android-26
-  - echo y | android update sdk -u -a -t extra-google-m2repository
-  - echo y | android update sdk -u -a -t extra-android-m2repository
+  # Download SDK
+  - echo yes | sdkmanager "tools"
+  - echo yes | sdkmanager "platform-tools"
+  - echo yes | sdkmanager "build-tools;26.0.1"
+  - echo yes | sdkmanager "platforms;android-26"
+  - echo yes | sdkmanager "extras;google;m2repository"
+  - echo yes | sdkmanager "extras;android;m2repository"
+  # Download emulator
+  - echo yes | sdkmanager "platforms;android-19"
+  - echo yes | sdkmanager "system-images;android-19;default;armeabi-v7a"
+  - echo yes | sdkmanager --licenses
   # Setup emulator
-  - echo y | android update sdk -u -a -t android-19
-  - echo y | android update sdk -u -a -t sys-img-armeabi-v7a-android-19
-  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-audio -no-window &
+  - echo no | avdmanager create avd --force -n test -k "system-images;android-19;default;armeabi-v7a"
+  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
 
 install:
   # Build debug and release(run proguard)
