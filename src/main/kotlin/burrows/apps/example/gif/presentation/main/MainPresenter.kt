@@ -6,8 +6,6 @@ import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
 import burrows.apps.example.gif.presentation.IBaseSchedulerProvider
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
