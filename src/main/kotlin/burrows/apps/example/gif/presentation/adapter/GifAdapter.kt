@@ -132,7 +132,7 @@ class GifAdapter(
   fun clear() {
     val size = data.size
     if (size > 0) {
-      for (i in 0..size - 1) data.removeAt(0)
+      for (i in 0 until size) data.removeAt(0)
 
       notifyItemRangeRemoved(0, size)
     }
@@ -145,9 +145,9 @@ class GifAdapter(
    * @return always true.
    */
   fun add(model: ImageInfoModel): Boolean {
-    val added = data.add(model)
-    notifyItemInserted(data.size + 1)
-    return added
+    return data.add(model).apply {
+      notifyItemInserted(data.size + 1)
+    }
   }
 
   /**
@@ -160,9 +160,9 @@ class GifAdapter(
    * collection was empty).
    */
   fun addAll(collection: List<ImageInfoModel>): Boolean {
-    val added = data.addAll(collection)
-    notifyItemRangeInserted(0, data.size + 1)
-    return added
+    return data.addAll(collection).apply {
+      notifyItemRangeInserted(0, data.size + 1)
+    }
   }
 
   /**
@@ -188,9 +188,9 @@ class GifAdapter(
    * @return true if the data was modified by this operation, false otherwise.
    */
   fun remove(location: Int, model: ImageInfoModel): Boolean {
-    val removed = data.remove(model)
-    notifyItemRangeRemoved(location, data.size)
-    return removed
+    return data.remove(model).apply {
+      notifyItemRangeRemoved(location, data.size)
+    }
   }
 
   /**
@@ -200,10 +200,11 @@ class GifAdapter(
    * @return true if the data was modified by this operation, false otherwise.
    */
   fun remove(model: ImageInfoModel): Boolean {
-    val location = getLocation(model)
-    val removed = data.remove(model)
-    notifyItemRemoved(location)
-    return removed
+    return getLocation(model).let { location ->
+      data.remove(model).apply {
+        notifyItemRemoved(location)
+      }
+    }
   }
 
   /**
@@ -213,9 +214,9 @@ class GifAdapter(
    * @return the removed object.
    */
   fun remove(location: Int): ImageInfoModel {
-    val removedObject = data.removeAt(location)
-    notifyItemRemoved(location)
-    notifyItemRangeChanged(location, data.size)
-    return removedObject
+    return data.removeAt(location).apply {
+      notifyItemRemoved(location)
+      notifyItemRangeChanged(location, data.size)
+    }
   }
 }
