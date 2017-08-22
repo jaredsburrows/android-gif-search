@@ -195,12 +195,12 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
     presenter.loadTrendingImages(next)
   }
 
-  override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     super.onCreateOptionsMenu(menu, inflater)
 
-    inflater?.inflate(R.menu.menu_fragment_main, menu)
+    inflater.inflate(R.menu.menu_fragment_main, menu)
 
-    val menuItem = menu?.findItem(R.id.menu_search)
+    val menuItem = menu.findItem(R.id.menu_search)
     val searchView = menuItem?.actionView as SearchView?
     searchView?.queryHint = searchView?.context?.getString(R.string.search_gifs)
 
