@@ -24,7 +24,6 @@ extra["debugKeystorePass"]          = "android"
 // Plugins
 extra["gradle"]                     = "com.android.tools.build:gradle:$androidGradleVersion"
 extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-extra["kotlinAndroidExtensions"]    = "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:1.7.1"
 extra["playPublisher"]              = "com.github.triplet.gradle:play-publisher:1.2.0"
 extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.8"
