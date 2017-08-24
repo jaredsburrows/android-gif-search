@@ -23,7 +23,7 @@ buildscript {
     classpath(extra["coverallsGradlePlugin"])
     classpath(extra["gradleVersionsPlugin"])
     classpath(extra["gradleLicensePlugin"])
-    classpath("gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC3")
+    classpath(extra["detektGradlePlugin"])
   }
 }
 
