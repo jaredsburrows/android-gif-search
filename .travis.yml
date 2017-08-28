@@ -13,8 +13,6 @@ before_install:
   - echo yes | sdkmanager "platform-tools"
   - echo yes | sdkmanager "build-tools;26.0.1"
   - echo yes | sdkmanager "platforms;android-26"
-  - echo yes | sdkmanager "extras;google;m2repository"
-  - echo yes | sdkmanager "extras;android;m2repository"
   # Download emulator
   - echo yes | sdkmanager "platforms;android-19"
   - echo yes | sdkmanager "system-images;android-19;default;armeabi-v7a"
