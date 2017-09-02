@@ -1,15 +1,15 @@
 // Common versions
 val androidGradleVersion            = "2.3.3"
-val kotlinVersion                   = "1.1.4-2"
-val supportLibraryVersion           = "26.0.1"
+val kotlinVersion                   = "1.1.4-3"
+val supportLibraryVersion           = "26.0.2"
 val daggerVersion                   = "2.11"
 val okHttpVersion                   = "3.8.1"
 val retrofitVersion                 = "2.3.0"
-val espressoVersion                 = "3.0.0"
+val espressoVersion                 = "3.0.1"
 val leakCanaryVersion               = "1.5"
 val multidexVersion                 = "1.0.2"
 val glideVersion                    = "4.0.0"
-val mockitoVersion                  = "2.8.47"
+val mockitoVersion                  = "2.9.0"
 
 // Android plugin
 extra["minSdkVersion"]              = 19
@@ -73,7 +73,7 @@ extra["espressoCore"]               = "com.android.support.test.espresso:espress
 extra["espressoIntents"]            = "com.android.support.test.espresso:espresso-intents:$espressoVersion"
 extra["espressoContrib"]            = "com.android.support.test.espresso:espresso-contrib:$espressoVersion"
 extra["testingSupportLib"]          = "com.android.support.test:testing-support-lib:0.1"
-extra["runner"]                     = "com.android.support.test:runner:1.0.0"
+extra["runner"]                     = "com.android.support.test:runner:1.0.1"
 
 // testCompile
 extra["junit"]                      = "junit:junit:4.12"
@@ -81,6 +81,6 @@ extra["mockitoCore"]                = "org.mockito:mockito-core:$mockitoVersion"
 extra["mockitoInline"]              = "org.mockito:mockito-inline:$mockitoVersion"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["assertjCore"]                = "org.assertj:assertj-core:1.7.1"
-extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.3.2"
+extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.3.3"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 extra["reflections"]                = "org.reflections:reflections:0.9.11"
