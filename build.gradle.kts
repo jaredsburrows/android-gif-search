@@ -157,10 +157,12 @@ android {
 // Resolves dependency versions across test and production APKs, specifically, transitive
 // dependencies. This is required since Espresso internally has a dependency on support-annotations.
 configurations.all {
-  resolutionStrategy.force(extra["supportAnnotations"])
-  resolutionStrategy.force(extra["kotlinStdlib"])
-  resolutionStrategy.force(extra["multidex"])
-  resolutionStrategy.force(extra["multidexInstrumentation"])
+  resolutionStrategy {
+    force(extra["kotlinStdlib"])
+    force(extra["supportAnnotations"])
+    force(extra["multidex"])
+    force(extra["multidexInstrumentation"])
+  }
 }
 
 dependencies {

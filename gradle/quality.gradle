@@ -46,6 +46,7 @@ android.applicationVariants.all { variant ->
 }
 
 detekt {
+  version = "1.0.0.RC3"
   profile("main") {
     input = "$projectDir/src/main/kotlin"
     config = rootProject.file("${project.rootDir}/config/detekt/detekt.yml")

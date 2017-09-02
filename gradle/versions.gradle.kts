@@ -9,7 +9,7 @@ val espressoVersion                 = "3.0.0"
 val leakCanaryVersion               = "1.5"
 val multidexVersion                 = "1.0.2"
 val glideVersion                    = "4.0.0"
-val mocktioVersion                  = "2.8.47"
+val mockitoVersion                  = "2.8.47"
 
 // Android plugin
 extra["minSdkVersion"]              = 19
@@ -77,8 +77,8 @@ extra["runner"]                     = "com.android.support.test:runner:1.0.0"
 
 // testCompile
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoCore"]                = "org.mockito:mockito-core:$mocktioVersion"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:$mocktioVersion"
+extra["mockitoCore"]                = "org.mockito:mockito-core:$mockitoVersion"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:$mockitoVersion"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["assertjCore"]                = "org.assertj:assertj-core:1.7.1"
 extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.3.2"
