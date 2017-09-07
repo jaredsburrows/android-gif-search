@@ -1,8 +1,7 @@
 import com.android.build.gradle.internal.dsl.TestOptions
 
 buildscript {
-  applyFrom(rootProject.file("gradle/versions.gradle.kts"))
-
+  rootProject.apply { from(rootProject.file("gradle/versions.gradle.kts")) }
   rootProject.extra["ci"] = rootProject.hasProperty("ci")
   rootProject.extra["lollipop"] = rootProject.hasProperty("lollipop")
 
