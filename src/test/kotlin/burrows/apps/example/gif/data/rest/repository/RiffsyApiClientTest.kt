@@ -9,7 +9,7 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import org.assertj.core.api.Assertions.assertThat
+import com.google.common.truth.Truth.assertThat
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass

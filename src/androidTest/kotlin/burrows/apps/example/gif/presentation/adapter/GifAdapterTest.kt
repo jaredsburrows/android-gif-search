@@ -11,7 +11,7 @@ import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.presentation.adapter.GifAdapter.OnItemClickListener
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 import com.nhaarman.mockito_kotlin.eq
-import org.assertj.core.api.Assertions.assertThat
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

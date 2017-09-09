@@ -2,7 +2,7 @@ package burrows.apps.example.gif.presentation.adapter.model
 
 import nl.jqno.equalsverifier.EqualsVerifier.forClass
 import nl.jqno.equalsverifier.Warning
-import org.assertj.core.api.Assertions.assertThat
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import test.TestBase
 

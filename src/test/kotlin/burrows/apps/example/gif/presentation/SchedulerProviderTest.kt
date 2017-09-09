@@ -2,7 +2,7 @@ package burrows.apps.example.gif.presentation
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.assertj.core.api.Assertions.assertThat
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 /**

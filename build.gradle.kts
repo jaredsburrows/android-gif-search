@@ -187,7 +187,7 @@ dependencies {
   releaseCompile(extra["leakcanaryAndroidNoOp"])
 
   androidTestCompile(extra["junit"])
-  androidTestCompile(extra["assertjCore"])
+  androidTestCompile(extra["truth"])
   androidTestCompile(extra["mockitoKotlin"] as String) { exclude(group = "net.bytebuddy") }     // DexMaker has it"s own MockMaker
   androidTestCompile(extra["mockitoCore"] as String) { exclude(group = "net.bytebuddy") }       // DexMaker has it"s own MockMaker
   androidTestCompile(extra["dexmakerMockito"] as String) { exclude(group = "net.bytebuddy") }   // DexMaker has it"s own MockMaker
@@ -198,7 +198,7 @@ dependencies {
   androidTestCompile(extra["mockwebserver"])
 
   testCompile(extra["junit"])
-  testCompile(extra["assertjCore"])
+  testCompile(extra["truth"])
   testCompile(extra["mockitoKotlin"])
   testCompile(extra["mockitoInline"])
   testCompile(extra["leakcanaryAndroidNoOp"])
