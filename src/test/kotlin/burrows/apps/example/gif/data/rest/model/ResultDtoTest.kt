@@ -1,6 +1,6 @@
 package burrows.apps.example.gif.data.rest.model
 
-import org.assertj.core.api.Assertions.assertThat
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import test.TestBase
 

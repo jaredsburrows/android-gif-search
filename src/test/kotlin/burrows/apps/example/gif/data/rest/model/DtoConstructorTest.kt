@@ -1,7 +1,7 @@
 package burrows.apps.example.gif.data.rest.model
 
 import com.squareup.moshi.Json
-import org.assertj.core.api.Assertions.fail
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.reflections.Reflections
