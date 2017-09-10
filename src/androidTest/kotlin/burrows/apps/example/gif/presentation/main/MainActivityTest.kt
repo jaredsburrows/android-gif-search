@@ -48,11 +48,11 @@ class MainActivityTest : AndroidTestBase() {
 
     private val dispatcher = object : Dispatcher() {
       override fun dispatch(request: RecordedRequest): MockResponse {
-        when {
-          request.path.contains("v1/trending") -> return getMockResponse("/trending_results.json")
-          request.path.contains("v1/search") -> return getMockResponse("/search_results.json")
-          request.path.contains("images") -> return getMockFileResponse("/ic_launcher.png")
-          else -> return MockResponse().setResponseCode(HTTP_NOT_FOUND)
+        return when {
+          request.path.contains("v1/trending") -> getMockResponse("/trending_results.json")
+          request.path.contains("v1/search") -> getMockResponse("/search_results.json")
+          request.path.contains("images") -> getMockFileResponse("/ic_launcher.png")
+          else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
         }
       }
     }

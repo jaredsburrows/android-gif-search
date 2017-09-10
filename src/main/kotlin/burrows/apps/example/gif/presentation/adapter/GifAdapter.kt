@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.list_item.view.*
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class GifAdapter(
-  val onItemClickListener: GifAdapter.OnItemClickListener,
+  private val onItemClickListener: GifAdapter.OnItemClickListener,
   val repository: ImageApiRepository) : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
   companion object {
     private val TAG = GifAdapter::class.java.simpleName // Can't be longer than 23 chars

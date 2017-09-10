@@ -39,7 +39,7 @@ abstract class TestBase {
         .addHeader("Content-type: application/json; charset=utf-8")
     }
 
-    @JvmStatic fun parseText(fileName: String): String {
+    @JvmStatic private fun parseText(fileName: String): String {
       val inputStream = TestBase::class.java.getResourceAsStream(fileName)
       val text = InputStreamReader(inputStream).readText()
       inputStream.close()

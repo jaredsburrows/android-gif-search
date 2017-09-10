@@ -50,7 +50,7 @@ class GifItemDecorationTest : AndroidTestBase() {
     recyclerView.layoutManager = layoutManager
 
     // Add fake data
-    for (i in 0..RiffsyApiClient.DEFAULT_LIMIT_COUNT - 1) adapter.add(ImageInfoModel())
+    for (i in 0 until RiffsyApiClient.DEFAULT_LIMIT_COUNT) adapter.add(ImageInfoModel())
 
     // Increase the childcount
     recyclerView.addView(AppCompatTextView(targetContext))

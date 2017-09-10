@@ -22,7 +22,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import burrows.apps.example.gif.App
 import burrows.apps.example.gif.R
-import burrows.apps.example.gif.data.rest.model.ResultDto
 import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient

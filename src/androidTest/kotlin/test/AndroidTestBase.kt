@@ -41,7 +41,7 @@ abstract class AndroidTestBase {
         .addHeader("Content-type: application/json; charset=utf-8")
     }
 
-    @JvmStatic fun parseText(fileName: String): String {
+    @JvmStatic private fun parseText(fileName: String): String {
       val inputStream = AndroidTestBase::class.java.getResourceAsStream(fileName)
       val text = InputStreamReader(inputStream).readText()
       inputStream.close()
@@ -56,7 +56,7 @@ abstract class AndroidTestBase {
         .addHeader("content-type: image/png")
     }
 
-    @JvmStatic fun parseImage(fileName: String): Buffer {
+    @JvmStatic private fun parseImage(fileName: String): Buffer {
       val inputStream = AndroidTestBase::class.java.getResourceAsStream(fileName)
       val source = Okio.source(inputStream)
       val result = Buffer()
