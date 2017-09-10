@@ -16,8 +16,7 @@ extra["minSdkVersion"]              = 19
 extra["targetSdkVersion"]           = 26
 extra["compileSdkVersion"]          = 26
 extra["buildToolsVersion"]          = "26.0.1"
-extra["sourceCompatibilityVersion"] = "1.7" // JavaVersion.VERSION_1_7
-extra["targetCompatibilityVersion"] = "1.7" // JavaVersion.VERSION_1_7
+extra["javaVersion"]                = "1.7"
 extra["debugKeystoreUser"]          = "androiddebugkey"
 extra["debugKeystorePass"]          = "android"
 

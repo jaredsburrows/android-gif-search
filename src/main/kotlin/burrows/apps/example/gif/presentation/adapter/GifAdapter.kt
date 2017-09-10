@@ -45,7 +45,7 @@ class GifAdapter(
                                      isFirstResource: Boolean): Boolean {
           // Hide progressbar
           holder.itemView.gifProgress.visibility = View.GONE
-          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model)
+          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
 
           return false
         }
@@ -54,7 +54,7 @@ class GifAdapter(
                                   isFirstResource: Boolean): Boolean {
           // Hide progressbar
           holder.itemView.gifProgress.visibility = View.GONE
-          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model)
+          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
 
           return false
         }

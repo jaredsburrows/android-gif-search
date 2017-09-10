@@ -90,7 +90,7 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
 
       adapter.add(ImageInfoModel(url, null))
 
-      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t" + url)
+      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $url")
     }
   }
 
@@ -277,7 +277,7 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
                                      isFirstResource: Boolean): Boolean {
           // Hide progressbar
           progressBar.visibility = View.GONE
-          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model)
+          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
           return false
         }
 
@@ -285,7 +285,7 @@ class MainFragment : Fragment(), IMainView, GifAdapter.OnItemClickListener {
                                   isFirstResource: Boolean): Boolean {
           // Hide progressbar
           progressBar.visibility = View.GONE
-          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t" + model)
+          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
 
           return false
         }

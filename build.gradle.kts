@@ -69,8 +69,8 @@ android {
   }
 
   compileOptions {
-    setSourceCompatibility(extra["sourceCompatibilityVersion"])
-    setTargetCompatibility(extra["targetCompatibilityVersion"])
+    setSourceCompatibility(extra["javaVersion"])
+    setTargetCompatibility(extra["javaVersion"])
   }
 
   // Optimize local build speed - disable aapt PNG crunching

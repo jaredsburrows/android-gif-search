@@ -42,7 +42,7 @@ class DtoConstructorTest {
     classes.forEach { clazz ->
       val className = clazz.name
       if (className.endsWith(DATA_TRANSPORT_OBJECT) && !hasNoArgConstructor(clazz)) {
-        fail("Found no 'no-args' and public constructors in class " + className)
+        fail("Found no 'no-args' and public constructors in class $className")
       }
     }
   }
@@ -53,7 +53,7 @@ class DtoConstructorTest {
     classes.forEach { clazz ->
       val className = clazz.name
       if (className.endsWith(DATA_TRANSPORT_OBJECT) && hasNoFinalAnnotations(clazz)) {
-        fail("Found finalized field with @SerializedNamed annotation in class " + className)
+        fail("Found finalized field with @SerializedNamed annotation in class $className")
       }
     }
   }

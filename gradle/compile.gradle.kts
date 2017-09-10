@@ -2,8 +2,8 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 // Turn on all warnings and errors
 tasks.withType<JavaCompile> {
-  sourceCompatibility = rootProject.extra["sourceCompatibilityVersion"] as String
-  targetCompatibility = rootProject.extra["targetCompatibilityVersion"] as String
+  sourceCompatibility = rootProject.extra["javaVersion"] as String
+  targetCompatibility = rootProject.extra["javaVersion"] as String
 
   // Show all warnings except boot classpath
   options.compilerArgs.add("-Xlint:all")                // Turn on all warnings
