@@ -75,7 +75,8 @@
             "play": "de.triplet.gradle.play.PlayPublisherPluginExtension",
             "dexcount": "com.getkeepsafe.dexcount.DexMethodCountExtension",
             "jacoco": "org.gradle.testing.jacoco.plugins.JacocoPluginExtension",
-            "coveralls": "org.kt3k.gradle.plugin.CoverallsPluginExtension"
+            "coveralls": "org.kt3k.gradle.plugin.CoverallsPluginExtension",
+            "detekt": "io.gitlab.arturbosch.detekt.extensions.DetektExtension"
         }
     }
 }
