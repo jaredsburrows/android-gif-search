@@ -23,7 +23,7 @@ before_install:
 
 install:
   # Build debug and release(run proguard)
-  - ./gradlew clean assemble assembleAndroidTest -Pci --stacktrace --scan
+  - ./gradlew clean assemble assembleDebugAndroidTest -Pci --stacktrace --scan
 
 before_script:
   # Make sure the emulator is available
@@ -44,7 +44,7 @@ before_script:
 
 script:
   # Run all checks
-  - ./gradlew check connectedCheck createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan
+  - ./gradlew check connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan
 
 branches:
   except:
