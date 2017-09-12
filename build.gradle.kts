@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.dsl.TestOptions
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
   rootProject.apply { from(rootProject.file("gradle/versions.gradle.kts")) }
@@ -161,45 +162,54 @@ configurations.all {
     force(extra["supportAnnotations"])
     force(extra["multidex"])
     force(extra["multidexInstrumentation"])
+    force(extra["orgJacocoAgent"])
+    force(extra["orgJacocoAnt"])
   }
 }
 
 dependencies {
-  compile(extra["design"])
-  compile(extra["cardviewv7"])
-  compile(extra["kotlinStdlib"])
-  compile(extra["okhttp"])
-  compile(extra["loggingInterceptor"])
-  compile(extra["adapterRxjava2"])
-  compile(extra["converterMoshi"])
-  compile(extra["moshiAdapters"])
-  compile(extra["retrofit"])
-  compile(extra["rxAndroid"])
-  compile(extra["rxJava"])
-  compile(extra["glide"])
-  compile(extra["okhttp3Integration"])
-  compile(extra["dagger"])
+  implementation(extra["design"])
+  implementation(extra["cardviewv7"])
+  implementation(extra["kotlinStdlib"])
+  implementation(extra["okhttp"])
+  implementation(extra["loggingInterceptor"])
+  implementation(extra["adapterRxjava2"])
+  implementation(extra["converterMoshi"])
+  implementation(extra["moshiAdapters"])
+  implementation(extra["retrofit"])
+  implementation(extra["rxAndroid"])
+  implementation(extra["rxJava"])
+  implementation(extra["glide"])
+  implementation(extra["okhttp3Integration"])
+  implementation(extra["dagger"])
 
   kapt(extra["daggerCompiler"])
   kapt(extra["glideCompiler"])
 
-  debugCompile(extra["leakcanaryAndroid"])
-  releaseCompile(extra["leakcanaryAndroidNoOp"])
+  debugImplementation(extra["leakcanaryAndroid"])
+  releaseImplementation(extra["leakcanaryAndroidNoOp"])
 
-  androidTestCompile(extra["junit"])
-  androidTestCompile(extra["truth"])
-  androidTestCompile(extra["runner"])
-  androidTestCompile(extra["espressoCore"])
-  androidTestCompile(extra["espressoIntents"])
-  androidTestCompile(extra["espressoContrib"] as String) { exclude(group = "com.android.support") }
-  androidTestCompile(extra["mockwebserver"])
+  androidTestImplementation(extra["junit"])
+  androidTestImplementation(extra["truth"])
+  androidTestImplementation(extra["runner"])
+  androidTestImplementation(extra["espressoCore"])
+  androidTestImplementation(extra["espressoIntents"])
+  androidTestImplementation(extra["espressoContrib"] as String) { exclude(group = "com.android.support") }
+  androidTestImplementation(extra["mockwebserver"])
 
-  testCompile(extra["junit"])
-  testCompile(extra["truth"])
-  testCompile(extra["mockitoKotlin"])
-  testCompile(extra["mockitoInline"])
-  testCompile(extra["leakcanaryAndroidNoOp"])
-  testCompile(extra["mockwebserver"])
-  testCompile(extra["equalsverifier"])
-  testCompile(extra["reflections"])
+  testImplementation(extra["junit"])
+  testImplementation(extra["truth"])
+  testImplementation(extra["mockitoKotlin"])
+  testImplementation(extra["mockitoInline"])
+  testImplementation(extra["leakcanaryAndroidNoOp"])
+  testImplementation(extra["mockwebserver"])
+  testImplementation(extra["equalsverifier"])
+  testImplementation(extra["reflections"])
 }
+
+// TODO causes Instrumentation run failed due to 'java.lang.IllegalAccessError'
+//tasks.withType<KotlinCompile> {
+//  kotlinOptions {
+//    jvmTarget = rootProject.extra["javaVersion"] as String
+//  }
+//}
