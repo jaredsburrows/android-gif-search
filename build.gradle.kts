@@ -210,7 +210,7 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
   kotlinOptions {
-    // TODO causes Instrumentation run failed due to 'java.lang.IllegalAccessError'
+    // TODO Instrumentation run failed due to 'java.lang.IllegalAccessError'
 //    jvmTarget = rootProject.extra["javaVersion"] as String
   }
 }

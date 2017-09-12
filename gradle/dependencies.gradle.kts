@@ -1,4 +1,4 @@
-// Common versions
+// common
 val androidGradleVersion            = "3.0.0-beta5"
 val kotlinVersion                   = "1.1.4-3"
 val supportLibraryVersion           = "26.0.2"
@@ -20,7 +20,7 @@ extra["javaVersion"]                = "1.8"
 extra["debugKeystoreUser"]          = "androiddebugkey"
 extra["debugKeystorePass"]          = "android"
 
-// Plugins
+// classpath
 extra["gradle"]                     = "com.android.tools.build:gradle:$androidGradleVersion"
 extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:1.7.1"
@@ -33,7 +33,6 @@ extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plug
 extra["gradleLicensePlugin"]        = "com.jaredsburrows:gradle-license-plugin:0.6.0"
 extra["detektGradlePlugin"]         = "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC3"
 
-// Dependencies
 // compile
 extra["design"]                     = "com.android.support:design:$supportLibraryVersion"
 extra["appcompatv7"]                = "com.android.support:appcompat-v7:$supportLibraryVersion"
@@ -82,8 +81,8 @@ extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.3
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 extra["reflections"]                = "org.reflections:reflections:0.9.11"
 
-// jacocoAgent / androidJacocoAgent
+// jacocoAgent/androidJacocoAgent
 extra["orgJacocoAgent"]             = "org.jacoco:org.jacoco.agent:$jacocoVersion"
 
-// jacocoAnt / androidJacocoAnt
+// jacocoAnt/androidJacocoAnt
 extra["orgJacocoAnt"]               = "org.jacoco:org.jacoco.ant:$jacocoVersion"
