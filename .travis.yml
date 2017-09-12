@@ -44,7 +44,7 @@ before_script:
 
 script:
   # Run all checks
-  - ./gradlew check connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan
+  - ./gradlew testDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci --stacktrace --scan
 
 branches:
   except:

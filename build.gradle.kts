@@ -161,6 +161,8 @@ configurations.all {
     force(extra["supportAnnotations"])
     force(extra["multidex"])
     force(extra["multidexInstrumentation"])
+    force(extra["orgJacocoAgent"])
+    force(extra["orgJacocoAnt"])
   }
 }
 
