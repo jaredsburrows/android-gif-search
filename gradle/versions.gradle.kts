@@ -1,5 +1,5 @@
 // Common versions
-val androidGradleVersion            = "2.3.3"
+val androidGradleVersion            = "3.0.0-beta5"
 val kotlinVersion                   = "1.1.4-3"
 val supportLibraryVersion           = "26.0.2"
 val daggerVersion                   = "2.11"
@@ -17,7 +17,7 @@ extra["minSdkVersion"]              = 19
 extra["targetSdkVersion"]           = 26
 extra["compileSdkVersion"]          = 26
 extra["buildToolsVersion"]          = "26.0.1"
-extra["javaVersion"]                = "1.7"
+extra["javaVersion"]                = "1.8"
 extra["debugKeystoreUser"]          = "androiddebugkey"
 extra["debugKeystorePass"]          = "android"
 
