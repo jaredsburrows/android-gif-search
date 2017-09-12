@@ -9,7 +9,6 @@ val espressoVersion                 = "3.0.1"
 val leakCanaryVersion               = "1.5"
 val multidexVersion                 = "1.0.2"
 val glideVersion                    = "4.1.1"
-val mockitoVersion                  = "2.9.0"
 val jacocoVersion                   = "0.7.4.201502262128"
 
 // Android plugin
@@ -26,9 +25,9 @@ extra["gradle"]                     = "com.android.tools.build:gradle:$androidGr
 extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:1.7.1"
 extra["playPublisher"]              = "com.github.triplet.gradle:play-publisher:1.2.0"
-extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.8"
+extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.9"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.7.3"
-extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.3.0"
+extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["coverallsGradlePlugin"]      = "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.15.0"
 extra["gradleLicensePlugin"]        = "com.jaredsburrows:gradle-license-plugin:0.6.0"
@@ -68,7 +67,6 @@ extra["daggerCompiler"]             = "com.google.dagger:dagger-compiler:$dagger
 extra["glideCompiler"]              = "com.github.bumptech.glide:compiler:$glideVersion"
 
 // androidTestCompile
-extra["dexmakerMockito"]            = "com.linkedin.dexmaker:dexmaker-mockito:2.2.0"
 extra["espressoCore"]               = "com.android.support.test.espresso:espresso-core:$espressoVersion"
 extra["espressoIntents"]            = "com.android.support.test.espresso:espresso-intents:$espressoVersion"
 extra["espressoContrib"]            = "com.android.support.test.espresso:espresso-contrib:$espressoVersion"
@@ -77,8 +75,7 @@ extra["runner"]                     = "com.android.support.test:runner:1.0.1"
 
 // testCompile
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoCore"]                = "org.mockito:mockito-core:$mockitoVersion"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:$mockitoVersion"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:2.10.0"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["truth"]                      = "com.google.truth:truth:0.35"
 extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.3.3"

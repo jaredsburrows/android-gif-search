@@ -2,7 +2,7 @@ import com.android.build.gradle.internal.dsl.TestOptions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
-  rootProject.apply { from(rootProject.file("gradle/versions.gradle.kts")) }
+  rootProject.apply { from(rootProject.file("gradle/dependencies.gradle.kts")) }
   rootProject.extra["ci"] = rootProject.hasProperty("ci")
   rootProject.extra["lollipop"] = rootProject.hasProperty("lollipop")
 
@@ -182,6 +182,7 @@ dependencies {
   implementation(extra["glide"])
   implementation(extra["okhttp3Integration"])
   implementation(extra["dagger"])
+  implementation(extra["multidex"])
 
   kapt(extra["daggerCompiler"])
   kapt(extra["glideCompiler"])
@@ -207,9 +208,9 @@ dependencies {
   testImplementation(extra["reflections"])
 }
 
-// TODO causes Instrumentation run failed due to 'java.lang.IllegalAccessError'
-//tasks.withType<KotlinCompile> {
-//  kotlinOptions {
+tasks.withType<KotlinCompile> {
+  kotlinOptions {
+    // TODO causes Instrumentation run failed due to 'java.lang.IllegalAccessError'
 //    jvmTarget = rootProject.extra["javaVersion"] as String
-//  }
-//}
+  }
+}
