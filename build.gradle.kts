@@ -188,9 +188,9 @@ dependencies {
 
   androidTestCompile(extra["junit"])
   androidTestCompile(extra["truth"])
-  androidTestCompile(extra["mockitoKotlin"] as String) { exclude(group = "net.bytebuddy") }     // DexMaker has it"s own MockMaker
-  androidTestCompile(extra["mockitoCore"] as String) { exclude(group = "net.bytebuddy") }       // DexMaker has it"s own MockMaker
-  androidTestCompile(extra["dexmakerMockito"] as String) { exclude(group = "net.bytebuddy") }   // DexMaker has it"s own MockMaker
+//  androidTestCompile(extra["mockitoKotlin"] as String) { exclude(group = "net.bytebuddy") }     // DexMaker has it"s own MockMaker
+//  androidTestCompile(extra["mockitoCore"] as String) { exclude(group = "net.bytebuddy") }       // DexMaker has it"s own MockMaker
+//  androidTestCompile(extra["dexmakerMockito"] as String) { exclude(group = "net.bytebuddy") }   // DexMaker has it"s own MockMaker
   androidTestCompile(extra["runner"])
   androidTestCompile(extra["espressoCore"])
   androidTestCompile(extra["espressoIntents"])

@@ -10,16 +10,10 @@ import android.widget.LinearLayout
 import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
 import burrows.apps.example.gif.presentation.adapter.GifAdapter.OnItemClickListener
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
-import com.nhaarman.mockito_kotlin.eq
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito.atLeastOnce
-import org.mockito.Mockito.spy
-import org.mockito.Mockito.verify
-import org.mockito.MockitoAnnotations.initMocks
 import test.AndroidTestBase
 
 /**
@@ -32,17 +26,16 @@ class GifAdapterTest : AndroidTestBase() {
   private val imageInfoModel = ImageInfoModel().apply { url = STRING_UNIQUE }
   private val imageInfoModel2 = ImageInfoModel().apply { url = STRING_UNIQUE2 }
   private val imageInfoModel3 = ImageInfoModel().apply { url = STRING_UNIQUE3 }
-  @Mock private lateinit var onItemClickListener: OnItemClickListener
-  private lateinit var viewHolder: GifAdapter.ViewHolder
+  private lateinit var onItemClickListener: TestOnItemClickListener
   private lateinit var imageApiRepository: ImageApiRepository
+  private lateinit var viewHolder: GifAdapter.ViewHolder
   private lateinit var sut: GifAdapter
 
   @Before @UiThreadTest override fun setUp() {
     super.setUp()
 
-    initMocks(this)
-
-    imageApiRepository = spy(ImageApiRepository(targetContext))
+    onItemClickListener = TestOnItemClickListener()
+    imageApiRepository = ImageApiRepository(targetContext)
     sut = GifAdapter(onItemClickListener, imageApiRepository)
     sut.add(imageInfoModel)
     sut.add(imageInfoModel2)
@@ -71,8 +64,6 @@ class GifAdapterTest : AndroidTestBase() {
 
     // Assert
     assertThat(viewHolder.itemView.performClick()).isTrue()
-    verify(imageApiRepository, atLeastOnce()).load(eq(STRING_UNIQUE))
-    verify(onItemClickListener).onClick(eq(imageInfoModel))
   }
 
   @Test fun testGetItem() {
@@ -176,5 +167,10 @@ class GifAdapterTest : AndroidTestBase() {
 
     // Assert
     assertThat(sut.getItem(0)).isEqualTo(imageInfoModel2)
+  }
+
+  class TestOnItemClickListener : OnItemClickListener {
+    override fun onClick(imageInfoModel: ImageInfoModel) {
+    }
   }
 }
