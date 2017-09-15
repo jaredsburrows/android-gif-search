@@ -12,7 +12,7 @@ import javax.inject.Inject
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-open class ImageApiRepository @Inject constructor(private val context: Context) { // dexmaker-mockito issue, leave open
+class ImageApiRepository @Inject constructor(private val context: Context) {
   private val imageHeight: Int = context.resources.getDimensionPixelSize(R.dimen.gif_image_width)
   private val imageWidth: Int
 
@@ -20,14 +20,14 @@ open class ImageApiRepository @Inject constructor(private val context: Context) 
     this.imageWidth = imageHeight
   }
 
-  open fun load(url: String?): RequestBuilder<GifDrawable> {
+  fun load(url: String?): RequestBuilder<GifDrawable> {
     return Glide.with(context)
       .asGif()
       .apply(RequestOptions.noTransformation()
-          .error(R.mipmap.ic_launcher)
-          .fallback(R.mipmap.ic_launcher)
-          .override(imageWidth, imageHeight)
-          .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
+        .error(R.mipmap.ic_launcher)
+        .fallback(R.mipmap.ic_launcher)
+        .override(imageWidth, imageHeight)
+        .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
       .load(url)
   }
 }
