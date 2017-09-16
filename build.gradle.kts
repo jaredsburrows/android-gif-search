@@ -133,6 +133,7 @@ android {
     animationsDisabled = true
     unitTests(delegateClosureOf<TestOptions.UnitTestOptions> {
       setReturnDefaultValues(true)
+      setIncludeAndroidResources(true)
       all(KotlinClosure1<Any, Test>({
         (this as Test).also { testTask ->
           testTask.extensions
