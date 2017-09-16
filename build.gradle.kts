@@ -110,18 +110,14 @@ android {
       if (extra["ci"] as Boolean) isTestCoverageEnabled = true                                // https://issuetracker.google.com/issues/37019591
       applicationIdSuffix = ".debug"
 
-      if (extra["ci"] as Boolean) {
-        buildConfigField("String", "BASE_URL", "\"http://localhost:8080\"")
-      } else {
-        buildConfigField("String", "BASE_URL", "\"https://api.riffsy.com\"")
-      }
+      buildConfigField("String", "BASE_URL", if (extra["ci"] as Boolean) "\"http://localhost:8080\"" else "\"https://api.riffsy.com\"")
     }
 
     // Apply fake signing config to release to test "assembleRelease" locally
     getByName("release") {
-      isMinifyEnabled = true                                                                  // Optimize APK size - remove/optimize DEX file(s)
-      isShrinkResources = true                                                                // Optimize APK size - remove unused resources
-      proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))             // Optimize APK size - use optimized proguard rules
+      isMinifyEnabled = true                                                                    // Optimize APK size - remove/optimize DEX file(s)
+      isShrinkResources = true                                                                  // Optimize APK size - remove unused resources
+      proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))               // Optimize APK size - use optimized proguard rules
       proguardFile(rootProject.file("config/proguard/proguard-rules.txt"))
       signingConfig = signingConfigs.getByName("debug")
 

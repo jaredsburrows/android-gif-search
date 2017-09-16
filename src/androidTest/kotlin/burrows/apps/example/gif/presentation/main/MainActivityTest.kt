@@ -8,8 +8,7 @@ import android.support.test.espresso.action.ViewActions.typeText
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import android.support.test.espresso.matcher.RootMatchers.isDialog
-import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
-import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.filters.SmallTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
@@ -66,8 +65,9 @@ class MainActivityTest : AndroidTestBase() {
     activityRule.launchActivity(null)
 
     // Assert
+    // Select 0, the response only contains 1 item
     onView(withId(R.id.recyclerView))
-      .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click())) // Select 0, the response only contains 1 item
+      .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
     onView(withId(R.id.gifDialogImage))
       .inRoot(isDialog())
       .check(matches(isDisplayed()))
@@ -83,8 +83,9 @@ class MainActivityTest : AndroidTestBase() {
     // Assert
     onView(withId(R.id.menu_search))
       .perform(click())
-    onView(withId(android.support.v7.appcompat.R.id.search_src_text))
-      .perform(typeText("hello"), closeSoftKeyboard(), pressBack())
+    // android.support.v7.appcompat.R.id.search_src_text sometimes is not found
+    onView(withHint("Search Gifs"))
+      .perform(click(), typeText("hello"), closeSoftKeyboard(), pressBack())
     onView(withId(R.id.recyclerView))
       .check(matches(isDisplayed()))
   }

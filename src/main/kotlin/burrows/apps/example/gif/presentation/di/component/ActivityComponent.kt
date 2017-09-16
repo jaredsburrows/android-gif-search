@@ -6,7 +6,6 @@ import burrows.apps.example.gif.presentation.di.module.NetModule
 import burrows.apps.example.gif.presentation.di.module.RiffsyModule
 import burrows.apps.example.gif.presentation.di.scope.PerActivity
 import burrows.apps.example.gif.presentation.main.MainActivity
-import burrows.apps.example.gif.presentation.main.MainFragment
 import dagger.Component
 
 /**
@@ -19,7 +18,6 @@ import dagger.Component
 interface ActivityComponent {
   // Injections
   fun inject(mainActivity: MainActivity)
-  fun inject(mainFragment: MainFragment)
   fun inject(gifAdapter: GifAdapter)
 
   // Setup components dependencies and modules
