@@ -20,7 +20,6 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import org.junit.AfterClass
 import org.junit.BeforeClass
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -59,7 +58,6 @@ class MainActivityTest : AndroidTestBase() {
 
   @get:Rule val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java, true, false)
 
-  @Ignore
   @Test fun testTrendingThenClickOpenDialog() {
     // Act
     activityRule.launchActivity(null)

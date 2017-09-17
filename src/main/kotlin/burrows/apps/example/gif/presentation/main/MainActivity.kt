@@ -275,6 +275,7 @@ class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListe
           // Hide progressbar
           progressBar.visibility = View.GONE
           if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+
           return false
         }
 
