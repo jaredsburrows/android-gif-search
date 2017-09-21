@@ -27,9 +27,9 @@ import java.util.concurrent.TimeUnit
 @Module
 class NetModule {
   companion object {
-    private val CLIENT_TIME_OUT = 10L
-    private val CLIENT_CACHE_SIZE = 10 * 1024 * 1024L // 10 MiB
-    private val CLIENT_CACHE_DIRECTORY = "http"
+    private const val CLIENT_TIME_OUT = 10L
+    private const val CLIENT_CACHE_SIZE = 10 * 1024 * 1024L // 10 MiB
+    private const val CLIENT_CACHE_DIRECTORY = "http"
   }
 
   @Provides @PerActivity fun providesCache(application: Application): Cache {

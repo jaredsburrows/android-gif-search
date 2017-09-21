@@ -18,20 +18,20 @@ import java.util.UUID.randomUUID
 @Suppress("unused")
 abstract class AndroidTestBase {
   companion object {
-    val MOCK_SERVER_PORT = 8080
-    val NUMBER_NEGATIVE_ONE = -1
-    val NUMBER_ZERO = 0
-    val NUMBER_ONE = 1
-    val STRING_EMPTY = ""
-    val STRING_NULL: String? = null
-    val STRING_UNIQUE = randomUUID().toString()
-    val STRING_UNIQUE2 = randomUUID().toString() + randomUUID().toString()
-    val STRING_UNIQUE3 = randomUUID().toString()
-    val INTEGER_RANDOM: Int = Random().nextInt()
-    val INTEGER_RANDOM_POSITIVE: Int = Random().nextInt(Integer.SIZE - 1)
-    val LONG_RANDOM: Long = Random().nextLong()
-    val FLOAT_RANDOM: Float = Random().nextFloat()
-    val DOUBLE_RANDOM: Double = Random().nextDouble()
+    const val MOCK_SERVER_PORT = 8080
+    const val NUMBER_NEGATIVE_ONE = -1
+    const val NUMBER_ZERO = 0
+    const val NUMBER_ONE = 1
+    const val STRING_EMPTY = ""
+    @JvmField val STRING_NULL: String? = null
+    @JvmField val STRING_UNIQUE = randomUUID().toString()
+    @JvmField val STRING_UNIQUE2 = randomUUID().toString() + randomUUID().toString()
+    @JvmField val STRING_UNIQUE3 = randomUUID().toString()
+    @JvmField val INTEGER_RANDOM: Int = Random().nextInt()
+    @JvmField val INTEGER_RANDOM_POSITIVE: Int = Random().nextInt(Integer.SIZE - 1)
+    @JvmField val LONG_RANDOM: Long = Random().nextLong()
+    @JvmField val INT_RANDOM: Int = Random().nextInt()
+    @JvmField val DOUBLE_RANDOM: Double = Random().nextDouble()
 
     @JvmStatic fun getMockResponse(fileName: String): MockResponse {
       return MockResponse()

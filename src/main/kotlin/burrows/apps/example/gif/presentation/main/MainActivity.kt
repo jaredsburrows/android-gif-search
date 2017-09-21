@@ -42,8 +42,8 @@ import kotlinx.android.synthetic.main.dialog_preview.view.*
 class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListener {
   companion object {
     private val TAG = MainActivity::class.java.simpleName // Can't be longer than 23 chars
-    private val PORTRAIT_COLUMNS = 3
-    private val VISIBLE_THRESHOLD = 5
+    private const val PORTRAIT_COLUMNS = 3
+    private const val VISIBLE_THRESHOLD = 5
   }
   private lateinit var layoutManager: GridLayoutManager
   private lateinit var itemOffsetDecoration: GifItemDecoration
