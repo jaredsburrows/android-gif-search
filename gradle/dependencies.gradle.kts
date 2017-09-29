@@ -1,6 +1,6 @@
 // common
 val androidGradleVersion            = "3.0.0-beta6"
-val kotlinVersion                   = "1.1.50"
+val kotlinVersion                   = "1.1.51"
 val supportLibraryVersion           = "26.1.0"
 val daggerVersion                   = "2.11"
 val okHttpVersion                   = "3.9.0"
@@ -15,7 +15,7 @@ val jacocoVersion                   = "0.7.4.201502262128"
 extra["minSdkVersion"]              = 19
 extra["targetSdkVersion"]           = 26
 extra["compileSdkVersion"]          = 26
-extra["buildToolsVersion"]          = "26.0.1"
+extra["buildToolsVersion"]          = "26.0.2"
 extra["javaVersion"]                = "1.8"
 extra["debugKeystoreUser"]          = "androiddebugkey"
 extra["debugKeystorePass"]          = "android"

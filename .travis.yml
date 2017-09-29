@@ -11,7 +11,7 @@ before_install:
   # Download SDK
   - echo yes | sdkmanager "tools" &>/dev/null
   - echo yes | sdkmanager "platform-tools" &>/dev/null
-  - echo yes | sdkmanager "build-tools;26.0.1" &>/dev/null
+  - echo yes | sdkmanager "build-tools;26.0.2" &>/dev/null
   - echo yes | sdkmanager "platforms;android-26" &>/dev/null
   # Download emulator
   - echo yes | sdkmanager "platforms;android-19" &>/dev/null

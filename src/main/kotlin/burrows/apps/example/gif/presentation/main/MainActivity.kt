@@ -136,11 +136,10 @@ class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListe
     recyclerView.addItemDecoration(itemOffsetDecoration)
     recyclerView.adapter = adapter
     recyclerView.setHasFixedSize(true)
-    // http://stackoverflow.com/questions/30511890/does-glide-queue-up-every-image-request-recyclerview-loads-are-very-slow-when-s#comment49135977_30511890
-    recyclerView.recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
     recyclerView.setItemViewCacheSize(RiffsyApiClient.DEFAULT_LIMIT_COUNT)
     recyclerView.isDrawingCacheEnabled = true
     recyclerView.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
+    recyclerView.recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
     recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
       override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
