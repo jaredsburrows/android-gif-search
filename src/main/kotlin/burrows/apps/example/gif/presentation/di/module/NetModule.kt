@@ -10,8 +10,7 @@ import dagger.Provides
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
-import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
+import okhttp3.logging.HttpLoggingInterceptor.Level
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -45,7 +44,7 @@ class NetModule {
   @Provides @PerActivity fun providesOkHttpClient(cache: Cache): OkHttpClient {
     return OkHttpClient.Builder()
       .addInterceptor(HttpLoggingInterceptor()
-        .setLevel(if (BuildConfig.DEBUG) BODY else NONE))
+        .setLevel(if (BuildConfig.DEBUG) Level.BODY else Level.NONE))
       .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)

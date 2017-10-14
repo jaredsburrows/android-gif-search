@@ -15,6 +15,7 @@ buildscript {
   dependencies {
     classpath(extra["gradle"])
     classpath(extra["kotlinGradlePlugin"])
+    classpath(extra["kotlinAndroidExtensions"])
     classpath(extra["gradleAndroidCommandPlugin"])
     classpath(extra["playPublisher"])
     classpath(extra["buildScanPlugin"])
