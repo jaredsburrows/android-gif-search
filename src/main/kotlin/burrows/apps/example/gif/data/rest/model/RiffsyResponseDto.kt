@@ -8,4 +8,4 @@ package burrows.apps.example.gif.data.rest.model
  */
 data class RiffsyResponseDto(
   var results: List<ResultDto>? = emptyList(),
-  var page: Int? = 0)
+  var page: Double? = null)

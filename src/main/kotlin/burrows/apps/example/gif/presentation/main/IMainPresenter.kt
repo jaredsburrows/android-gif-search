@@ -7,6 +7,6 @@ import burrows.apps.example.gif.presentation.IBasePresenter
  */
 interface IMainPresenter : IBasePresenter {
   fun clearImages()
-  fun loadTrendingImages(next: Int)
-  fun loadSearchImages(searchString: String, next: Int)
+  fun loadTrendingImages(next: Double?)
+  fun loadSearchImages(searchString: String, next: Double?)
 }

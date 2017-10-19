@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListe
   private var firstVisibleItem = 0
   private var visibleItemCount = 0
   private var totalItemCount = 0
-  private var next = 0
+  private var next: Double? = null
   @Inject lateinit var refWatcher: RefWatcher
   @Inject lateinit var repository: ImageApiRepository
   @Inject lateinit var client: RiffsyApiClient
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListe
   }
 
   override fun addImages(response: RiffsyResponseDto) {
-    next = response.page ?: 0
+    next = response.page
 
     response.results?.forEach {
       val url = it.media?.first()?.gif?.url

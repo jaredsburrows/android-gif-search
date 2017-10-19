@@ -9,13 +9,13 @@ import test.TestBase
  */
 class RiffsyResponseDtoTest : TestBase() {
   private val TEST_RESULTS = arrayListOf<ResultDto>()
-  private var sut = RiffsyResponseDto().apply { results = TEST_RESULTS; page = INT_RANDOM }
+  private var sut = RiffsyResponseDto().apply { results = TEST_RESULTS; page = DOUBLE_RANDOM }
 
   @Test fun testGetResults() {
     assertThat(sut.results).isEqualTo(TEST_RESULTS)
   }
 
   @Test fun testGetNext() {
-    assertThat(sut.page).isEqualTo(INT_RANDOM)
+    assertThat(sut.page).isEqualTo(DOUBLE_RANDOM)
   }
 }
