@@ -1,5 +1,5 @@
 // common
-val androidGradleVersion            = "3.0.0-rc1"
+val androidGradleVersion            = "3.0.0-rc2"
 val kotlinVersion                   = "1.1.51"
 val supportLibraryVersion           = "26.1.0"
 val daggerVersion                   = "2.12"
@@ -11,7 +11,7 @@ val multidexVersion                 = "1.0.2"
 val glideVersion                    = "4.2.0"
 val jacocoVersion                   = "0.7.4.201502262128"
 
-// Android plugin
+// android plugin
 extra["minSdkVersion"]              = 19
 extra["targetSdkVersion"]           = 26
 extra["compileSdkVersion"]          = 26
@@ -26,7 +26,7 @@ extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin
 extra["kotlinAndroidExtensions"]    = "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:1.7.1"
 extra["playPublisher"]              = "com.github.triplet.gradle:play-publisher:1.2.0"
-extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.9"
+extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.9.1"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.1"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["coverallsGradlePlugin"]      = "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
@@ -34,7 +34,7 @@ extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plug
 extra["gradleLicensePlugin"]        = "com.jaredsburrows:gradle-license-plugin:0.6.0"
 extra["detektGradlePlugin"]         = "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC4-3"
 
-// compile
+// implementation
 extra["design"]                     = "com.android.support:design:$supportLibraryVersion"
 extra["appcompatv7"]                = "com.android.support:appcompat-v7:$supportLibraryVersion"
 extra["supportv4"]                  = "com.android.support:support-v4:$supportLibraryVersion"
@@ -56,24 +56,24 @@ extra["adapterRxjava2"]             = "com.squareup.retrofit2:adapter-rxjava2:$r
 extra["glide"]                      = "com.github.bumptech.glide:glide:$glideVersion"
 extra["okhttp3Integration"]         = "com.github.bumptech.glide:okhttp3-integration:$glideVersion@aar"
 
-// debugCompile
+// debugImplementation
 extra["leakcanaryAndroid"]          = "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
 
-// releaseCompile
+// releaseImplementation
 extra["leakcanaryAndroidNoOp"]      = "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
 // kapt
 extra["daggerCompiler"]             = "com.google.dagger:dagger-compiler:$daggerVersion"
 extra["glideCompiler"]              = "com.github.bumptech.glide:compiler:$glideVersion"
 
-// androidTestCompile
+// androidTestImplementation
 extra["espressoCore"]               = "com.android.support.test.espresso:espresso-core:$espressoVersion"
 extra["espressoIntents"]            = "com.android.support.test.espresso:espresso-intents:$espressoVersion"
 extra["espressoContrib"]            = "com.android.support.test.espresso:espresso-contrib:$espressoVersion"
 extra["testingSupportLib"]          = "com.android.support.test:testing-support-lib:0.1"
 extra["runner"]                     = "com.android.support.test:runner:1.0.1"
 
-// testCompile
+// testImplementation
 extra["junit"]                      = "junit:junit:4.12"
 extra["mockitoInline"]              = "org.mockito:mockito-inline:2.11.0"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"

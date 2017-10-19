@@ -13,18 +13,18 @@ buildscript {
   }
 
   dependencies {
-    classpath(extra["gradle"])
-    classpath(extra["kotlinGradlePlugin"])
-    classpath(extra["kotlinAndroidExtensions"])
-    classpath(extra["gradleAndroidCommandPlugin"])
-    classpath(extra["playPublisher"])
-    classpath(extra["buildScanPlugin"])
-    classpath(extra["dexcountGradlePlugin"])
-    classpath(extra["gradleAndroidApkSizePlugin"])
-    classpath(extra["coverallsGradlePlugin"])
-    classpath(extra["gradleVersionsPlugin"])
-    classpath(extra["gradleLicensePlugin"])
-    classpath(extra["detektGradlePlugin"])
+    classpath(extra["gradle"] as String)
+    classpath(extra["kotlinGradlePlugin"] as String)
+    classpath(extra["kotlinAndroidExtensions"] as String)
+    classpath(extra["gradleAndroidCommandPlugin"] as String)
+    classpath(extra["playPublisher"] as String)
+    classpath(extra["buildScanPlugin"] as String)
+    classpath(extra["dexcountGradlePlugin"] as String)
+    classpath(extra["gradleAndroidApkSizePlugin"] as String)
+    classpath(extra["coverallsGradlePlugin"] as String)
+    classpath(extra["gradleVersionsPlugin"] as String)
+    classpath(extra["gradleLicensePlugin"] as String)
+    classpath(extra["detektGradlePlugin"] as String)
   }
 }
 
@@ -34,7 +34,7 @@ repositories {
 }
 
 apply {
-  from(rootProject.file("gradle/scan.gradle"))
+  from(file("gradle/scan.gradle"))
   plugin("com.android.application")
   plugin("kotlin-android")
   plugin("kotlin-android-extensions")
@@ -45,10 +45,10 @@ apply {
   plugin("com.vanniktech.android.apk.size")
   plugin("com.github.ben-manes.versions")
   plugin("com.jaredsburrows.license")
-  from(rootProject.file("gradle/compile.gradle.kts"))
-  from(rootProject.file("gradle/quality.gradle"))
-  from(rootProject.file("gradle/publish.gradle"))
-  from(rootProject.file("gradle/wrapper.gradle.kts"))
+  from(file("gradle/compile.gradle.kts"))
+  from(file("gradle/quality.gradle"))
+  from(file("gradle/publish.gradle"))
+  from(file("gradle/wrapper.gradle.kts"))
 }
 
 android {
@@ -59,8 +59,8 @@ android {
     applicationId = "burrows.apps.example.gif"
     versionCode = 1
     versionName = "1.0"
-    minSdkVersion(if (rootProject.extra["lollipop"] as Boolean) 21 else rootProject.extra["minSdkVersion"] as Int) // Optimize build speed - build with minSdk 21 if using multidex
-    targetSdkVersion(rootProject.extra["targetSdkVersion"] as Int)
+    minSdkVersion(if (extra["lollipop"] as Boolean) 21 else extra["minSdkVersion"] as Int) // Optimize build speed - build with minSdk 21 if using multidex
+    targetSdkVersion(extra["targetSdkVersion"] as Int)
     testApplicationId = "burrows.apps.example.gif.test"
     testInstrumentationRunner = "test.CustomTestRunner"
     testInstrumentationRunnerArgument("disableAnalytics", "true")
@@ -90,13 +90,13 @@ android {
     textOutput("stdout")
     isCheckAllWarnings = true
     isWarningsAsErrors = true
-    setLintConfig(rootProject.file("${project.rootDir}/config/lint/lint.xml"))
+    setLintConfig(file("${project.rootDir}/config/lint/lint.xml"))
   }
 
   // Add "debug.keystore" so developers can share APKs with same signatures locally
   signingConfigs {
     getByName("debug") {
-      storeFile = rootProject.file("config/signing/debug.keystore")
+      storeFile = file("config/signing/debug.keystore")
       storePassword = extra["debugKeystorePass"] as String
       keyAlias = extra["debugKeystoreUser"] as String
       keyPassword = extra["debugKeystorePass"] as String
@@ -116,7 +116,7 @@ android {
       isMinifyEnabled = true                                                                    // Optimize APK size - remove/optimize DEX file(s)
       isShrinkResources = true                                                                  // Optimize APK size - remove unused resources
       proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))               // Optimize APK size - use optimized proguard rules
-      proguardFile(rootProject.file("config/proguard/proguard-rules.txt"))
+      proguardFile(file("config/proguard/proguard-rules.txt"))
       signingConfig = signingConfigs.getByName("debug")
 
       buildConfigField("String", "BASE_URL", "\"https://api.riffsy.com\"")
@@ -152,59 +152,59 @@ android {
 // dependencies. This is required since Espresso internally has a dependency on support-annotations.
 configurations.all {
   resolutionStrategy {
-    force(extra["kotlinStdlib"])
-    force(extra["supportAnnotations"])
-    force(extra["multidex"])
-    force(extra["multidexInstrumentation"])
-    force(extra["orgJacocoAgent"])
-    force(extra["orgJacocoAnt"])
+    force(extra["kotlinStdlib"] as String)
+    force(extra["supportAnnotations"] as String)
+    force(extra["multidex"] as String)
+    force(extra["multidexInstrumentation"] as String)
+    force(extra["orgJacocoAgent"] as String)
+    force(extra["orgJacocoAnt"] as String)
   }
 }
 
 dependencies {
-  implementation(extra["design"])
-  implementation(extra["cardviewv7"])
-  implementation(extra["kotlinStdlib"])
-  implementation(extra["okhttp"])
-  implementation(extra["loggingInterceptor"])
-  implementation(extra["adapterRxjava2"])
-  implementation(extra["converterMoshi"])
-  implementation(extra["moshiAdapters"])
-  implementation(extra["retrofit"])
-  implementation(extra["rxAndroid"])
-  implementation(extra["rxJava"])
-  implementation(extra["glide"])
-  implementation(extra["okhttp3Integration"])
-  implementation(extra["dagger"])
-  implementation(extra["multidex"])
+  implementation(extra["design"] as String)
+  implementation(extra["cardviewv7"] as String)
+  implementation(extra["kotlinStdlib"] as String)
+  implementation(extra["okhttp"] as String)
+  implementation(extra["loggingInterceptor"] as String)
+  implementation(extra["adapterRxjava2"] as String)
+  implementation(extra["converterMoshi"] as String)
+  implementation(extra["moshiAdapters"] as String)
+  implementation(extra["retrofit"] as String)
+  implementation(extra["rxAndroid"] as String)
+  implementation(extra["rxJava"] as String)
+  implementation(extra["glide"] as String)
+  implementation(extra["okhttp3Integration"] as String)
+  implementation(extra["dagger"] as String)
+  implementation(extra["multidex"] as String)
 
-  kapt(extra["daggerCompiler"])
-  kapt(extra["glideCompiler"])
+  kapt(extra["daggerCompiler"] as String)
+  kapt(extra["glideCompiler"] as String)
 
-  debugImplementation(extra["leakcanaryAndroid"])
-  releaseImplementation(extra["leakcanaryAndroidNoOp"])
+  debugImplementation(extra["leakcanaryAndroid"] as String)
+  releaseImplementation(extra["leakcanaryAndroidNoOp"] as String)
 
-  androidTestImplementation(extra["junit"])
-  androidTestImplementation(extra["truth"])
-  androidTestImplementation(extra["runner"])
-  androidTestImplementation(extra["espressoCore"])
-  androidTestImplementation(extra["espressoIntents"])
+  androidTestImplementation(extra["junit"] as String)
+  androidTestImplementation(extra["truth"] as String)
+  androidTestImplementation(extra["runner"] as String)
+  androidTestImplementation(extra["espressoCore"] as String)
+  androidTestImplementation(extra["espressoIntents"] as String)
   androidTestImplementation(extra["espressoContrib"] as String) { exclude(group = "com.android.support") }
-  androidTestImplementation(extra["mockwebserver"])
+  androidTestImplementation(extra["mockwebserver"] as String)
 
-  testImplementation(extra["junit"])
-  testImplementation(extra["truth"])
-  testImplementation(extra["mockitoKotlin"])
-  testImplementation(extra["mockitoInline"])
-  testImplementation(extra["leakcanaryAndroidNoOp"])
-  testImplementation(extra["mockwebserver"])
-  testImplementation(extra["equalsverifier"])
-  testImplementation(extra["reflections"])
+  testImplementation(extra["junit"] as String)
+  testImplementation(extra["truth"] as String)
+  testImplementation(extra["mockitoKotlin"] as String)
+  testImplementation(extra["mockitoInline"] as String)
+  testImplementation(extra["leakcanaryAndroidNoOp"] as String)
+  testImplementation(extra["mockwebserver"] as String)
+  testImplementation(extra["equalsverifier"] as String)
+  testImplementation(extra["reflections"] as String)
 }
 
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     // TODO Instrumentation run failed due to 'java.lang.IllegalAccessError'
-//    jvmTarget = rootProject.extra["javaVersion"] as String
+//    jvmTarget = extra["javaVersion"] as String
   }
 }

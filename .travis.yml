@@ -16,6 +16,8 @@ before_install:
   # Download emulator
   - echo yes | sdkmanager "platforms;android-19" &>/dev/null
   - echo yes | sdkmanager "system-images;android-19;default;armeabi-v7a" &>/dev/null
+  # Update remaining dependencies and accept licenses
+  - echo yes | sdkmanager --update &>/dev/null
   - echo yes | sdkmanager --licenses &>/dev/null
   # Setup emulator
   - echo no | avdmanager create avd --force -n test -k "system-images;android-19;default;armeabi-v7a" &>/dev/null
