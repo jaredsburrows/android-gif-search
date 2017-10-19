@@ -29,7 +29,7 @@ extra["playPublisher"]              = "com.github.triplet.gradle:play-publisher:
 extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.9"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.1"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
-extra["coverallsGradlePlugin"]      = "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1"
+extra["coverallsGradlePlugin"]      = "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.15.0"
 extra["gradleLicensePlugin"]        = "com.jaredsburrows:gradle-license-plugin:0.6.0"
 extra["detektGradlePlugin"]         = "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC4-3"
@@ -75,7 +75,7 @@ extra["runner"]                     = "com.android.support.test:runner:1.0.1"
 
 // testCompile
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:2.10.0"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:2.11.0"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["truth"]                      = "com.google.truth:truth:0.36"
 extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.3.3"

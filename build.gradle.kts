@@ -74,9 +74,6 @@ android {
     setTargetCompatibility(extra["javaVersion"])
   }
 
-  // Optimize local build speed - disable aapt PNG crunching
-  aaptOptions.cruncherEnabled = extra["ci"] as Boolean
-
   // Optimize ci build speed - disable dexing on ci
   dexOptions.preDexLibraries = !(extra["ci"] as Boolean)
 
