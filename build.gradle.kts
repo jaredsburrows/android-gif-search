@@ -90,7 +90,7 @@ android {
     textOutput("stdout")
     isCheckAllWarnings = true
     isWarningsAsErrors = true
-    setLintConfig(file("${project.rootDir}/config/lint/lint.xml"))
+    lintConfig = rootProject.file("${project.rootDir}/config/lint/lint.xml")
   }
 
   // Add "debug.keystore" so developers can share APKs with same signatures locally
@@ -126,13 +126,13 @@ android {
   testOptions {
     animationsDisabled = true
     unitTests(delegateClosureOf<TestOptions.UnitTestOptions> {
-      setReturnDefaultValues(true)
-      setIncludeAndroidResources(true)
+      isReturnDefaultValues = true
+      isIncludeAndroidResources = true
       all(KotlinClosure1<Any, Test>({
         (this as Test).also { testTask ->
           testTask.extensions
             .getByType(JacocoTaskExtension::class.java)
-            .setIncludeNoLocationClasses(true)
+            .isIncludeNoLocationClasses = true
         }
       }, this))
     })
