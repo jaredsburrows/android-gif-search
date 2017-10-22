@@ -47,7 +47,6 @@ apply {
   plugin("com.jaredsburrows.license")
   from(file("gradle/compile.gradle.kts"))
   from(file("gradle/quality.gradle"))
-  from(file("gradle/publish.gradle"))
   from(file("gradle/wrapper.gradle.kts"))
 }
 
