@@ -30,7 +30,7 @@ extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.9.1"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.1"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["coverallsGradlePlugin"]      = "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
-extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.15.0"
+extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.16.0"
 extra["gradleLicensePlugin"]        = "com.jaredsburrows:gradle-license-plugin:0.7.0"
 extra["detektGradlePlugin"]         = "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC4-3"
 
