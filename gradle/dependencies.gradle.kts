@@ -1,7 +1,7 @@
 // common
-val androidGradleVersion            = "3.0.0-rc2"
+val androidGradleVersion            = "3.0.0"
 val kotlinVersion                   = "1.1.51"
-val supportLibraryVersion           = "26.1.0"
+val supportLibraryVersion           = "27.0.0"
 val daggerVersion                   = "2.12"
 val okHttpVersion                   = "3.9.0"
 val retrofitVersion                 = "2.3.0"
@@ -13,9 +13,9 @@ val jacocoVersion                   = "0.7.4.201502262128"
 
 // android plugin
 extra["minSdkVersion"]              = 19
-extra["targetSdkVersion"]           = 26
-extra["compileSdkVersion"]          = 26
-extra["buildToolsVersion"]          = "26.0.2"
+extra["targetSdkVersion"]           = 27
+extra["compileSdkVersion"]          = 27
+extra["buildToolsVersion"]          = "27.0.0"
 extra["javaVersion"]                = "1.8"
 extra["debugKeystoreUser"]          = "androiddebugkey"
 extra["debugKeystorePass"]          = "android"
