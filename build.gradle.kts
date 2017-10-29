@@ -139,7 +139,8 @@ android {
 
   // Optimize APK size - remove excess files in the manifest and APK
   packagingOptions {
-    exclude("/META-INF/*.kotlin_module")
+    exclude("**/*.kotlin_module")
+    exclude("**/*.version")
     exclude("**/kotlin/**")
     exclude("**/*.txt")
     exclude("**/*.xml")
