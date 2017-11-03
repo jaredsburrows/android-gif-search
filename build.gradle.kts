@@ -34,7 +34,7 @@ repositories {
 }
 
 apply {
-  from(file("gradle/scan.gradle"))
+  from(file("gradle/scan.gradle.kts"))
   plugin("com.android.application")
   plugin("kotlin-android")
   plugin("kotlin-android-extensions")
