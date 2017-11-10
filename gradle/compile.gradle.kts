@@ -6,15 +6,19 @@ tasks.withType<JavaCompile> {
   targetCompatibility = rootProject.extra["javaVersion"] as String
 
   // Show all warnings except boot classpath
-  options.compilerArgs.add("-Xlint:all")                // Turn on all warnings
-  options.compilerArgs.add("-Xlint:-options")           // Turn off "missing" bootclasspath warning
-  options.compilerArgs.add("-Xlint:-path")              // Turn off warning - annotation processing
-  options.compilerArgs.add("-Xlint:-processing")        // Turn off warning about not claiming annotations
-  options.compilerArgs.add("-Xdiags:verbose")           // Turn on verbose errors
-  options.compilerArgs.add("-Werror")                   // Turn warnings into errors
-  options.encoding = "utf-8"
-  options.isIncremental = true
-  options.isFork = true
+  options.apply {
+    compilerArgs.apply {
+      add("-Xlint:all")                // Turn on all warnings
+      add("-Xlint:-options")           // Turn off "missing" bootclasspath warning
+      add("-Xlint:-path")              // Turn off warning - annotation processing
+      add("-Xlint:-processing")        // Turn off warning about not claiming annotations
+      add("-Xdiags:verbose")           // Turn on verbose errors
+      add("-Werror")                   // Turn warnings into errors
+    }
+    encoding = "utf-8"
+    isIncremental = true
+    isFork = true
+  }
 }
 
 // Turn on logging for all tests, filter to show failures/skips only

@@ -8,14 +8,14 @@ val retrofitVersion                 = "2.3.0"
 val espressoVersion                 = "3.0.1"
 val leakCanaryVersion               = "1.5"
 val multidexVersion                 = "1.0.2"
-val glideVersion                    = "4.2.0"
+val glideVersion                    = "4.3.1"
 val jacocoVersion                   = "0.7.4.201502262128"
 
 // android plugin
 extra["minSdkVersion"]              = 19
 extra["targetSdkVersion"]           = 27
 extra["compileSdkVersion"]          = 27
-extra["buildToolsVersion"]          = "27.0.0"
+extra["buildToolsVersion"]          = "27.0.1"
 extra["javaVersion"]                = "1.8"
 extra["debugKeystoreUser"]          = "androiddebugkey"
 extra["debugKeystorePass"]          = "android"
@@ -26,7 +26,7 @@ extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin
 extra["kotlinAndroidExtensions"]    = "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:1.7.1"
 extra["playPublisher"]              = "com.github.triplet.gradle:play-publisher:1.2.0"
-extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.10.1"
+extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.10.2"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.1"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["coverallsGradlePlugin"]      = "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
@@ -75,7 +75,7 @@ extra["runner"]                     = "com.android.support.test:runner:1.0.1"
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:2.11.0"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:2.12.0"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["truth"]                      = "com.google.truth:truth:0.36"
 extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.3.3"
