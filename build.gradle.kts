@@ -89,13 +89,13 @@ android {
     textOutput("stdout")
     isCheckAllWarnings = true
     isWarningsAsErrors = true
-    lintConfig = rootProject.file("${project.rootDir}/config/lint/lint.xml")
+    lintConfig = file("${project.rootDir}/config/lint/lint.xml")
   }
 
   // Add "debug.keystore" so developers can share APKs with same signatures locally
   signingConfigs {
     getByName("debug") {
-      storeFile = rootProject.file("config/signing/debug.keystore")
+      storeFile = file("config/signing/debug.keystore")
       storePassword = extra["debugKeystorePass"] as String
       keyAlias = extra["debugKeystoreUser"] as String
       keyPassword = extra["debugKeystorePass"] as String
@@ -115,7 +115,7 @@ android {
       isMinifyEnabled = true                                                                    // Optimize APK size - remove/optimize DEX file(s)
       isShrinkResources = true                                                                  // Optimize APK size - remove unused resources
       proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))               // Optimize APK size - use optimized proguard rules
-      proguardFile(rootProject.file("config/proguard/proguard-rules.txt"))
+      proguardFile(file("config/proguard/proguard-rules.txt"))
       signingConfig = signingConfigs.getByName("debug")
 
       buildConfigField("String", "BASE_URL", "\"https://api.riffsy.com\"")
