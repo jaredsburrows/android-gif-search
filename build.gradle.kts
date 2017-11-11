@@ -63,7 +63,7 @@ android {
     testApplicationId = "burrows.apps.example.gif.test"
     testInstrumentationRunner = "test.CustomTestRunner"
     testInstrumentationRunnerArgument("disableAnalytics", "true")
-    resConfigs("en")                                                            // Optimize APK size - keep only english resource files for now
+    resConfigs("en")                                                                    // Optimize APK size - keep only english resource files for now
     vectorDrawables.useSupportLibrary = true                                            // Optimize APK size - use vector drawables
     multiDexEnabled = true
   }
@@ -95,7 +95,7 @@ android {
   // Add "debug.keystore" so developers can share APKs with same signatures locally
   signingConfigs {
     getByName("debug") {
-      storeFile = file("config/signing/debug.keystore")
+      storeFile = rootProject.file("config/signing/debug.keystore")
       storePassword = extra["debugKeystorePass"] as String
       keyAlias = extra["debugKeystoreUser"] as String
       keyPassword = extra["debugKeystorePass"] as String
@@ -115,7 +115,7 @@ android {
       isMinifyEnabled = true                                                                    // Optimize APK size - remove/optimize DEX file(s)
       isShrinkResources = true                                                                  // Optimize APK size - remove unused resources
       proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))               // Optimize APK size - use optimized proguard rules
-      proguardFile(file("config/proguard/proguard-rules.txt"))
+      proguardFile(rootProject.file("config/proguard/proguard-rules.txt"))
       signingConfig = signingConfigs.getByName("debug")
 
       buildConfigField("String", "BASE_URL", "\"https://api.riffsy.com\"")
@@ -135,6 +135,7 @@ android {
         }
       }, this))
     })
+    setExecution("ANDROID_TEST_ORCHESTRATOR")
   }
 
   // Optimize APK size - remove excess files in the manifest and APK
@@ -191,6 +192,8 @@ dependencies {
   androidTestImplementation(extra["espressoIntents"] as String)
   androidTestImplementation(extra["espressoContrib"] as String) { exclude(group = "com.android.support") }
   androidTestImplementation(extra["mockwebserver"] as String)
+
+  androidTestUtil(extra["orchestrator"] as String)
 
   testImplementation(extra["junit"] as String)
   testImplementation(extra["truth"] as String)

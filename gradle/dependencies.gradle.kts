@@ -1,8 +1,8 @@
 // common
 val androidGradleVersion            = "3.0.0"
 val kotlinVersion                   = "1.1.51"
-val supportLibraryVersion           = "27.0.0"
-val daggerVersion                   = "2.12"
+val supportLibraryVersion           = "27.0.1"
+val daggerVersion                   = "2.12" // 2.13 classfile error
 val okHttpVersion                   = "3.9.0"
 val retrofitVersion                 = "2.3.0"
 val espressoVersion                 = "3.0.1"
@@ -72,6 +72,9 @@ extra["espressoIntents"]            = "com.android.support.test.espresso:espress
 extra["espressoContrib"]            = "com.android.support.test.espresso:espresso-contrib:$espressoVersion"
 extra["testingSupportLib"]          = "com.android.support.test:testing-support-lib:0.1"
 extra["runner"]                     = "com.android.support.test:runner:1.0.1"
+
+// androidTestUtil
+extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0.1"
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
