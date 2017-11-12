@@ -10,6 +10,8 @@ buildscript {
     google()
     jcenter()
     maven { setUrl("https://plugins.gradle.org/m2/") }
+    maven { setUrl("https://oss.jfrog.org/artifactory/oss-snapshot-local/") }
+    maven { setUrl("https://oss.sonatype.org/content/repositories/snapshots") } // For Spoon snapshot, until 2.0.0 is released
   }
 
   dependencies {
@@ -25,12 +27,14 @@ buildscript {
     classpath(extra["gradleVersionsPlugin"] as String)
     classpath(extra["gradleLicensePlugin"] as String)
     classpath(extra["detektGradlePlugin"] as String)
+    classpath(extra["gradleSpoonPlugin"] as String)
   }
 }
 
 repositories {
   google()
   jcenter()
+  maven { setUrl("https://oss.sonatype.org/content/repositories/snapshots") } // For Spoon snapshot, until 2.0.0 is released
 }
 
 apply {
@@ -45,6 +49,7 @@ apply {
   plugin("com.vanniktech.android.apk.size")
   plugin("com.github.ben-manes.versions")
   plugin("com.jaredsburrows.license")
+  plugin("com.jaredsburrows.spoon")
   from(file("gradle/compile.gradle.kts"))
   from(file("gradle/quality.gradle"))
   from(file("gradle/wrapper.gradle.kts"))
