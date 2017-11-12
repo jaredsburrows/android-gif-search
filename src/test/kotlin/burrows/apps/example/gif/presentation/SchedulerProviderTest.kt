@@ -3,7 +3,7 @@ package burrows.apps.example.gif.presentation
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import com.google.common.truth.Truth.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)

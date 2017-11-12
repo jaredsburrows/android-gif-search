@@ -2,6 +2,7 @@ package burrows.apps.example.gif.data.rest.repository
 
 import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
+import com.google.common.truth.Truth.assertThat
 import io.reactivex.observers.TestObserver
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -9,11 +10,10 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import com.google.common.truth.Truth.assertThat
-import org.junit.AfterClass
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -27,12 +27,12 @@ class RiffsyApiClientTest : TestBase() {
   companion object {
     private val server = MockWebServer()
 
-    @BeforeClass @JvmStatic fun setUpClass() {
+    @BeforeAll @JvmStatic fun setUpClass() {
       server.start(MOCK_SERVER_PORT)
       server.setDispatcher(dispatcher)
     }
 
-    @AfterClass @JvmStatic fun tearDownClass() {
+    @AfterAll @JvmStatic fun tearDownClass() {
       server.shutdown()
     }
 
@@ -49,7 +49,7 @@ class RiffsyApiClientTest : TestBase() {
 
   private lateinit var sut: RiffsyApiClient
 
-  @Before override fun setUp() {
+  @BeforeEach override fun setUp() {
     super.setUp()
 
     sut = getRetrofit(server.url("/").toString()).build().create(RiffsyApiClient::class.java)

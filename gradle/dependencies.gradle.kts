@@ -10,6 +10,8 @@ val leakCanaryVersion               = "1.5"
 val multidexVersion                 = "1.0.2"
 val glideVersion                    = "4.3.1"
 val jacocoVersion                   = "0.7.4.201502262128"
+val junitVersion                    = "5.0.0"
+val junitPluginVersion              = "1.0.12"
 
 // android plugin
 extra["minSdkVersion"]              = 19
@@ -33,6 +35,7 @@ extra["coverallsGradlePlugin"]      = "org.kt3k.gradle.plugin:coveralls-gradle-p
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.17.0"
 extra["gradleLicensePlugin"]        = "com.jaredsburrows:gradle-license-plugin:0.7.0"
 extra["detektGradlePlugin"]         = "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC4-3"
+extra["androidJunit5"]              = "de.mannodermaus.gradle.plugins:android-junit5:$junitPluginVersion"
 
 // implementation
 extra["design"]                     = "com.android.support:design:$supportLibraryVersion"
@@ -78,6 +81,9 @@ extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
+extra["junitJupiterApi"]            = "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+extra["junitJupiterEngine"]         = "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+extra["junit5EmbeddedRuntime"]      = "de.mannodermaus.gradle.plugins:android-junit5-embedded-runtime:$junitPluginVersion"
 extra["mockitoInline"]              = "org.mockito:mockito-inline:2.12.0"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["truth"]                      = "com.google.truth:truth:0.36"

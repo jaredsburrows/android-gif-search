@@ -7,8 +7,8 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.never
 import io.reactivex.Observable
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.times
@@ -26,7 +26,7 @@ class MainPresenterTest : TestBase() {
   @Mock private lateinit var repository: RiffsyApiClient
   private lateinit var sut: MainPresenter
 
-  @Before override fun setUp() {
+  @BeforeEach override fun setUp() {
     super.setUp()
 
     initMocks(this)

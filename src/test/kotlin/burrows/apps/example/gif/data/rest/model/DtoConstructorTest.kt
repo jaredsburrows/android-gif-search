@@ -2,8 +2,8 @@ package burrows.apps.example.gif.data.rest.model
 
 import com.google.common.truth.Truth.assert_
 import com.squareup.moshi.Json
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.reflections.Reflections
 import org.reflections.scanners.FieldAnnotationsScanner
 import org.reflections.scanners.MemberUsageScanner
@@ -25,7 +25,8 @@ class DtoConstructorTest {
   private val DATA_TRANSPORT_OBJECT = "Dto"
   private lateinit var classes: Set<Class<*>>
 
-  @Before fun setUp() {
+  @BeforeEach
+  fun setUp() {
     val reflections = Reflections(ConfigurationBuilder().filterInputsBy(
       FilterBuilder().includePackage(MODEL_PACKAGE))
       .setUrls(ClasspathHelper.forClassLoader())
