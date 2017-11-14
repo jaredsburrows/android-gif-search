@@ -1,6 +1,6 @@
 // common
 val androidGradleVersion            = "3.0.0"
-val kotlinVersion                   = "1.1.51"
+val kotlinVersion                   = "1.1.60"
 val supportLibraryVersion           = "27.0.1"
 val daggerVersion                   = "2.12" // 2.13 classfile error
 val okHttpVersion                   = "3.9.0"
@@ -81,7 +81,7 @@ extra["junit"]                      = "junit:junit:4.12"
 extra["mockitoInline"]              = "org.mockito:mockito-inline:2.12.0"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["truth"]                      = "com.google.truth:truth:0.36"
-extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.3.3"
+extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.4"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 extra["reflections"]                = "org.reflections:reflections:0.9.11"
 
