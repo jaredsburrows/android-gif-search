@@ -25,6 +25,7 @@ buildscript {
     classpath(extra["gradleVersionsPlugin"] as String)
     classpath(extra["gradleLicensePlugin"] as String)
     classpath(extra["detektGradlePlugin"] as String)
+    classpath(extra["androidJunit5"] as String)
   }
 }
 
@@ -39,6 +40,7 @@ apply {
   plugin("kotlin-android")
   plugin("kotlin-android-extensions")
   plugin("kotlin-kapt")
+  plugin("de.mannodermaus.android-junit5")
   plugin("android-command")
   plugin("com.github.triplet.play")
   plugin("com.getkeepsafe.dexcount")
@@ -195,7 +197,9 @@ dependencies {
 
   androidTestUtil(extra["orchestrator"] as String)
 
-  testImplementation(extra["junit"] as String)
+  testImplementation(extra["junitJupiterApi"] as String)
+  testImplementation(extra["junitJupiterEngine"] as String)
+  testImplementation(extra["junit5EmbeddedRuntime"] as String)
   testImplementation(extra["truth"] as String)
   testImplementation(extra["mockitoKotlin"] as String)
   testImplementation(extra["mockitoInline"] as String)
