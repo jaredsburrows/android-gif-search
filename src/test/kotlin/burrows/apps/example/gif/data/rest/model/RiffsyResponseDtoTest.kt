@@ -8,7 +8,9 @@ import test.TestBase
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class RiffsyResponseDtoTest : TestBase() {
-  private val TEST_RESULTS = arrayListOf<ResultDto>()
+  companion object {
+    private val TEST_RESULTS = arrayListOf<ResultDto>()
+  }
   private var sut = RiffsyResponseDto().apply { results = TEST_RESULTS; page = DOUBLE_RANDOM }
 
   @Test fun testGetResults() {

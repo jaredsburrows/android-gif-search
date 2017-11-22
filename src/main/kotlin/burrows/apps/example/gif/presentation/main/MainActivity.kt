@@ -94,9 +94,7 @@ class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListe
     showImageDialog(imageInfoModel)
   }
 
-  override fun isActive(): Boolean {
-    return !isFinishing
-  }
+  override fun isActive(): Boolean = !isFinishing
 
   //
   // GifAdapter
@@ -196,9 +194,7 @@ class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListe
 
     // Set contextual action on search icon click
     menuItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-      override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-        return true
-      }
+      override fun onMenuItemActionExpand(item: MenuItem): Boolean = true
 
       override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
         // When search is closed, go back to trending getResults
@@ -225,9 +221,7 @@ class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListe
         return false
       }
 
-      override fun onQueryTextSubmit(query: String): Boolean {
-        return false
-      }
+      override fun onQueryTextSubmit(query: String): Boolean = false
     })
 
     return true

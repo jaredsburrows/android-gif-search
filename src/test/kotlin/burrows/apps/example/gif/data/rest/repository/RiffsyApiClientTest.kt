@@ -37,12 +37,10 @@ class RiffsyApiClientTest : TestBase() {
     }
 
     private val dispatcher = object : Dispatcher() {
-      override fun dispatch(request: RecordedRequest): MockResponse {
-        return when {
-          request.path.contains("/v1/trending") -> getMockResponse("/trending_results.json")
-          request.path.contains("/v1/search") -> getMockResponse("/search_results.json")
-          else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
-        }
+      override fun dispatch(request: RecordedRequest): MockResponse = when {
+        request.path.contains("/v1/trending") -> getMockResponse("/trending_results.json")
+        request.path.contains("/v1/search") -> getMockResponse("/search_results.json")
+        else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
       }
     }
   }

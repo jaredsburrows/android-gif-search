@@ -1,6 +1,8 @@
 package test
 
 import okhttp3.mockwebserver.MockResponse
+import okio.Buffer
+import okio.Okio
 import org.junit.After
 import org.junit.Before
 import java.io.InputStreamReader
@@ -44,6 +46,24 @@ abstract class TestBase {
       val text = InputStreamReader(inputStream).readText()
       inputStream.close()
       return text
+    }
+
+    @JvmStatic fun getMockFileResponse(fileName: String): MockResponse {
+      return MockResponse()
+        .setStatus("HTTP/1.1 200")
+        .setResponseCode(HTTP_OK)
+        .setBody(parseImage(fileName))
+        .addHeader("content-type: image/png")
+    }
+
+    @JvmStatic private fun parseImage(fileName: String): Buffer {
+      val inputStream = TestBase::class.java.getResourceAsStream(fileName)
+      val source = Okio.source(inputStream)
+      val result = Buffer()
+      result.writeAll(source)
+      inputStream.close()
+      source.close()
+      return result
     }
   }
 

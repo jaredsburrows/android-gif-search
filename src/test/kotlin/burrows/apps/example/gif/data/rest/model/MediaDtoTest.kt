@@ -8,7 +8,9 @@ import test.TestBase
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class MediaDtoTest : TestBase() {
-  private val TEST_GIF = GifDto()
+  companion object {
+    private val TEST_GIF = GifDto()
+  }
   private var sut = MediaDto().apply { gif = TEST_GIF }
 
   @Test fun testGetGif() {

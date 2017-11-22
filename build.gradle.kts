@@ -78,10 +78,11 @@ android {
 
   // Need this to help IDE recognize Kotlin
   sourceSets {
-    getByName("androidTest").java.srcDirs("src/androidTest/kotlin")
+    val commonTest = "src/commonTest/kotlin"
+    getByName("androidTest").java.srcDirs("src/androidTest/kotlin", commonTest)
     getByName("debug").java.srcDirs("src/debug/kotlin")
     getByName("main").java.srcDirs("src/main/kotlin")
-    getByName("test").java.srcDirs("src/test/kotlin")
+    getByName("test").java.srcDirs("src/test/kotlin", commonTest)
   }
 
   lintOptions {

@@ -12,7 +12,5 @@ import dagger.Provides
  */
 @Module
 class LeakCanaryModule {
-  @Provides @PerActivity fun providesRefWatcher(application: Application): RefWatcher {
-    return LeakCanary.install(application)
-  }
+  @Provides @PerActivity fun providesRefWatcher(application: Application): RefWatcher = LeakCanary.install(application)
 }

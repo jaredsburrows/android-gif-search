@@ -8,7 +8,9 @@ import test.TestBase
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class ResultDtoTest : TestBase() {
-  private val TEST_MEDIAS = arrayListOf<MediaDto>()
+  companion object {
+    private val TEST_MEDIAS = arrayListOf<MediaDto>()
+  }
   private var sut = ResultDto().apply { media = TEST_MEDIAS; title = STRING_UNIQUE }
 
   @Test fun testGetMedia() {

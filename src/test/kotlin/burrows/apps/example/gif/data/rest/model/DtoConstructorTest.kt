@@ -21,8 +21,10 @@ import java.lang.reflect.Modifier
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class DtoConstructorTest {
-  private val MODEL_PACKAGE = "burrows.apps.example.gif.data.rest.model"
-  private val DATA_TRANSPORT_OBJECT = "Dto"
+  companion object {
+    private const val MODEL_PACKAGE = "burrows.apps.example.gif.data.rest.model"
+    private const val DATA_TRANSPORT_OBJECT = "Dto"
+  }
   private lateinit var classes: Set<Class<*>>
 
   @Before fun setUp() {

@@ -14,14 +14,14 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import test.AndroidTestBase
+import test.TestBase
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 @SmallTest
 @RunWith(AndroidJUnit4::class)
-class GifAdapterTest : AndroidTestBase() {
+class GifAdapterTest : TestBase() {
   private val targetContext: Context = InstrumentationRegistry.getTargetContext()
   private val imageInfoModel = ImageInfoModel().apply { url = STRING_UNIQUE }
   private val imageInfoModel2 = ImageInfoModel().apply { url = STRING_UNIQUE2 }

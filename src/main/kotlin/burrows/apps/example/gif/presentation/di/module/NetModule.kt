@@ -31,9 +31,8 @@ class NetModule {
     private const val CLIENT_CACHE_DIRECTORY = "http"
   }
 
-  @Provides @PerActivity fun providesCache(application: Application): Cache {
-    return Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
-  }
+  @Provides @PerActivity fun providesCache(application: Application): Cache
+    = Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
 
   @Provides @PerActivity fun providesMoshi(): Moshi {
     return Moshi.Builder()

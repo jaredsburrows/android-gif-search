@@ -9,11 +9,6 @@ import javax.inject.Inject
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class SchedulerProvider @Inject constructor() : IBaseSchedulerProvider {
-  override fun io(): Scheduler {
-    return Schedulers.io()
-  }
-
-  override fun ui(): Scheduler {
-    return AndroidSchedulers.mainThread()
-  }
+  override fun io(): Scheduler = Schedulers.io()
+  override fun ui(): Scheduler = AndroidSchedulers.mainThread()
 }

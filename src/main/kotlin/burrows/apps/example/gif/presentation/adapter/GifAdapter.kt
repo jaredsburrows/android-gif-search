@@ -29,9 +29,8 @@ class GifAdapter(
   }
   private val data = arrayListOf<ImageInfoModel>()
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false))
-  }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
+    = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false))
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val imageInfoModel = getItem(position)
@@ -80,18 +79,14 @@ class GifAdapter(
    *
    * @return the number of elements in the data.
    */
-  override fun getItemCount(): Int {
-    return data.size
-  }
+  override fun getItemCount(): Int = data.size
 
   /**
    * Returns the hashCode of the URL of image.
    *
    * @return the hashCode of the URL of image.
    */
-  override fun getItemId(position: Int): Long {
-    return getItem(position).url?.hashCode()?.toLong() ?: 0L
-  }
+  override fun getItemId(position: Int): Long = getItem(position).url?.hashCode()?.toLong() ?: 0L
 
   /**
    * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
@@ -111,9 +106,7 @@ class GifAdapter(
    * @param location the index of the element to return.
    * @return the element at the specified location.
    */
-  fun getItem(location: Int): ImageInfoModel {
-    return data[location]
-  }
+  fun getItem(location: Int): ImageInfoModel = data[location]
 
   /**
    * Searches the data for the specified object and returns the index of the
@@ -122,9 +115,7 @@ class GifAdapter(
    * @param model the object to search for.
    * @return the index of the first occurrence of the object or -1 if the object was not found.
    */
-  fun getLocation(model: ImageInfoModel): Int {
-    return data.indexOf(model)
-  }
+  fun getLocation(model: ImageInfoModel): Int = data.indexOf(model)
 
   /**
    * Clear the entire adapter using [android.support.v7.widget.RecyclerView.Adapter.notifyItemRangeRemoved].

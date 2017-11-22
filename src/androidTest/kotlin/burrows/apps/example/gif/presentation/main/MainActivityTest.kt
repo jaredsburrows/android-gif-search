@@ -24,7 +24,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import test.AndroidTestBase
+import test.TestBase
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 /**
@@ -32,7 +32,7 @@ import java.net.HttpURLConnection.HTTP_NOT_FOUND
  */
 @SmallTest
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest : AndroidTestBase() {
+class MainActivityTest : TestBase() {
   companion object {
     private val server = MockWebServer()
 
@@ -46,13 +46,11 @@ class MainActivityTest : AndroidTestBase() {
     }
 
     private val dispatcher = object : Dispatcher() {
-      override fun dispatch(request: RecordedRequest): MockResponse {
-        return when {
-          request.path.contains("v1/trending") -> getMockResponse("/trending_results.json")
-          request.path.contains("v1/search") -> getMockResponse("/search_results.json")
-          request.path.contains("images") -> getMockFileResponse("/ic_launcher.png")
-          else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
-        }
+      override fun dispatch(request: RecordedRequest): MockResponse = when {
+        request.path.contains("v1/trending") -> getMockResponse("/trending_results.json")
+        request.path.contains("v1/search") -> getMockResponse("/search_results.json")
+        request.path.contains("images") -> getMockFileResponse("/ic_launcher.png")
+        else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
       }
     }
   }
