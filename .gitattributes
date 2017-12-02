@@ -1,0 +1,5 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text eol=lf
+*.bat eol=crlf
+*.jar binary
+*.png binary
