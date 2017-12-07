@@ -1,14 +1,14 @@
 // common
 val androidGradleVersion            = "3.0.1"
 val kotlinVersion                   = "1.2.0"
-val supportLibraryVersion           = "27.0.1"
+val supportLibraryVersion           = "27.0.2"
 val daggerVersion                   = "2.12" // 2.13 classfile error
-val okHttpVersion                   = "3.9.0"
+val okHttpVersion                   = "3.9.1"
 val retrofitVersion                 = "2.3.0"
 val espressoVersion                 = "3.0.1"
 val leakCanaryVersion               = "1.5"
 val multidexVersion                 = "1.0.2"
-val glideVersion                    = "4.3.1"
+val glideVersion                    = "4.4.0"
 val jacocoVersion                   = "0.7.4.201502262128"
 
 // android plugin
@@ -26,8 +26,8 @@ extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin
 extra["kotlinAndroidExtensions"]    = "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:1.7.1"
 extra["playPublisher"]              = "com.github.triplet.gradle:play-publisher:1.2.0"
-extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.10.2"
-extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.1"
+extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.11"
+extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["coverallsGradlePlugin"]      = "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.17.0"
@@ -45,7 +45,7 @@ extra["multidex"]                   = "com.android.support:multidex:$multidexVer
 extra["multidexInstrumentation"]    = "com.android.support:multidex-instrumentation:$multidexVersion"
 extra["kotlinStdlib"]               = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 extra["rxAndroid"]                  = "io.reactivex.rxjava2:rxandroid:2.0.1"
-extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.1.6"
+extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.1.7"
 extra["dagger"]                     = "com.google.dagger:dagger:$daggerVersion"
 extra["okhttp"]                     = "com.squareup.okhttp3:okhttp:$okHttpVersion"
 extra["loggingInterceptor"]         = "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
@@ -78,7 +78,7 @@ extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:2.12.0"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:2.13.0"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["truth"]                      = "com.google.truth:truth:0.36"
 extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.4"
