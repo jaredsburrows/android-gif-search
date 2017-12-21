@@ -1,8 +1,8 @@
 // common
 val androidGradleVersion            = "3.0.1"
-val kotlinVersion                   = "1.2.0"
+val kotlinVersion                   = "1.2.10"
 val supportLibraryVersion           = "27.0.2"
-val daggerVersion                   = "2.12" // 2.13 classfile error
+val daggerVersion                   = "2.14.1"
 val okHttpVersion                   = "3.9.1"
 val retrofitVersion                 = "2.3.0"
 val espressoVersion                 = "3.0.1"
@@ -80,7 +80,7 @@ extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0
 extra["junit"]                      = "junit:junit:4.12"
 extra["mockitoInline"]              = "org.mockito:mockito-inline:2.13.0"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
-extra["truth"]                      = "com.google.truth:truth:0.36"
+extra["truth"]                      = "com.google.truth:truth:0.37"
 extra["equalsverifier"]             = "nl.jqno.equalsverifier:equalsverifier:2.4"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 extra["reflections"]                = "org.reflections:reflections:0.9.11"
