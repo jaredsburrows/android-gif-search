@@ -9,7 +9,7 @@ buildscript {
   repositories {
     google()
     jcenter()
-    maven { setUrl("https://plugins.gradle.org/m2/") }
+    gradlePluginPortal()
   }
 
   dependencies {
@@ -208,7 +208,7 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
   kotlinOptions {
-    // TODO Instrumentation run failed due to 'java.lang.IllegalAccessError'
-//    jvmTarget = extra["javaVersion"] as String
+    // jvmTarget = rootProject.extra["javaVersion"] as String // TODO instrumentation issue
+    allWarningsAsErrors = true
   }
 }
