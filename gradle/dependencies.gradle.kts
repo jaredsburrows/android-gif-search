@@ -2,7 +2,7 @@
 val androidGradleVersion            = "3.0.1"
 val kotlinVersion                   = "1.2.0"
 val supportLibraryVersion           = "27.0.2"
-val daggerVersion                   = "2.12" // 2.13 classfile error
+val daggerVersion                   = "2.14.1"
 val okHttpVersion                   = "3.9.1"
 val retrofitVersion                 = "2.3.0"
 val espressoVersion                 = "3.0.1"
