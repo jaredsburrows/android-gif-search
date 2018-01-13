@@ -8,7 +8,7 @@ val retrofitVersion                 = "2.3.0"
 val espressoVersion                 = "3.0.1"
 val leakCanaryVersion               = "1.5"
 val multidexVersion                 = "1.0.2"
-val glideVersion                    = "4.4.0"
+val glideVersion                    = "4.5.0"
 val jacocoVersion                   = "0.7.4.201502262128"
 
 // android plugin
@@ -45,7 +45,7 @@ extra["multidex"]                   = "com.android.support:multidex:$multidexVer
 extra["multidexInstrumentation"]    = "com.android.support:multidex-instrumentation:$multidexVersion"
 extra["kotlinStdlib"]               = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 extra["rxAndroid"]                  = "io.reactivex.rxjava2:rxandroid:2.0.1"
-extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.1.7"
+extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.1.8"
 extra["dagger"]                     = "com.google.dagger:dagger:$daggerVersion"
 extra["okhttp"]                     = "com.squareup.okhttp3:okhttp:$okHttpVersion"
 extra["loggingInterceptor"]         = "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
