@@ -206,6 +206,10 @@ dependencies {
   testImplementation(extra["reflections"] as String)
 }
 
+kapt {
+  useBuildCache = true
+}
+
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     // TODO Instrumentation run failed due to 'java.lang.IllegalAccessError'
