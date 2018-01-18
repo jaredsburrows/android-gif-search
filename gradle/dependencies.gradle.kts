@@ -44,6 +44,7 @@ extra["supportAnnotations"]         = "com.android.support:support-annotations:$
 extra["multidex"]                   = "com.android.support:multidex:$multidexVersion"
 extra["multidexInstrumentation"]    = "com.android.support:multidex-instrumentation:$multidexVersion"
 extra["kotlinStdlib"]               = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+extra["kotlinReflect"]              = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 extra["rxAndroid"]                  = "io.reactivex.rxjava2:rxandroid:2.0.1"
 extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.1.8"
 extra["dagger"]                     = "com.google.dagger:dagger:$daggerVersion"

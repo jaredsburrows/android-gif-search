@@ -1,7 +1,7 @@
 package burrows.apps.example.gif.data.rest.model
 
-import com.google.common.truth.Truth.assert_
 import com.squareup.moshi.Json
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.reflections.Reflections
@@ -42,7 +42,7 @@ class DtoConstructorTest {
     classes.forEach { clazz ->
       val className = clazz.name
       if (className.endsWith(DATA_TRANSPORT_OBJECT) && !hasNoArgConstructor(clazz)) {
-        assert_().fail("Found no 'no-args' and public constructors in class $className")
+        fail("Found no 'no-args' and public constructors in class $className")
       }
     }
   }
@@ -52,7 +52,7 @@ class DtoConstructorTest {
     classes.forEach { clazz ->
       val className = clazz.name
       if (className.endsWith(DATA_TRANSPORT_OBJECT) && hasNoFinalAnnotations(clazz)) {
-        assert_().fail("Found finalized field with @SerializedNamed annotation in class $className")
+        fail("Found finalized field with @SerializedNamed annotation in class $className")
       }
     }
   }

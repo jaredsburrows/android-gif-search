@@ -155,6 +155,7 @@ android {
 configurations.all {
   resolutionStrategy {
     force(extra["kotlinStdlib"] as String)
+    force(extra["kotlinReflect"] as String)
     force(extra["supportAnnotations"] as String)
     force(extra["multidex"] as String)
     force(extra["multidexInstrumentation"] as String)
