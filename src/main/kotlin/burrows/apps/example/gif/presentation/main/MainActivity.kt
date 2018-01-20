@@ -16,9 +16,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import burrows.apps.example.gif.App
 import burrows.apps.example.gif.R
-import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
-import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
-import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
+import burrows.apps.example.gif.data.model.RiffsyResponseDto
+import burrows.apps.example.gif.data.repository.ImageApiRepository
+import burrows.apps.example.gif.data.repository.RiffsyApiClient
 import burrows.apps.example.gif.presentation.SchedulerProvider
 import burrows.apps.example.gif.presentation.adapter.GifAdapter
 import burrows.apps.example.gif.presentation.adapter.GifItemDecoration
@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.dialog_preview.view.*
  *
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class MainActivity : AppCompatActivity(), MainContract.MainView, GifAdapter.OnItemClickListener {
+class MainActivity : AppCompatActivity(), MainContract.View, GifAdapter.OnItemClickListener {
   companion object {
     private val TAG = "MainActivity"
     private const val PORTRAIT_COLUMNS = 3
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), MainContract.MainView, GifAdapter.OnIt
   private lateinit var dialogText: TextView
   private lateinit var progressBar: ProgressBar
   private lateinit var imageView: ImageView
-  private lateinit var presenter: MainContract.MainPresenter
+  private lateinit var presenter: MainContract.Presenter
   private var hasSearched = false
   private var previousTotal = 0
   private var loading = true
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), MainContract.MainView, GifAdapter.OnIt
   // Contract
   //
 
-  override fun setPresenter(presenter: MainContract.MainPresenter) {
+  override fun setPresenter(presenter: MainContract.Presenter) {
     this.presenter = presenter
   }
 
@@ -261,26 +261,27 @@ class MainActivity : AppCompatActivity(), MainContract.MainView, GifAdapter.OnIt
     // Load image
     repository.load(imageInfoModel.url)
       .thumbnail(repository.load(imageInfoModel.previewUrl))
-      .listener(object : RequestListener<GifDrawable> {
-        override fun onResourceReady(resource: GifDrawable?, model: Any?,
-                                     target: Target<GifDrawable>?, dataSource: DataSource?,
-                                     isFirstResource: Boolean): Boolean {
-          // Hide progressbar
-          progressBar.visibility = View.GONE
-          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
-
-          return false
-        }
-
-        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?,
-                                  isFirstResource: Boolean): Boolean {
-          // Hide progressbar
-          progressBar.visibility = View.GONE
-          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
-
-          return false
-        }
-      })
+      .listener(imageRequestListener)
       .into(imageView)
+  }
+
+  private val imageRequestListener = object : RequestListener<GifDrawable> {
+    override fun onResourceReady(resource: GifDrawable?, model: Any?, target: Target<GifDrawable>?,
+                                 dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+      // Hide progressbar
+      progressBar.visibility = View.GONE
+      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+
+      return false
+    }
+
+    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?,
+                              isFirstResource: Boolean): Boolean {
+      // Hide progressbar
+      progressBar.visibility = View.GONE
+      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+
+      return false
+    }
   }
 }

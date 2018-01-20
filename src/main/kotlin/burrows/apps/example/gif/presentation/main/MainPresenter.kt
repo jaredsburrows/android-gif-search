@@ -1,8 +1,8 @@
 package burrows.apps.example.gif.presentation.main
 
 import android.util.Log
-import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
-import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
+import burrows.apps.example.gif.data.model.RiffsyResponseDto
+import burrows.apps.example.gif.data.repository.RiffsyApiClient
 import burrows.apps.example.gif.presentation.BaseSchedulerProvider
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -10,9 +10,9 @@ import io.reactivex.disposables.CompositeDisposable
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class MainPresenter(val view: MainContract.MainView,
+class MainPresenter(val view: MainContract.View,
                     val repository: RiffsyApiClient,
-                    val provider: BaseSchedulerProvider) : MainContract.MainPresenter {
+                    val provider: BaseSchedulerProvider) : MainContract.Presenter {
   companion object {
     private val TAG = "MainPresenter"
   }

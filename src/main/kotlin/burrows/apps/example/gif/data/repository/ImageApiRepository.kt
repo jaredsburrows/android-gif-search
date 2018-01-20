@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.data.rest.repository
+package burrows.apps.example.gif.data.repository
 
 import android.content.Context
 import burrows.apps.example.gif.R

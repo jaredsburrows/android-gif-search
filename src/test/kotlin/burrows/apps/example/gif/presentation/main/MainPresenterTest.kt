@@ -1,8 +1,8 @@
 package burrows.apps.example.gif.presentation.main
 
-import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
-import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
-import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
+import burrows.apps.example.gif.data.model.RiffsyResponseDto
+import burrows.apps.example.gif.data.repository.RiffsyApiClient
+import burrows.apps.example.gif.data.repository.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.never
@@ -22,7 +22,7 @@ import test.TestBase
  */
 class MainPresenterTest : TestBase() {
   private val provider = ImmediateSchedulerProvider()
-  @Mock private lateinit var view: MainContract.MainView
+  @Mock private lateinit var view: MainContract.View
   @Mock private lateinit var repository: RiffsyApiClient
   private lateinit var sut: MainPresenter
 

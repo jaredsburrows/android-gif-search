@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.data.rest.model
+package burrows.apps.example.gif.data.model
 
 import com.squareup.moshi.Json
 import org.junit.Assert.fail
