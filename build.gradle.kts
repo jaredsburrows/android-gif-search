@@ -107,8 +107,6 @@ android {
     getByName("debug") {
       if (extra["ci"] as Boolean) isTestCoverageEnabled = true                                // https://issuetracker.google.com/issues/37019591
       applicationIdSuffix = ".debug"
-
-      buildConfigField("String", "BASE_URL", if (extra["ci"] as Boolean) "\"http://localhost:8080\"" else "\"https://api.riffsy.com\"")
     }
 
     // Apply fake signing config to release to test "assembleRelease" locally
@@ -118,8 +116,6 @@ android {
       proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))               // Optimize APK size - use optimized proguard rules
       proguardFile(file("config/proguard/proguard-rules.txt"))
       signingConfig = signingConfigs.getByName("debug")
-
-      buildConfigField("String", "BASE_URL", "\"https://api.riffsy.com\"")
     }
   }
 

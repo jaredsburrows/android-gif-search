@@ -9,9 +9,8 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import com.google.common.truth.Truth.assertThat
-import org.junit.AfterClass
+import org.junit.After
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -23,33 +22,20 @@ import java.net.HttpURLConnection.HTTP_NOT_FOUND
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class RiffsyApiClientTest : TestBase() {
-  companion object {
-    private val server = MockWebServer()
-
-    @BeforeClass @JvmStatic fun setUpClass() {
-      server.start(MOCK_SERVER_PORT)
-      server.setDispatcher(dispatcher)
-    }
-
-    @AfterClass @JvmStatic fun tearDownClass() {
-      server.shutdown()
-    }
-
-    private val dispatcher = object : Dispatcher() {
-      override fun dispatch(request: RecordedRequest): MockResponse = when {
-        request.path.contains("/v1/trending") -> getMockResponse("/trending_results.json")
-        request.path.contains("/v1/search") -> getMockResponse("/search_results.json")
-        else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
-      }
-    }
-  }
-
+  private val server = MockWebServer()
   private lateinit var sut: RiffsyApiClient
 
   @Before override fun setUp() {
     super.setUp()
+    server.start(MOCK_SERVER_PORT)
+    server.setDispatcher(dispatcher)
 
     sut = getRetrofit(server.url("/").toString()).build().create(RiffsyApiClient::class.java)
+  }
+
+  @After override fun tearDown() {
+    super.tearDown()
+    server.shutdown()
   }
 
   @Test fun testTrendingResultsUrlShouldParseCorrectly() {
@@ -118,5 +104,13 @@ class RiffsyApiClientTest : TestBase() {
           .setLevel(HttpLoggingInterceptor.Level.BODY))
         .build()
       )
+  }
+
+  private val dispatcher = object : Dispatcher() {
+    override fun dispatch(request: RecordedRequest): MockResponse = when {
+      request.path.contains("/v1/trending") -> getMockResponse("/trending_results.json")
+      request.path.contains("/v1/search") -> getMockResponse("/search_results.json")
+      else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
+    }
   }
 }

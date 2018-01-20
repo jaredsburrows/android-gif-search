@@ -66,7 +66,8 @@ class DtoConstructorTest {
    */
   private fun hasNoArgConstructor(klass: Class<*>): Boolean {
     return klass.declaredConstructors.any { field ->
-      field.parameterTypes.isEmpty() && Modifier.isPublic(field.modifiers)
+      field.parameterTypes.isEmpty()
+        && Modifier.isPublic(field.modifiers)
     }
   }
 
