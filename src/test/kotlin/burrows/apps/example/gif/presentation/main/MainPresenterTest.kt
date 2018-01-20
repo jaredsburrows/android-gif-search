@@ -22,7 +22,7 @@ import test.TestBase
  */
 class MainPresenterTest : TestBase() {
   private val provider = ImmediateSchedulerProvider()
-  @Mock private lateinit var view: IMainView
+  @Mock private lateinit var view: MainContract.MainView
   @Mock private lateinit var repository: RiffsyApiClient
   private lateinit var sut: MainPresenter
 

@@ -3,18 +3,18 @@ package burrows.apps.example.gif.presentation.main
 import android.util.Log
 import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient
-import burrows.apps.example.gif.presentation.IBaseSchedulerProvider
+import burrows.apps.example.gif.presentation.BaseSchedulerProvider
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class MainPresenter(val view: IMainView,
+class MainPresenter(val view: MainContract.MainView,
                     val repository: RiffsyApiClient,
-                    val provider: IBaseSchedulerProvider) : IMainPresenter {
+                    val provider: BaseSchedulerProvider) : MainContract.MainPresenter {
   companion object {
-    private val TAG = MainPresenter::class.java.simpleName // Can't be longer than 23 chars
+    private val TAG = "MainPresenter"
   }
   private val disposable = CompositeDisposable()
 

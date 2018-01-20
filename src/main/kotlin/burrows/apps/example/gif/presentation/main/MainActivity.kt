@@ -39,9 +39,9 @@ import kotlinx.android.synthetic.main.dialog_preview.view.*
  *
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListener {
+class MainActivity : AppCompatActivity(), MainContract.MainView, GifAdapter.OnItemClickListener {
   companion object {
-    private val TAG = MainActivity::class.java.simpleName // Can't be longer than 23 chars
+    private val TAG = "MainActivity"
     private const val PORTRAIT_COLUMNS = 3
     private const val VISIBLE_THRESHOLD = 5
   }
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListe
   private lateinit var dialogText: TextView
   private lateinit var progressBar: ProgressBar
   private lateinit var imageView: ImageView
-  private lateinit var presenter: IMainPresenter
+  private lateinit var presenter: MainContract.MainPresenter
   private var hasSearched = false
   private var previousTotal = 0
   private var loading = true
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListe
   // Contract
   //
 
-  override fun setPresenter(presenter: IMainPresenter) {
+  override fun setPresenter(presenter: MainContract.MainPresenter) {
     this.presenter = presenter
   }
 
@@ -78,10 +78,10 @@ class MainActivity : AppCompatActivity(), IMainView, GifAdapter.OnItemClickListe
     adapter.clear()
   }
 
-  override fun addImages(response: RiffsyResponseDto) {
-    next = response.page
+  override fun addImages(riffsyResponseDto: RiffsyResponseDto) {
+    next = riffsyResponseDto.page
 
-    response.results?.forEach {
+    riffsyResponseDto.results?.forEach {
       val url = it.media?.first()?.gif?.url
 
       adapter.add(ImageInfoModel(url, null))

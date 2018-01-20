@@ -13,8 +13,8 @@ import dagger.Component
  */
 @PerActivity
 @Component(
-  dependencies = arrayOf(AppComponent::class),
-  modules = arrayOf(NetModule::class, RiffsyModule::class, LeakCanaryModule::class))
+  dependencies = [AppComponent::class],
+  modules = [NetModule::class, RiffsyModule::class, LeakCanaryModule::class])
 interface ActivityComponent {
   // Injections
   fun inject(mainActivity: MainActivity)
