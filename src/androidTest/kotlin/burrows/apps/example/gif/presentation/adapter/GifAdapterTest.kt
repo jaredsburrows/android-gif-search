@@ -169,7 +169,7 @@ class GifAdapterTest : TestBase() {
     assertThat(sut.getItem(0)).isEqualTo(imageInfoModel2)
   }
 
-  class TestOnItemClickListener : OnItemClickListener {
+  private class TestOnItemClickListener : OnItemClickListener {
     override fun onClick(imageInfoModel: ImageInfoModel) {
     }
   }
