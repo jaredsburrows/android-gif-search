@@ -7,7 +7,7 @@ import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
+import burrows.apps.example.gif.data.repository.ImageApiRepository
 import burrows.apps.example.gif.presentation.adapter.GifAdapter.OnItemClickListener
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 import com.google.common.truth.Truth.assertThat

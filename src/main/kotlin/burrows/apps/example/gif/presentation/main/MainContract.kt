@@ -1,6 +1,6 @@
 package burrows.apps.example.gif.presentation.main
 
-import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
+import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import burrows.apps.example.gif.presentation.BasePresenter
 import burrows.apps.example.gif.presentation.BaseView
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
@@ -9,13 +9,13 @@ import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 interface MainContract {
-  interface MainPresenter : BasePresenter {
+  interface Presenter : BasePresenter {
     fun clearImages()
     fun loadTrendingImages(next: Double?)
     fun loadSearchImages(searchString: String, next: Double?)
   }
 
-  interface MainView : BaseView<MainPresenter> {
+  interface View : BaseView<Presenter> {
     fun clearImages()
     fun addImages(riffsyResponseDto: RiffsyResponseDto)
     fun showDialog(imageInfoModel: ImageInfoModel)

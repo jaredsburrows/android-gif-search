@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import burrows.apps.example.gif.R
-import burrows.apps.example.gif.data.rest.repository.ImageApiRepository
+import burrows.apps.example.gif.data.repository.ImageApiRepository
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -39,9 +39,8 @@ class GifAdapter(
     repository.load(imageInfoModel.url)
       .thumbnail(repository.load(imageInfoModel.previewUrl))
       .listener(object : RequestListener<GifDrawable> {
-        override fun onResourceReady(resource: GifDrawable?, model: Any?,
-                                     target: Target<GifDrawable>?, dataSource: DataSource?,
-                                     isFirstResource: Boolean): Boolean {
+        override fun onResourceReady(resource: GifDrawable?, model: Any?, target: Target<GifDrawable>?,
+                                     dataSource: DataSource?, isFirstResource: Boolean): Boolean {
           // Hide progressbar
           holder.itemView.gifProgress.visibility = View.GONE
           if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")

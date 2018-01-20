@@ -1,7 +1,6 @@
-package burrows.apps.example.gif.data.rest.repository
+package burrows.apps.example.gif.data.repository
 
-import burrows.apps.example.gif.data.rest.model.RiffsyResponseDto
-import burrows.apps.example.gif.data.rest.repository.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
+import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import io.reactivex.observers.TestObserver
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -58,7 +57,7 @@ class RiffsyApiClientTest : TestBase() {
     val observer = TestObserver<RiffsyResponseDto>()
 
     // Act
-    val observable = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
+    val observable = sut.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
     val response = observable.blockingFirst()
     observer.assertNoErrors()
 
@@ -72,7 +71,7 @@ class RiffsyApiClientTest : TestBase() {
     val observer = TestObserver<RiffsyResponseDto>()
 
     // Act
-    val observable = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
+    val observable = sut.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
     val response = observable.blockingFirst()
     observer.assertNoErrors()
 
@@ -86,7 +85,7 @@ class RiffsyApiClientTest : TestBase() {
     val observer = TestObserver<RiffsyResponseDto>()
 
     // Act
-    val observable = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
+    val observable = sut.getSearchResults("hello", RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
     val response = observable.blockingFirst()
     observer.assertNoErrors()
 
@@ -100,7 +99,7 @@ class RiffsyApiClientTest : TestBase() {
     val observer = TestObserver<RiffsyResponseDto>()
 
     // Act
-    val observable = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
+    val observable = sut.getSearchResults("hello", RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
     val response = observable.blockingFirst()
     observer.assertNoErrors()
 

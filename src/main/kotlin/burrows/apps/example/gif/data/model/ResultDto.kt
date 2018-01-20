@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.data.rest.model
+package burrows.apps.example.gif.data.model
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
