@@ -41,7 +41,7 @@ import kotlinx.android.synthetic.main.dialog_preview.view.*
  */
 class MainActivity : DaggerAppCompatActivity(), MainContract.View, GifAdapter.OnItemClickListener {
   companion object {
-    private val TAG = "MainActivity"
+    private const val TAG = "MainActivity"
     private const val PORTRAIT_COLUMNS = 3
     private const val VISIBLE_THRESHOLD = 5
   }

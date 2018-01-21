@@ -25,7 +25,7 @@ class GifAdapter(
   private val onItemClickListener: GifAdapter.OnItemClickListener,
   private val repository: ImageApiRepository) : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
   companion object {
-    private val TAG = "GifAdapter"
+    private const val TAG = "GifAdapter"
   }
   private val data = arrayListOf<ImageInfoModel>()
 
