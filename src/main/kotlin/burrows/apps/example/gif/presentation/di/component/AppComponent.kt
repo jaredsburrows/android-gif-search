@@ -1,32 +1,25 @@
 package burrows.apps.example.gif.presentation.di.component
 
 import android.app.Application
-import android.content.Context
 import burrows.apps.example.gif.App
+import burrows.apps.example.gif.presentation.di.module.ActivityBuilderModule
 import burrows.apps.example.gif.presentation.di.module.AppModule
+import dagger.BindsInstance
 import dagger.Component
-
+import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 /**
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 @Singleton
-@Component(modules = [AppModule::class])
-interface AppComponent {
-  // Injections
-  fun inject(app: App)
-
-  // Expose to subgraphs
-  fun application(): Application
-  fun context(): Context
-
-  // Setup components dependencies and modules
-  companion object {
-    fun init(application: Application): AppComponent {
-      return DaggerAppComponent.builder()
-        .appModule(AppModule(application))
-        .build()
-    }
+@Component(modules = [AndroidSupportInjectionModule::class, AppModule::class, ActivityBuilderModule::class])
+interface AppComponent : AndroidInjector<App> {
+  @Component.Builder
+  interface Builder {
+    @BindsInstance
+    fun application(application: Application): AppComponent.Builder
+    fun build(): AppComponent
   }
 }

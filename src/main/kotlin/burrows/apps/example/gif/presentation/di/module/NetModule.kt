@@ -2,7 +2,6 @@ package burrows.apps.example.gif.presentation.di.module
 
 import android.app.Application
 import burrows.apps.example.gif.BuildConfig
-import burrows.apps.example.gif.presentation.di.scope.PerActivity
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Rfc3339DateJsonAdapter
 import dagger.Module
@@ -31,31 +30,24 @@ class NetModule {
     private const val CLIENT_CACHE_DIRECTORY = "http"
   }
 
-  @Provides @PerActivity fun providesCache(application: Application): Cache
-    = Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
+  @Provides fun providesCache(application: Application): Cache = Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
 
-  @Provides @PerActivity fun providesMoshi(): Moshi {
-    return Moshi.Builder()
-      .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
-      .build()
-  }
+  @Provides fun providesMoshi(): Moshi = Moshi.Builder()
+    .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
+    .build()
 
-  @Provides @PerActivity fun providesOkHttpClient(cache: Cache): OkHttpClient {
-    return OkHttpClient.Builder()
-      .addInterceptor(HttpLoggingInterceptor()
-        .setLevel(if (BuildConfig.DEBUG) Level.BODY else Level.NONE))
-      .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
-      .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
-      .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
-      .cache(cache)
-      .build()
-  }
+  @Provides fun providesOkHttpClient(cache: Cache): OkHttpClient = OkHttpClient.Builder()
+    .addInterceptor(HttpLoggingInterceptor()
+      .setLevel(if (BuildConfig.DEBUG) Level.BODY else Level.NONE))
+    .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+    .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+    .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+    .cache(cache)
+    .build()
 
-  @Provides @PerActivity fun providesRetrofit(moshi: Moshi,
-                                              okHttpClient: OkHttpClient): Retrofit.Builder {
-    return Retrofit.Builder()
-      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-      .addConverterFactory(MoshiConverterFactory.create(moshi))
-      .client(okHttpClient)
-  }
+  @Provides fun providesRetrofit(moshi: Moshi,
+                                 okHttpClient: OkHttpClient): Retrofit.Builder = Retrofit.Builder()
+    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .client(okHttpClient)
 }

@@ -1,6 +1,5 @@
 package burrows.apps.example.gif.presentation.main
 
-import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
@@ -16,13 +15,7 @@ import android.support.test.filters.SmallTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
-import burrows.apps.example.gif.App
 import burrows.apps.example.gif.R
-import burrows.apps.example.gif.presentation.di.component.DaggerActivityComponent
-import burrows.apps.example.gif.presentation.di.component.DaggerAppComponent
-import burrows.apps.example.gif.presentation.di.module.AppModule
-import burrows.apps.example.gif.presentation.di.module.RiffsyModule
-import test.launchActivity
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -34,6 +27,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import test.TestBase
+import test.launchActivity
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 /**
@@ -42,9 +36,6 @@ import java.net.HttpURLConnection.HTTP_NOT_FOUND
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest : TestBase() {
-  companion object {
-    private const val MOCK_WEB_SERVER_BASE_URL = "http://localhost:8080"
-  }
   private val server = MockWebServer()
   @get:Rule val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java, true, false)
 
@@ -52,15 +43,6 @@ class MainActivityTest : TestBase() {
     super.setUp()
     server.start(MOCK_SERVER_PORT)
     server.setDispatcher(dispatcher)
-
-    val app = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as App
-    val daggerActivityComponent = DaggerActivityComponent.builder()
-      .appComponent(DaggerAppComponent.builder()
-        .appModule(AppModule(app))
-        .build())
-      .riffsyModule(RiffsyModule(MOCK_WEB_SERVER_BASE_URL))
-      .build()
-    app.activityComponent = daggerActivityComponent
   }
 
   @After override fun tearDown() {

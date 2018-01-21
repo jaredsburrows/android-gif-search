@@ -12,7 +12,8 @@ tasks.withType<JavaCompile> {
       add("-Xlint:-options")           // Turn off "missing" bootclasspath warning
       add("-Xlint:-path")              // Turn off warning - annotation processing
       add("-Xlint:-processing")        // Turn off warning about not claiming annotations
-      add("-Xlint:-classfile")         // Ignore Java 8 method param meta data 
+      add("-Xlint:-classfile")         // Ignore Java 8 method param meta data
+      add("-Xlint:-unchecked")         // Dagger 2 unchecked issues
       add("-Werror")                   // Turn warnings into errors
     }
     encoding = "utf-8"

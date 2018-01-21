@@ -107,6 +107,8 @@ android {
     getByName("debug") {
       if (extra["ci"] as Boolean) isTestCoverageEnabled = true                                // https://issuetracker.google.com/issues/37019591
       applicationIdSuffix = ".debug"
+
+      buildConfigField("String", "BASE_URL", if (extra["ci"] as Boolean) "\"http://localhost:8080\"" else "\"https://api.riffsy.com\"")
     }
 
     // Apply fake signing config to release to test "assembleRelease" locally
@@ -116,6 +118,8 @@ android {
       proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))               // Optimize APK size - use optimized proguard rules
       proguardFile(file("config/proguard/proguard-rules.txt"))
       signingConfig = signingConfigs.getByName("debug")
+
+      buildConfigField("String", "BASE_URL", "\"https://api.riffsy.com\"")
     }
   }
 
@@ -175,9 +179,12 @@ dependencies {
   implementation(extra["glide"] as String)
   implementation(extra["okhttp3Integration"] as String)
   implementation(extra["dagger"] as String)
+  implementation(extra["daggerAndroid"] as String)
+  implementation(extra["daggerAndroidSupport"] as String)
   implementation(extra["multidex"] as String)
 
   kapt(extra["daggerCompiler"] as String)
+  kapt(extra["daggerAndroidProcessor"] as String)
   kapt(extra["glideCompiler"] as String)
 
   debugImplementation(extra["leakcanaryAndroid"] as String)
@@ -210,6 +217,6 @@ kapt {
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     // TODO Instrumentation run failed due to 'java.lang.IllegalAccessError'
-//    jvmTarget = extra["javaVersion"] as String
+//    jvmTarget = rootProject.extra["javaVersion"] as String
   }
 }
