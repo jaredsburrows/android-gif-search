@@ -11,15 +11,15 @@ import io.reactivex.disposables.CompositeDisposable
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class MainPresenter(val view: MainContract.View,
-                    val repository: RiffsyApiClient,
+                    val riffsyApiClient: RiffsyApiClient,
                     val provider: BaseSchedulerProvider) : MainContract.Presenter {
   companion object {
-    private val TAG = "MainPresenter"
+    private const val TAG = "MainPresenter"
   }
   private val disposable = CompositeDisposable()
 
   init {
-    this.view.setPresenter(this)
+    view.setPresenter(this)
   }
 
   override fun subscribe() {}
@@ -37,7 +37,7 @@ class MainPresenter(val view: MainContract.View,
    * Load gif trending images.
    */
   override fun loadTrendingImages(next: Double?) {
-    loadImages(repository.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
+    loadImages(riffsyApiClient.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
   }
 
   /**
@@ -46,7 +46,7 @@ class MainPresenter(val view: MainContract.View,
    * @param searchString User input.
    */
   override fun loadSearchImages(searchString: String, next: Double?) {
-    loadImages(repository.getSearchResults(searchString, RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
+    loadImages(riffsyApiClient.getSearchResults(searchString, RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
   }
 
   /**

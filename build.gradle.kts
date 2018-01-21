@@ -91,6 +91,7 @@ android {
     isCheckAllWarnings = true
     isWarningsAsErrors = true
     lintConfig = file("${project.rootDir}/config/lint/lint.xml")
+    isCheckReleaseBuilds = false
   }
 
   // Add "debug.keystore" so developers can share APKs with same signatures locally
