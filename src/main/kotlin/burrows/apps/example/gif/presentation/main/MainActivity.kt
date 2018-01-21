@@ -1,7 +1,6 @@
 package burrows.apps.example.gif.presentation.main
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDialog
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,7 +13,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import burrows.apps.example.gif.App
 import burrows.apps.example.gif.R
 import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.repository.ImageApiRepository
@@ -30,6 +28,8 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.squareup.leakcanary.RefWatcher
+import dagger.android.AndroidInjection
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_preview.view.*
@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.dialog_preview.view.*
  *
  * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
-class MainActivity : AppCompatActivity(), MainContract.View, GifAdapter.OnItemClickListener {
+class MainActivity : DaggerAppCompatActivity(), MainContract.View, GifAdapter.OnItemClickListener {
   companion object {
     private val TAG = "MainActivity"
     private const val PORTRAIT_COLUMNS = 3
@@ -79,12 +79,12 @@ class MainActivity : AppCompatActivity(), MainContract.View, GifAdapter.OnItemCl
   }
 
   override fun addImages(riffsyResponseDto: RiffsyResponseDto) {
-    next = riffsyResponseDto.page
+    next = riffsyResponseDto.next
 
     riffsyResponseDto.results?.forEach {
       val url = it.media?.first()?.gif?.url
 
-      adapter.add(ImageInfoModel(url, null))
+      adapter.add(ImageInfoModel(url = url))
 
       if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $url")
     }
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity(), MainContract.View, GifAdapter.OnItemCl
     setContentView(R.layout.activity_main)
 
     // Injection dependencies
-    (application as App).activityComponent.inject(this)
+    AndroidInjection.inject(this)
 
     MainPresenter(this, client, schedulerProvider)
 

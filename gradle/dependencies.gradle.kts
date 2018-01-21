@@ -48,6 +48,8 @@ extra["kotlinReflect"]              = "org.jetbrains.kotlin:kotlin-reflect:$kotl
 extra["rxAndroid"]                  = "io.reactivex.rxjava2:rxandroid:2.0.1"
 extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.1.8"
 extra["dagger"]                     = "com.google.dagger:dagger:$daggerVersion"
+extra["daggerAndroid"]              = "com.google.dagger:dagger-android:$daggerVersion"
+extra["daggerAndroidSupport"]       = "com.google.dagger:dagger-android-support:$daggerVersion"
 extra["okhttp"]                     = "com.squareup.okhttp3:okhttp:$okHttpVersion"
 extra["loggingInterceptor"]         = "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
 extra["retrofit"]                   = "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -65,6 +67,7 @@ extra["leakcanaryAndroidNoOp"]      = "com.squareup.leakcanary:leakcanary-androi
 
 // kapt
 extra["daggerCompiler"]             = "com.google.dagger:dagger-compiler:$daggerVersion"
+extra["daggerAndroidProcessor"]     = "com.google.dagger:dagger-android-processor:$daggerVersion"
 extra["glideCompiler"]              = "com.github.bumptech.glide:compiler:$glideVersion"
 
 // androidTestImplementation
