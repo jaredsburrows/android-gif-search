@@ -126,7 +126,7 @@ android {
 
   testOptions {
     animationsDisabled = true
-    unitTests(delegateClosureOf<TestOptions.UnitTestOptions> {
+    unitTests.apply {
       isReturnDefaultValues = true
       isIncludeAndroidResources = true
       all(KotlinClosure1<Any, Test>({
@@ -136,7 +136,7 @@ android {
             .isIncludeNoLocationClasses = true
         }
       }, this))
-    })
+    }
     setExecution("ANDROID_TEST_ORCHESTRATOR")
   }
 
