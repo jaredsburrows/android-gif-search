@@ -168,6 +168,8 @@ configurations.all {
 dependencies {
   implementation(extra["design"] as String)
   implementation(extra["cardviewv7"] as String)
+  implementation(extra["multidex"] as String)
+  implementation(extra["constraintLayout"] as String)
   implementation(extra["kotlinStdlib"] as String)
   implementation(extra["okhttp"] as String)
   implementation(extra["loggingInterceptor"] as String)
@@ -182,7 +184,6 @@ dependencies {
   implementation(extra["dagger"] as String)
   implementation(extra["daggerAndroid"] as String)
   implementation(extra["daggerAndroidSupport"] as String)
-  implementation(extra["multidex"] as String)
 
   kapt(extra["daggerCompiler"] as String)
   kapt(extra["daggerAndroidProcessor"] as String)
@@ -207,7 +208,6 @@ dependencies {
   testImplementation(extra["mockitoInline"] as String)
   testImplementation(extra["leakcanaryAndroidNoOp"] as String)
   testImplementation(extra["mockwebserver"] as String)
-  testImplementation(extra["equalsverifier"] as String)
   testImplementation(extra["reflections"] as String)
 }
 

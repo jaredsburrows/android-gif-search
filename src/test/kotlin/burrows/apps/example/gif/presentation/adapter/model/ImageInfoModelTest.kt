@@ -1,7 +1,5 @@
 package burrows.apps.example.gif.presentation.adapter.model
 
-import nl.jqno.equalsverifier.EqualsVerifier.forClass
-import nl.jqno.equalsverifier.Warning
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import test.TestBase
@@ -18,12 +16,5 @@ class ImageInfoModelTest : TestBase() {
 
   @Test fun testGetUrlPreview() {
     assertThat(sut.previewUrl).isEqualTo(STRING_UNIQUE2)
-  }
-
-  @Test fun testEqualsGashCode() {
-    forClass(ImageInfoModel::class.java)
-      .withPrefabValues(ImageInfoModel::class.java, ImageInfoModel(), ImageInfoModel().apply { url = STRING_UNIQUE })
-      .suppress(Warning.NONFINAL_FIELDS)
-      .verify()
   }
 }

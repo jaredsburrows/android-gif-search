@@ -117,10 +117,9 @@ class MainActivity : DaggerAppCompatActivity(), MainContract.View, GifAdapter.On
 
     MainPresenter(this, client, schedulerProvider)
 
-    // Setup Toolbar
-    toolBar.setNavigationIcon(R.mipmap.ic_launcher)
-    toolBar.setTitle(R.string.main_screen_title)
-    setSupportActionBar(toolBar)
+    // Setup
+    toolbar.setTitle(R.string.main_screen_title)
+    setSupportActionBar(toolbar)
 
     layoutManager = GridLayoutManager(this, PORTRAIT_COLUMNS)
     itemOffsetDecoration = GifItemDecoration(
