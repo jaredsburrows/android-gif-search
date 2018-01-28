@@ -33,6 +33,7 @@ extra["coverallsGradlePlugin"]      = "org.kt3k.gradle.plugin:coveralls-gradle-p
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.17.0"
 extra["gradleLicensePlugin"]        = "com.jaredsburrows:gradle-license-plugin:0.7.0"
 extra["detektGradlePlugin"]         = "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC4-3"
+extra["gradleSpoonPlugin"]          = "com.jaredsburrows:gradle-spoon-plugin:1.0.0"
 
 // implementation
 extra["design"]                     = "com.android.support:design:$supportLibraryVersion"
@@ -77,6 +78,7 @@ extra["espressoIntents"]            = "com.android.support.test.espresso:espress
 extra["espressoContrib"]            = "com.android.support.test.espresso:espresso-contrib:$espressoVersion"
 extra["testingSupportLib"]          = "com.android.support.test:testing-support-lib:0.1"
 extra["runner"]                     = "com.android.support.test:runner:1.0.1"
+extra["spoonClient"]                = "com.squareup.spoon:spoon-client:2.0.0-SNAPSHOT"
 
 // androidTestUtil
 extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0.1"
