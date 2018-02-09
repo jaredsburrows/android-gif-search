@@ -12,7 +12,7 @@ val glideVersion                    = "4.6.1"
 val jacocoVersion                   = "0.7.4.201502262128"
 
 // android plugin
-extra["minSdkVersion"]              = 25
+extra["minSdkVersion"]              = 19
 extra["targetSdkVersion"]           = 27
 extra["compileSdkVersion"]          = 27
 extra["buildToolsVersion"]          = "27.0.3"

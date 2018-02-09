@@ -63,7 +63,6 @@ android {
     testInstrumentationRunnerArgument("disableAnalytics", "true")
     resConfigs("en")
     vectorDrawables.useSupportLibrary = true
-    multiDexEnabled = true
   }
 
   compileOptions {
@@ -207,5 +206,6 @@ tasks.withType<KotlinCompile> {
   kotlinOptions {
     // TODO Instrumentation run failed due to 'java.lang.IllegalAccessError'
 //    jvmTarget = rootProject.extra["javaVersion"] as String
+    allWarningsAsErrors = true
   }
 }
