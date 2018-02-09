@@ -36,8 +36,6 @@ import kotlinx.android.synthetic.main.dialog_preview.view.*
 
 /**
  * Main activity that will load our Fragments via the Support Fragment Manager.
- *
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class MainActivity : DaggerAppCompatActivity(), MainContract.View, GifAdapter.OnItemClickListener {
   companion object {

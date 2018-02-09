@@ -16,9 +16,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import test.TestBase
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class GifAdapterTest : TestBase() {

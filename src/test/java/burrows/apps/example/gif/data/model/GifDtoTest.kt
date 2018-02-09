@@ -4,9 +4,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import test.TestBase
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 class GifDtoTest : TestBase() {
   private var sut = GifDto().apply { url = STRING_UNIQUE; preview = STRING_UNIQUE2 }
 

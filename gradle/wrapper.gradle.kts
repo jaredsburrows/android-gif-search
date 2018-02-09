@@ -4,6 +4,6 @@ task<Wrapper>("wrapper") {
   description = "Generate Gradle wrapper."
   group = "build"
 
-  gradleVersion = "4.4.1"
+  gradleVersion = "4.5"
   distributionType = Wrapper.DistributionType.ALL
 }

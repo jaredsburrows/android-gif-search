@@ -30,9 +30,6 @@ import test.TestBase
 import test.launchActivity
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest : TestBase() {

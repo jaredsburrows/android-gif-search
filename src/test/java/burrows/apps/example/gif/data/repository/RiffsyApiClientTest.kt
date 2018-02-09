@@ -18,9 +18,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import test.TestBase
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 class RiffsyApiClientTest : TestBase() {
   private val server = MockWebServer()
   private lateinit var sut: RiffsyApiClient

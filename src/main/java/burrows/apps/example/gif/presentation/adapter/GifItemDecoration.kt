@@ -6,8 +6,6 @@ import android.view.View
 
 /**
  * RecyclerView ItemDecoration for custom space divider.
- *
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class GifItemDecoration(private val offSet: Int, private val columns: Int) : RecyclerView.ItemDecoration() {
   override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {

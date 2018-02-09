@@ -5,9 +5,6 @@ import android.content.Context
 import dagger.Binds
 import dagger.Module
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 @Module(includes = [LeakCanaryModule::class])
 abstract class AppModule {
   @Binds

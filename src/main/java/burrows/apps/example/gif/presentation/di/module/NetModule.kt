@@ -19,8 +19,6 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Creates services based on Retrofit interfaces.
- *
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 @Module
 class NetModule {

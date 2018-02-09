@@ -18,8 +18,6 @@ import kotlinx.android.synthetic.main.list_item.view.*
 
 /**
  * RecyclerView adapter for handling Gif Images in a Grid format.
- *
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 class GifAdapter(
   private val onItemClickListener: GifAdapter.OnItemClickListener,
@@ -87,14 +85,8 @@ class GifAdapter(
    */
   override fun getItemId(position: Int): Long = getItem(position).url?.hashCode()?.toLong() ?: 0L
 
-  /**
-   * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
-   */
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-  /**
-   * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
-   */
   interface OnItemClickListener {
     fun onClick(imageInfoModel: ImageInfoModel)
   }

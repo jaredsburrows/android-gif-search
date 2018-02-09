@@ -9,8 +9,6 @@ import retrofit2.http.Query
  * Riffsy Api Service for getting "trending" and "search" api getResults.
  *
  * Custom Api interfaces for the Riffsy Api.
- *
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 interface RiffsyApiClient {
   companion object {

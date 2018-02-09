@@ -5,9 +5,6 @@ import io.reactivex.schedulers.Schedulers
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 class SchedulerProviderTest {
   private val sut = SchedulerProvider()
 
