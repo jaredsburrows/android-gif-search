@@ -17,9 +17,6 @@ import org.mockito.MockitoAnnotations.initMocks
 import test.ImmediateSchedulerProvider
 import test.TestBase
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 class MainPresenterTest : TestBase() {
   private val provider = ImmediateSchedulerProvider()
   @Mock private lateinit var view: MainContract.View

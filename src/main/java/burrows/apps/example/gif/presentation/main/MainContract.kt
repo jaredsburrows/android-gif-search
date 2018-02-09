@@ -5,9 +5,6 @@ import burrows.apps.example.gif.presentation.BasePresenter
 import burrows.apps.example.gif.presentation.BaseView
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 interface MainContract {
   interface Presenter : BasePresenter {
     fun clearImages()

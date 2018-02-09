@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 buildscript {
   rootProject.apply { from(rootProject.file("gradle/dependencies.gradle.kts")) }
   rootProject.extra["ci"] = rootProject.hasProperty("ci")
-  rootProject.extra["lollipop"] = rootProject.hasProperty("lollipop")
 
   repositories {
     google()
@@ -57,14 +56,13 @@ android {
     applicationId = "burrows.apps.example.gif"
     versionCode = 1
     versionName = "1.0"
-    minSdkVersion(if (extra["lollipop"] as Boolean) 21 else extra["minSdkVersion"] as Int) // Optimize build speed - build with minSdk 21 if using multidex
+    minSdkVersion(extra["minSdkVersion"] as Int)
     targetSdkVersion(extra["targetSdkVersion"] as Int)
     testApplicationId = "burrows.apps.example.gif.test"
-    testInstrumentationRunner = "test.CustomTestRunner"
+    testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     testInstrumentationRunnerArgument("disableAnalytics", "true")
-    resConfigs("en")                                                                    // Optimize APK size - keep only english resource files for now
-    vectorDrawables.useSupportLibrary = true                                            // Optimize APK size - use vector drawables
-    multiDexEnabled = true
+    resConfigs("en")
+    vectorDrawables.useSupportLibrary = true
   }
 
   compileOptions {
@@ -72,10 +70,8 @@ android {
     setTargetCompatibility(extra["javaVersion"])
   }
 
-  // Optimize ci build speed - disable dexing on ci
   dexOptions.preDexLibraries = !(extra["ci"] as Boolean)
 
-  // Need this to help IDE recognize Kotlin
   sourceSets {
     val commonTest = "src/commonTest/java"
     getByName("androidTest").java.srcDirs("src/androidTest/java", commonTest)
@@ -91,7 +87,6 @@ android {
     isCheckReleaseBuilds = false
   }
 
-  // Add "debug.keystore" so developers can share APKs with same signatures locally
   signingConfigs {
     getByName("debug") {
       storeFile = file("config/signing/debug.keystore")
@@ -103,7 +98,7 @@ android {
 
   buildTypes {
     getByName("debug") {
-      if (extra["ci"] as Boolean) isTestCoverageEnabled = true                                // https://issuetracker.google.com/issues/37019591
+      if (extra["ci"] as Boolean) isTestCoverageEnabled = true // https://issuetracker.google.com/issues/37019591
       applicationIdSuffix = ".debug"
 
       buildConfigField("String", "BASE_URL", if (extra["ci"] as Boolean) "\"http://localhost:8080\"" else "\"https://api.riffsy.com\"")
@@ -111,9 +106,9 @@ android {
 
     // Apply fake signing config to release to test "assembleRelease" locally
     getByName("release") {
-      isMinifyEnabled = true                                                                    // Optimize APK size - remove/optimize DEX file(s)
-      isShrinkResources = true                                                                  // Optimize APK size - remove unused resources
-      proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))               // Optimize APK size - use optimized proguard rules
+      isMinifyEnabled = true
+      isShrinkResources = true
+      proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))
       proguardFile(file("config/proguard/proguard-rules.txt"))
       signingConfig = signingConfigs.getByName("debug")
 
@@ -148,15 +143,11 @@ android {
   }
 }
 
-// Resolves dependency versions across test and production APKs, specifically, transitive
-// dependencies. This is required since Espresso internally has a dependency on support-annotations.
 configurations.all {
   resolutionStrategy {
     force(extra["kotlinStdlib"] as String)
     force(extra["kotlinReflect"] as String)
     force(extra["supportAnnotations"] as String)
-    force(extra["multidex"] as String)
-    force(extra["multidexInstrumentation"] as String)
     force(extra["orgJacocoAgent"] as String)
     force(extra["orgJacocoAnt"] as String)
   }
@@ -165,7 +156,6 @@ configurations.all {
 dependencies {
   implementation(extra["design"] as String)
   implementation(extra["cardviewv7"] as String)
-  implementation(extra["multidex"] as String)
   implementation(extra["constraintLayout"] as String)
   implementation(extra["kotlinStdlib"] as String)
   implementation(extra["okhttp"] as String)
@@ -216,5 +206,6 @@ tasks.withType<KotlinCompile> {
   kotlinOptions {
     // TODO Instrumentation run failed due to 'java.lang.IllegalAccessError'
 //    jvmTarget = rootProject.extra["javaVersion"] as String
+    allWarningsAsErrors = true
   }
 }

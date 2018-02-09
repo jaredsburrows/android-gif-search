@@ -4,9 +4,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import test.TestBase
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 class RiffsyResponseDtoTest : TestBase() {
   companion object {
     private val TEST_RESULTS = arrayListOf<ResultDto>()

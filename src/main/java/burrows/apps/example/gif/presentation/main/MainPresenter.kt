@@ -7,9 +7,6 @@ import burrows.apps.example.gif.presentation.BaseSchedulerProvider
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 class MainPresenter(val view: MainContract.View,
                     val riffsyApiClient: RiffsyApiClient,
                     val provider: BaseSchedulerProvider) : MainContract.Presenter {

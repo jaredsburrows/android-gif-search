@@ -12,8 +12,6 @@ import java.util.UUID.randomUUID
 
 /**
  * JUnit Tests.
- *
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
  */
 @Suppress("unused")
 abstract class TestBase {

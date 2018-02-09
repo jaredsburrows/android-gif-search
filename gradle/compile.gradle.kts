@@ -1,6 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-
-// Turn on all warnings and errors
 tasks.withType<JavaCompile> {
   sourceCompatibility = rootProject.extra["javaVersion"] as String
   targetCompatibility = rootProject.extra["javaVersion"] as String
@@ -22,10 +19,9 @@ tasks.withType<JavaCompile> {
   }
 }
 
-// Turn on logging for all tests, filter to show failures/skips only
 tasks.withType<Test> {
   testLogging {
-    exceptionFormat = TestExceptionFormat.FULL
+    setExceptionFormat("full")
     showCauses = true
     showExceptions = true
     showStackTraces = true

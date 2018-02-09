@@ -17,9 +17,6 @@ import org.reflections.util.ConfigurationBuilder
 import org.reflections.util.FilterBuilder
 import java.lang.reflect.Modifier
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 class DtoConstructorTest {
   companion object {
     private const val MODEL_PACKAGE = "burrows.apps.example.gif.data.rest.model"

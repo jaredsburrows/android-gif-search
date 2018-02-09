@@ -6,9 +6,6 @@ import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 
-/**
- * @author [Jared Burrows](mailto:jaredsburrows@gmail.com)
- */
 @Module
 class RiffsyModule {
   @Provides fun providesRiffsyApi(retrofit: Retrofit.Builder): RiffsyApiClient = retrofit
