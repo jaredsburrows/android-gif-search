@@ -9,7 +9,7 @@ buildscript {
   repositories {
     google()
     jcenter()
-    maven { setUrl("https://plugins.gradle.org/m2/") }
+    gradlePluginPortal()
   }
 
   dependencies {
@@ -52,7 +52,6 @@ apply {
 
 android {
   compileSdkVersion(extra["compileSdkVersion"] as Int)
-  buildToolsVersion(extra["buildToolsVersion"] as String)
 
   defaultConfig {
     applicationId = "burrows.apps.example.gif"
@@ -78,11 +77,9 @@ android {
 
   // Need this to help IDE recognize Kotlin
   sourceSets {
-    val commonTest = "src/commonTest/kotlin"
-    getByName("androidTest").java.srcDirs("src/androidTest/kotlin", commonTest)
-    getByName("debug").java.srcDirs("src/debug/kotlin")
-    getByName("main").java.srcDirs("src/main/kotlin")
-    getByName("test").java.srcDirs("src/test/kotlin", commonTest)
+    val commonTest = "src/commonTest/java"
+    getByName("androidTest").java.srcDirs("src/androidTest/java", commonTest)
+    getByName("test").java.srcDirs("src/test/java", commonTest)
   }
 
   lintOptions {
