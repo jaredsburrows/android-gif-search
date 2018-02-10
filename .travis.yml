@@ -36,17 +36,12 @@ before_script:
   - adb shell settings put global transition_animation_scale 0 &
   - adb shell settings put global animator_duration_scale 0 &
 
-  # For Multidex issue for devices API < 19
-  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-  - adb shell stop installd
-  - adb shell start installd
-
   # Wake up
   - adb shell input keyevent 82 &
 
 script:
   # Run all checks
-  - ./gradlew testDebug connectedDebugAndroidTest createDebugCoverageReport jacocoDebugReport coveralls -Pci -s --scan
+  - ./gradlew testDebug connectedDebugAndroidTest -Pci -s --scan
 
 branches:
   except:

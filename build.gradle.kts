@@ -20,10 +20,8 @@ buildscript {
     classpath(extra["buildScanPlugin"] as String)
     classpath(extra["dexcountGradlePlugin"] as String)
     classpath(extra["gradleAndroidApkSizePlugin"] as String)
-    classpath(extra["coverallsGradlePlugin"] as String)
     classpath(extra["gradleVersionsPlugin"] as String)
     classpath(extra["gradleLicensePlugin"] as String)
-    classpath(extra["detektGradlePlugin"] as String)
   }
 }
 
@@ -45,8 +43,6 @@ apply {
   plugin("com.github.ben-manes.versions")
   plugin("com.jaredsburrows.license")
   from(file("gradle/compile.gradle.kts"))
-  from(file("gradle/quality.gradle"))
-  from(file("gradle/wrapper.gradle.kts"))
 }
 
 android {
@@ -98,7 +94,6 @@ android {
 
   buildTypes {
     getByName("debug") {
-      if (extra["ci"] as Boolean) isTestCoverageEnabled = true // https://issuetracker.google.com/issues/37019591
       applicationIdSuffix = ".debug"
 
       buildConfigField("String", "BASE_URL", if (extra["ci"] as Boolean) "\"http://localhost:8080\"" else "\"https://api.riffsy.com\"")
@@ -121,13 +116,6 @@ android {
     unitTests.apply {
       isReturnDefaultValues = true
       isIncludeAndroidResources = true
-      all(KotlinClosure1<Any, Test>({
-        (this as Test).also { testTask ->
-          testTask.extensions
-            .getByType(JacocoTaskExtension::class.java)
-            .isIncludeNoLocationClasses = true
-        }
-      }, this))
     }
     setExecution("ANDROID_TEST_ORCHESTRATOR")
   }
@@ -148,8 +136,6 @@ configurations.all {
     force(extra["kotlinStdlib"] as String)
     force(extra["kotlinReflect"] as String)
     force(extra["supportAnnotations"] as String)
-    force(extra["orgJacocoAgent"] as String)
-    force(extra["orgJacocoAnt"] as String)
   }
 }
 
