@@ -7,9 +7,7 @@ val okHttpVersion                   = "3.9.1"
 val retrofitVersion                 = "2.3.0"
 val espressoVersion                 = "3.0.1"
 val leakCanaryVersion               = "1.5"
-val multidexVersion                 = "1.0.2"
 val glideVersion                    = "4.6.1"
-val jacocoVersion                   = "0.7.4.201502262128"
 
 // android plugin
 extra["minSdkVersion"]              = 19
@@ -29,10 +27,8 @@ extra["playPublisher"]              = "com.github.triplet.gradle:play-publisher:
 extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.11"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
-extra["coverallsGradlePlugin"]      = "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.17.0"
 extra["gradleLicensePlugin"]        = "com.jaredsburrows:gradle-license-plugin:0.8.1"
-extra["detektGradlePlugin"]         = "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC4-3"
 
 // implementation
 extra["design"]                     = "com.android.support:design:$supportLibraryVersion"
@@ -41,8 +37,6 @@ extra["supportv4"]                  = "com.android.support:support-v4:$supportLi
 extra["recyclerviewv7"]             = "com.android.support:recyclerview-v7:$supportLibraryVersion"
 extra["cardviewv7"]                 = "com.android.support:cardview-v7:$supportLibraryVersion"
 extra["supportAnnotations"]         = "com.android.support:support-annotations:$supportLibraryVersion"
-extra["multidex"]                   = "com.android.support:multidex:$multidexVersion"
-extra["multidexInstrumentation"]    = "com.android.support:multidex-instrumentation:$multidexVersion"
 extra["constraintLayout"]           = "com.android.support.constraint:constraint-layout:1.0.2"
 extra["kotlinStdlib"]               = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 extra["kotlinReflect"]              = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
@@ -88,9 +82,3 @@ extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["truth"]                      = "com.google.truth:truth:0.39"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 extra["reflections"]                = "org.reflections:reflections:0.9.11"
-
-// jacocoAgent/androidJacocoAgent
-extra["orgJacocoAgent"]             = "org.jacoco:org.jacoco.agent:$jacocoVersion"
-
-// jacocoAnt/androidJacocoAnt
-extra["orgJacocoAnt"]               = "org.jacoco:org.jacoco.ant:$jacocoVersion"

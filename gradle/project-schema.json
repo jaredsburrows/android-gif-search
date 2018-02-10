@@ -56,8 +56,6 @@
             "debugWearBundling",
             "default",
             "implementation",
-            "jacocoAgent",
-            "jacocoAnt",
             "kapt",
             "kaptAndroidTest",
             "kaptAndroidTestDebug",
@@ -130,9 +128,7 @@
             "play": "de.triplet.gradle.play.PlayPublisherPluginExtension",
             "dexcount": "com.getkeepsafe.dexcount.DexMethodCountExtension",
             "apkSize": "com.vanniktech.android.apk.size.ApkSizeExtension",
-            "jacoco": "org.gradle.testing.jacoco.plugins.JacocoPluginExtension",
-            "coveralls": "org.kt3k.gradle.plugin.CoverallsPluginExtension",
-            "detekt": "io.gitlab.arturbosch.detekt.extensions.DetektExtension"
+            "licenseReport": "com.jaredsburrows.license.LicenseReportOptions"
         }
     }
 }
