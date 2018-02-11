@@ -6,7 +6,7 @@ val daggerVersion                   = "2.14.1"
 val okHttpVersion                   = "3.9.1"
 val retrofitVersion                 = "2.3.0"
 val espressoVersion                 = "3.0.1"
-val leakCanaryVersion               = "1.5"
+val leakCanaryVersion               = "1.5.4"
 val glideVersion                    = "4.6.1"
 
 // android plugin
@@ -77,7 +77,7 @@ extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:2.13.0"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:2.15.0"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["truth"]                      = "com.google.truth:truth:0.39"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:$okHttpVersion"

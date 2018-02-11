@@ -47,6 +47,7 @@ apply {
 
 android {
   compileSdkVersion(extra["compileSdkVersion"] as Int)
+  buildToolsVersion(extra["buildToolsVersion"] as String)
 
   defaultConfig {
     applicationId = "burrows.apps.example.gif"
