@@ -182,9 +182,9 @@ class GifAdapter(
    * @return true if the data was modified by this operation, false otherwise.
    */
   fun remove(model: ImageInfoModel): Boolean {
-    return getLocation(model).let { location ->
+    return getLocation(model).let {
       data.remove(model).apply {
-        notifyItemRemoved(location)
+        notifyItemRemoved(it)
       }
     }
   }

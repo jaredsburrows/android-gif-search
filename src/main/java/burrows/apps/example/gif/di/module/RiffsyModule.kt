@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.presentation.di.module
+package burrows.apps.example.gif.di.module
 
 import burrows.apps.example.gif.BuildConfig
 import burrows.apps.example.gif.data.repository.RiffsyApiClient

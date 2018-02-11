@@ -1,8 +1,8 @@
 package burrows.apps.example.gif.presentation.main
 
-import burrows.apps.example.gif.presentation.di.module.LeakCanaryModule
-import burrows.apps.example.gif.presentation.di.module.NetModule
-import burrows.apps.example.gif.presentation.di.module.RiffsyModule
+import burrows.apps.example.gif.di.module.LeakCanaryModule
+import burrows.apps.example.gif.di.module.NetModule
+import burrows.apps.example.gif.di.module.RiffsyModule
 import dagger.Binds
 import dagger.Module
 

@@ -1,9 +1,9 @@
-package burrows.apps.example.gif.presentation.di.component
+package burrows.apps.example.gif.di.component
 
 import android.app.Application
 import burrows.apps.example.gif.App
-import burrows.apps.example.gif.presentation.di.module.ActivityBuilderModule
-import burrows.apps.example.gif.presentation.di.module.AppModule
+import burrows.apps.example.gif.di.module.ActivityBuilderModule
+import burrows.apps.example.gif.di.module.AppModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector

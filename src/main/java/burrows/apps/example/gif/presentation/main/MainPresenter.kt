@@ -3,7 +3,7 @@ package burrows.apps.example.gif.presentation.main
 import android.util.Log
 import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.repository.RiffsyApiClient
-import burrows.apps.example.gif.presentation.BaseSchedulerProvider
+import burrows.apps.example.gif.BaseSchedulerProvider
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 
