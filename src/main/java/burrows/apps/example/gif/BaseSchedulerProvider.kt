@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.presentation
+package burrows.apps.example.gif
 
 import io.reactivex.Scheduler
 

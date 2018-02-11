@@ -7,8 +7,12 @@ import android.view.View
 /**
  * RecyclerView ItemDecoration for custom space divider.
  */
-class GifItemDecoration(private val offSet: Int, private val columns: Int) : RecyclerView.ItemDecoration() {
-  override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+class GifItemDecoration(private val offSet: Int,
+                        private val columns: Int) : RecyclerView.ItemDecoration() {
+  override fun getItemOffsets(outRect: Rect,
+                              view: View,
+                              parent: RecyclerView,
+                              state: RecyclerView.State) {
     super.getItemOffsets(outRect, view, parent, state)
 
     val position = parent.getChildLayoutPosition(view)

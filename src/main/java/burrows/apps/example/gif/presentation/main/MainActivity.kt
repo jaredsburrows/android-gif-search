@@ -17,7 +17,7 @@ import burrows.apps.example.gif.R
 import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.repository.ImageApiRepository
 import burrows.apps.example.gif.data.repository.RiffsyApiClient
-import burrows.apps.example.gif.presentation.SchedulerProvider
+import burrows.apps.example.gif.SchedulerProvider
 import burrows.apps.example.gif.presentation.adapter.GifAdapter
 import burrows.apps.example.gif.presentation.adapter.GifItemDecoration
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel

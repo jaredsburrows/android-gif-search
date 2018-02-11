@@ -1,5 +1,6 @@
 package burrows.apps.example.gif.presentation
 
+import burrows.apps.example.gif.SchedulerProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import com.google.common.truth.Truth.assertThat

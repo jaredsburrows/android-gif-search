@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.presentation.di.module
+package burrows.apps.example.gif.di.module
 
 import android.app.Application
 import burrows.apps.example.gif.BuildConfig
@@ -28,7 +28,8 @@ class NetModule {
     private const val CLIENT_CACHE_DIRECTORY = "http"
   }
 
-  @Provides fun providesCache(application: Application): Cache = Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
+  @Provides fun providesCache(application: Application):
+    Cache = Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
 
   @Provides fun providesMoshi(): Moshi = Moshi.Builder()
     .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
