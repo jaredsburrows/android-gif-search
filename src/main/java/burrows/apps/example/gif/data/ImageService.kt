@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.data.repository
+package burrows.apps.example.gif.data
 
 import android.content.Context
 import burrows.apps.example.gif.R
@@ -9,7 +9,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestOptions
 import javax.inject.Inject
 
-class ImageApiRepository @Inject constructor(private val context: Context) {
+class ImageService @Inject constructor(private val context: Context) {
   private val imageHeight: Int = context.resources.getDimensionPixelSize(R.dimen.gif_image_width)
   private val imageWidth: Int
 

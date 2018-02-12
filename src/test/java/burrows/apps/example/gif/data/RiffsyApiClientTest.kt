@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.data.repository
+package burrows.apps.example.gif.data
 
 import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import io.reactivex.observers.TestObserver

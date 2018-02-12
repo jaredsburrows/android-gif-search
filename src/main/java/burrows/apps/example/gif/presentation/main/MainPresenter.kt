@@ -2,14 +2,14 @@ package burrows.apps.example.gif.presentation.main
 
 import android.util.Log
 import burrows.apps.example.gif.data.model.RiffsyResponseDto
-import burrows.apps.example.gif.data.repository.RiffsyApiClient
+import burrows.apps.example.gif.data.RiffsyApiClient
 import burrows.apps.example.gif.BaseSchedulerProvider
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 
-class MainPresenter(val view: MainContract.View,
-                    val riffsyApiClient: RiffsyApiClient,
-                    val provider: BaseSchedulerProvider) : MainContract.Presenter {
+class MainPresenter(private val view: MainContract.View,
+                    private val riffsyApiClient: RiffsyApiClient,
+                    private val provider: BaseSchedulerProvider) : MainContract.Presenter {
   companion object {
     private const val TAG = "MainPresenter"
   }
@@ -51,7 +51,7 @@ class MainPresenter(val view: MainContract.View,
    *
    * @param observable Observable to added to the subscription.
    */
-  fun loadImages(observable: Observable<RiffsyResponseDto>) {
+  private fun loadImages(observable: Observable<RiffsyResponseDto>) {
     disposable.add(observable
       .subscribeOn(provider.io())
       .observeOn(provider.ui())
