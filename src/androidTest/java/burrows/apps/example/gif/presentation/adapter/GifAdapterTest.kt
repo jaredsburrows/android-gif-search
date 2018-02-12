@@ -7,7 +7,7 @@ import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import burrows.apps.example.gif.data.repository.ImageApiRepository
+import burrows.apps.example.gif.data.ImageService
 import burrows.apps.example.gif.presentation.adapter.GifAdapter.OnItemClickListener
 import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 import com.google.common.truth.Truth.assertThat
@@ -24,7 +24,7 @@ class GifAdapterTest : TestBase() {
   private val imageInfoModel2 = ImageInfoModel().apply { url = STRING_UNIQUE2 }
   private val imageInfoModel3 = ImageInfoModel().apply { url = STRING_UNIQUE3 }
   private lateinit var onItemClickListener: TestOnItemClickListener
-  private lateinit var imageApiRepository: ImageApiRepository
+  private lateinit var imageService: ImageService
   private lateinit var viewHolder: GifAdapter.ViewHolder
   private lateinit var sut: GifAdapter
 
@@ -32,8 +32,8 @@ class GifAdapterTest : TestBase() {
     super.setUp()
 
     onItemClickListener = TestOnItemClickListener()
-    imageApiRepository = ImageApiRepository(targetContext)
-    sut = GifAdapter(onItemClickListener, imageApiRepository)
+    imageService = ImageService(targetContext)
+    sut = GifAdapter(onItemClickListener, imageService)
     sut.add(imageInfoModel)
     sut.add(imageInfoModel2)
     viewHolder = sut.onCreateViewHolder(LinearLayout(targetContext), 0)
@@ -97,10 +97,6 @@ class GifAdapterTest : TestBase() {
     assertThat(sut.getItem(1)).isEqualTo(imageInfoModel2)
   }
 
-  @Test fun testGetLocationShouldReturnCorrectValues() {
-    assertThat(sut.getLocation(imageInfoModel2)).isEqualTo(1)
-  }
-
   @Test fun testClearShouldClearAdapter() {
     // Act
     sut.clear()
@@ -140,30 +136,6 @@ class GifAdapterTest : TestBase() {
     assertThat(sut.getItem(0)).isEqualTo(imageInfoModel3)
     assertThat(sut.getItem(1)).isEqualTo(imageInfoModel)
     assertThat(sut.getItem(2)).isEqualTo(imageInfoModel2)
-  }
-
-  @Test fun testRemoveLocationObjectShouldReturnCorrectValues() {
-    // Act
-    sut.remove(0, imageInfoModel)
-
-    // Assert
-    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel2)
-  }
-
-  @Test fun testRemoveObjectShouldReturnCorrectValues() {
-    // Act
-    sut.remove(imageInfoModel)
-
-    // Assert
-    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel2)
-  }
-
-  @Test fun testRemoveLocationShouldReturnCorrectValues() {
-    // Act
-    sut.remove(0)
-
-    // Assert
-    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel2)
   }
 
   private class TestOnItemClickListener : OnItemClickListener {

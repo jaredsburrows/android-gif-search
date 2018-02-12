@@ -7,6 +7,5 @@ import dagger.Module
 
 @Module(includes = [LeakCanaryModule::class])
 abstract class AppModule {
-  @Binds
-  abstract fun providesContext(application: Application): Context
+  @Binds abstract fun providesContext(application: Application): Context
 }
