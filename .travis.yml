@@ -25,7 +25,7 @@ before_install:
 
 install:
   # Build debug and release(run proguard)
-  - ./gradlew clean assemble assembleDebugAndroidTest -Pci -s --scan
+  - ./gradlew clean assemble assembleDebugAndroidTest -Pci -s
 
 before_script:
   # Make sure the emulator is available
@@ -41,7 +41,7 @@ before_script:
 
 script:
   # Run all checks
-  - ./gradlew testDebug connectedDebugAndroidTest -Pci -s --scan
+  - ./gradlew testDebug connectedDebugAndroidTest -Pci -s
 
 branches:
   except:

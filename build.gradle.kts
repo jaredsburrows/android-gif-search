@@ -1,13 +1,9 @@
-import com.android.build.gradle.internal.dsl.TestOptions
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 buildscript {
   rootProject.apply { from(rootProject.file("gradle/dependencies.gradle.kts")) }
   rootProject.extra["ci"] = rootProject.hasProperty("ci")
 
   repositories {
     google()
-    jcenter()
     gradlePluginPortal()
   }
 
@@ -17,7 +13,6 @@ buildscript {
     classpath(extra["kotlinAndroidExtensions"] as String)
     classpath(extra["gradleAndroidCommandPlugin"] as String)
     classpath(extra["playPublisher"] as String)
-    classpath(extra["buildScanPlugin"] as String)
     classpath(extra["dexcountGradlePlugin"] as String)
     classpath(extra["gradleAndroidApkSizePlugin"] as String)
     classpath(extra["gradleVersionsPlugin"] as String)
@@ -27,11 +22,10 @@ buildscript {
 
 repositories {
   google()
-  jcenter()
+  gradlePluginPortal()
 }
 
 apply {
-  from(file("gradle/scan.gradle.kts"))
   plugin("com.android.application")
   plugin("kotlin-android")
   plugin("kotlin-android-extensions")
@@ -189,7 +183,7 @@ kapt {
   useBuildCache = true
 }
 
-tasks.withType<KotlinCompile> {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
   kotlinOptions {
     jvmTarget = rootProject.extra["javaVersion"] as String
     allWarningsAsErrors = true
