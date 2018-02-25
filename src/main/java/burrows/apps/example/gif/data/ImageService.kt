@@ -10,12 +10,8 @@ import com.bumptech.glide.request.RequestOptions
 import javax.inject.Inject
 
 class ImageService @Inject constructor(private val context: Context) {
-  private val imageHeight: Int = context.resources.getDimensionPixelSize(R.dimen.gif_image_width)
-  private val imageWidth: Int
-
-  init {
-    this.imageWidth = imageHeight
-  }
+  private val imageHeight = context.resources.getDimensionPixelSize(R.dimen.gif_image_width)
+  private val imageWidth = imageHeight
 
   fun load(url: String?): RequestBuilder<GifDrawable> {
     return Glide.with(context)

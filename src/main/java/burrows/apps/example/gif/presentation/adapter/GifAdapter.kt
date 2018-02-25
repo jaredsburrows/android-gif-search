@@ -78,9 +78,9 @@ class GifAdapter(private val onItemClickListener: GifAdapter.OnItemClickListener
     holder.itemView.gifProgress.visibility = View.VISIBLE
   }
 
-  override fun getItemCount(): Int = data.size
+  override fun getItemCount() = data.size
 
-  override fun getItemId(position: Int): Long = getItem(position).url?.hashCode()?.toLong() ?: 0L
+  override fun getItemId(position: Int) = getItem(position).url?.hashCode()?.toLong() ?: 0L
 
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -88,7 +88,7 @@ class GifAdapter(private val onItemClickListener: GifAdapter.OnItemClickListener
     fun onClick(imageInfoModel: ImageInfoModel)
   }
 
-  fun getItem(location: Int): ImageInfoModel = data[location]
+  fun getItem(location: Int) = data[location]
 
   fun clear() {
     val size = data.size
