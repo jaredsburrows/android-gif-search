@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.presentation.adapter
+package burrows.apps.example.gif.giflist
 
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView

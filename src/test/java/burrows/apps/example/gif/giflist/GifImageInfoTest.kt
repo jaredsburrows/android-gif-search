@@ -1,11 +1,11 @@
-package burrows.apps.example.gif.presentation.adapter.model
+package burrows.apps.example.gif.giflist
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import test.TestBase
 
-class ImageInfoModelTest : TestBase() {
-  private var sut = ImageInfoModel().apply { url = STRING_UNIQUE; previewUrl = STRING_UNIQUE2 }
+class GifImageInfoTest : TestBase() {
+  private var sut = GifImageInfo().apply { url = STRING_UNIQUE; previewUrl = STRING_UNIQUE2 }
 
   @Test fun testGetUrl() {
     assertThat(sut.url).isEqualTo(STRING_UNIQUE)

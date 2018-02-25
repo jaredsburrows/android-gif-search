@@ -1,10 +1,10 @@
 package test
 
-import burrows.apps.example.gif.BaseSchedulerProvider
-import io.reactivex.Scheduler
+import burrows.apps.example.gif.SchedulerProvider
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class ImmediateSchedulerProvider : BaseSchedulerProvider {
-  override fun io(): Scheduler = Schedulers.trampoline()
-  override fun ui(): Scheduler = Schedulers.trampoline()
+class ImmediateSchedulerProvider @Inject constructor() : SchedulerProvider() {
+  override fun io() = Schedulers.trampoline()
+  override fun ui() = Schedulers.trampoline()
 }

@@ -1,6 +1,6 @@
 package burrows.apps.example.gif
 
-interface BasePresenter {
-  fun subscribe()
-  fun unsubscribe()
+interface BasePresenter<in T> {
+  fun takeView(view: T)
+  fun dropView()
 }

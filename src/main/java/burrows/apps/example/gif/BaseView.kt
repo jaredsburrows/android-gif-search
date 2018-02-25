@@ -1,5 +1,5 @@
 package burrows.apps.example.gif
 
-interface BaseView<in T : BasePresenter> {
-  fun setPresenter(presenter: T)
+interface BaseView {
+  fun isActive(): Boolean
 }

@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.presentation.main
+package burrows.apps.example.gif.giflist
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -15,13 +15,9 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import burrows.apps.example.gif.R
-import burrows.apps.example.gif.SchedulerProvider
 import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.ImageService
 import burrows.apps.example.gif.data.RiffsyApiClient
-import burrows.apps.example.gif.presentation.adapter.GifAdapter
-import burrows.apps.example.gif.presentation.adapter.GifItemDecoration
-import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -38,7 +34,7 @@ import javax.inject.Inject
 /**
  * Main activity that will load our Fragments via the Support Fragment Manager.
  */
-class MainActivity : DaggerAppCompatActivity(), MainContract.View, GifAdapter.OnItemClickListener {
+class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnItemClickListener {
   companion object {
     private const val TAG = "MainActivity"
     private const val PORTRAIT_COLUMNS = 3
@@ -52,7 +48,6 @@ class MainActivity : DaggerAppCompatActivity(), MainContract.View, GifAdapter.On
   private lateinit var gifDialogText: TextView
   private lateinit var gifDialogProgressBar: ProgressBar
   private lateinit var gifImageView: ImageView
-  private lateinit var presenter: MainContract.Presenter
   private var hasSearched = false
   private var previousTotal = 0
   private var loading = true
@@ -60,49 +55,9 @@ class MainActivity : DaggerAppCompatActivity(), MainContract.View, GifAdapter.On
   private var visibleItemCount = 0
   private var totalItemCount = 0
   private var next: Double? = null
+  @Inject lateinit var presenter: GifPresenter
   @Inject lateinit var refWatcher: RefWatcher
   @Inject lateinit var repository: ImageService
-  @Inject lateinit var client: RiffsyApiClient
-  @Inject lateinit var schedulerProvider: SchedulerProvider
-
-  //
-  // Contract
-  //
-
-  override fun setPresenter(presenter: MainContract.Presenter) {
-    this.presenter = presenter
-  }
-
-  override fun clearImages() {
-    // Clear current data
-    gifAdapter.clear()
-  }
-
-  override fun addImages(riffsyResponseDto: RiffsyResponseDto) {
-    next = riffsyResponseDto.next
-
-    riffsyResponseDto.results?.forEach {
-      val url = it.media?.first()?.gif?.url
-
-      gifAdapter.add(ImageInfoModel(url = url))
-
-      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $url")
-    }
-  }
-
-  override fun showDialog(imageInfoModel: ImageInfoModel) {
-    showImageDialog(imageInfoModel)
-  }
-
-  override fun isActive(): Boolean = !isFinishing
-
-  //
-  // GifAdapter
-  //
-
-  override fun onClick(imageInfoModel: ImageInfoModel) {
-    showDialog(imageInfoModel)
-  }
 
   //
   // Activity
@@ -114,8 +69,6 @@ class MainActivity : DaggerAppCompatActivity(), MainContract.View, GifAdapter.On
 
     // Injection dependencies
     AndroidInjection.inject(this)
-
-    MainPresenter(this, client, schedulerProvider)
 
     // Setup
     toolbar.setTitle(R.string.main_screen_title)
@@ -178,19 +131,54 @@ class MainActivity : DaggerAppCompatActivity(), MainContract.View, GifAdapter.On
   override fun onResume() {
     super.onResume()
 
-    presenter.subscribe()
+    presenter.takeView(this)
   }
 
   override fun onPause() {
-    super.onPause()
+    presenter.dropView()
 
-    presenter.unsubscribe()
+    super.onPause()
   }
 
   override fun onDestroy() {
     super.onDestroy()
 
     refWatcher.watch(this, TAG)
+  }
+
+  //
+  // MainContract.View
+  //
+
+  override fun clearImages() {
+    // Clear current data
+    gifAdapter.clear()
+  }
+
+  override fun addImages(riffsyResponseDto: RiffsyResponseDto) {
+    next = riffsyResponseDto.next
+
+    riffsyResponseDto.results?.forEach {
+      val url = it.media?.first()?.gif?.url
+
+      gifAdapter.add(GifImageInfo(url = url))
+
+      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $url")
+    }
+  }
+
+  override fun showDialog(imageInfoModel: GifImageInfo) {
+    showImageDialog(imageInfoModel)
+  }
+
+  override fun isActive() = !isFinishing
+
+  //
+  // GifAdapter
+  //
+
+  override fun onClick(imageInfoModel: GifImageInfo) {
+    showDialog(imageInfoModel)
   }
 
   //
@@ -220,7 +208,7 @@ class MainActivity : DaggerAppCompatActivity(), MainContract.View, GifAdapter.On
   }
 
   private val searchOnActionExpandListener = object : MenuItem.OnActionExpandListener {
-    override fun onMenuItemActionExpand(item: MenuItem): Boolean = true
+    override fun onMenuItemActionExpand(item: MenuItem) = true
 
     override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
       // When search is closed, go back to trending getResults
@@ -246,10 +234,10 @@ class MainActivity : DaggerAppCompatActivity(), MainContract.View, GifAdapter.On
       return false
     }
 
-    override fun onQueryTextSubmit(query: String): Boolean = false
+    override fun onQueryTextSubmit(query: String) = false
   }
 
-  private fun showImageDialog(imageInfoModel: ImageInfoModel) {
+  private fun showImageDialog(imageInfoModel: GifImageInfo) {
     gifDialog.show()
     // Remove "white" background for gifDialog
     gifDialog.window.decorView.setBackgroundResource(android.R.color.transparent)
