@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.presentation.main
+package burrows.apps.example.gif.giflist
 
 import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.RiffsyApiClient
@@ -17,11 +17,11 @@ import org.mockito.MockitoAnnotations.initMocks
 import test.ImmediateSchedulerProvider
 import test.TestBase
 
-class MainPresenterTest : TestBase() {
+class GifPresenterTest : TestBase() {
   private val provider = ImmediateSchedulerProvider()
-  @Mock private lateinit var view: MainContract.View
+  @Mock private lateinit var view: GifContract.View
   @Mock private lateinit var repository: RiffsyApiClient
-  private lateinit var sut: MainPresenter
+  private lateinit var sut: GifPresenter
 
   @Before override fun setUp() {
     super.setUp()
@@ -36,7 +36,8 @@ class MainPresenterTest : TestBase() {
     val next = 0.0
     val response = RiffsyResponseDto()
     `when`(view.isActive()).thenReturn(false)
-    sut = MainPresenter(view, repository, provider)
+    sut = GifPresenter(repository, provider)
+    sut.takeView(view)
     `when`(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
 
@@ -52,7 +53,8 @@ class MainPresenterTest : TestBase() {
     // Arrange
     val next = 0.0
     val response = RiffsyResponseDto()
-    sut = MainPresenter(view, repository, provider)
+    sut = GifPresenter(repository, provider)
+    sut.takeView(view)
     `when`(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
 
@@ -69,7 +71,8 @@ class MainPresenterTest : TestBase() {
     val searchString = "gifs"
     val next = 0.0
     val response = RiffsyResponseDto()
-    sut = MainPresenter(view, repository, provider)
+    sut = GifPresenter(repository, provider)
+    sut.takeView(view)
     `when`(repository.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
 
@@ -87,7 +90,8 @@ class MainPresenterTest : TestBase() {
     val searchString = "gifs"
     val next = 0.0
     val response = RiffsyResponseDto()
-    sut = MainPresenter(view, repository, provider)
+    sut = GifPresenter(repository, provider)
+    sut.takeView(view)
     `when`(repository.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Observable.just(response))
 

@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.presentation.main
+package burrows.apps.example.gif.giflist
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
@@ -32,9 +32,9 @@ import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 @SmallTest
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest : TestBase() {
+class GifActivityTest : TestBase() {
   private val server = MockWebServer()
-  @get:Rule val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java, true, false)
+  @get:Rule val activityRule = ActivityTestRule<GifActivity>(GifActivity::class.java, true, false)
 
   @Before override fun setUp() {
     super.setUp()

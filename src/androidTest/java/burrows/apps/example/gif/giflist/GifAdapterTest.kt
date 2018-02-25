@@ -1,6 +1,5 @@
-package burrows.apps.example.gif.presentation.adapter
+package burrows.apps.example.gif.giflist
 
-import android.content.Context
 import android.support.test.InstrumentationRegistry
 import android.support.test.annotation.UiThreadTest
 import android.support.test.filters.SmallTest
@@ -8,8 +7,7 @@ import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import burrows.apps.example.gif.data.ImageService
-import burrows.apps.example.gif.presentation.adapter.GifAdapter.OnItemClickListener
-import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
+import burrows.apps.example.gif.giflist.GifAdapter.OnItemClickListener
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -19,10 +17,10 @@ import test.TestBase
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class GifAdapterTest : TestBase() {
-  private val targetContext: Context = InstrumentationRegistry.getTargetContext()
-  private val imageInfoModel = ImageInfoModel().apply { url = STRING_UNIQUE }
-  private val imageInfoModel2 = ImageInfoModel().apply { url = STRING_UNIQUE2 }
-  private val imageInfoModel3 = ImageInfoModel().apply { url = STRING_UNIQUE3 }
+  private val targetContext = InstrumentationRegistry.getTargetContext()
+  private val gifImageInfo = GifImageInfo().apply { url = STRING_UNIQUE }
+  private val gifImageInfo2 = GifImageInfo().apply { url = STRING_UNIQUE2 }
+  private val gifImageInfo3 = GifImageInfo().apply { url = STRING_UNIQUE3 }
   private lateinit var onItemClickListener: TestOnItemClickListener
   private lateinit var imageService: ImageService
   private lateinit var viewHolder: GifAdapter.ViewHolder
@@ -34,8 +32,8 @@ class GifAdapterTest : TestBase() {
     onItemClickListener = TestOnItemClickListener()
     imageService = ImageService(targetContext)
     sut = GifAdapter(onItemClickListener, imageService)
-    sut.add(imageInfoModel)
-    sut.add(imageInfoModel2)
+    sut.add(gifImageInfo)
+    sut.add(gifImageInfo2)
     viewHolder = sut.onCreateViewHolder(LinearLayout(targetContext), 0)
   }
 
@@ -52,9 +50,9 @@ class GifAdapterTest : TestBase() {
   @Test @UiThreadTest fun testOnBindViewHolderOnAdapterItemClick() {
     // Arrange
     sut.clear()
-    sut.add(imageInfoModel)
-    sut.add(imageInfoModel2)
-    sut.add(ImageInfoModel())
+    sut.add(gifImageInfo)
+    sut.add(gifImageInfo2)
+    sut.add(GifImageInfo())
 
     // Act
     sut.onBindViewHolder(viewHolder, 0)
@@ -68,7 +66,7 @@ class GifAdapterTest : TestBase() {
     sut.clear()
 
     // Act
-    val imageInfo = ImageInfoModel()
+    val imageInfo = GifImageInfo()
     sut.add(imageInfo)
 
     // Assert
@@ -77,7 +75,7 @@ class GifAdapterTest : TestBase() {
 
   @Test @UiThreadTest fun onViewRecycled() {
     // Arrange
-    sut.add(ImageInfoModel())
+    sut.add(GifImageInfo())
 
     // Act
     sut.onBindViewHolder(viewHolder, 0)
@@ -89,12 +87,12 @@ class GifAdapterTest : TestBase() {
   }
 
   @Test fun testGetListCountShouldReturnCorrectValues() {
-    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel)
-    assertThat(sut.getItem(1)).isEqualTo(imageInfoModel2)
+    assertThat(sut.getItem(0)).isEqualTo(gifImageInfo)
+    assertThat(sut.getItem(1)).isEqualTo(gifImageInfo2)
   }
 
   @Test fun testGetItemShouldReturnCorrectValues() {
-    assertThat(sut.getItem(1)).isEqualTo(imageInfoModel2)
+    assertThat(sut.getItem(1)).isEqualTo(gifImageInfo2)
   }
 
   @Test fun testClearShouldClearAdapter() {
@@ -107,39 +105,39 @@ class GifAdapterTest : TestBase() {
 
   @Test fun testAddObjectShouldReturnCorrectValues() {
     // Act
-    sut.add(imageInfoModel3)
+    sut.add(gifImageInfo3)
 
     // Assert
-    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel)
-    assertThat(sut.getItem(1)).isEqualTo(imageInfoModel2)
-    assertThat(sut.getItem(2)).isEqualTo(imageInfoModel3)
+    assertThat(sut.getItem(0)).isEqualTo(gifImageInfo)
+    assertThat(sut.getItem(1)).isEqualTo(gifImageInfo2)
+    assertThat(sut.getItem(2)).isEqualTo(gifImageInfo3)
   }
 
   @Test fun testAddCollectionShouldReturnCorrectValues() {
     // Arrange
-    val imageInfos = listOf(imageInfoModel3)
+    val imageInfos = listOf(gifImageInfo3)
 
     // Act
     sut.addAll(imageInfos)
 
     // Assert
-    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel)
-    assertThat(sut.getItem(1)).isEqualTo(imageInfoModel2)
-    assertThat(sut.getItem(2)).isEqualTo(imageInfoModel3)
+    assertThat(sut.getItem(0)).isEqualTo(gifImageInfo)
+    assertThat(sut.getItem(1)).isEqualTo(gifImageInfo2)
+    assertThat(sut.getItem(2)).isEqualTo(gifImageInfo3)
   }
 
   @Test fun testAddLocationObjectShouldReturnCorrectValues() {
     // Act
-    sut.add(0, imageInfoModel3)
+    sut.add(0, gifImageInfo3)
 
     // Assert
-    assertThat(sut.getItem(0)).isEqualTo(imageInfoModel3)
-    assertThat(sut.getItem(1)).isEqualTo(imageInfoModel)
-    assertThat(sut.getItem(2)).isEqualTo(imageInfoModel2)
+    assertThat(sut.getItem(0)).isEqualTo(gifImageInfo3)
+    assertThat(sut.getItem(1)).isEqualTo(gifImageInfo)
+    assertThat(sut.getItem(2)).isEqualTo(gifImageInfo2)
   }
 
   private class TestOnItemClickListener : OnItemClickListener {
-    override fun onClick(imageInfoModel: ImageInfoModel) {
+    override fun onClick(imageInfoModel: GifImageInfo) {
     }
   }
 }

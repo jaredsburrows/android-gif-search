@@ -1,33 +1,35 @@
-package burrows.apps.example.gif.presentation.main
+package burrows.apps.example.gif.giflist
 
 import android.util.Log
-import burrows.apps.example.gif.data.model.RiffsyResponseDto
+import burrows.apps.example.gif.SchedulerProvider
 import burrows.apps.example.gif.data.RiffsyApiClient
-import burrows.apps.example.gif.BaseSchedulerProvider
+import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Inject
 
-class MainPresenter(private val view: MainContract.View,
-                    private val riffsyApiClient: RiffsyApiClient,
-                    private val provider: BaseSchedulerProvider) : MainContract.Presenter {
+class GifPresenter @Inject constructor(private val riffsyApiClient: RiffsyApiClient,
+                                       private val schedulerProvider: SchedulerProvider) : GifContract.Presenter {
   companion object {
     private const val TAG = "MainPresenter"
   }
-  private val disposable = CompositeDisposable()
 
-  init {
-    view.setPresenter(this)
+  private val disposable = CompositeDisposable()
+  private var view: GifContract.View? = null
+
+  override fun takeView(view: GifContract.View) {
+    this.view = view
+    // TODO load
   }
 
-  override fun subscribe() {}
-
-  override fun unsubscribe() {
+  override fun dropView() {
     disposable.clear()
+    view = null
   }
 
   override fun clearImages() {
     // Clear current data
-    view.clearImages()
+    view?.clearImages()
   }
 
   /**
@@ -53,13 +55,13 @@ class MainPresenter(private val view: MainContract.View,
    */
   private fun loadImages(observable: Observable<RiffsyResponseDto>) {
     disposable.add(observable
-      .subscribeOn(provider.io())
-      .observeOn(provider.ui())
+      .subscribeOn(schedulerProvider.io())
+      .observeOn(schedulerProvider.ui())
       .subscribe({ riffsyResponse ->
-        if (!view.isActive()) return@subscribe
+        if (view?.isActive() == false) return@subscribe
 
         // Iterate over data from response and grab the urls
-        view.addImages(riffsyResponse)
+        view?.addImages(riffsyResponse)
       }, { throwable ->
         Log.e(TAG, "onError", throwable) // java.lang.UnsatisfiedLinkError - unit tests
       }))

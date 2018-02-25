@@ -1,4 +1,4 @@
-package burrows.apps.example.gif.presentation.adapter
+package burrows.apps.example.gif.giflist
 
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import burrows.apps.example.gif.R
 import burrows.apps.example.gif.data.ImageService
-import burrows.apps.example.gif.presentation.adapter.model.ImageInfoModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -19,14 +18,14 @@ import kotlinx.android.synthetic.main.list_item.view.*
 /**
  * RecyclerView adapter for handling Gif Images in a Grid format.
  */
-class GifAdapter(private val onItemClickListener: GifAdapter.OnItemClickListener,
+class GifAdapter(private val onItemClickListener: OnItemClickListener,
                  private val imageService: ImageService)
   : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
   companion object {
     private const val TAG = "GifAdapter"
   }
 
-  private val data = arrayListOf<ImageInfoModel>()
+  private val data = arrayListOf<GifImageInfo>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
     : ViewHolder = ViewHolder(LayoutInflater.from(parent.context)
@@ -85,7 +84,7 @@ class GifAdapter(private val onItemClickListener: GifAdapter.OnItemClickListener
   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
   interface OnItemClickListener {
-    fun onClick(imageInfoModel: ImageInfoModel)
+    fun onClick(imageInfoModel: GifImageInfo)
   }
 
   fun getItem(location: Int) = data[location]
@@ -99,19 +98,19 @@ class GifAdapter(private val onItemClickListener: GifAdapter.OnItemClickListener
     }
   }
 
-  fun add(model: ImageInfoModel): Boolean {
+  fun add(model: GifImageInfo): Boolean {
     return data.add(model).apply {
       notifyItemInserted(data.size + 1)
     }
   }
 
-  fun addAll(collection: List<ImageInfoModel>): Boolean {
+  fun addAll(collection: List<GifImageInfo>): Boolean {
     return data.addAll(collection).apply {
       notifyItemRangeInserted(0, data.size + 1)
     }
   }
 
-  fun add(location: Int, model: ImageInfoModel) {
+  fun add(location: Int, model: GifImageInfo) {
     data.add(location, model)
     notifyItemInserted(location)
   }

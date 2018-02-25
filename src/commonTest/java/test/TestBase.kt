@@ -25,11 +25,11 @@ abstract class TestBase {
     @JvmField val STRING_UNIQUE = randomUUID().toString()
     @JvmField val STRING_UNIQUE2 = randomUUID().toString() + randomUUID().toString()
     @JvmField val STRING_UNIQUE3 = randomUUID().toString()
-    @JvmField val INTEGER_RANDOM: Int = Random().nextInt()
-    @JvmField val INTEGER_RANDOM_POSITIVE: Int = Random().nextInt(Integer.SIZE - 1)
-    @JvmField val LONG_RANDOM: Long = Random().nextLong()
-    @JvmField val INT_RANDOM: Int = Random().nextInt()
-    @JvmField val DOUBLE_RANDOM: Double = Random().nextDouble()
+    @JvmField val INTEGER_RANDOM = Random().nextInt()
+    @JvmField val INTEGER_RANDOM_POSITIVE = Random().nextInt(Integer.SIZE - 1)
+    @JvmField val LONG_RANDOM = Random().nextLong()
+    @JvmField val INT_RANDOM = Random().nextInt()
+    @JvmField val DOUBLE_RANDOM = Random().nextDouble()
 
     @JvmStatic fun getMockResponse(fileName: String): MockResponse {
       return MockResponse()
