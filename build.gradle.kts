@@ -13,6 +13,7 @@ buildscript {
     classpath(extra["kotlinAndroidExtensions"] as String)
     classpath(extra["gradleAndroidCommandPlugin"] as String)
     classpath(extra["playPublisher"] as String)
+    classpath(extra["buildScanPlugin"] as String)
     classpath(extra["dexcountGradlePlugin"] as String)
     classpath(extra["gradleAndroidApkSizePlugin"] as String)
     classpath(extra["gradleVersionsPlugin"] as String)
@@ -26,6 +27,7 @@ repositories {
 }
 
 apply {
+  from(file("gradle/scan.gradle.kts"))
   plugin("com.android.application")
   plugin("kotlin-android")
   plugin("kotlin-android-extensions")
