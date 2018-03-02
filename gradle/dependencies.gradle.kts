@@ -24,6 +24,7 @@ extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin
 extra["kotlinAndroidExtensions"]    = "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:2.0"
 extra["playPublisher"]              = "com.github.triplet.gradle:play-publisher:1.2.0"
+extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.12.1"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.17.0"
