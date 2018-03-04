@@ -29,10 +29,10 @@ repositories {
 apply {
   from(file("gradle/scan.gradle.kts"))
   plugin("com.android.application")
-  plugin("kotlin-android")
-  plugin("kotlin-android-extensions")
-  plugin("kotlin-kapt")
-  plugin("android-command")
+  plugin("org.jetbrains.kotlin.android")
+  plugin("org.jetbrains.kotlin.android.extensions")
+  plugin("org.jetbrains.kotlin.kapt")
+  plugin("com.novoda.android-command")
   plugin("com.github.triplet.play")
   plugin("com.getkeepsafe.dexcount")
   plugin("com.vanniktech.android.apk.size")
@@ -78,6 +78,7 @@ android {
     isWarningsAsErrors = true
     lintConfig = file("${project.rootDir}/config/lint/lint.xml")
     isCheckReleaseBuilds = false
+    isCheckTestSources = true
   }
 
   signingConfigs {
