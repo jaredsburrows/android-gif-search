@@ -5,7 +5,7 @@ import org.junit.Test
 import test.TestBase
 
 class GifImageInfoTest : TestBase() {
-  private var sut = GifImageInfo().apply { url = STRING_UNIQUE; previewUrl = STRING_UNIQUE2 }
+  private var sut = GifImageInfo(url = STRING_UNIQUE, previewUrl = STRING_UNIQUE2)
 
   @Test fun testGetUrl() {
     assertThat(sut.url).isEqualTo(STRING_UNIQUE)

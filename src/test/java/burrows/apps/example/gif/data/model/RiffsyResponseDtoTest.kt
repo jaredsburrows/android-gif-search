@@ -8,7 +8,7 @@ class RiffsyResponseDtoTest : TestBase() {
   companion object {
     private val TEST_RESULTS = arrayListOf<ResultDto>()
   }
-  private var sut = RiffsyResponseDto().apply { results = TEST_RESULTS; next = DOUBLE_RANDOM }
+  private var sut = RiffsyResponseDto(results = TEST_RESULTS, next = DOUBLE_RANDOM)
 
   @Test fun testGetResults() {
     assertThat(sut.results).isEqualTo(TEST_RESULTS)

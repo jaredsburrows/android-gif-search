@@ -18,10 +18,13 @@ import test.TestBase
 @RunWith(AndroidJUnit4::class)
 class GifAdapterTest : TestBase() {
   private val targetContext = InstrumentationRegistry.getTargetContext()
-  private val gifImageInfo = GifImageInfo().apply { url = STRING_UNIQUE }
-  private val gifImageInfo2 = GifImageInfo().apply { url = STRING_UNIQUE2 }
-  private val gifImageInfo3 = GifImageInfo().apply { url = STRING_UNIQUE3 }
-  private lateinit var onItemClickListener: TestOnItemClickListener
+  private val gifImageInfo = GifImageInfo(url = STRING_UNIQUE)
+  private val gifImageInfo2 = GifImageInfo(url = STRING_UNIQUE2)
+  private val gifImageInfo3 = GifImageInfo(url = STRING_UNIQUE)
+  private val testOnItemClickListener = object: OnItemClickListener {
+    override fun onClick(imageInfoModel: GifImageInfo) {
+    }
+  }
   private lateinit var imageService: ImageService
   private lateinit var viewHolder: GifAdapter.ViewHolder
   private lateinit var sut: GifAdapter
@@ -29,9 +32,8 @@ class GifAdapterTest : TestBase() {
   @Before @UiThreadTest override fun setUp() {
     super.setUp()
 
-    onItemClickListener = TestOnItemClickListener()
     imageService = ImageService(targetContext)
-    sut = GifAdapter(onItemClickListener, imageService)
+    sut = GifAdapter(testOnItemClickListener, imageService)
     sut.add(gifImageInfo)
     sut.add(gifImageInfo2)
     viewHolder = sut.onCreateViewHolder(LinearLayout(targetContext), 0)
@@ -134,10 +136,5 @@ class GifAdapterTest : TestBase() {
     assertThat(sut.getItem(0)).isEqualTo(gifImageInfo3)
     assertThat(sut.getItem(1)).isEqualTo(gifImageInfo)
     assertThat(sut.getItem(2)).isEqualTo(gifImageInfo2)
-  }
-
-  private class TestOnItemClickListener : OnItemClickListener {
-    override fun onClick(imageInfoModel: GifImageInfo) {
-    }
   }
 }

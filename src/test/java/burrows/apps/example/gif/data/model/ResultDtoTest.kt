@@ -8,7 +8,7 @@ class ResultDtoTest : TestBase() {
   companion object {
     private val TEST_MEDIAS = arrayListOf<MediaDto>()
   }
-  private var sut = ResultDto().apply { media = TEST_MEDIAS; title = STRING_UNIQUE }
+  private var sut = ResultDto(media = TEST_MEDIAS, title = STRING_UNIQUE)
 
   @Test fun testGetMedia() {
     assertThat(sut.media).isEqualTo(TEST_MEDIAS)

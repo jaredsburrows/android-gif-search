@@ -8,7 +8,7 @@ class MediaDtoTest : TestBase() {
   companion object {
     private val TEST_GIF = GifDto()
   }
-  private var sut = MediaDto().apply { gif = TEST_GIF }
+  private var sut = MediaDto( gif = TEST_GIF)
 
   @Test fun testGetGif() {
     assertThat(sut.gif).isEqualTo(TEST_GIF)
