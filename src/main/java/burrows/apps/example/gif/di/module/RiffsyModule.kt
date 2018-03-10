@@ -7,10 +7,10 @@ import dagger.Provides
 import retrofit2.Retrofit
 
 @Module
-class RiffsyModule {
+class RiffsyModule(var baseUrl: String = BuildConfig.BASE_URL) {
   @Provides fun providesRiffsyApi(retrofit: Retrofit.Builder)
     : RiffsyApiClient = retrofit
-    .baseUrl(BuildConfig.BASE_URL)
+    .baseUrl(baseUrl)
     .build()
     .create(RiffsyApiClient::class.java)
 }

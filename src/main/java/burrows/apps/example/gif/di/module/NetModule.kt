@@ -35,7 +35,7 @@ class NetModule {
     .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
     .build()
 
-  @Provides fun providesOkHttpClient(cache: Cache): OkHttpClient = OkHttpClient.Builder()
+  @Provides fun providesOkHttpClient(cache: Cache?): OkHttpClient = OkHttpClient.Builder()
     .addInterceptor(HttpLoggingInterceptor()
       .setLevel(if (BuildConfig.DEBUG) Level.BODY else Level.NONE))
     .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)

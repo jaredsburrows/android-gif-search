@@ -1,26 +1,22 @@
 package burrows.apps.example.gif.data
 
 import burrows.apps.example.gif.data.model.RiffsyResponseDto
+import burrows.apps.example.gif.di.module.NetModule
+import burrows.apps.example.gif.di.module.RiffsyModule
+import com.google.common.truth.Truth.assertThat
 import io.reactivex.observers.TestObserver
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import test.TestBase
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 class RiffsyApiClientTest : TestBase() {
   private val server = MockWebServer()
-  private lateinit var sut: RiffsyApiClient
   private val dispatcher = object : Dispatcher() {
     override fun dispatch(request: RecordedRequest): MockResponse = when {
       request.path.contains("/v1/trending") -> getMockResponse("/trending_results.json")
@@ -28,13 +24,18 @@ class RiffsyApiClientTest : TestBase() {
       else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
     }
   }
+  private lateinit var sut: RiffsyApiClient
 
   @Before override fun setUp() {
     super.setUp()
     server.start(MOCK_SERVER_PORT)
     server.setDispatcher(dispatcher)
 
-    sut = getRetrofit(server.url("/").toString()).build().create(RiffsyApiClient::class.java)
+    sut = RiffsyModule(server.url("/").toString())
+      .providesRiffsyApi(NetModule()
+        .providesRetrofit(NetModule()
+          .providesMoshi(), NetModule()
+          .providesOkHttpClient(null)))
   }
 
   @After override fun tearDown() {
@@ -96,17 +97,5 @@ class RiffsyApiClientTest : TestBase() {
     // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.preview)
       .contains("/images/6f2ed339fbdb5c1270e29945ee1f0d77/raw")
-  }
-
-  private fun getRetrofit(baseUrl: String): Retrofit.Builder {
-    return Retrofit.Builder()
-      .baseUrl(baseUrl)
-      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-      .addConverterFactory(MoshiConverterFactory.create())
-      .client(OkHttpClient.Builder()
-        .addInterceptor(HttpLoggingInterceptor()
-          .setLevel(HttpLoggingInterceptor.Level.BODY))
-        .build()
-      )
   }
 }
