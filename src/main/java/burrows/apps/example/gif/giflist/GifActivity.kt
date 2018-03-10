@@ -126,7 +126,6 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     }
   }
 
-
   //
   // Activity
   //
@@ -232,9 +231,11 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     next = riffsyResponseDto.next
 
     riffsyResponseDto.results?.forEach {
-      val url = it.media?.first()?.gif?.url
+      val first = it.media?.first()?.gif
+      val url = first?.url
+      val preview = first?.preview
 
-      gifAdapter.add(GifImageInfo(url = url))
+      gifAdapter.add(GifImageInfo(url = url, previewUrl = preview))
 
       if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $url")
     }
