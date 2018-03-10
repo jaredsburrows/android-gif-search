@@ -21,6 +21,13 @@ import java.net.HttpURLConnection.HTTP_NOT_FOUND
 class RiffsyApiClientTest : TestBase() {
   private val server = MockWebServer()
   private lateinit var sut: RiffsyApiClient
+  private val dispatcher = object : Dispatcher() {
+    override fun dispatch(request: RecordedRequest): MockResponse = when {
+      request.path.contains("/v1/trending") -> getMockResponse("/trending_results.json")
+      request.path.contains("/v1/search") -> getMockResponse("/search_results.json")
+      else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
+    }
+  }
 
   @Before override fun setUp() {
     super.setUp()
@@ -101,13 +108,5 @@ class RiffsyApiClientTest : TestBase() {
           .setLevel(HttpLoggingInterceptor.Level.BODY))
         .build()
       )
-  }
-
-  private val dispatcher = object : Dispatcher() {
-    override fun dispatch(request: RecordedRequest): MockResponse = when {
-      request.path.contains("/v1/trending") -> getMockResponse("/trending_results.json")
-      request.path.contains("/v1/search") -> getMockResponse("/search_results.json")
-      else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
-    }
   }
 }

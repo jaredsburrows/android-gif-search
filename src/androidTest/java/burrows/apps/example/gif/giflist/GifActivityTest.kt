@@ -33,8 +33,16 @@ import java.net.HttpURLConnection.HTTP_NOT_FOUND
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class GifActivityTest : TestBase() {
-  private val server = MockWebServer()
   @get:Rule val activityRule = ActivityTestRule<GifActivity>(GifActivity::class.java, true, false)
+  private val server = MockWebServer()
+  private val dispatcher = object : Dispatcher() {
+    override fun dispatch(request: RecordedRequest): MockResponse = when {
+      request.path.contains("v1/trending") -> getMockResponse("/trending_results.json")
+      request.path.contains("v1/search") -> getMockResponse("/search_results.json")
+      request.path.contains("images") -> getMockFileResponse("/ic_launcher.png")
+      else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
+    }
+  }
 
   @Before override fun setUp() {
     super.setUp()
@@ -76,14 +84,5 @@ class GifActivityTest : TestBase() {
       .perform(click(), typeText("hello"), closeSoftKeyboard(), pressBack())
     onView(withId(R.id.recyclerView))
       .check(matches(isDisplayed()))
-  }
-
-  private val dispatcher = object : Dispatcher() {
-    override fun dispatch(request: RecordedRequest): MockResponse = when {
-      request.path.contains("v1/trending") -> getMockResponse("/trending_results.json")
-      request.path.contains("v1/search") -> getMockResponse("/search_results.json")
-      request.path.contains("images") -> getMockFileResponse("/ic_launcher.png")
-      else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
-    }
   }
 }
