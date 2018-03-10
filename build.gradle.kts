@@ -12,12 +12,10 @@ buildscript {
     classpath(extra["kotlinGradlePlugin"] as String)
     classpath(extra["kotlinAndroidExtensions"] as String)
     classpath(extra["gradleAndroidCommandPlugin"] as String)
-    classpath(extra["playPublisher"] as String)
     classpath(extra["buildScanPlugin"] as String)
     classpath(extra["dexcountGradlePlugin"] as String)
     classpath(extra["gradleAndroidApkSizePlugin"] as String)
     classpath(extra["gradleVersionsPlugin"] as String)
-    classpath(extra["gradleLicensePlugin"] as String)
   }
 }
 
@@ -33,11 +31,9 @@ apply {
   plugin("org.jetbrains.kotlin.android.extensions")
   plugin("org.jetbrains.kotlin.kapt")
   plugin("com.novoda.android-command")
-  plugin("com.github.triplet.play")
   plugin("com.getkeepsafe.dexcount")
   plugin("com.vanniktech.android.apk.size")
   plugin("com.github.ben-manes.versions")
-  plugin("com.jaredsburrows.license")
   from(file("gradle/compile.gradle.kts"))
 }
 
