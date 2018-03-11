@@ -2,7 +2,7 @@
 val androidGradleVersion            = "3.0.1"
 val kotlinVersion                   = "1.2.30"
 val supportLibraryVersion           = "27.1.0"
-val daggerVersion                   = "2.14.1"
+val daggerVersion                   = "2.15"
 val okHttpVersion                   = "3.10.0"
 val retrofitVersion                 = "2.3.0"
 val espressoVersion                 = "3.0.1"
@@ -23,12 +23,10 @@ extra["gradle"]                     = "com.android.tools.build:gradle:$androidGr
 extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 extra["kotlinAndroidExtensions"]    = "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:2.0"
-extra["playPublisher"]              = "com.github.triplet.gradle:play-publisher:1.2.0"
 extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.12.1"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.17.0"
-extra["gradleLicensePlugin"]        = "com.jaredsburrows:gradle-license-plugin:0.8.1"
 
 // implementation
 extra["design"]                     = "com.android.support:design:$supportLibraryVersion"

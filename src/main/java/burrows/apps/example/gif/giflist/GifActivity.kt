@@ -1,6 +1,5 @@
 package burrows.apps.example.gif.giflist
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.app.AppCompatDialog
 import android.support.v7.widget.GridLayoutManager
@@ -41,6 +40,9 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     private const val VISIBLE_THRESHOLD = 5
   }
 
+  @Inject lateinit var presenter: GifPresenter
+  @Inject lateinit var refWatcher: RefWatcher
+  @Inject lateinit var repository: ImageService
   private lateinit var layoutManager: GridLayoutManager
   private lateinit var gifItemDecoration: GifItemDecoration
   private lateinit var gifAdapter: GifAdapter
@@ -55,9 +57,74 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
   private var visibleItemCount = 0
   private var totalItemCount = 0
   private var next: Double? = null
-  @Inject lateinit var presenter: GifPresenter
-  @Inject lateinit var refWatcher: RefWatcher
-  @Inject lateinit var repository: ImageService
+  private val imageRequestListener = object : RequestListener<GifDrawable> {
+    override fun onResourceReady(resource: GifDrawable?, model: Any?, target: Target<GifDrawable>?,
+                                 dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+      // Hide progressbar
+      gifDialogProgressBar.visibility = View.GONE
+      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+
+      return false
+    }
+
+    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?,
+                              isFirstResource: Boolean): Boolean {
+      // Hide progressbar
+      gifDialogProgressBar.visibility = View.GONE
+      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+
+      return false
+    }
+  }
+  private val searchOnQueryTextListener = object : SearchView.OnQueryTextListener {
+    override fun onQueryTextChange(newText: String): Boolean {
+      // Search on type
+      if (!TextUtils.isEmpty(newText)) {
+        // Reset
+        presenter.clearImages()
+        presenter.loadSearchImages(newText, next)
+        hasSearched = true
+      }
+      return false
+    }
+
+    override fun onQueryTextSubmit(query: String) = false
+  }
+  private val searchOnActionExpandListener = object : MenuItem.OnActionExpandListener {
+    override fun onMenuItemActionExpand(item: MenuItem) = true
+
+    override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+      // When search is closed, go back to trending getResults
+      if (hasSearched) {
+        // Reset
+        presenter.clearImages()
+        presenter.loadTrendingImages(next)
+        hasSearched = false
+      }
+      return true
+    }
+  }
+  private val recyclerViewOnScrollListener = object : RecyclerView.OnScrollListener() {
+    override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+      super.onScrolled(recyclerView, dx, dy)
+
+      // Continuous scrolling
+      visibleItemCount = recyclerView?.childCount ?: 0
+      totalItemCount = layoutManager.itemCount
+      firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+
+      if (loading && totalItemCount > previousTotal) {
+        loading = false
+        previousTotal = totalItemCount
+      }
+
+      if (!loading && totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD) {
+        presenter.loadTrendingImages(next)
+
+        loading = true
+      }
+    }
+  }
 
   //
   // Activity
@@ -100,7 +167,12 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     gifDialog.setContentView(dialogView)
     gifDialog.setCancelable(true)
     gifDialog.setCanceledOnTouchOutside(true)
-    gifDialog.setOnDismissListener(gifDialogOnDismissListener)
+    gifDialog.setOnDismissListener {
+      // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
+      Glide.with(gifImageView.context).clear(gifImageView)  // Forget view, try to free resources
+      gifImageView.setImageDrawable(null)
+      gifDialogProgressBar.visibility = View.VISIBLE // Make sure to show progress when loading new view
+    }
 
     // Dialog views
     gifDialogText = dialogView.gifDialogTitle
@@ -159,9 +231,11 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     next = riffsyResponseDto.next
 
     riffsyResponseDto.results?.forEach {
-      val url = it.media?.first()?.gif?.url
+      val first = it.media?.first()?.gif
+      val url = first?.url
+      val preview = first?.preview
 
-      gifAdapter.add(GifImageInfo(url = url))
+      gifAdapter.add(GifImageInfo(url = url, previewUrl = preview))
 
       if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $url")
     }
@@ -185,58 +259,6 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
   // Private
   //
 
-  private val recyclerViewOnScrollListener = object : RecyclerView.OnScrollListener() {
-    override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-      super.onScrolled(recyclerView, dx, dy)
-
-      // Continuous scrolling
-      visibleItemCount = recyclerView?.childCount ?: 0
-      totalItemCount = layoutManager.itemCount
-      firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-
-      if (loading && totalItemCount > previousTotal) {
-        loading = false
-        previousTotal = totalItemCount
-      }
-
-      if (!loading && totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD) {
-        presenter.loadTrendingImages(next)
-
-        loading = true
-      }
-    }
-  }
-
-  private val searchOnActionExpandListener = object : MenuItem.OnActionExpandListener {
-    override fun onMenuItemActionExpand(item: MenuItem) = true
-
-    override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-      // When search is closed, go back to trending getResults
-      if (hasSearched) {
-        // Reset
-        presenter.clearImages()
-        presenter.loadTrendingImages(next)
-        hasSearched = false
-      }
-      return true
-    }
-  }
-
-  private val searchOnQueryTextListener = object : SearchView.OnQueryTextListener {
-    override fun onQueryTextChange(newText: String): Boolean {
-      // Search on type
-      if (!TextUtils.isEmpty(newText)) {
-        // Reset
-        presenter.clearImages()
-        presenter.loadSearchImages(newText, next)
-        hasSearched = true
-      }
-      return false
-    }
-
-    override fun onQueryTextSubmit(query: String) = false
-  }
-
   private fun showImageDialog(imageInfoModel: GifImageInfo) {
     gifDialog.show()
     // Remove "white" background for gifDialog
@@ -251,32 +273,5 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
       .thumbnail(repository.load(imageInfoModel.previewUrl))
       .listener(imageRequestListener)
       .into(gifImageView)
-  }
-
-  private val gifDialogOnDismissListener = DialogInterface.OnDismissListener {
-    // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
-    Glide.with(gifImageView.context).clear(gifImageView)  // Forget view, try to free resources
-    gifImageView.setImageDrawable(null)
-    gifDialogProgressBar.visibility = View.VISIBLE // Make sure to show progress when loading new view
-  }
-
-  private val imageRequestListener = object : RequestListener<GifDrawable> {
-    override fun onResourceReady(resource: GifDrawable?, model: Any?, target: Target<GifDrawable>?,
-                                 dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-      // Hide progressbar
-      gifDialogProgressBar.visibility = View.GONE
-      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
-
-      return false
-    }
-
-    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?,
-                              isFirstResource: Boolean): Boolean {
-      // Hide progressbar
-      gifDialogProgressBar.visibility = View.GONE
-      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
-
-      return false
-    }
   }
 }

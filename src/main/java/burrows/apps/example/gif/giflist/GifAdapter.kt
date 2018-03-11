@@ -37,30 +37,7 @@ class GifAdapter(private val onItemClickListener: OnItemClickListener,
     // Load images
     imageService.load(imageInfoModel.url)
       .thumbnail(imageService.load(imageInfoModel.previewUrl))
-      .listener(object : RequestListener<GifDrawable> {
-        override fun onResourceReady(resource: GifDrawable?,
-                                     model: Any?,
-                                     target: Target<GifDrawable>?,
-                                     dataSource: DataSource?,
-                                     isFirstResource: Boolean): Boolean {
-          // Hide progressbar
-          holder.itemView.gifProgress.visibility = View.GONE
-          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
-
-          return false
-        }
-
-        override fun onLoadFailed(e: GlideException?,
-                                  model: Any?,
-                                  target: Target<GifDrawable>?,
-                                  isFirstResource: Boolean): Boolean {
-          // Hide progressbar
-          holder.itemView.gifProgress.visibility = View.GONE
-          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
-
-          return false
-        }
-      })
+      .listener(ImageListener(holder))
       .into(holder.itemView.gifImage)
 
     holder.itemView.setOnClickListener { onItemClickListener.onClick(imageInfoModel) }
@@ -80,12 +57,6 @@ class GifAdapter(private val onItemClickListener: OnItemClickListener,
   override fun getItemCount() = data.size
 
   override fun getItemId(position: Int) = getItem(position).url?.hashCode()?.toLong() ?: 0L
-
-  inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
-  interface OnItemClickListener {
-    fun onClick(imageInfoModel: GifImageInfo)
-  }
 
   fun getItem(location: Int) = data[location]
 
@@ -113,5 +84,36 @@ class GifAdapter(private val onItemClickListener: OnItemClickListener,
   fun add(location: Int, model: GifImageInfo) {
     data.add(location, model)
     notifyItemInserted(location)
+  }
+
+  inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+  interface OnItemClickListener {
+    fun onClick(imageInfoModel: GifImageInfo)
+  }
+
+  private class ImageListener(private val holder: ViewHolder) : RequestListener<GifDrawable> {
+    override fun onResourceReady(resource: GifDrawable?,
+                                 model: Any?,
+                                 target: Target<GifDrawable>?,
+                                 dataSource: DataSource?,
+                                 isFirstResource: Boolean): Boolean {
+      // Hide progressbar
+      holder.itemView.gifProgress.visibility = View.GONE
+      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+
+      return false
+    }
+
+    override fun onLoadFailed(e: GlideException?,
+                              model: Any?,
+                              target: Target<GifDrawable>?,
+                              isFirstResource: Boolean): Boolean {
+      // Hide progressbar
+      holder.itemView.gifProgress.visibility = View.GONE
+      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+
+      return false
+    }
   }
 }

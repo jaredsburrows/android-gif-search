@@ -32,7 +32,7 @@ interface RiffsyApiClient {
    */
   @GET("/v1/trending?key=$API_KEY") fun getTrendingResults(
     @Query("limit") limit: Int,
-    @Query("pos") pos: Double?): Observable<RiffsyResponseDto> // Allow passing null
+    @Query("pos") pos: Double?): Observable<RiffsyResponseDto>
 
   /**
    * Get search gif results by a search string.
@@ -53,5 +53,5 @@ interface RiffsyApiClient {
   @GET("/v1/search?key=$API_KEY") fun getSearchResults(
     @Query("tag") tag: String,
     @Query("limit") limit: Int,
-    @Query("pos") pos: Double?): Observable<RiffsyResponseDto>  // Allow passing null
+    @Query("pos") pos: Double?): Observable<RiffsyResponseDto>
 }
