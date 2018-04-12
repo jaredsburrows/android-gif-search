@@ -1,7 +1,7 @@
 // common
-val androidGradleVersion            = "3.1.0"
+val androidGradleVersion            = "3.1.1"
 val kotlinVersion                   = "1.2.31"
-val supportLibraryVersion           = "27.1.0"
+val supportLibraryVersion           = "27.1.1"
 val daggerVersion                   = "2.15"
 val okHttpVersion                   = "3.10.0"
 val retrofitVersion                 = "2.4.0"
@@ -23,7 +23,7 @@ extra["gradle"]                     = "com.android.tools.build:gradle:${androidG
 extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
 extra["kotlinAndroidExtensions"]    = "org.jetbrains.kotlin:kotlin-android-extensions:${kotlinVersion}"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:2.0.1"
-extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.12.1"
+extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.13.1"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.17.0"
@@ -75,8 +75,8 @@ extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:2.17.0"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:2.18.0"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
-extra["truth"]                      = "com.google.truth:truth:0.39"
+extra["truth"]                      = "com.google.truth:truth:0.40"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
 extra["reflections"]                = "org.reflections:reflections:0.9.11"
