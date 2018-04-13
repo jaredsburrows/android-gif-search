@@ -12,15 +12,14 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import test.TestBase
 
 @SmallTest
 @RunWith(AndroidJUnit4::class)
-class GifAdapterTest : TestBase() {
+class GifAdapterTest {
   private val targetContext = InstrumentationRegistry.getTargetContext()
-  private val gifImageInfo = GifImageInfo(url = STRING_UNIQUE)
-  private val gifImageInfo2 = GifImageInfo(url = STRING_UNIQUE2)
-  private val gifImageInfo3 = GifImageInfo(url = STRING_UNIQUE)
+  private val gifImageInfo = GifImageInfo(url = "http://some.url")
+  private val gifImageInfo2 = GifImageInfo(url = "http://some.url2")
+  private val gifImageInfo3 = GifImageInfo(url = "http://some.url3")
   private val testOnItemClickListener = object: OnItemClickListener {
     override fun onClick(imageInfoModel: GifImageInfo) {
     }
@@ -29,9 +28,7 @@ class GifAdapterTest : TestBase() {
   private lateinit var viewHolder: GifAdapter.ViewHolder
   private lateinit var sut: GifAdapter
 
-  @Before @UiThreadTest override fun setUp() {
-    super.setUp()
-
+  @Before @UiThreadTest fun setUp() {
     imageService = ImageService(targetContext)
     sut = GifAdapter(testOnItemClickListener, imageService)
     sut.add(gifImageInfo)

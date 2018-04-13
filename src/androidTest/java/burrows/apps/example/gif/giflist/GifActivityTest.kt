@@ -26,13 +26,15 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import test.TestBase
+import test.TestUtils.MOCK_SERVER_PORT
+import test.TestUtils.getMockFileResponse
+import test.TestUtils.getMockResponse
 import test.launchActivity
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 @SmallTest
 @RunWith(AndroidJUnit4::class)
-class GifActivityTest : TestBase() {
+class GifActivityTest {
   @get:Rule val activityRule = ActivityTestRule<GifActivity>(GifActivity::class.java, true, false)
   private val server = MockWebServer()
   private val dispatcher = object : Dispatcher() {
@@ -44,14 +46,12 @@ class GifActivityTest : TestBase() {
     }
   }
 
-  @Before override fun setUp() {
-    super.setUp()
+  @Before fun setUp() {
     server.start(MOCK_SERVER_PORT)
     server.setDispatcher(dispatcher)
   }
 
-  @After override fun tearDown() {
-    super.tearDown()
+  @After fun tearDown() {
     server.shutdown()
   }
 

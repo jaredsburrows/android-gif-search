@@ -15,17 +15,14 @@ import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations.initMocks
 import test.ImmediateSchedulerProvider
-import test.TestBase
 
-class GifPresenterTest : TestBase() {
+class GifPresenterTest {
   private val provider = ImmediateSchedulerProvider()
   @Mock private lateinit var view: GifContract.View
   @Mock private lateinit var repository: RiffsyApiClient
   private lateinit var sut: GifPresenter
 
-  @Before override fun setUp() {
-    super.setUp()
-
+  @Before fun setUp() {
     initMocks(this)
 
     `when`(view.isActive()).thenReturn(true)

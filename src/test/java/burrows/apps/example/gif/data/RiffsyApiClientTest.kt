@@ -12,10 +12,11 @@ import okhttp3.mockwebserver.RecordedRequest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import test.TestBase
+import test.TestUtils.MOCK_SERVER_PORT
+import test.TestUtils.getMockResponse
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
-class RiffsyApiClientTest : TestBase() {
+class RiffsyApiClientTest {
   private val server = MockWebServer()
   private val dispatcher = object : Dispatcher() {
     override fun dispatch(request: RecordedRequest): MockResponse = when {
@@ -26,8 +27,7 @@ class RiffsyApiClientTest : TestBase() {
   }
   private lateinit var sut: RiffsyApiClient
 
-  @Before override fun setUp() {
-    super.setUp()
+  @Before fun setUp() {
     server.start(MOCK_SERVER_PORT)
     server.setDispatcher(dispatcher)
 
@@ -38,8 +38,7 @@ class RiffsyApiClientTest : TestBase() {
           .providesOkHttpClient(null)))
   }
 
-  @After override fun tearDown() {
-    super.tearDown()
+  @After fun tearDown() {
     server.shutdown()
   }
 
