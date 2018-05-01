@@ -13,7 +13,8 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import kotlinx.android.synthetic.main.list_item.view.*
+import kotlinx.android.synthetic.main.list_item.view.gifImage
+import kotlinx.android.synthetic.main.list_item.view.gifProgress
 
 /**
  * RecyclerView adapter for handling Gif Images in a Grid format.

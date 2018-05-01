@@ -14,9 +14,9 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import burrows.apps.example.gif.R
-import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.ImageService
 import burrows.apps.example.gif.data.RiffsyApiClient
+import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -26,8 +26,11 @@ import com.bumptech.glide.request.target.Target
 import com.squareup.leakcanary.RefWatcher
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.dialog_preview.view.*
+import kotlinx.android.synthetic.main.activity_main.recyclerView
+import kotlinx.android.synthetic.main.activity_main.toolbar
+import kotlinx.android.synthetic.main.dialog_preview.view.gifDialogImage
+import kotlinx.android.synthetic.main.dialog_preview.view.gifDialogProgress
+import kotlinx.android.synthetic.main.dialog_preview.view.gifDialogTitle
 import javax.inject.Inject
 
 /**
