@@ -1,13 +1,13 @@
 // common
-val androidGradleVersion            = "3.1.1"
-val kotlinVersion                   = "1.2.31"
+val androidGradleVersion            = "3.1.2"
+val kotlinVersion                   = "1.2.41"
 val supportLibraryVersion           = "27.1.1"
 val daggerVersion                   = "2.15"
 val okHttpVersion                   = "3.10.0"
 val retrofitVersion                 = "2.4.0"
-val espressoVersion                 = "3.0.1"
+val espressoVersion                 = "3.0.2"
 val leakCanaryVersion               = "1.5.4"
-val glideVersion                    = "4.6.1"
+val glideVersion                    = "4.7.1"
 
 // android plugin
 extra["minSdkVersion"]              = 19
@@ -35,11 +35,11 @@ extra["supportv4"]                  = "com.android.support:support-v4:${supportL
 extra["recyclerviewv7"]             = "com.android.support:recyclerview-v7:${supportLibraryVersion}"
 extra["cardviewv7"]                 = "com.android.support:cardview-v7:${supportLibraryVersion}"
 extra["supportAnnotations"]         = "com.android.support:support-annotations:${supportLibraryVersion}"
-extra["constraintLayout"]           = "com.android.support.constraint:constraint-layout:1.0.2"
+extra["constraintLayout"]           = "com.android.support.constraint:constraint-layout:1.1.0"
 extra["kotlinStdlib"]               = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
 extra["kotlinReflect"]              = "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
 extra["rxAndroid"]                  = "io.reactivex.rxjava2:rxandroid:2.0.2"
-extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.1.12"
+extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.1.13"
 extra["dagger"]                     = "com.google.dagger:dagger:${daggerVersion}"
 extra["daggerAndroid"]              = "com.google.dagger:dagger-android:${daggerVersion}"
 extra["daggerAndroidSupport"]       = "com.google.dagger:dagger-android-support:${daggerVersion}"
@@ -68,14 +68,14 @@ extra["espressoCore"]               = "com.android.support.test.espresso:espress
 extra["espressoIntents"]            = "com.android.support.test.espresso:espresso-intents:${espressoVersion}"
 extra["espressoContrib"]            = "com.android.support.test.espresso:espresso-contrib:${espressoVersion}"
 extra["testingSupportLib"]          = "com.android.support.test:testing-support-lib:0.1"
-extra["runner"]                     = "com.android.support.test:runner:1.0.1"
+extra["runner"]                     = "com.android.support.test:runner:1.0.2"
 
 // androidTestUtil
-extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0.1"
+extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0.2"
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:2.18.0"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:2.18.3"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["truth"]                      = "com.google.truth:truth:0.40"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"

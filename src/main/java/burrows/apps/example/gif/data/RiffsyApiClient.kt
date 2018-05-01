@@ -30,7 +30,7 @@ interface RiffsyApiClient {
    * @param pos   Position of getResults.
    * @return Response of trending getResults.
    */
-  @GET("/v1/trending?key=$API_KEY") fun getTrendingResults(
+  @GET("/v1/trending?key=$API_KEY&safesearch=strict") fun getTrendingResults(
     @Query("limit") limit: Int,
     @Query("pos") pos: Double?): Observable<RiffsyResponseDto>
 
@@ -50,7 +50,7 @@ interface RiffsyApiClient {
    * @param pos   Position of getResults.
    * @return Response of search getResults.
    */
-  @GET("/v1/search?key=$API_KEY") fun getSearchResults(
+  @GET("/v1/search?key=$API_KEY&safesearch=strict") fun getSearchResults(
     @Query("tag") tag: String,
     @Query("limit") limit: Int,
     @Query("pos") pos: Double?): Observable<RiffsyResponseDto>
