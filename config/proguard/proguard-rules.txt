@@ -44,8 +44,7 @@
 # https://github.com/square/moshi#proguard
 ##########################################################################################
 -dontwarn okio.**
--dontwarn javax.annotation.Nullable
--dontwarn javax.annotation.ParametersAreNonnullByDefault
+-dontwarn javax.annotation.**
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
 }
