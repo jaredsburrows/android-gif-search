@@ -22,13 +22,13 @@ class GifPresenterTest {
   @Mock private lateinit var repository: RiffsyApiClient
   private lateinit var sut: GifPresenter
 
-  @Before fun setUp() {
+  @Before fun `set up`() {
     initMocks(this)
 
     `when`(view.isActive()).thenReturn(true)
   }
 
-  @Test fun testLoadTrendingImagesNotActive() {
+  @Test fun `test Load Trending Images Not Active`() {
     // Arrange
     val next = 0.0
     val response = RiffsyResponseDto()
@@ -46,7 +46,7 @@ class GifPresenterTest {
     verify(view, times(0)).addImages(eq(response))
   }
 
-  @Test fun testLoadTrendingImagesSuccess() {
+  @Test fun `test Load Trending Images Success`() {
     // Arrange
     val next = 0.0
     val response = RiffsyResponseDto()
@@ -63,7 +63,7 @@ class GifPresenterTest {
     verify(view).addImages(eq(response))
   }
 
-  @Test fun testLoadSearchImagesSuccess() {
+  @Test fun `test Load Search Images Success`() {
     // Arrange
     val searchString = "gifs"
     val next = 0.0
@@ -81,7 +81,7 @@ class GifPresenterTest {
     verify(view).addImages(eq(response))
   }
 
-  @Test fun testLoadSearchImagesViewInactive() {
+  @Test fun `test Load Search Images View Inactive`() {
     // Arrange
     `when`(view.isActive()).thenReturn(false)
     val searchString = "gifs"

@@ -8,11 +8,11 @@ import org.junit.Test
 class SchedulerProviderTest {
   private val sut = SchedulerProvider()
 
-  @Test fun testIo() {
+  @Test fun `test io`() {
     assertThat(sut.io()).isEqualTo(Schedulers.io())
   }
 
-  @Test fun testUi() {
+  @Test fun `test ui`() {
     assertThat(sut.ui()).isEqualTo(AndroidSchedulers.mainThread())
   }
 }

@@ -1,5 +1,5 @@
 // common
-val androidGradleVersion            = "3.1.2"
+val androidGradleVersion            = "3.1.3"
 val kotlinVersion                   = "1.2.51"
 val supportLibraryVersion           = "27.1.1"
 val daggerVersion                   = "2.15"
@@ -77,6 +77,6 @@ extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0
 extra["junit"]                      = "junit:junit:4.12"
 extra["mockitoInline"]              = "org.mockito:mockito-inline:2.18.3"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
-extra["truth"]                      = "com.google.truth:truth:0.40"
+extra["truth"]                      = "com.google.truth:truth:0.40"                           // D8: Program type already present: afu.org.checkerframework.checker.nullness.NullnessUtils
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
 extra["reflections"]                = "org.reflections:reflections:0.9.11"

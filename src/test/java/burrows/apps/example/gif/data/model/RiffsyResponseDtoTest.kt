@@ -9,12 +9,12 @@ class RiffsyResponseDtoTest {
   private var sutDefault = RiffsyResponseDto()
   private var sut = RiffsyResponseDto(results = results, next = nextResponse)
 
-  @Test fun testGetResults() {
+  @Test fun `test Get Results`() {
     assertThat(sutDefault.results).isEmpty()
     assertThat(sut.results).isEqualTo(results)
   }
 
-  @Test fun testGetNext() {
+  @Test fun `test Get Next`() {
     assertThat(sutDefault.next).isNull()
     assertThat(sut.next).isEqualTo(nextResponse)
   }

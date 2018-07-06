@@ -27,7 +27,7 @@ class RiffsyApiClientTest {
   }
   private lateinit var sut: RiffsyApiClient
 
-  @Before fun setUp() {
+  @Before fun `set up`() {
     server.start(MOCK_SERVER_PORT)
     server.setDispatcher(dispatcher)
 
@@ -38,11 +38,11 @@ class RiffsyApiClientTest {
           .providesOkHttpClient(null)))
   }
 
-  @After fun tearDown() {
+  @After fun `tear down`() {
     server.shutdown()
   }
 
-  @Test fun testTrendingResultsUrlShouldParseCorrectly() {
+  @Test fun `test Trending Results URL Should Parse Correctly`() {
     // Arrange
     val observer = TestObserver<RiffsyResponseDto>()
 
@@ -56,7 +56,7 @@ class RiffsyApiClientTest {
       .contains("/images/7d95a1f8a8750460a82b04451be26d69/raw")
   }
 
-  @Test fun testTrendingResultsUrlPreviewShouldParseCorrectly() {
+  @Test fun `test Trending Results URL Preview Should Parse Correctly`() {
     // Arrange
     val observer = TestObserver<RiffsyResponseDto>()
 
@@ -70,7 +70,7 @@ class RiffsyApiClientTest {
       .contains("/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw")
   }
 
-  @Test fun testSearchResultsUrlShouldParseCorrectly() {
+  @Test fun `test Search Results URL Should Parse Correctly`() {
     // Arrange
     val observer = TestObserver<RiffsyResponseDto>()
 
@@ -84,7 +84,7 @@ class RiffsyApiClientTest {
       .contains("/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw")
   }
 
-  @Test fun testSearchResultsUrlPreviewShouldParseCorrectly() {
+  @Test fun `test Search Results URL Preview Should Parse Correctly`() {
     // Arrange
     val observer = TestObserver<RiffsyResponseDto>()
 

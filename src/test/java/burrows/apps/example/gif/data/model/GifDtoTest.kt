@@ -9,12 +9,12 @@ class GifDtoTest {
   private var defaultSut = GifDto()
   private var sut = GifDto(url = gifUrl, preview = previewUrl)
 
-  @Test fun testGetUrl() {
+  @Test fun `test Get Url`() {
     assertThat(defaultSut.url).isEmpty()
     assertThat(sut.url).isEqualTo(gifUrl)
   }
 
-  @Test fun testGetPreview() {
+  @Test fun `test Get Preview`() {
     assertThat(defaultSut.url).isEmpty()
     assertThat(sut.preview).isEqualTo(previewUrl)
   }

@@ -11,9 +11,7 @@ import android.support.test.espresso.matcher.RootMatchers.isDialog
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withHint
 import android.support.test.espresso.matcher.ViewMatchers.withId
-import android.support.test.filters.SmallTest
 import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
 import burrows.apps.example.gif.R
 import okhttp3.mockwebserver.Dispatcher
@@ -25,15 +23,12 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import test.TestUtils.MOCK_SERVER_PORT
 import test.TestUtils.getMockFileResponse
 import test.TestUtils.getMockResponse
 import test.launchActivity
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
-@SmallTest
-@RunWith(AndroidJUnit4::class)
 class GifActivityTest {
   @get:Rule val activityRule = ActivityTestRule<GifActivity>(GifActivity::class.java, true, false)
   private val server = MockWebServer()
@@ -57,10 +52,8 @@ class GifActivityTest {
 
   @Ignore // TODO on view 'Animations or transitions are enabled on the target device. For more info check: http://goo.gl/qVu1yV
   @Test fun testTrendingThenClickOpenDialog() {
-    // Act
     activityRule.launchActivity()
 
-    // Assert
     // Select 0, the response only contains 1 item
     onView(withId(R.id.recyclerView))
       .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
@@ -73,10 +66,8 @@ class GifActivityTest {
   }
 
   @Test fun testTrendingResultsThenSearchThenBackToTrending() {
-    // Act
     activityRule.launchActivity()
 
-    // Assert
     onView(withId(R.id.menu_search))
       .perform(click())
     // android.support.v7.appcompat.R.id.search_src_text sometimes is not found

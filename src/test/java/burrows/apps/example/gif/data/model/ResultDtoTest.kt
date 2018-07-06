@@ -9,12 +9,12 @@ class ResultDtoTest {
   private var sutDefault = ResultDto()
   private var sut = ResultDto(media = media, title = mediaTitle)
 
-  @Test fun testGetMedia() {
+  @Test fun `test Get Media`() {
     assertThat(sutDefault.media).isEmpty()
     assertThat(sut.media).isEqualTo(media)
   }
 
-  @Test fun testGetTitle() {
+  @Test fun `test Get Title`() {
     assertThat(sutDefault.title).isEmpty()
     assertThat(sut.title).isEqualTo(mediaTitle)
   }
