@@ -160,7 +160,7 @@ dependencies {
   releaseImplementation(extra["leakcanaryAndroidNoOp"] as String)
 
   androidTestImplementation(extra["junit"] as String)
-  androidTestImplementation(extra["truth"] as String)
+  androidTestImplementation(extra["truth"] as String) { exclude(module = "checker-qual") }
   androidTestImplementation(extra["runner"] as String)
   androidTestImplementation(extra["espressoCore"] as String)
   androidTestImplementation(extra["espressoIntents"] as String)
@@ -170,7 +170,7 @@ dependencies {
   androidTestUtil(extra["orchestrator"] as String)
 
   testImplementation(extra["junit"] as String)
-  testImplementation(extra["truth"] as String)
+  testImplementation(extra["truth"] as String) { exclude(module = "checker-qual") }
   testImplementation(extra["mockitoKotlin"] as String)
   testImplementation(extra["mockitoInline"] as String)
   testImplementation(extra["leakcanaryAndroidNoOp"] as String)
