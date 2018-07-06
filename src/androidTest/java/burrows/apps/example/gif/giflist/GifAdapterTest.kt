@@ -39,7 +39,7 @@ class GifAdapterTest {
   @Test @UiThreadTest fun testOnCreateViewHolder() {
     // Arrange
     val parent = object : ViewGroup(targetContext) {
-      override fun onLayout(b: Boolean, i: Int, i1: Int, i2: Int, i3: Int) {}
+      override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
     }
 
     // Assert
