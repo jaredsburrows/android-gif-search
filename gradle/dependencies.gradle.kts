@@ -13,7 +13,6 @@ val glideVersion                    = "4.7.1"
 extra["minSdkVersion"]              = 19
 extra["targetSdkVersion"]           = 27
 extra["compileSdkVersion"]          = 27
-extra["buildToolsVersion"]          = "27.0.3"
 extra["javaVersion"]                = "1.8"
 extra["debugKeystoreUser"]          = "androiddebugkey"
 extra["debugKeystorePass"]          = "android"
