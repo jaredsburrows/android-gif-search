@@ -75,7 +75,7 @@ extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:2.18.3"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:2.19.0"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["truth"]                      = "com.google.truth:truth:0.40"                           // D8: Program type already present: afu.org.checkerframework.checker.nullness.NullnessUtils
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
