@@ -26,7 +26,7 @@ extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:
 extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.15.1"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
-extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.17.0"
+extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.20.0"
 
 // implementation
 extra["design"]                     = "com.android.support:design:${supportLibraryVersion}"
