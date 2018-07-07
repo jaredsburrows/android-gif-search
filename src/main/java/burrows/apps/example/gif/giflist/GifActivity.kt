@@ -152,29 +152,32 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     gifAdapter.setHasStableIds(true)
 
     // Setup RecyclerView
-    recyclerView.layoutManager = layoutManager
-    recyclerView.addItemDecoration(gifItemDecoration)
-    recyclerView.adapter = gifAdapter
-    recyclerView.setHasFixedSize(true)
-    recyclerView.setItemViewCacheSize(RiffsyApiClient.DEFAULT_LIMIT_COUNT)
-    recyclerView.isDrawingCacheEnabled = true
-    recyclerView.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
-    recyclerView.recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
-    recyclerView.addOnScrollListener(recyclerViewOnScrollListener)
+    recyclerView.apply {
+      layoutManager = layoutManager
+      addItemDecoration(gifItemDecoration)
+      adapter = gifAdapter
+      setHasFixedSize(true)
+      setItemViewCacheSize(RiffsyApiClient.DEFAULT_LIMIT_COUNT)
+      isDrawingCacheEnabled = true
+      drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
+      recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
+      addOnScrollListener(recyclerViewOnScrollListener)
+    }
 
     // Custom view for Dialog
     val dialogView = View.inflate(this, R.layout.dialog_preview, null)
 
     // Customize Dialog
-    gifDialog = AppCompatDialog(this)
-    gifDialog.setContentView(dialogView)
-    gifDialog.setCancelable(true)
-    gifDialog.setCanceledOnTouchOutside(true)
-    gifDialog.setOnDismissListener {
-      // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
-      Glide.with(gifImageView.context).clear(gifImageView)  // Forget view, try to free resources
-      gifImageView.setImageDrawable(null)
-      gifDialogProgressBar.visibility = View.VISIBLE // Make sure to show progress when loading new view
+    gifDialog = AppCompatDialog(this).apply {
+      setContentView(dialogView)
+      setCancelable(true)
+      setCanceledOnTouchOutside(true)
+      setOnDismissListener {
+        // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
+        Glide.with(gifImageView.context).clear(gifImageView) // Forget view, try to free resources
+        gifImageView.setImageDrawable(null)
+        gifDialogProgressBar.visibility = View.VISIBLE // Make sure to show progress when loading new view
+      }
     }
 
     // Dialog views

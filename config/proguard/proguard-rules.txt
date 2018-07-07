@@ -26,8 +26,7 @@
 # Okhttp3
 # https://github.com/square/okhttp#proguard
 ##########################################################################################
--dontwarn javax.annotation.Nullable
--dontwarn javax.annotation.ParametersAreNonnullByDefault
+-dontwarn javax.annotation.**
 -dontwarn okhttp3.**
 -dontnote okhttp3.**
 
@@ -35,8 +34,7 @@
 # Okio
 # https://github.com/square/okio#proguard
 ##########################################################################################
--dontwarn javax.annotation.Nullable
--dontwarn javax.annotation.ParametersAreNonnullByDefault
+-dontwarn javax.annotation.**
 -dontwarn okio.**
 
 ##########################################################################################
@@ -44,8 +42,7 @@
 # https://github.com/square/moshi#proguard
 ##########################################################################################
 -dontwarn okio.**
--dontwarn javax.annotation.Nullable
--dontwarn javax.annotation.ParametersAreNonnullByDefault
+-dontwarn javax.annotation.**
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
 }
