@@ -74,7 +74,7 @@ extra["orchestrator"]               = "com.android.support.test:orchestrator:1.0
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:2.19.0"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:2.19.1"
 extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 extra["truth"]                      = "com.google.truth:truth:0.41"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
