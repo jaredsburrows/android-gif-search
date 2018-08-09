@@ -7,4 +7,3 @@ fun <T : Activity> ActivityTestRule<T>.launchActivity() {
   launchActivity(null)
 }
 
-

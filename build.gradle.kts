@@ -16,6 +16,7 @@ buildscript {
     classpath(extra["dexcountGradlePlugin"] as String)
     classpath(extra["gradleAndroidApkSizePlugin"] as String)
     classpath(extra["gradleVersionsPlugin"] as String)
+    classpath(extra["ktlintGradle"] as String)
   }
 }
 
@@ -34,6 +35,7 @@ apply {
   plugin("com.getkeepsafe.dexcount")
   plugin("com.vanniktech.android.apk.size")
   plugin("com.github.ben-manes.versions")
+  plugin("org.jlleitschuh.gradle.ktlint")
   from(file("gradle/compile.gradle.kts"))
 }
 
