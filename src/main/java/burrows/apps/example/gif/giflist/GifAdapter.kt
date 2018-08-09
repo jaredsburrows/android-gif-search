@@ -50,9 +50,11 @@ class GifAdapter(private val onItemClickListener: OnItemClickListener,
     // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
     // Forget view, try to free resources
     Glide.with(holder.itemView.context).clear(holder.itemView.gifImage)
-    holder.itemView.gifImage.setImageDrawable(null)
-    // Make sure to show progress when loading new view
-    holder.itemView.gifProgress.visibility = View.VISIBLE
+    holder.itemView.apply {
+      gifImage.setImageDrawable(null)
+      // Make sure to show progress when loading new view
+      gifProgress.visibility = View.VISIBLE
+    }
   }
 
   override fun getItemCount() = data.size

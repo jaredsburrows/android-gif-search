@@ -84,8 +84,10 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
       // Search on type
       if (!TextUtils.isEmpty(newText)) {
         // Reset
-        presenter.clearImages()
-        presenter.loadSearchImages(newText, next)
+        presenter.apply {
+          clearImages()
+          loadSearchImages(newText, next)
+        }
         hasSearched = true
       }
       return false
@@ -100,8 +102,10 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
       // When search is closed, go back to trending getResults
       if (hasSearched) {
         // Reset
-        presenter.clearImages()
-        presenter.loadTrendingImages(next)
+        presenter.apply {
+          clearImages()
+          loadTrendingImages(next)
+        }
         hasSearched = false
       }
       return true
@@ -148,8 +152,9 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     gifItemDecoration = GifItemDecoration(
       resources.getDimensionPixelSize(R.dimen.gif_adapter_item_offset),
       layoutManager.spanCount)
-    gifAdapter = GifAdapter(this, repository)
-    gifAdapter.setHasStableIds(true)
+    gifAdapter = GifAdapter(this, repository).apply {
+      setHasStableIds(true)
+    }
 
     // Setup RecyclerView
     recyclerView.apply {
@@ -266,13 +271,17 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
   //
 
   private fun showImageDialog(imageInfoModel: GifImageInfo) {
-    gifDialog.show()
-    // Remove "white" background for gifDialog
-    gifDialog.window.decorView.setBackgroundResource(android.R.color.transparent)
+    gifDialog.apply {
+      show()
+      // Remove "white" background for gifDialog
+      window.decorView.setBackgroundResource(android.R.color.transparent)
+    }
 
     // Load associated text
-    gifDialogText.text = imageInfoModel.url
-    gifDialogText.visibility = View.VISIBLE
+    gifDialogText.apply {
+      text = imageInfoModel.url
+      visibility = View.VISIBLE
+    }
 
     // Load image
     repository.load(imageInfoModel.url)
