@@ -8,7 +8,7 @@ class MediaDtoTest {
   private var defaultSut = MediaDto()
   private var sut = MediaDto(gif = gifDto)
 
-  @Test fun `test Get Gif`() {
+  @Test fun testGetGif() {
     assertThat(defaultSut.gif).isEqualTo(GifDto("", ""))
     assertThat(sut.gif).isEqualTo(gifDto)
   }

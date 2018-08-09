@@ -27,7 +27,7 @@ class RiffsyApiClientTest {
   }
   private lateinit var sut: RiffsyApiClient
 
-  @Before fun `set up`() {
+  @Before fun setUp() {
     server.start(MOCK_SERVER_PORT)
     server.setDispatcher(dispatcher)
 
@@ -38,62 +38,50 @@ class RiffsyApiClientTest {
           .providesOkHttpClient(null)))
   }
 
-  @After fun `tear down`() {
+  @After fun tearDown() {
     server.shutdown()
   }
 
-  @Test fun `test Trending Results URL Should Parse Correctly`() {
-    // Arrange
+  @Test fun testTrendingResultsURLShouldParseCorrectly() {
     val observer = TestObserver<RiffsyResponseDto>()
 
-    // Act
     val observable = sut.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
     val response = observable.blockingFirst()
     observer.assertNoErrors()
 
-    // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.url)
       .contains("/images/7d95a1f8a8750460a82b04451be26d69/raw")
   }
 
-  @Test fun `test Trending Results URL Preview Should Parse Correctly`() {
-    // Arrange
+  @Test fun testTrendingResultsURLPreviewShouldParseCorrectly() {
     val observer = TestObserver<RiffsyResponseDto>()
 
-    // Act
     val observable = sut.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
     val response = observable.blockingFirst()
     observer.assertNoErrors()
 
-    // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.preview)
       .contains("/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw")
   }
 
-  @Test fun `test Search Results URL Should Parse Correctly`() {
-    // Arrange
+  @Test fun testSearchResultsURLShouldParseCorrectly() {
     val observer = TestObserver<RiffsyResponseDto>()
 
-    // Act
     val observable = sut.getSearchResults("hello", RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
     val response = observable.blockingFirst()
     observer.assertNoErrors()
 
-    // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.url)
       .contains("/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw")
   }
 
-  @Test fun `test Search Results URL Preview Should Parse Correctly`() {
-    // Arrange
+  @Test fun testSearchResultsURLPreviewShouldParseCorrectly() {
     val observer = TestObserver<RiffsyResponseDto>()
 
-    // Act
     val observable = sut.getSearchResults("hello", RiffsyApiClient.DEFAULT_LIMIT_COUNT, null)
     val response = observable.blockingFirst()
     observer.assertNoErrors()
 
-    // Assert
     assertThat(response.results?.get(0)?.media?.get(0)?.gif?.preview)
       .contains("/images/6f2ed339fbdb5c1270e29945ee1f0d77/raw")
   }

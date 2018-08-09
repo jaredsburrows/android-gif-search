@@ -38,6 +38,7 @@ object TestUtils {
     val result = Buffer()
     result.writeAll(source)
     source.close()
+    inputStream.close()
     return result
   }
 }
