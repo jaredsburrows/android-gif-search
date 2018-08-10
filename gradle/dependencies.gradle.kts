@@ -6,7 +6,7 @@ val daggerVersion                   = "2.17"
 val okHttpVersion                   = "3.11.0"
 val retrofitVersion                 = "2.4.0"
 val espressoVersion                 = "3.0.2"
-val leakCanaryVersion               = "1.5.4"
+val leakCanaryVersion               = "1.6.1"
 val glideVersion                    = "4.7.1"
 
 // android plugin
