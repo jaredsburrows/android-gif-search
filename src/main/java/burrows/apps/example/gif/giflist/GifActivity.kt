@@ -172,8 +172,6 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
             adapter = gifAdapter
             setHasFixedSize(true)
             setItemViewCacheSize(RiffsyApiClient.DEFAULT_LIMIT_COUNT)
-            isDrawingCacheEnabled = true
-            drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
             recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
             addOnScrollListener(recyclerViewOnScrollListener)
         }
@@ -283,7 +281,7 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
         gifDialog.apply {
             show()
             // Remove "white" background for gifDialog
-            window.decorView.setBackgroundResource(android.R.color.transparent)
+            window?.decorView?.setBackgroundResource(android.R.color.transparent)
         }
 
         // Load associated text

@@ -17,8 +17,8 @@ object TestUtils {
             .addHeader("Content-type: application/json; charset=utf-8")
     }
 
-    @JvmStatic private fun parseText(fileName: String): String {
-        val inputStream = TestUtils::class.java.getResourceAsStream(fileName)
+    @JvmStatic private fun parseText(fileName: String): String? {
+        val inputStream = TestUtils::class.java.getResourceAsStream(fileName) ?: return null
         val text = InputStreamReader(inputStream).readText()
         inputStream.close()
         return text
@@ -32,8 +32,8 @@ object TestUtils {
             .addHeader("content-type: image/png")
     }
 
-    @JvmStatic private fun parseImage(fileName: String): Buffer {
-        val inputStream = TestUtils::class.java.getResourceAsStream(fileName)
+    @JvmStatic private fun parseImage(fileName: String): Buffer? {
+        val inputStream = TestUtils::class.java.getResourceAsStream(fileName) ?: return null
         val source = Okio.source(inputStream)
         val result = Buffer()
         result.writeAll(source)
