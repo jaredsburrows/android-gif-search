@@ -121,11 +121,11 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
         }
     }
     private val recyclerViewOnScrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
 
             // Continuous scrolling
-            visibleItemCount = recyclerView?.childCount ?: 0
+            visibleItemCount = recyclerView.childCount
             totalItemCount = layoutManager.itemCount
             firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
 

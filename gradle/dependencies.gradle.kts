@@ -1,7 +1,7 @@
 // common
 val androidGradleVersion            = "3.3.0-alpha07"
 val kotlinVersion                   = "1.2.61"
-val supportLibraryVersion           = "27.1.1"
+val supportLibraryVersion           = "28.0.0-rc01"
 val daggerVersion                   = "2.17"
 val okHttpVersion                   = "3.11.0"
 val retrofitVersion                 = "2.4.0"
@@ -11,8 +11,8 @@ val glideVersion                    = "4.7.1"
 
 // android plugin
 extra["minSdkVersion"]              = 19
-extra["targetSdkVersion"]           = 27
-extra["compileSdkVersion"]          = 27
+extra["targetSdkVersion"]           = 28
+extra["compileSdkVersion"]          = 28
 extra["javaVersion"]                = "1.8"
 extra["debugKeystoreUser"]          = "androiddebugkey"
 extra["debugKeystorePass"]          = "android"
