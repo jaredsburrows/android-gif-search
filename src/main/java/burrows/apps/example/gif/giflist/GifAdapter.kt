@@ -29,7 +29,10 @@ class GifAdapter(
 
     private val data = arrayListOf<GifImageInfo>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(LayoutInflater.from(parent.context)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder = ViewHolder(LayoutInflater.from(parent.context)
         .inflate(R.layout.list_item, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -72,16 +75,12 @@ class GifAdapter(
         }
     }
 
-    fun add(model: GifImageInfo): Boolean {
-        return data.add(model).apply {
-            notifyItemInserted(data.size + 1)
-        }
+    fun add(model: GifImageInfo) = data.add(model).apply {
+        notifyItemInserted(data.size + 1)
     }
 
-    fun addAll(collection: List<GifImageInfo>): Boolean {
-        return data.addAll(collection).apply {
-            notifyItemRangeInserted(0, data.size + 1)
-        }
+    fun addAll(collection: List<GifImageInfo>) = data.addAll(collection).apply {
+        notifyItemRangeInserted(0, data.size + 1)
     }
 
     fun add(location: Int, model: GifImageInfo) {

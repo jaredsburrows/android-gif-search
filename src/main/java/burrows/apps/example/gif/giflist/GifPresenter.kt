@@ -47,7 +47,8 @@ class GifPresenter @Inject constructor(
      * @param searchString User input.
      */
     override fun loadSearchImages(searchString: String, next: Double?) {
-        loadImages(riffsyApiClient.getSearchResults(searchString, RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
+        loadImages(riffsyApiClient
+            .getSearchResults(searchString, RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
     }
 
     /**

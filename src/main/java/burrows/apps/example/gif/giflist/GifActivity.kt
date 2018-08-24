@@ -134,7 +134,8 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
                 previousTotal = totalItemCount
             }
 
-            if (!loading && totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD) {
+            if (!loading &&
+                totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD) {
                 presenter.loadTrendingImages(next)
 
                 loading = true

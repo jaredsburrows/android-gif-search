@@ -25,9 +25,10 @@ class GifAdapterTest {
 
     @Before @UiThreadTest fun setUp() {
         imageService = ImageService(targetContext)
-        sut = GifAdapter(testOnItemClickListener, imageService)
-        sut.add(gifImageInfo)
-        sut.add(gifImageInfo2)
+        sut = GifAdapter(testOnItemClickListener, imageService).apply {
+            add(gifImageInfo)
+            add(gifImageInfo2)
+        }
         viewHolder = sut.onCreateViewHolder(LinearLayout(targetContext), 0)
     }
 
@@ -36,7 +37,8 @@ class GifAdapterTest {
             override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
         }
 
-        assertThat(sut.onCreateViewHolder(parent, 0)).isInstanceOf(GifAdapter.ViewHolder::class.java)
+        assertThat(sut.onCreateViewHolder(parent, 0))
+            .isInstanceOf(GifAdapter.ViewHolder::class.java)
     }
 
     @Test @UiThreadTest fun testOnBindViewHolderOnAdapterItemClick() {

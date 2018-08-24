@@ -29,7 +29,7 @@ object TestUtils {
             .setStatus("HTTP/1.1 200")
             .setResponseCode(HttpURLConnection.HTTP_OK)
             .setBody(parseImage(fileName))
-            .addHeader("content-type: image/png")
+            .addHeader("Content-type: image/png")
     }
 
     @JvmStatic private fun parseImage(fileName: String): Buffer? {
