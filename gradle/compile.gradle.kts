@@ -12,7 +12,6 @@ tasks.withType<JavaCompile> {
             add("-Werror")                   // Turn warnings into errors
         }
         encoding = "utf-8"
-        isIncremental = true
         isFork = true
     }
 }
