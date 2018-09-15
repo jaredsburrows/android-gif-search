@@ -1,7 +1,7 @@
 // common
 val androidGradleVersion            = "3.3.0-alpha07"
 val kotlinVersion                   = "1.2.61"
-val supportLibraryVersion           = "28.0.0-rc01"
+val supportLibraryVersion           = "28.0.0-rc02"
 val daggerVersion                   = "2.17"
 val okHttpVersion                   = "3.11.0"
 val retrofitVersion                 = "2.4.0"
