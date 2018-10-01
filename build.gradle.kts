@@ -112,7 +112,7 @@ android {
             isReturnDefaultValues = true
             isIncludeAndroidResources = true
         }
-        setExecution("ANDROID_TEST_ORCHESTRATOR")
+        execution = "ANDROID_TEST_ORCHESTRATOR"
     }
 
     // Optimize APK size - remove excess files in the manifest and APK
