@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 tasks.withType<JavaCompile> {
     sourceCompatibility = rootProject.extra["javaVersion"] as String
     targetCompatibility = rootProject.extra["javaVersion"] as String
@@ -18,11 +21,11 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Test> {
     testLogging {
-        setExceptionFormat("full")
+        exceptionFormat = TestExceptionFormat.FULL
         showCauses = true
         showExceptions = true
         showStackTraces = true
-        events("failed", "skipped")
+        events = setOf(TestLogEvent.FAILED, TestLogEvent.SKIPPED)
     }
 
     failFast = true
