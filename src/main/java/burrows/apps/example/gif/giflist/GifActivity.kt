@@ -43,23 +43,23 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
         private const val VISIBLE_THRESHOLD = 5
     }
 
-    @Inject lateinit var presenter: GifPresenter
+    @Inject lateinit var gifPresenter: GifPresenter
     @Inject lateinit var refWatcher: RefWatcher
-    @Inject lateinit var repository: ImageService
-    private lateinit var layoutManager: GridLayoutManager
+    @Inject lateinit var imageService: ImageService
+    private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var gifItemDecoration: GifItemDecoration
     private lateinit var gifAdapter: GifAdapter
     private lateinit var gifDialog: AppCompatDialog
     private lateinit var gifDialogText: TextView
     private lateinit var gifDialogProgressBar: ProgressBar
     private lateinit var gifImageView: ImageView
-    private var hasSearched = false
-    private var previousTotal = 0
-    private var loading = true
-    private var firstVisibleItem = 0
-    private var visibleItemCount = 0
-    private var totalItemCount = 0
-    private var next: Double? = null
+    private var hasSearchedImages = false
+    private var previousImageCount = 0
+    private var loadingImages = true
+    private var firstVisibleImage = 0
+    private var visibleImageCount = 0
+    private var totalImageCount = 0
+    private var nextPageNumber: Double? = null
     private val imageRequestListener = object : RequestListener<GifDrawable> {
         override fun onResourceReady(
             resource: GifDrawable?,
@@ -70,7 +70,7 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
         ): Boolean {
             // Hide progressbar
             gifDialogProgressBar.visibility = View.GONE
-            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loadingImages\t $model")
 
             return false
         }
@@ -83,7 +83,7 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
         ): Boolean {
             // Hide progressbar
             gifDialogProgressBar.visibility = View.GONE
-            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loadingImages\t $model")
 
             return false
         }
@@ -93,11 +93,11 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
             // Search on type
             if (!TextUtils.isEmpty(newText)) {
                 // Reset
-                presenter.apply {
+                gifPresenter.apply {
                     clearImages()
-                    loadSearchImages(newText, next)
+                    loadSearchImages(newText, nextPageNumber)
                 }
-                hasSearched = true
+                hasSearchedImages = true
             }
             return false
         }
@@ -109,13 +109,13 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
 
         override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
             // When search is closed, go back to trending getResults
-            if (hasSearched) {
+            if (hasSearchedImages) {
                 // Reset
-                presenter.apply {
+                gifPresenter.apply {
                     clearImages()
-                    loadTrendingImages(next)
+                    loadTrendingImages(nextPageNumber)
                 }
-                hasSearched = false
+                hasSearchedImages = false
             }
             return true
         }
@@ -125,20 +125,20 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
             super.onScrolled(recyclerView, dx, dy)
 
             // Continuous scrolling
-            visibleItemCount = recyclerView.childCount
-            totalItemCount = layoutManager.itemCount
-            firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+            visibleImageCount = recyclerView.childCount
+            totalImageCount = gridLayoutManager.itemCount
+            firstVisibleImage = gridLayoutManager.findFirstVisibleItemPosition()
 
-            if (loading && totalItemCount > previousTotal) {
-                loading = false
-                previousTotal = totalItemCount
+            if (loadingImages && totalImageCount > previousImageCount) {
+                loadingImages = false
+                previousImageCount = totalImageCount
             }
 
-            if (!loading &&
-                totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD) {
-                presenter.loadTrendingImages(next)
+            if (!loadingImages &&
+                totalImageCount - visibleImageCount <= firstVisibleImage + VISIBLE_THRESHOLD) {
+                gifPresenter.loadTrendingImages(nextPageNumber)
 
-                loading = true
+                loadingImages = true
             }
         }
     }
@@ -158,17 +158,17 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
         toolbar.setTitle(R.string.main_screen_title)
         setSupportActionBar(toolbar)
 
-        layoutManager = GridLayoutManager(this, PORTRAIT_COLUMNS)
+        gridLayoutManager = GridLayoutManager(this, PORTRAIT_COLUMNS)
         gifItemDecoration = GifItemDecoration(
             resources.getDimensionPixelSize(R.dimen.gif_adapter_item_offset),
-            layoutManager.spanCount)
-        gifAdapter = GifAdapter(this, repository).apply {
+            gridLayoutManager.spanCount)
+        gifAdapter = GifAdapter(this, imageService).apply {
             setHasStableIds(true)
         }
 
         // Setup RecyclerView
-        recyclerView.layoutManager = layoutManager
         recyclerView.apply {
+            layoutManager = gridLayoutManager
             addItemDecoration(gifItemDecoration)
             adapter = gifAdapter
             setHasFixedSize(true)
@@ -189,7 +189,7 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
                 // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
                 Glide.with(gifImageView.context).clear(gifImageView) // Forget view, try to free resources
                 gifImageView.setImageDrawable(null)
-                gifDialogProgressBar.visibility = View.VISIBLE // Make sure to show progress when loading new view
+                gifDialogProgressBar.visibility = View.VISIBLE // Make sure to show progress when loadingImages new view
             }
         }
 
@@ -199,22 +199,23 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
         gifImageView = dialogView.gifDialogImage
 
         // Load initial images
-        presenter.loadTrendingImages(next)
+        gifPresenter.loadTrendingImages(nextPageNumber)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.menu_fragment_main, menu)
 
-        val menuItem = menu.findItem(R.id.menu_search)
-        val searchView = menuItem?.actionView as SearchView?
-        searchView?.queryHint = searchView?.context?.getString(R.string.search_gifs)
+        menu.findItem(R.id.menu_search).apply {
+            // Set contextual action on search icon click
+            setOnActionExpandListener(searchOnActionExpandListener)
 
-        // Set contextual action on search icon click
-        menuItem?.setOnActionExpandListener(searchOnActionExpandListener)
-
-        // Query listener for search bar
-        searchView?.setOnQueryTextListener(searchOnQueryTextListener)
+            (actionView as SearchView).apply {
+                queryHint = context.getString(R.string.search_gifs)
+                // Query listener for search bar
+                setOnQueryTextListener(searchOnQueryTextListener)
+            }
+        }
 
         return true
     }
@@ -222,11 +223,11 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     override fun onResume() {
         super.onResume()
 
-        presenter.takeView(this)
+        gifPresenter.takeView(this)
     }
 
     override fun onPause() {
-        presenter.dropView()
+        gifPresenter.dropView()
 
         super.onPause()
     }
@@ -247,16 +248,16 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     }
 
     override fun addImages(riffsyResponseDto: RiffsyResponseDto) {
-        next = riffsyResponseDto.next
+        nextPageNumber = riffsyResponseDto.next
 
-        riffsyResponseDto.results?.forEach {
-            val first = it.media?.first()?.gif
-            val url = first?.url
-            val preview = first?.preview
+        riffsyResponseDto.results?.forEach { result ->
+            val gif = result.media?.first()?.gif
+            val gifUrl = gif?.url
+            val gifPreviewUrl = gif?.preview
 
-            gifAdapter.add(GifImageInfo(url = url, previewUrl = preview))
+            gifAdapter.add(GifImageInfo(url = gifUrl, previewUrl = gifPreviewUrl))
 
-            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $url")
+            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $gifUrl")
         }
     }
 
@@ -292,8 +293,8 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
         }
 
         // Load image
-        repository.load(imageInfoModel.url)
-            .thumbnail(repository.load(imageInfoModel.previewUrl))
+        imageService.load(imageInfoModel.url)
+            .thumbnail(imageService.load(imageInfoModel.previewUrl))
             .listener(imageRequestListener)
             .into(gifImageView)
     }
