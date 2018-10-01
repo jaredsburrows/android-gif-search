@@ -49,7 +49,7 @@ android {
         minSdkVersion(extra["minSdkVersion"] as Int)
         targetSdkVersion(extra["targetSdkVersion"] as Int)
         testApplicationId = "burrows.apps.example.gif.test"
-        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArgument("disableAnalytics", "true")
         resConfigs("en")
         vectorDrawables.useSupportLibrary = true
@@ -112,7 +112,7 @@ android {
             isReturnDefaultValues = true
             isIncludeAndroidResources = true
         }
-        execution = "ANDROID_TEST_ORCHESTRATOR"
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
     // Optimize APK size - remove excess files in the manifest and APK
@@ -130,13 +130,11 @@ configurations.all {
     resolutionStrategy {
         force(extra["kotlinStdlib"] as String)
         force(extra["kotlinReflect"] as String)
-        force(extra["supportAnnotations"] as String)
     }
 }
 
 dependencies {
-    implementation(extra["design"] as String)
-    implementation(extra["cardviewv7"] as String)
+    implementation(extra["material"] as String)
     implementation(extra["constraintLayout"] as String)
     implementation(extra["kotlinStdlib"] as String)
     implementation(extra["okhttp"] as String)

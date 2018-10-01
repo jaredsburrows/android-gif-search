@@ -1,7 +1,7 @@
 package burrows.apps.example.gif.giflist
 
 import android.graphics.Rect
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 
 /**
