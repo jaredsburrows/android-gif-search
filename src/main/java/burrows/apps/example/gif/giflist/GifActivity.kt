@@ -167,8 +167,8 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
         }
 
         // Setup RecyclerView
+        recyclerView.layoutManager = layoutManager
         recyclerView.apply {
-            layoutManager = layoutManager
             addItemDecoration(gifItemDecoration)
             adapter = gifAdapter
             setHasFixedSize(true)
