@@ -65,7 +65,6 @@ class GifActivityTest {
             .perform(pressBack())
     }
 
-    @Ignore("AGP 3.3. issue?")
     @Test fun testTrendingResultsThenSearchThenBackToTrending() {
         activityRule.launchActivity()
 
