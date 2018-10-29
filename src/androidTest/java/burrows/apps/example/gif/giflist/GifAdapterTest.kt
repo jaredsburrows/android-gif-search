@@ -1,9 +1,9 @@
 package burrows.apps.example.gif.giflist
 
-import android.support.test.InstrumentationRegistry
-import android.support.test.annotation.UiThreadTest
+import androidx.test.annotation.UiThreadTest
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.test.platform.app.InstrumentationRegistry
 import burrows.apps.example.gif.data.ImageService
 import burrows.apps.example.gif.giflist.GifAdapter.OnItemClickListener
 import com.google.common.truth.Truth.assertThat
@@ -11,7 +11,7 @@ import org.junit.Before
 import org.junit.Test
 
 class GifAdapterTest {
-    private val targetContext = InstrumentationRegistry.getTargetContext()
+    private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
     private val gifImageInfo = GifImageInfo(url = "http://some.url")
     private val gifImageInfo2 = GifImageInfo(url = "http://some.url2")
     private val gifImageInfo3 = GifImageInfo(url = "http://some.url3")

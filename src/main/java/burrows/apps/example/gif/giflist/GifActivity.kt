@@ -1,10 +1,10 @@
 package burrows.apps.example.gif.giflist
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatDialog
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
+import androidx.appcompat.app.AppCompatDialog
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.SearchView
 import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
