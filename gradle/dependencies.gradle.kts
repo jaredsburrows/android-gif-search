@@ -23,7 +23,7 @@ extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin
 extra["kotlinAndroidExtensions"]    = "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:2.0.1"
 extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.16"
-extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.3"
+extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.4"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.20.0"
 extra["ktlintGradle"]               = "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:5.1.0"
@@ -34,7 +34,7 @@ extra["constraintLayout"]           = "androidx.constraintlayout:constraintlayou
 extra["kotlinStdlib"]               = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 extra["kotlinReflect"]              = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 extra["rxAndroid"]                  = "io.reactivex.rxjava2:rxandroid:2.1.0"
-extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.2.2"
+extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.2.3"
 extra["dagger"]                     = "com.google.dagger:dagger:$daggerVersion"
 extra["daggerAndroid"]              = "com.google.dagger:dagger-android:$daggerVersion"
 extra["daggerAndroidSupport"]       = "com.google.dagger:dagger-android-support:$daggerVersion"
@@ -62,10 +62,10 @@ extra["glideCompiler"]              = "com.github.bumptech.glide:compiler:$glide
 extra["espressoCore"]               = "androidx.test.espresso:espresso-core:$espressoVersion"
 extra["espressoIntents"]            = "androidx.test.espresso:espresso-intents:$espressoVersion"
 extra["espressoContrib"]            = "androidx.test.espresso:espresso-contrib:$espressoVersion"
-extra["runner"]                     = "androidx.test:runner:1.1.0-alpha4"
+extra["runner"]                     = "androidx.test:runner:1.1.0"
 
 // androidTestUtil
-extra["orchestrator"]               = "androidx.test:orchestrator:1.1.0-alpha4"
+extra["orchestrator"]               = "androidx.test:orchestrator:1.1.0"
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
