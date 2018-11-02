@@ -1,11 +1,11 @@
-# Android RecyclerView Gif Example in Kotlin with Kotlin DSL
+# Android RecyclerView Gif Example in Kotlin using the Kotlin DSL
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![TravisCI  Build](https://img.shields.io/travis/jaredsburrows/android-gif-example/master.svg)](https://travis-ci.org/jaredsburrows/android-gif-example)
 [![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
 
 
-Riffsy RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2, Junit and Espresso tests with Kotlin DSL!
+Gif RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2, Junit, Espresso and Robolectric tests!
 
 <a href="http://i.imgur.com/zErC6JV.png" target="_blank"><img src="http://i.imgur.com/zErC6JV.png" width="250px" /></a>
 

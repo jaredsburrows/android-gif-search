@@ -59,6 +59,8 @@ extra["daggerAndroidProcessor"]     = "com.google.dagger:dagger-android-processo
 extra["glideCompiler"]              = "com.github.bumptech.glide:compiler:$glideVersion"
 
 // androidTestImplementation
+extra["androidXCore"]               = "androidx.test:core:1.0.0"
+extra["androidXJunit"]              = "androidx.test.ext:junit:1.0.0"
 extra["espressoCore"]               = "androidx.test.espresso:espresso-core:$espressoVersion"
 extra["espressoIntents"]            = "androidx.test.espresso:espresso-intents:$espressoVersion"
 extra["espressoContrib"]            = "androidx.test.espresso:espresso-contrib:$espressoVersion"
@@ -74,3 +76,4 @@ extra["mockitoKotlin"]              = "com.nhaarman.mockitokotlin2:mockito-kotli
 extra["truth"]                      = "com.google.truth:truth:0.42"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 extra["reflections"]                = "org.reflections:reflections:0.9.11"
+extra["robolectric"]                = "org.robolectric:robolectric:4.0.1"

@@ -1,17 +1,20 @@
 package burrows.apps.example.gif.giflist
 
-import androidx.test.annotation.UiThreadTest
+import android.content.Context
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import burrows.apps.example.gif.data.ImageService
 import burrows.apps.example.gif.giflist.GifAdapter.OnItemClickListener
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import androidx.test.core.app.ApplicationProvider
 
+@RunWith(AndroidJUnit4::class)
 class GifAdapterTest {
-    private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
+    private val context = ApplicationProvider.getApplicationContext<Context>()
     private val gifImageInfo = GifImageInfo(url = "http://some.url")
     private val gifImageInfo2 = GifImageInfo(url = "http://some.url2")
     private val gifImageInfo3 = GifImageInfo(url = "http://some.url3")
@@ -23,17 +26,17 @@ class GifAdapterTest {
     private lateinit var viewHolder: GifAdapter.ViewHolder
     private lateinit var sut: GifAdapter
 
-    @Before @UiThreadTest fun setUp() {
-        imageService = ImageService(targetContext)
+    @Before fun setUp() {
+        imageService = ImageService(context)
         sut = GifAdapter(testOnItemClickListener, imageService).apply {
             add(gifImageInfo)
             add(gifImageInfo2)
         }
-        viewHolder = sut.onCreateViewHolder(LinearLayout(targetContext), 0)
+        viewHolder = sut.onCreateViewHolder(LinearLayout(context), 0)
     }
 
-    @Test @UiThreadTest fun testOnCreateViewHolder() {
-        val parent = object : ViewGroup(targetContext) {
+    @Test fun testOnCreateViewHolder() {
+        val parent = object : ViewGroup(context) {
             override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
         }
 
@@ -41,7 +44,7 @@ class GifAdapterTest {
             .isInstanceOf(GifAdapter.ViewHolder::class.java)
     }
 
-    @Test @UiThreadTest fun testOnBindViewHolderOnAdapterItemClick() {
+    @Test fun testOnBindViewHolderOnAdapterItemClick() {
         sut.clear()
         sut.add(gifImageInfo)
         sut.add(gifImageInfo2)
@@ -61,7 +64,7 @@ class GifAdapterTest {
         assertThat(sut.getItem(0)).isEqualTo(imageInfo)
     }
 
-    @Test @UiThreadTest fun onViewRecycled() {
+    @Test fun onViewRecycled() {
         sut.add(GifImageInfo())
 
         sut.onBindViewHolder(viewHolder, 0)
