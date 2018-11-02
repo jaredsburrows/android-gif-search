@@ -70,7 +70,7 @@ extra["orchestrator"]               = "androidx.test:orchestrator:1.1.0"
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
 extra["mockitoInline"]              = "org.mockito:mockito-inline:2.23.0"
-extra["mockitoKotlin"]              = "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
+extra["mockitoKotlin"]              = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
 extra["truth"]                      = "com.google.truth:truth:0.42"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 extra["reflections"]                = "org.reflections:reflections:0.9.11"
