@@ -26,7 +26,7 @@ extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:1.16"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.4"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.20.0"
-extra["ktlintGradle"]               = "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:5.1.0"
+extra["ktlintGradle"]               = "org.jlleitschuh.gradle:ktlint-gradle:6.3.0"
 
 // implementation
 extra["material"]                   = "com.google.android.material:material:1.0.0"
