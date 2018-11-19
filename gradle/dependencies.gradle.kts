@@ -1,5 +1,5 @@
 // common
-val androidGradleVersion            = "3.4.0-alpha01"
+val androidGradleVersion            = "3.4.0-alpha04"
 val kotlinVersion                   = "1.3.10"
 val androidXVersion                 = "1.0.0"
 val daggerVersion                   = "2.16" // https://github.com/google/dagger/issues/1245
