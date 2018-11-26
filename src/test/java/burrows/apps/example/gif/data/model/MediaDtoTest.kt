@@ -6,7 +6,7 @@ import org.junit.Test
 class MediaDtoTest {
     private val gifDto = GifDto()
     private var defaultSut = MediaDto()
-    private var sut = MediaDto(gif = gifDto)
+    private var sut = MediaDto(gifDto)
 
     @Test fun testGetGif() {
         assertThat(defaultSut.gif).isEqualTo(GifDto("", ""))

@@ -7,7 +7,7 @@ class ResultDtoTest {
     private val mediaTitle = "Good Luck"
     private val media = arrayListOf<MediaDto>()
     private var sutDefault = ResultDto()
-    private var sut = ResultDto(media = media, title = mediaTitle)
+    private var sut = ResultDto(media, mediaTitle)
 
     @Test fun testGetMedia() {
         assertThat(sutDefault.media).isEmpty()

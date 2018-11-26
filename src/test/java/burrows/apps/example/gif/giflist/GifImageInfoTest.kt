@@ -7,7 +7,7 @@ class GifImageInfoTest {
     private val gifUrl = "https://media.riffsy.com/images/ed8cf447392c5e7e0cc16cbad2a0edce/tenor.gif"
     private val previewUrl = "https://media.riffsy.com/images/b1060f2602934944c0e3502a1d7d20d8/raw"
     private var sutDefault = GifImageInfo()
-    private var sut = GifImageInfo(url = gifUrl, previewUrl = previewUrl)
+    private var sut = GifImageInfo(gifUrl, previewUrl)
 
     @Test fun testGetURL() {
         assertThat(sutDefault.url).isEmpty()

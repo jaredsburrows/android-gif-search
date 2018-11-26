@@ -250,10 +250,10 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     override fun addImages(riffsyResponseDto: RiffsyResponseDto) {
         nextPageNumber = riffsyResponseDto.next
 
-        riffsyResponseDto.results?.forEach { result ->
-            val gif = result.media?.first()?.gif
-            val gifUrl = gif?.url
-            val gifPreviewUrl = gif?.preview
+        riffsyResponseDto.results.forEach { result ->
+            val gif = result.media.first().gif
+            val gifUrl = gif.url
+            val gifPreviewUrl = gif.preview
 
             gifAdapter.add(GifImageInfo(url = gifUrl, previewUrl = gifPreviewUrl))
 
