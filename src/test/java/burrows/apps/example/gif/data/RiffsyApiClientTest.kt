@@ -31,11 +31,12 @@ class RiffsyApiClientTest {
         server.start(MOCK_SERVER_PORT)
         server.setDispatcher(dispatcher)
 
-        sut = RiffsyModule(server.url("/").toString())
-            .providesRiffsyApi(NetModule()
-                .providesRetrofit(NetModule()
-                    .providesMoshi(), NetModule()
-                    .providesOkHttpClient(null)))
+        sut = RiffsyModule(server.url("/").toString()).providesRiffsyApi(
+            NetModule().providesRetrofit(
+                NetModule().providesMoshi(),
+                NetModule().providesOkHttpClient(null)
+            )
+        )
     }
 
     @After fun tearDown() {
