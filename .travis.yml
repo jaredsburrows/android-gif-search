@@ -4,28 +4,26 @@ env:
   global:
     - ADB_INSTALL_TIMEOUT=8
 
-jdk:
-  - oraclejdk8
+jdk: oraclejdk8
 
 before_install:
   # Download SDK
-  - echo yes | sdkmanager "tools" &>/dev/null
-  - echo yes | sdkmanager "platform-tools" &>/dev/null
-  - echo yes | sdkmanager "build-tools;27.0.3" &>/dev/null
-  - echo yes | sdkmanager "platforms;android-27" &>/dev/null
+  - yes | sdkmanager "tools" &>/dev/null
+  - yes | sdkmanager "platform-tools" &>/dev/null
+  - yes | sdkmanager "platforms;android-28" &>/dev/null
   # Download emulator
-  - echo yes | sdkmanager "platforms;android-19" &>/dev/null
-  - echo yes | sdkmanager "system-images;android-19;default;armeabi-v7a" &>/dev/null
+  - yes | sdkmanager "platforms;android-19" &>/dev/null
+  - yes | sdkmanager "system-images;android-19;default;armeabi-v7a" &>/dev/null
   # Update remaining dependencies and accept licenses
-  - echo yes | sdkmanager --update &>/dev/null
-  - echo yes | sdkmanager --licenses &>/dev/null
+  - yes | sdkmanager --update &>/dev/null
+  - yes | sdkmanager --licenses &>/dev/null
   # Setup emulator
-  - echo no | avdmanager create avd --force -n test -k "system-images;android-19;default;armeabi-v7a" &>/dev/null
+  - echo "no" | avdmanager create avd --force -n test -k "system-images;android-19;default;armeabi-v7a" &>/dev/null
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window & &>/dev/null
 
 install:
   # Build debug and release(run proguard)
-  - ./gradlew clean assemble assembleDebugAndroidTest -Pci -s --scan
+  - ./gradlew clean ktlintCheck assemble assembleDebugAndroidTest -Pci -s --scan
 
 before_script:
   # Make sure the emulator is available

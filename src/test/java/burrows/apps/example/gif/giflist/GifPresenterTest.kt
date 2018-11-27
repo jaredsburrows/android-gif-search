@@ -1,104 +1,89 @@
 package burrows.apps.example.gif.giflist
 
-import burrows.apps.example.gif.data.model.RiffsyResponseDto
 import burrows.apps.example.gif.data.RiffsyApiClient
 import burrows.apps.example.gif.data.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.eq
-import com.nhaarman.mockito_kotlin.never
+import burrows.apps.example.gif.data.model.RiffsyResponseDto
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
-import org.mockito.MockitoAnnotations.initMocks
+import org.mockito.junit.MockitoJUnitRunner
 import test.ImmediateSchedulerProvider
-import test.TestBase
 
-class GifPresenterTest : TestBase() {
-  private val provider = ImmediateSchedulerProvider()
-  @Mock private lateinit var view: GifContract.View
-  @Mock private lateinit var repository: RiffsyApiClient
-  private lateinit var sut: GifPresenter
+@RunWith(MockitoJUnitRunner::class)
+class GifPresenterTest {
+    private val provider = ImmediateSchedulerProvider()
+    @Mock private lateinit var view: GifContract.View
+    @Mock private lateinit var repository: RiffsyApiClient
+    private lateinit var sut: GifPresenter
 
-  @Before override fun setUp() {
-    super.setUp()
+    @Before fun setUp() {
+        whenever(view.isActive()).thenReturn(true)
+    }
 
-    initMocks(this)
+    @Test fun testLoadTrendingImageNotActive() {
+        val next = 0.0
+        val response = RiffsyResponseDto()
+        whenever(view.isActive()).thenReturn(false)
+        sut = GifPresenter(repository, provider)
+        sut.takeView(view)
+        whenever(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
+            .thenReturn(Observable.just(response))
 
-    `when`(view.isActive()).thenReturn(true)
-  }
+        sut.loadTrendingImages(next)
 
-  @Test fun testLoadTrendingImagesNotActive() {
-    // Arrange
-    val next = 0.0
-    val response = RiffsyResponseDto()
-    `when`(view.isActive()).thenReturn(false)
-    sut = GifPresenter(repository, provider)
-    sut.takeView(view)
-    `when`(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
-      .thenReturn(Observable.just(response))
+        verify(view).isActive()
+        verify(view, times(0)).addImages(eq(response))
+    }
 
-    // Act
-    sut.loadTrendingImages(next)
+    @Test fun testLoadTrendingImagesSuccess() {
+        val next = 0.0
+        val response = RiffsyResponseDto()
+        sut = GifPresenter(repository, provider)
+        sut.takeView(view)
+        whenever(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
+            .thenReturn(Observable.just(response))
 
-    // Assert
-    verify(view).isActive()
-    verify(view, times(0)).addImages(eq(response))
-  }
+        sut.loadTrendingImages(next)
 
-  @Test fun testLoadTrendingImagesSuccess() {
-    // Arrange
-    val next = 0.0
-    val response = RiffsyResponseDto()
-    sut = GifPresenter(repository, provider)
-    sut.takeView(view)
-    `when`(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
-      .thenReturn(Observable.just(response))
+        verify(view).isActive()
+        verify(view).addImages(eq(response))
+    }
 
-    // Act
-    sut.loadTrendingImages(next)
+    @Test fun testLoadSearchImagesSuccess() {
+        val searchString = "gifs"
+        val next = 0.0
+        val response = RiffsyResponseDto()
+        sut = GifPresenter(repository, provider)
+        sut.takeView(view)
+        whenever(repository.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
+            .thenReturn(Observable.just(response))
 
-    // Assert
-    verify(view).isActive()
-    verify(view).addImages(eq(response))
-  }
+        sut.loadSearchImages(searchString, next)
 
-  @Test fun testLoadSearchImagesSuccess() {
-    // Arrange
-    val searchString = "gifs"
-    val next = 0.0
-    val response = RiffsyResponseDto()
-    sut = GifPresenter(repository, provider)
-    sut.takeView(view)
-    `when`(repository.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
-      .thenReturn(Observable.just(response))
+        verify(view).isActive()
+        verify(view).addImages(eq(response))
+    }
 
-    // Act
-    sut.loadSearchImages(searchString, next)
+    @Test fun testLoadSearchImageViewInactive() {
+        whenever(view.isActive()).thenReturn(false)
+        val searchString = "gifs"
+        val next = 0.0
+        val response = RiffsyResponseDto()
+        sut = GifPresenter(repository, provider)
+        sut.takeView(view)
+        whenever(repository.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
+            .thenReturn(Observable.just(response))
 
-    // Assert
-    verify(view).isActive()
-    verify(view).addImages(eq(response))
-  }
+        sut.loadSearchImages(searchString, next)
 
-  @Test fun testLoadSearchImagesViewInactive() {
-    // Arrange
-    `when`(view.isActive()).thenReturn(false)
-    val searchString = "gifs"
-    val next = 0.0
-    val response = RiffsyResponseDto()
-    sut = GifPresenter(repository, provider)
-    sut.takeView(view)
-    `when`(repository.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
-      .thenReturn(Observable.just(response))
-
-    // Act
-    sut.loadSearchImages(searchString, next)
-
-    // Assert
-    verify(view, never()).addImages(any())
-  }
+        verify(view, never()).addImages(any())
+    }
 }

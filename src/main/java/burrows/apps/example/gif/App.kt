@@ -6,7 +6,7 @@ import dagger.android.DaggerApplication
 
 @SuppressLint("Registered")
 open class App : DaggerApplication() {
-  override fun applicationInjector() = DaggerAppComponent.builder()
-    .application(this)
-    .build()
+    override fun applicationInjector() = DaggerAppComponent.builder()
+        .application(this)
+        .build()
 }
