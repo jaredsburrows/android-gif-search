@@ -39,7 +39,7 @@ apply {
     from(file("gradle/compile.gradle.kts"))
 }
 
-android {
+configure<com.android.build.gradle.AppExtension> {
     compileSdkVersion(extra["compileSdkVersion"] as Int)
 
     defaultConfig {
@@ -134,6 +134,15 @@ configurations.all {
 }
 
 dependencies {
+
+    val implementation by configurations
+    val kapt by configurations
+    val debugImplementation by configurations
+    val releaseImplementation by configurations
+    val androidTestImplementation by configurations
+    val androidTestUtil by configurations
+    val testImplementation by configurations
+
     implementation(extra["material"] as String)
     implementation(extra["constraintLayout"] as String)
     implementation(extra["kotlinStdlib"] as String)
@@ -182,7 +191,7 @@ dependencies {
     testImplementation(extra["robolectric"] as String)
 }
 
-kapt {
+configure<org.jetbrains.kotlin.gradle.plugin.KaptExtension> {
     useBuildCache = true
 }
 
