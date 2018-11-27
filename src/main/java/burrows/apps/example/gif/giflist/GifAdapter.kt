@@ -62,7 +62,7 @@ class GifAdapter(
 
     override fun getItemCount() = data.size
 
-    override fun getItemId(position: Int) = getItem(position).url?.hashCode()?.toLong() ?: 0L
+    override fun getItemId(position: Int) = getItem(position).url.hashCode().toLong()
 
     fun getItem(location: Int) = data[location]
 
