@@ -15,11 +15,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import test.ImmediateSchedulerProvider
+import test.TestImmediateSchedulerProvider
 
 @RunWith(MockitoJUnitRunner::class)
 class GifPresenterTest {
-    private val provider = ImmediateSchedulerProvider()
+    private val provider = TestImmediateSchedulerProvider()
     @Mock private lateinit var view: GifContract.View
     @Mock private lateinit var repository: RiffsyApiClient
     private lateinit var sut: GifPresenter

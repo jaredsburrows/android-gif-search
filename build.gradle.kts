@@ -1,3 +1,7 @@
+import com.android.build.gradle.AppExtension
+import org.jetbrains.kotlin.gradle.plugin.KaptExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 buildscript {
     rootProject.apply { from(rootProject.file("gradle/dependencies.gradle.kts")) }
     rootProject.extra["ci"] = rootProject.hasProperty("ci")
@@ -10,7 +14,6 @@ buildscript {
     dependencies {
         classpath(extra["gradle"] as String)
         classpath(extra["kotlinGradlePlugin"] as String)
-        classpath(extra["kotlinAndroidExtensions"] as String)
         classpath(extra["gradleAndroidCommandPlugin"] as String)
         classpath(extra["buildScanPlugin"] as String)
         classpath(extra["dexcountGradlePlugin"] as String)
@@ -39,7 +42,7 @@ apply {
     from(file("gradle/compile.gradle.kts"))
 }
 
-configure<com.android.build.gradle.AppExtension> {
+configure<AppExtension> {
     compileSdkVersion(extra["compileSdkVersion"] as Int)
 
     defaultConfig {
@@ -48,9 +51,11 @@ configure<com.android.build.gradle.AppExtension> {
         versionName = "1.0"
         minSdkVersion(extra["minSdkVersion"] as Int)
         targetSdkVersion(extra["targetSdkVersion"] as Int)
+
         testApplicationId = "burrows.apps.example.gif.test"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArgument("disableAnalytics", "true")
+
         resConfigs("en")
         vectorDrawables.useSupportLibrary = true
     }
@@ -64,8 +69,8 @@ configure<com.android.build.gradle.AppExtension> {
 
     sourceSets {
         val commonTest = "src/commonTest/java"
-        getByName("androidTest").java.srcDirs("src/androidTest/java", commonTest)
-        getByName("test").java.srcDirs("src/test/java", commonTest)
+        getByName("androidTest").java.srcDirs(commonTest)
+        getByName("test").java.srcDirs(commonTest)
     }
 
     lintOptions {
@@ -130,72 +135,64 @@ configurations.all {
     resolutionStrategy {
         force(extra["kotlinStdlib"] as String)
         force(extra["kotlinReflect"] as String)
+        force(extra["ktlint"] as String)
     }
 }
 
 dependencies {
+    "implementation"(extra["material"] as String)
+    "implementation"(extra["constraintLayout"] as String)
+    "implementation"(extra["kotlinStdlib"] as String)
+    "implementation"(extra["okhttp"] as String)
+    "implementation"(extra["loggingInterceptor"] as String)
+    "implementation"(extra["adapterRxjava2"] as String)
+    "implementation"(extra["converterMoshi"] as String)
+    "implementation"(extra["moshiAdapters"] as String)
+    "implementation"(extra["retrofit"] as String)
+    "implementation"(extra["rxAndroid"] as String)
+    "implementation"(extra["rxJava"] as String)
+    "implementation"(extra["glide"] as String)
+    "implementation"(extra["okhttp3Integration"] as String)
+    "implementation"(extra["dagger"] as String)
+    "implementation"(extra["daggerAndroid"] as String)
+    "implementation"(extra["daggerAndroidSupport"] as String)
 
-    val implementation by configurations
-    val kapt by configurations
-    val debugImplementation by configurations
-    val releaseImplementation by configurations
-    val androidTestImplementation by configurations
-    val androidTestUtil by configurations
-    val testImplementation by configurations
+    "kapt"(extra["daggerCompiler"] as String)
+    "kapt"(extra["daggerAndroidProcessor"] as String)
+    "kapt"(extra["glideCompiler"] as String)
 
-    implementation(extra["material"] as String)
-    implementation(extra["constraintLayout"] as String)
-    implementation(extra["kotlinStdlib"] as String)
-    implementation(extra["okhttp"] as String)
-    implementation(extra["loggingInterceptor"] as String)
-    implementation(extra["adapterRxjava2"] as String)
-    implementation(extra["converterMoshi"] as String)
-    implementation(extra["moshiAdapters"] as String)
-    implementation(extra["retrofit"] as String)
-    implementation(extra["rxAndroid"] as String)
-    implementation(extra["rxJava"] as String)
-    implementation(extra["glide"] as String)
-    implementation(extra["okhttp3Integration"] as String)
-    implementation(extra["dagger"] as String)
-    implementation(extra["daggerAndroid"] as String)
-    implementation(extra["daggerAndroidSupport"] as String)
+    "debugImplementation"(extra["leakcanaryAndroid"] as String)
+    "releaseImplementation"(extra["leakcanaryAndroidNoOp"] as String)
 
-    kapt(extra["daggerCompiler"] as String)
-    kapt(extra["daggerAndroidProcessor"] as String)
-    kapt(extra["glideCompiler"] as String)
+    "androidTestImplementation"(extra["junit"] as String)
+    "androidTestImplementation"(extra["androidXCore"] as String)
+    "androidTestImplementation"(extra["androidXJunit"] as String)
+    "androidTestImplementation"(extra["truth"] as String) { exclude(module = "checker-qual") }
+    "androidTestImplementation"(extra["runner"] as String)
+    "androidTestImplementation"(extra["espressoCore"] as String)
+    "androidTestImplementation"(extra["espressoIntents"] as String)
+    "androidTestImplementation"(extra["espressoContrib"] as String) { exclude(group = "com.android.support") }
+    "androidTestImplementation"(extra["mockwebserver"] as String)
 
-    debugImplementation(extra["leakcanaryAndroid"] as String)
-    releaseImplementation(extra["leakcanaryAndroidNoOp"] as String)
+    "androidTestUtil"(extra["orchestrator"] as String)
 
-    androidTestImplementation(extra["junit"] as String)
-    androidTestImplementation(extra["androidXCore"] as String)
-    androidTestImplementation(extra["androidXJunit"] as String)
-    androidTestImplementation(extra["truth"] as String) { exclude(module = "checker-qual") }
-    androidTestImplementation(extra["runner"] as String)
-    androidTestImplementation(extra["espressoCore"] as String)
-    androidTestImplementation(extra["espressoIntents"] as String)
-    androidTestImplementation(extra["espressoContrib"] as String) { exclude(group = "com.android.support") }
-    androidTestImplementation(extra["mockwebserver"] as String)
-
-    androidTestUtil(extra["orchestrator"] as String)
-
-    testImplementation(extra["junit"] as String)
-    testImplementation(extra["androidXCore"] as String)
-    testImplementation(extra["androidXJunit"] as String)
-    testImplementation(extra["truth"] as String) { exclude(module = "checker-qual") }
-    testImplementation(extra["mockitoKotlin"] as String)
-    testImplementation(extra["mockitoInline"] as String)
-    testImplementation(extra["leakcanaryAndroidNoOp"] as String)
-    testImplementation(extra["mockwebserver"] as String)
-    testImplementation(extra["reflections"] as String)
-    testImplementation(extra["robolectric"] as String)
+    "testImplementation"(extra["junit"] as String)
+    "testImplementation"(extra["androidXCore"] as String)
+    "testImplementation"(extra["androidXJunit"] as String)
+    "testImplementation"(extra["truth"] as String) { exclude(module = "checker-qual") }
+    "testImplementation"(extra["mockitoKotlin"] as String)
+    "testImplementation"(extra["mockitoInline"] as String)
+    "testImplementation"(extra["leakcanaryAndroidNoOp"] as String)
+    "testImplementation"(extra["mockwebserver"] as String)
+    "testImplementation"(extra["reflections"] as String)
+    "testImplementation"(extra["robolectric"] as String)
 }
 
-configure<org.jetbrains.kotlin.gradle.plugin.KaptExtension> {
+configure<KaptExtension> {
     useBuildCache = true
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = rootProject.extra["javaVersion"] as String
         allWarningsAsErrors = true
