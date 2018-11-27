@@ -7,7 +7,7 @@ class RiffsyResponseDtoTest {
     private val nextResponse = 1.0
     private val results = arrayListOf<ResultDto>()
     private var sutDefault = RiffsyResponseDto()
-    private var sut = RiffsyResponseDto(results = results, next = nextResponse)
+    private var sut = RiffsyResponseDto(results, nextResponse)
 
     @Test fun testGetResults() {
         assertThat(sutDefault.results).isEmpty()
@@ -15,7 +15,7 @@ class RiffsyResponseDtoTest {
     }
 
     @Test fun testGetNext() {
-        assertThat(sutDefault.next).isNull()
+        assertThat(sutDefault.next).isEqualTo(0.0)
         assertThat(sut.next).isEqualTo(nextResponse)
     }
 }

@@ -3,8 +3,8 @@ val androidGradleVersion            = "3.4.0-alpha04"
 val kotlinVersion                   = "1.3.10"
 val androidXVersion                 = "1.0.0"
 val daggerVersion                   = "2.16" // https://github.com/google/dagger/issues/1245
-val okHttpVersion                   = "3.11.0"
-val retrofitVersion                 = "2.4.0"
+val okHttpVersion                   = "3.12.0"
+val retrofitVersion                 = "2.5.0"
 val espressoVersion                 = "3.1.0"
 val leakCanaryVersion               = "1.5.4" // TODO 1.6.1 crash?
 val glideVersion                    = "4.8.0"
@@ -26,7 +26,7 @@ extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:2.0.2"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.4"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.20.0"
-extra["ktlintGradle"]               = "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:5.1.0"
+extra["ktlintGradle"]               = "org.jlleitschuh.gradle:ktlint-gradle:6.3.0"
 
 // implementation
 extra["material"]                   = "com.google.android.material:material:1.0.0"
@@ -34,7 +34,7 @@ extra["constraintLayout"]           = "androidx.constraintlayout:constraintlayou
 extra["kotlinStdlib"]               = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 extra["kotlinReflect"]              = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 extra["rxAndroid"]                  = "io.reactivex.rxjava2:rxandroid:2.1.0"
-extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.2.3"
+extra["rxJava"]                     = "io.reactivex.rxjava2:rxjava:2.2.4"
 extra["dagger"]                     = "com.google.dagger:dagger:$daggerVersion"
 extra["daggerAndroid"]              = "com.google.dagger:dagger-android:$daggerVersion"
 extra["daggerAndroidSupport"]       = "com.google.dagger:dagger-android-support:$daggerVersion"
@@ -71,7 +71,7 @@ extra["orchestrator"]               = "androidx.test:orchestrator:1.1.0"
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:2.23.0"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:2.23.4"
 extra["mockitoKotlin"]              = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
 extra["truth"]                      = "com.google.truth:truth:0.42"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:$okHttpVersion"

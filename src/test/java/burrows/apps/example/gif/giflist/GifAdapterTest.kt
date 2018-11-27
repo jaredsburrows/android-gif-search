@@ -15,9 +15,9 @@ import androidx.test.core.app.ApplicationProvider
 @RunWith(AndroidJUnit4::class)
 class GifAdapterTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
-    private val gifImageInfo = GifImageInfo(url = "http://some.url")
-    private val gifImageInfo2 = GifImageInfo(url = "http://some.url2")
-    private val gifImageInfo3 = GifImageInfo(url = "http://some.url3")
+    private val gifImageInfo = GifImageInfo("http://some.url")
+    private val gifImageInfo2 = GifImageInfo("http://some.url2")
+    private val gifImageInfo3 = GifImageInfo("http://some.url3")
     private val testOnItemClickListener = object : OnItemClickListener {
         override fun onClick(imageInfoModel: GifImageInfo) {
         }
