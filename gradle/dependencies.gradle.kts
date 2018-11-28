@@ -1,5 +1,5 @@
 // common
-val androidGradleVersion            = "3.4.0-alpha04"
+val androidGradleVersion            = "3.4.0-alpha05"
 val kotlinVersion                   = "1.3.10"
 val androidXVersion                 = "1.0.0"
 val daggerVersion                   = "2.16" // https://github.com/google/dagger/issues/1245
@@ -20,13 +20,13 @@ extra["debugKeystorePass"]          = "android"
 // classpath
 extra["gradle"]                     = "com.android.tools.build:gradle:$androidGradleVersion"
 extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-extra["kotlinAndroidExtensions"]    = "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:2.0.1"
 extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:2.0.2"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.4"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.20.0"
-extra["ktlintGradle"]               = "org.jlleitschuh.gradle:ktlint-gradle:6.3.0"
+extra["ktlintGradle"]               = "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:5.0.0" // https://github.com/JLLeitschuh/ktlint-gradle/issues/162 - "org.jlleitschuh.gradle:ktlint-gradle:6.3.0"
+extra["ktlint"]                     = "com.github.shyiko:ktlint:0.29.0"
 
 // implementation
 extra["material"]                   = "com.google.android.material:material:1.0.0"

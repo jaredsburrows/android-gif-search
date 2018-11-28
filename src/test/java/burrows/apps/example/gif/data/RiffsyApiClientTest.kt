@@ -12,8 +12,8 @@ import okhttp3.mockwebserver.RecordedRequest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import test.TestUtils.MOCK_SERVER_PORT
-import test.TestUtils.getMockResponse
+import test.TestFileUtils.MOCK_SERVER_PORT
+import test.TestFileUtils.getMockResponse
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 class RiffsyApiClientTest {
