@@ -25,7 +25,7 @@ extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:2.0.2"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.4"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.20.0"
-extra["ktlintGradle"]               = "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:5.0.0" // https://github.com/JLLeitschuh/ktlint-gradle/issues/162 - "org.jlleitschuh.gradle:ktlint-gradle:6.3.0"
+extra["ktlintGradle"]               = "org.jlleitschuh.gradle:ktlint-gradle:6.3.1" // https://github.com/JLLeitschuh/ktlint-gradle/issues/162 - "org.jlleitschuh.gradle:ktlint-gradle:6.3.0"
 extra["ktlint"]                     = "com.github.shyiko:ktlint:0.29.0"
 
 // implementation
