@@ -13,7 +13,7 @@ class ImageService @Inject constructor(private val context: Context) {
     private val imageHeight = context.resources.getDimensionPixelSize(R.dimen.gif_image_width)
     private val imageWidth = imageHeight
 
-    fun load(url: String?): RequestBuilder<GifDrawable> {
+    fun load(url: String): RequestBuilder<GifDrawable> {
         return Glide.with(context)
             .asGif()
             .apply(RequestOptions.noTransformation()
