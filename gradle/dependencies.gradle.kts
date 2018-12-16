@@ -2,7 +2,7 @@
 val androidGradleVersion            = "3.4.0-alpha07"
 val kotlinVersion                   = "1.3.11"
 val androidXVersion                 = "1.0.0"
-val daggerVersion                   = "2.16" // https://github.com/google/dagger/issues/1245
+val daggerVersion                   = "2.19" // https://github.com/google/dagger/issues/1245
 val okHttpVersion                   = "3.12.0"
 val retrofitVersion                 = "2.5.0"
 val espressoVersion                 = "3.1.0"
