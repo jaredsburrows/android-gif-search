@@ -1,5 +1,4 @@
 import com.android.build.gradle.AppExtension
-import org.gradle.api.internal.artifacts.dependencies.DefaultMutableVersionConstraint.withVersion
 import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -137,9 +136,15 @@ configure<AppExtension> {
 
 configurations.all {
     resolutionStrategy {
+        // classpath
+        force(extra["ktlint"] as String)
+
+        // implementation
+        force(extra["okio"] as String)
+        force(extra["moshi"] as String)
+        force(extra["rxJava"] as String)
         force(extra["kotlinStdlib"] as String)
         force(extra["kotlinReflect"] as String)
-        force(extra["ktlint"] as String)
     }
 }
 
@@ -147,9 +152,11 @@ dependencies {
     "implementation"(extra["material"] as String)
     "implementation"(extra["constraintLayout"] as String)
     "implementation"(extra["kotlinStdlib"] as String)
+    "implementation"(extra["okio"] as String)
     "implementation"(extra["okhttp"] as String)
     "implementation"(extra["loggingInterceptor"] as String)
     "implementation"(extra["adapterRxjava2"] as String)
+    "implementation"(extra["moshi"] as String)
     "implementation"(extra["converterMoshi"] as String)
     "implementation"(extra["moshiAdapters"] as String)
     "implementation"(extra["retrofit"] as String)
@@ -198,7 +205,6 @@ configure<KaptExtension> {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = rootProject.extra["javaVersion"] as String
         allWarningsAsErrors = true
     }
 }
