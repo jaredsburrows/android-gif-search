@@ -3,11 +3,11 @@ package burrows.apps.example.gif.data.model
 import com.squareup.moshi.Json
 
 data class GifDto(
-    @field:Json(name = "url") private val _url: String? = null,
-    @field:Json(name = "preview") private val _preview: String? = null
+    @field:Json(name = "url") private val urlJson: String? = null,
+    @field:Json(name = "preview") private val urlPreview: String? = null
 ) {
     val url: String
-        get() = _url.orEmpty()
+        get() = urlJson.orEmpty()
     val preview: String
-        get() = _preview.orEmpty()
+        get() = urlPreview.orEmpty()
 }

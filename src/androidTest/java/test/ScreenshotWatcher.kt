@@ -7,7 +7,6 @@ import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import java.io.IOException
 
-@Suppress("unused") // TODO move out
 class ScreenshotWatcher : TestWatcher() {
 
     private lateinit var description: Description

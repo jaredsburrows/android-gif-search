@@ -8,11 +8,11 @@ import com.squareup.moshi.Json
  * eg. https://api.riffsy.com/v1/search?key=LIVDSRZULELA&tag=goodluck&limit=10
  */
 data class RiffsyResponseDto(
-    @field:Json(name = "results") private val _results: List<ResultDto>? = null,
-    @field:Json(name = "next") private val _next: Double? = null
+    @field:Json(name = "results") private val resultsJson: List<ResultDto>? = null,
+    @field:Json(name = "next") private val nextJson: Double? = null
 ) {
     val results: List<ResultDto>
-        get() = _results.orEmpty()
+        get() = resultsJson.orEmpty()
     val next: Double
-        get() = _next ?: 0.0
+        get() = nextJson ?: 0.0
 }

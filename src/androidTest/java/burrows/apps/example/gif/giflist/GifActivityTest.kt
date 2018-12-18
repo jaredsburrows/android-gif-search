@@ -62,7 +62,7 @@ class GifActivityTest {
         server.shutdown()
     }
 
-    @Ignore("on view 'Animations or transitions are enabled on the target device. For more info check: http://goo.gl/qVu1yV")
+    @Ignore("on view 'Animations or transitions are enabled on the target device.")
     @Test fun testTrendingThenClickOpenDialog() {
         activityRule.launchActivity()
 
