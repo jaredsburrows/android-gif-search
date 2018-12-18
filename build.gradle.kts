@@ -1,4 +1,5 @@
 import com.android.build.gradle.AppExtension
+import org.gradle.api.internal.artifacts.dependencies.DefaultMutableVersionConstraint.withVersion
 import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -54,7 +55,10 @@ configure<AppExtension> {
 
         testApplicationId = "burrows.apps.example.gif.test"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArgument("disableAnalytics", "true")
+        testInstrumentationRunnerArguments = mapOf(
+            "disableAnalytics" to "true",
+            "clearPackageData" to "true"
+        )
 
         resConfigs("en")
         vectorDrawables.useSupportLibrary = true
