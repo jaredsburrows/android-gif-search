@@ -69,7 +69,7 @@ extra["espressoContrib"]            = "androidx.test.espresso:espresso-contrib:$
 extra["runner"]                     = "androidx.test:runner:1.1.0"
 
 // androidTestUtil
-extra["orchestrator"]               = "androidx.test:orchestrator:1.1.0"
+extra["orchestrator"]               = "androidx.test:orchestrator:1.1.1"
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.12"
