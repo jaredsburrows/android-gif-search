@@ -66,7 +66,7 @@ extra["androidXJunit"]              = "androidx.test.ext:junit:1.0.0"
 extra["espressoCore"]               = "androidx.test.espresso:espresso-core:$espressoVersion"
 extra["espressoIntents"]            = "androidx.test.espresso:espresso-intents:$espressoVersion"
 extra["espressoContrib"]            = "androidx.test.espresso:espresso-contrib:$espressoVersion"
-extra["runner"]                     = "androidx.test:runner:1.1.0"
+extra["runner"]                     = "androidx.test:runner:1.1.1"
 
 // androidTestUtil
 extra["orchestrator"]               = "androidx.test:orchestrator:1.1.1"
