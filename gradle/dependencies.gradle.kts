@@ -61,7 +61,7 @@ extra["daggerAndroidProcessor"]     = "com.google.dagger:dagger-android-processo
 extra["glideCompiler"]              = "com.github.bumptech.glide:compiler:$glideVersion"
 
 // androidTestImplementation
-extra["androidXCore"]               = "androidx.test:core:1.0.0"
+extra["androidXCore"]               = "androidx.test:core:1.1.0"
 extra["androidXJunit"]              = "androidx.test.ext:junit:1.0.0"
 extra["espressoCore"]               = "androidx.test.espresso:espresso-core:$espressoVersion"
 extra["espressoIntents"]            = "androidx.test.espresso:espresso-intents:$espressoVersion"
