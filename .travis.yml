@@ -39,7 +39,7 @@ before_script:
 
 script:
   # Run all checks
-  - ./gradlew testDebug connectedDebugAndroidTest -Pci -s
+  - ./gradlew testDebug connectedDebugAndroidTest -Pci -s --scan
 
 branches:
   except:
