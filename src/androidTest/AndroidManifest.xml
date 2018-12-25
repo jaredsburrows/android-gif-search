@@ -2,7 +2,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="burrows.apps.example.gif"
+    package="com.burrowsapps.example.gif"
     tools:ignore="GoogleAppIndexingWarning,AllowBackup">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>

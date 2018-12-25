@@ -1,6 +1,6 @@
 package test
 
-import burrows.apps.example.gif.SchedulerProvider
+import com.burrowsapps.example.gif.SchedulerProvider
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 

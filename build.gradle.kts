@@ -46,7 +46,7 @@ configure<AppExtension> {
     compileSdkVersion(extra["compileSdkVersion"] as Int)
 
     defaultConfig {
-        applicationId = "burrows.apps.example.gif"
+        applicationId = "com.burrowsapps.example.gif"
         versionCode = 1
         versionName = "1.0"
         minSdkVersion(extra["minSdkVersion"] as Int)
