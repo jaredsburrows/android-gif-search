@@ -8,7 +8,6 @@ import org.junit.runners.model.Statement
 import java.io.IOException
 
 class ScreenshotWatcher : TestWatcher() {
-
     private lateinit var description: Description
 
     override fun apply(base: Statement, description: Description): Statement {

@@ -26,7 +26,6 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.RuleChain
 import test.ScreenshotWatcher
 import test.TestFileUtils.MOCK_SERVER_PORT
 import test.TestFileUtils.getMockFileResponse
@@ -35,12 +34,9 @@ import test.launchActivity
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 class GifActivityTest {
-    private val screenshotWatcher = ScreenshotWatcher()
-    private val grantPermissionRule = GrantPermissionRule.grant(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
-    private val activityRule = ActivityTestRule<GifActivity>(GifActivity::class.java, true, false)
-    @get:Rule val ruleChain = RuleChain.outerRule(screenshotWatcher)
-        .around(grantPermissionRule)
-        .around(activityRule)
+    @get:Rule val screenshotWatcher = ScreenshotWatcher()
+    @get:Rule val grantPermissionRule = GrantPermissionRule.grant(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
+    @get:Rule val activityRule = ActivityTestRule<GifActivity>(GifActivity::class.java, true, false)
     private val server = MockWebServer()
     private val dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse = when {
@@ -79,23 +75,19 @@ class GifActivityTest {
 
     @Test fun testTrendingResultsThenSearchThenBackToTrending() {
         activityRule.launchActivity()
-
         screenshotWatcher.capture("After launch")
 
         onView(withId(R.id.menu_search))
             .perform(click())
-
         screenshotWatcher.capture("After click")
 
         // android.support.v7.appcompat.R.id.search_src_text sometimes is not found
         onView(withHint("Search Gifs"))
             .perform(click(), typeText("hello"), closeSoftKeyboard(), pressBack())
-
         screenshotWatcher.capture("After Search")
 
         onView(withId(R.id.recyclerView))
             .check(matches(isDisplayed()))
-
         screenshotWatcher.capture("List displayed")
     }
 }
