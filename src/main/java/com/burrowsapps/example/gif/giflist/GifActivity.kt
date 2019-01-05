@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.SearchView
-import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -60,88 +59,6 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     private var visibleImageCount = 0
     private var totalImageCount = 0
     private var nextPageNumber: Double? = null
-    private val imageRequestListener = object : RequestListener<GifDrawable> {
-        override fun onResourceReady(
-            resource: GifDrawable?,
-            model: Any?,
-            target: Target<GifDrawable>?,
-            dataSource: DataSource?,
-            isFirstResource: Boolean
-        ): Boolean {
-            // Hide progressbar
-            gifDialogProgressBar.visibility = View.GONE
-            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loadingImages\t $model")
-
-            return false
-        }
-
-        override fun onLoadFailed(
-            e: GlideException?,
-            model: Any?,
-            target: Target<GifDrawable>?,
-            isFirstResource: Boolean
-        ): Boolean {
-            // Hide progressbar
-            gifDialogProgressBar.visibility = View.GONE
-            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loadingImages\t $model")
-
-            return false
-        }
-    }
-    private val searchOnQueryTextListener = object : SearchView.OnQueryTextListener {
-        override fun onQueryTextChange(newText: String): Boolean {
-            // Search on type
-            if (!TextUtils.isEmpty(newText)) {
-                // Reset
-                gifPresenter.apply {
-                    clearImages()
-                    loadSearchImages(newText, nextPageNumber)
-                }
-                hasSearchedImages = true
-            }
-            return false
-        }
-
-        override fun onQueryTextSubmit(query: String) = false
-    }
-    private val searchOnActionExpandListener = object : MenuItem.OnActionExpandListener {
-        override fun onMenuItemActionExpand(item: MenuItem) = true
-
-        override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-            // When search is closed, go back to trending getResults
-            if (hasSearchedImages) {
-                // Reset
-                gifPresenter.apply {
-                    clearImages()
-                    loadTrendingImages(nextPageNumber)
-                }
-                hasSearchedImages = false
-            }
-            return true
-        }
-    }
-    private val recyclerViewOnScrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-
-            // Continuous scrolling
-            visibleImageCount = recyclerView.childCount
-            totalImageCount = gridLayoutManager.itemCount
-            firstVisibleImage = gridLayoutManager.findFirstVisibleItemPosition()
-
-            if (loadingImages && totalImageCount > previousImageCount) {
-                loadingImages = false
-                previousImageCount = totalImageCount
-            }
-
-            if (!loadingImages &&
-                totalImageCount - visibleImageCount <= firstVisibleImage + VISIBLE_THRESHOLD) {
-                gifPresenter.loadTrendingImages(nextPageNumber)
-
-                loadingImages = true
-            }
-        }
-    }
 
     //
     // Activity
@@ -174,7 +91,28 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
             setHasFixedSize(true)
             setItemViewCacheSize(RiffsyApiClient.DEFAULT_LIMIT_COUNT)
             recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
-            addOnScrollListener(recyclerViewOnScrollListener)
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    // Continuous scrolling
+                    visibleImageCount = recyclerView.childCount
+                    totalImageCount = gridLayoutManager.itemCount
+                    firstVisibleImage = gridLayoutManager.findFirstVisibleItemPosition()
+
+                    if (loadingImages && totalImageCount > previousImageCount) {
+                        loadingImages = false
+                        previousImageCount = totalImageCount
+                    }
+
+                    if (!loadingImages &&
+                        totalImageCount - visibleImageCount <= firstVisibleImage + VISIBLE_THRESHOLD) {
+                        gifPresenter.loadTrendingImages(nextPageNumber)
+
+                        loadingImages = true
+                    }
+                }
+            })
         }
 
         // Custom view for Dialog
@@ -208,12 +146,42 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
 
         menu.findItem(R.id.menu_search).apply {
             // Set contextual action on search icon click
-            setOnActionExpandListener(searchOnActionExpandListener)
+            setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(item: MenuItem) = true
+
+                override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                    // When search is closed, go back to trending getResults
+                    if (hasSearchedImages) {
+                        // Reset
+                        gifPresenter.apply {
+                            clearImages()
+                            loadTrendingImages(nextPageNumber)
+                        }
+                        hasSearchedImages = false
+                    }
+                    return true
+                }
+            })
 
             (actionView as SearchView).apply {
                 queryHint = context.getString(R.string.search_gifs)
                 // Query listener for search bar
-                setOnQueryTextListener(searchOnQueryTextListener)
+                setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextChange(newText: String): Boolean {
+                        // Search on type
+                        if (newText.isNotEmpty()) {
+                            // Reset
+                            gifPresenter.apply {
+                                clearImages()
+                                loadSearchImages(newText, nextPageNumber)
+                            }
+                            hasSearchedImages = true
+                        }
+                        return false
+                    }
+
+                    override fun onQueryTextSubmit(query: String) = false
+                })
             }
         }
 
@@ -295,7 +263,34 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
         // Load image
         imageService.load(imageInfoModel.url)
             .thumbnail(imageService.load(imageInfoModel.previewUrl))
-            .listener(imageRequestListener)
+            .listener(object : RequestListener<GifDrawable> {
+                override fun onResourceReady(
+                    resource: GifDrawable?,
+                    model: Any?,
+                    target: Target<GifDrawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    // Hide progressbar
+                    gifDialogProgressBar.visibility = View.GONE
+                    if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loadingImages\t $model")
+
+                    return false
+                }
+
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<GifDrawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    // Hide progressbar
+                    gifDialogProgressBar.visibility = View.GONE
+                    if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loadingImages\t $model")
+
+                    return false
+                }
+            })
             .into(gifImageView)
     }
 }

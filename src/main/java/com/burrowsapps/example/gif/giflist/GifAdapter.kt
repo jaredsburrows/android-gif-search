@@ -41,7 +41,34 @@ class GifAdapter(
         // Load images
         imageService.load(imageInfoModel.url)
             .thumbnail(imageService.load(imageInfoModel.previewUrl))
-            .listener(ImageListener(holder))
+            .listener(object : RequestListener<GifDrawable> {
+                override fun onResourceReady(
+                    resource: GifDrawable?,
+                    model: Any?,
+                    target: Target<GifDrawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    // Hide progressbar
+                    holder.itemView.gifProgress.visibility = View.GONE
+                    if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+
+                    return false
+                }
+
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<GifDrawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    // Hide progressbar
+                    holder.itemView.gifProgress.visibility = View.GONE
+                    if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+
+                    return false
+                }
+            })
             .into(holder.itemView.gifImage)
 
         holder.itemView.setOnClickListener { onItemClickListener.onClick(imageInfoModel) }
@@ -92,34 +119,5 @@ class GifAdapter(
 
     interface OnItemClickListener {
         fun onClick(imageInfoModel: GifImageInfo)
-    }
-
-    private class ImageListener(private val holder: ViewHolder) : RequestListener<GifDrawable> {
-        override fun onResourceReady(
-            resource: GifDrawable?,
-            model: Any?,
-            target: Target<GifDrawable>?,
-            dataSource: DataSource?,
-            isFirstResource: Boolean
-        ): Boolean {
-            // Hide progressbar
-            holder.itemView.gifProgress.visibility = View.GONE
-            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
-
-            return false
-        }
-
-        override fun onLoadFailed(
-            e: GlideException?,
-            model: Any?,
-            target: Target<GifDrawable>?,
-            isFirstResource: Boolean
-        ): Boolean {
-            // Hide progressbar
-            holder.itemView.gifProgress.visibility = View.GONE
-            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
-
-            return false
-        }
     }
 }
