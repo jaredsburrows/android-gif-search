@@ -1,11 +1,10 @@
 package com.burrowsapps.example.gif.giflist
 
-import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.burrowsapps.example.gif.data.ImageService
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -13,6 +12,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.burrowsapps.example.gif.R
+import com.burrowsapps.example.gif.data.ImageService
 import kotlinx.android.synthetic.main.list_item.view.gifImage
 import kotlinx.android.synthetic.main.list_item.view.gifProgress
 
@@ -20,104 +20,104 @@ import kotlinx.android.synthetic.main.list_item.view.gifProgress
  * RecyclerView adapter for handling Gif Images in a Grid format.
  */
 class GifAdapter(
-    private val onItemClickListener: OnItemClickListener,
-    private val imageService: ImageService
+  private val onItemClickListener: OnItemClickListener,
+  private val imageService: ImageService
 ) : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
-    companion object {
-        private const val TAG = "GifAdapter"
-    }
+  companion object {
+    private const val TAG = "GifAdapter"
+  }
 
-    private val data = arrayListOf<GifImageInfo>()
+  private val data = arrayListOf<GifImageInfo>()
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder = ViewHolder(LayoutInflater.from(parent.context)
-        .inflate(R.layout.list_item, parent, false))
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int
+  ): ViewHolder = ViewHolder(LayoutInflater.from(parent.context)
+    .inflate(R.layout.list_item, parent, false))
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val imageInfoModel = getItem(position)
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    val imageInfoModel = getItem(position)
 
-        // Load images
-        imageService.load(imageInfoModel.url)
-            .thumbnail(imageService.load(imageInfoModel.previewUrl))
-            .listener(object : RequestListener<GifDrawable> {
-                override fun onResourceReady(
-                    resource: GifDrawable?,
-                    model: Any?,
-                    target: Target<GifDrawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    // Hide progressbar
-                    holder.itemView.gifProgress.visibility = View.GONE
-                    if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+    // Load images
+    imageService.load(imageInfoModel.url)
+      .thumbnail(imageService.load(imageInfoModel.previewUrl))
+      .listener(object : RequestListener<GifDrawable> {
+        override fun onResourceReady(
+          resource: GifDrawable?,
+          model: Any?,
+          target: Target<GifDrawable>?,
+          dataSource: DataSource?,
+          isFirstResource: Boolean
+        ): Boolean {
+          // Hide progressbar
+          holder.itemView.gifProgress.visibility = View.GONE
+          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
 
-                    return false
-                }
-
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<GifDrawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    // Hide progressbar
-                    holder.itemView.gifProgress.visibility = View.GONE
-                    if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
-
-                    return false
-                }
-            })
-            .into(holder.itemView.gifImage)
-
-        holder.itemView.setOnClickListener { onItemClickListener.onClick(imageInfoModel) }
-    }
-
-    override fun onViewRecycled(holder: ViewHolder) {
-        super.onViewRecycled(holder)
-
-        // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
-        // Forget view, try to free resources
-        Glide.with(holder.itemView.context).clear(holder.itemView.gifImage)
-        holder.itemView.apply {
-            gifImage.setImageDrawable(null)
-            // Make sure to show progress when loading new view
-            gifProgress.visibility = View.VISIBLE
+          return false
         }
-    }
 
-    override fun getItemCount() = data.size
+        override fun onLoadFailed(
+          e: GlideException?,
+          model: Any?,
+          target: Target<GifDrawable>?,
+          isFirstResource: Boolean
+        ): Boolean {
+          // Hide progressbar
+          holder.itemView.gifProgress.visibility = View.GONE
+          if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
 
-    override fun getItemId(position: Int) = getItem(position).url.hashCode().toLong()
-
-    fun getItem(location: Int) = data[location]
-
-    fun clear() {
-        val size = data.size
-        if (size > 0) {
-            for (i in 0 until size) data.removeAt(0)
-
-            notifyItemRangeRemoved(0, size)
+          return false
         }
-    }
+      })
+      .into(holder.itemView.gifImage)
 
-    fun add(model: GifImageInfo) = data.add(model).apply {
-        notifyItemInserted(data.size + 1)
-    }
+    holder.itemView.setOnClickListener { onItemClickListener.onClick(imageInfoModel) }
+  }
 
-    fun addAll(collection: List<GifImageInfo>) = data.addAll(collection).apply {
-        notifyItemRangeInserted(0, data.size + 1)
-    }
+  override fun onViewRecycled(holder: ViewHolder) {
+    super.onViewRecycled(holder)
 
-    fun add(location: Int, model: GifImageInfo) {
-        data.add(location, model)
-        notifyItemInserted(location)
+    // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
+    // Forget view, try to free resources
+    Glide.with(holder.itemView.context).clear(holder.itemView.gifImage)
+    holder.itemView.apply {
+      gifImage.setImageDrawable(null)
+      // Make sure to show progress when loading new view
+      gifProgress.visibility = View.VISIBLE
     }
+  }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+  override fun getItemCount() = data.size
 
-    interface OnItemClickListener {
-        fun onClick(imageInfoModel: GifImageInfo)
+  override fun getItemId(position: Int) = getItem(position).url.hashCode().toLong()
+
+  fun getItem(location: Int) = data[location]
+
+  fun clear() {
+    val size = data.size
+    if (size > 0) {
+      for (i in 0 until size) data.removeAt(0)
+
+      notifyItemRangeRemoved(0, size)
     }
+  }
+
+  fun add(model: GifImageInfo) = data.add(model).apply {
+    notifyItemInserted(data.size + 1)
+  }
+
+  fun addAll(collection: List<GifImageInfo>) = data.addAll(collection).apply {
+    notifyItemRangeInserted(0, data.size + 1)
+  }
+
+  fun add(location: Int, model: GifImageInfo) {
+    data.add(location, model)
+    notifyItemInserted(location)
+  }
+
+  inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+  interface OnItemClickListener {
+    fun onClick(imageInfoModel: GifImageInfo)
+  }
 }

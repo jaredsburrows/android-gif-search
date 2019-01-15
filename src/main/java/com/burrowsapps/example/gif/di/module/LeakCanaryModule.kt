@@ -8,7 +8,7 @@ import dagger.Provides
 
 @Module
 class LeakCanaryModule {
-    @Provides fun providesRefWatcher(
-        application: Application
-    ): RefWatcher = LeakCanary.install(application)
+  @Provides fun providesRefWatcher(
+    application: Application
+  ): RefWatcher = LeakCanary.install(application)
 }

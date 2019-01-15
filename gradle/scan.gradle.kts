@@ -1,8 +1,8 @@
 apply {
-    plugin("com.gradle.build-scan")
+  plugin("com.gradle.build-scan")
 }
 
 extensions["buildScan"].withGroovyBuilder {
-    "setTermsOfServiceUrl"("https://gradle.com/terms-of-service")
-    "setTermsOfServiceAgree"("yes")
+  "setTermsOfServiceUrl"("https://gradle.com/terms-of-service")
+  "setTermsOfServiceAgree"("yes")
 }
