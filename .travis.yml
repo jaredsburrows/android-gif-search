@@ -1,22 +1,28 @@
-language: android
+language: java
 
 env:
   global:
     - ADB_INSTALL_TIMEOUT=8
 
-jdk: oraclejdk8
+jdk: oraclejdk9
 
 before_install:
+  - wget http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz
+  - tar -xvf android-sdk*-linux.tgz
+  - cd android-sdk-linux/tools
+  - PATH=$PATH:/android-sdk-linux/platform-tools
+  - ANDROID_TOOLS=/android-sdk-linux
+
   # Download SDK
-  - yes | sdkmanager "tools" &>/dev/null
-  - yes | sdkmanager "platform-tools" &>/dev/null
-  - yes | sdkmanager "platforms;android-28" &>/dev/null
+  - yes | ./sdkmanager "tools" &>/dev/null
+  - yes | ./sdkmanager "platform-tools" &>/dev/null
+  - yes | ./sdkmanager "platforms;android-28" &>/dev/null
   # Download emulator
-  - yes | sdkmanager "platforms;android-19" &>/dev/null
-  - yes | sdkmanager "system-images;android-19;default;armeabi-v7a" &>/dev/null
+  - yes | ./sdkmanager "platforms;android-19" &>/dev/null
+  - yes | ./sdkmanager "system-images;android-19;default;armeabi-v7a" &>/dev/null
   # Update remaining dependencies and accept licenses
-  - yes | sdkmanager --update &>/dev/null
-  - yes | sdkmanager --licenses &>/dev/null
+  - yes | ./sdkmanager --update &>/dev/null
+  - yes | ./sdkmanager --licenses &>/dev/null
   # Setup emulator
   - echo "no" | avdmanager create avd -n test -k "system-images;android-19;default;armeabi-v7a" -c 200M -f &>/dev/null
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window & &>/dev/null
