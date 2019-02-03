@@ -1,7 +1,6 @@
 // common
 val androidGradleVersion            = "3.4.0-alpha10"
 val kotlinVersion                   = "1.3.20"
-val androidXVersion                 = "1.0.0"
 val daggerVersion                   = "2.21"
 val okHttpVersion                   = "3.12.1"
 val retrofitVersion                 = "2.5.0"
@@ -25,7 +24,7 @@ extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:2.1"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.5"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.20.0"
-extra["ktlintGradle"]               = "org.jlleitschuh.gradle:ktlint-gradle:6.3.1" // https://github.com/JLLeitschuh/ktlint-gradle/issues/162 - "org.jlleitschuh.gradle:ktlint-gradle:6.3.0"
+extra["ktlintGradle"]               = "org.jlleitschuh.gradle:ktlint-gradle:7.0.0"
 extra["ktlint"]                     = "com.github.shyiko:ktlint:0.29.0"
 
 // implementation
