@@ -71,7 +71,7 @@ extra["runner"]                     = "androidx.test:runner:1.1.1"
 extra["orchestrator"]               = "androidx.test:orchestrator:1.1.1"
 
 // testImplementation
-extra["junit"]                      = "junit:junit:4.13-beta-1"
+extra["junit"]                      = "junit:junit:4.13-beta-2"
 extra["mockitoInline"]              = "org.mockito:mockito-inline:2.24.0"
 extra["mockitoKotlin"]              = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
 extra["truth"]                      = "com.google.truth:truth:0.42"
