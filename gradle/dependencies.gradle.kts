@@ -6,7 +6,7 @@ val okHttpVersion                   = "3.14.0"
 val retrofitVersion                 = "2.5.0"
 val espressoVersion                 = "3.1.1"
 val leakCanaryVersion               = "1.5.4" // TODO 1.6.2 crash?
-val glideVersion                    = "4.8.0"
+val glideVersion                    = "4.9.0"
 
 // android plugin
 extra["minSdkVersion"]              = 19
