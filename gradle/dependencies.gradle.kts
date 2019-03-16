@@ -2,7 +2,7 @@
 val androidGradleVersion            = "3.5.0-alpha07"
 val kotlinVersion                   = "1.3.20"
 val daggerVersion                   = "2.21"
-val okHttpVersion                   = "3.12.1"
+val okHttpVersion                   = "3.14.0"
 val retrofitVersion                 = "2.5.0"
 val espressoVersion                 = "3.1.1"
 val leakCanaryVersion               = "1.5.4" // TODO 1.6.2 crash?
