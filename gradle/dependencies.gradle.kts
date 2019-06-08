@@ -77,4 +77,4 @@ extra["mockitoKotlin"]              = "com.nhaarman.mockitokotlin2:mockito-kotli
 extra["truth"]                      = "com.google.truth:truth:0.43"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 extra["reflections"]                = "org.reflections:reflections:0.9.11"
-extra["robolectric"]                = "org.robolectric:robolectric:4.2.1"
+extra["robolectric"]                = "org.robolectric:robolectric:4.3"
