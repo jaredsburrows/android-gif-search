@@ -12,14 +12,14 @@ buildscript {
   }
 
   dependencies {
-    classpath(extra["gradle"] as String)
-    classpath(extra["kotlinGradlePlugin"] as String)
-    classpath(extra["gradleAndroidCommandPlugin"] as String)
-    classpath(extra["buildScanPlugin"] as String)
-    classpath(extra["dexcountGradlePlugin"] as String)
-    classpath(extra["gradleAndroidApkSizePlugin"] as String)
-    classpath(extra["gradleVersionsPlugin"] as String)
-    classpath(extra["ktlintGradle"] as String)
+    classpath(rootProject.extra["gradle"] as String)
+    classpath(rootProject.extra["kotlinGradlePlugin"] as String)
+    classpath(rootProject.extra["gradleAndroidCommandPlugin"] as String)
+    classpath(rootProject.extra["buildScanPlugin"] as String)
+    classpath(rootProject.extra["dexcountGradlePlugin"] as String)
+    classpath(rootProject.extra["gradleAndroidApkSizePlugin"] as String)
+    classpath(rootProject.extra["gradleVersionsPlugin"] as String)
+    classpath(rootProject.extra["ktlintGradle"] as String)
   }
 }
 
@@ -137,66 +137,66 @@ configure<AppExtension> {
 configurations.all {
   resolutionStrategy {
     // classpath
-    force(extra["ktlint"] as String)
+    force(rootProject.extra["ktlint"] as String)
 
     // implementation
-    force(extra["okio"] as String)
-    force(extra["moshi"] as String)
-    force(extra["rxJava"] as String)
-    force(extra["kotlinStdlib"] as String)
-    force(extra["kotlinReflect"] as String)
+    force(rootProject.extra["okio"] as String)
+    force(rootProject.extra["moshi"] as String)
+    force(rootProject.extra["rxJava"] as String)
+    force(rootProject.extra["kotlinStdlib"] as String)
+    force(rootProject.extra["kotlinReflect"] as String)
   }
 }
 
 dependencies {
-  "implementation"(extra["material"] as String)
-  "implementation"(extra["constraintLayout"] as String)
-  "implementation"(extra["kotlinStdlib"] as String)
-  "implementation"(extra["okio"] as String)
-  "implementation"(extra["okhttp"] as String)
-  "implementation"(extra["loggingInterceptor"] as String)
-  "implementation"(extra["adapterRxjava2"] as String)
-  "implementation"(extra["moshi"] as String)
-  "implementation"(extra["converterMoshi"] as String)
-  "implementation"(extra["moshiAdapters"] as String)
-  "implementation"(extra["retrofit"] as String)
-  "implementation"(extra["rxAndroid"] as String)
-  "implementation"(extra["rxJava"] as String)
-  "implementation"(extra["glide"] as String)
-  "implementation"(extra["okhttp3Integration"] as String)
-  "implementation"(extra["dagger"] as String)
-  "implementation"(extra["daggerAndroid"] as String)
-  "implementation"(extra["daggerAndroidSupport"] as String)
+  "implementation"(rootProject.extra["material"] as String)
+  "implementation"(rootProject.extra["constraintLayout"] as String)
+  "implementation"(rootProject.extra["kotlinStdlib"] as String)
+  "implementation"(rootProject.extra["okio"] as String)
+  "implementation"(rootProject.extra["okhttp"] as String)
+  "implementation"(rootProject.extra["loggingInterceptor"] as String)
+  "implementation"(rootProject.extra["adapterRxjava2"] as String)
+  "implementation"(rootProject.extra["moshi"] as String)
+  "implementation"(rootProject.extra["converterMoshi"] as String)
+  "implementation"(rootProject.extra["moshiAdapters"] as String)
+  "implementation"(rootProject.extra["retrofit"] as String)
+  "implementation"(rootProject.extra["rxAndroid"] as String)
+  "implementation"(rootProject.extra["rxJava"] as String)
+  "implementation"(rootProject.extra["glide"] as String)
+  "implementation"(rootProject.extra["okhttp3Integration"] as String)
+  "implementation"(rootProject.extra["dagger"] as String)
+  "implementation"(rootProject.extra["daggerAndroid"] as String)
+  "implementation"(rootProject.extra["daggerAndroidSupport"] as String)
 
-  "kapt"(extra["daggerCompiler"] as String)
-  "kapt"(extra["daggerAndroidProcessor"] as String)
-  "kapt"(extra["glideCompiler"] as String)
+  "kapt"(rootProject.extra["daggerCompiler"] as String)
+  "kapt"(rootProject.extra["daggerAndroidProcessor"] as String)
+  "kapt"(rootProject.extra["glideCompiler"] as String)
 
-  "debugImplementation"(extra["leakcanaryAndroid"] as String)
-  "releaseImplementation"(extra["leakcanaryAndroidNoOp"] as String)
+  "debugImplementation"(rootProject.extra["leakcanaryAndroid"] as String)
+  "releaseImplementation"(rootProject.extra["leakcanaryAndroidNoOp"] as String)
 
-  "androidTestImplementation"(extra["junit"] as String)
-  "androidTestImplementation"(extra["androidXCore"] as String)
-  "androidTestImplementation"(extra["androidXJunit"] as String)
-  "androidTestImplementation"(extra["truth"] as String) { exclude(module = "checker-qual") }
-  "androidTestImplementation"(extra["runner"] as String)
-  "androidTestImplementation"(extra["espressoCore"] as String)
-  "androidTestImplementation"(extra["espressoIntents"] as String)
-  "androidTestImplementation"(extra["espressoContrib"] as String) { exclude(group = "com.android.support") }
-  "androidTestImplementation"(extra["mockwebserver"] as String)
+  "androidTestImplementation"(rootProject.extra["junit"] as String)
+  "androidTestImplementation"(rootProject.extra["androidXCore"] as String)
+  "androidTestImplementation"(rootProject.extra["androidXJunit"] as String)
+  "androidTestImplementation"(rootProject.extra["truth"] as String) { exclude(module = "checker-qual") }
+  "androidTestImplementation"(rootProject.extra["runner"] as String)
+  "androidTestImplementation"(rootProject.extra["espressoCore"] as String)
+  "androidTestImplementation"(rootProject.extra["espressoIntents"] as String)
+  "androidTestImplementation"(rootProject.extra["espressoContrib"] as String) { exclude(group = "com.android.support") }
+  "androidTestImplementation"(rootProject.extra["mockwebserver"] as String)
 
-  "androidTestUtil"(extra["orchestrator"] as String)
+  "androidTestUtil"(rootProject.extra["orchestrator"] as String)
 
-  "testImplementation"(extra["junit"] as String)
-  "testImplementation"(extra["androidXCore"] as String)
-  "testImplementation"(extra["androidXJunit"] as String)
-  "testImplementation"(extra["truth"] as String) { exclude(module = "checker-qual") }
-  "testImplementation"(extra["mockitoKotlin"] as String)
-  "testImplementation"(extra["mockitoInline"] as String)
-  "testImplementation"(extra["leakcanaryAndroidNoOp"] as String)
-  "testImplementation"(extra["mockwebserver"] as String)
-  "testImplementation"(extra["reflections"] as String)
-  "testImplementation"(extra["robolectric"] as String)
+  "testImplementation"(rootProject.extra["junit"] as String)
+  "testImplementation"(rootProject.extra["androidXCore"] as String)
+  "testImplementation"(rootProject.extra["androidXJunit"] as String)
+  "testImplementation"(rootProject.extra["truth"] as String) { exclude(module = "checker-qual") }
+  "testImplementation"(rootProject.extra["mockitoKotlin"] as String)
+  "testImplementation"(rootProject.extra["mockitoInline"] as String)
+  "testImplementation"(rootProject.extra["leakcanaryAndroidNoOp"] as String)
+  "testImplementation"(rootProject.extra["mockwebserver"] as String)
+  "testImplementation"(rootProject.extra["reflections"] as String)
+  "testImplementation"(rootProject.extra["robolectric"] as String)
 }
 
 configure<KaptExtension> {
