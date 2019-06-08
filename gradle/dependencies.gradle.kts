@@ -1,8 +1,9 @@
 // common
 val androidGradleVersion            = "3.5.0-beta01"
 val kotlinVersion                   = "1.3.31"
-val daggerVersion                   = "2.22.1"
+val daggerVersion                   = "2.23.1"
 val okHttpVersion                   = "3.14.0"
+val moshiVersion                    = "1.8.0"
 val retrofitVersion                 = "2.5.0"
 val espressoVersion                 = "3.1.1"
 val leakCanaryVersion               = "1.5.4" // TODO 1.6.2 crash?
@@ -42,8 +43,8 @@ extra["okhttp"]                     = "com.squareup.okhttp3:okhttp:$okHttpVersio
 extra["loggingInterceptor"]         = "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
 extra["retrofit"]                   = "com.squareup.retrofit2:retrofit:$retrofitVersion"
 extra["converterMoshi"]             = "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
-extra["moshi"]                      = "com.squareup.moshi:moshi:1.8.0"
-extra["moshiAdapters"]              = "com.squareup.moshi:moshi-adapters:1.8.0"
+extra["moshi"]                      = "com.squareup.moshi:moshi:$moshiVersion"
+extra["moshiAdapters"]              = "com.squareup.moshi:moshi-adapters:$moshiVersion"
 extra["adapterRxjava2"]             = "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 extra["glide"]                      = "com.github.bumptech.glide:glide:$glideVersion"
 extra["okhttp3Integration"]         = "com.github.bumptech.glide:okhttp3-integration:$glideVersion@aar"
