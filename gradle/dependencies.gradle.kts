@@ -4,7 +4,7 @@ val kotlinVersion                   = "1.3.31"
 val daggerVersion                   = "2.22.1"
 val okHttpVersion                   = "3.14.0"
 val retrofitVersion                 = "2.5.0"
-val espressoVersion                 = "3.1.1"
+val espressoVersion                 = "3.2.0"
 val leakCanaryVersion               = "1.5.4" // TODO 1.6.2 crash?
 val glideVersion                    = "4.9.0"
 
@@ -60,15 +60,15 @@ extra["daggerAndroidProcessor"]     = "com.google.dagger:dagger-android-processo
 extra["glideCompiler"]              = "com.github.bumptech.glide:compiler:$glideVersion"
 
 // androidTestImplementation
-extra["androidXCore"]               = "androidx.test:core:1.1.0"
-extra["androidXJunit"]              = "androidx.test.ext:junit:1.1.0"
+extra["androidXCore"]               = "androidx.test:core:1.2.0"
+extra["androidXJunit"]              = "androidx.test.ext:junit:1.1.1"
 extra["espressoCore"]               = "androidx.test.espresso:espresso-core:$espressoVersion"
 extra["espressoIntents"]            = "androidx.test.espresso:espresso-intents:$espressoVersion"
 extra["espressoContrib"]            = "androidx.test.espresso:espresso-contrib:$espressoVersion"
-extra["runner"]                     = "androidx.test:runner:1.1.1"
+extra["runner"]                     = "androidx.test:runner:1.2.0"
 
 // androidTestUtil
-extra["orchestrator"]               = "androidx.test:orchestrator:1.1.1"
+extra["orchestrator"]               = "androidx.test:orchestrator:1.2.0"
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.13-beta-2"
