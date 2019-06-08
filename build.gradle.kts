@@ -200,7 +200,12 @@ dependencies {
 }
 
 configure<KaptExtension> {
-  useBuildCache = true
+  correctErrorTypes = true
+  mapDiagnosticLocations = true
+  arguments {
+    arg("dagger.formatGeneratedSource", "disabled")
+    arg("dagger.gradle.incremental", "enabled")
+  }
 }
 
 tasks.withType<KotlinCompile> {
