@@ -25,7 +25,7 @@ extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
 extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.21.0"
 extra["ktlintGradle"]               = "org.jlleitschuh.gradle:ktlint-gradle:8.0.0"
-extra["ktlint"]                     = "com.github.shyiko:ktlint:0.29.0"
+extra["ktlint"]                     = "com.pinterest:ktlint:0.33.0"
 
 // implementation
 extra["material"]                   = "com.google.android.material:material:1.0.0"
