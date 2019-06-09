@@ -3,6 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![TravisCI  Build](https://img.shields.io/travis/jaredsburrows/android-gif-example/master.svg)](https://travis-ci.org/jaredsburrows/android-gif-example)
 [![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjaredsburrows%2Fandroid-gif-example.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjaredsburrows%2Fandroid-gif-example?ref=badge_shield)
 
 
 Gif RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2, Junit, Espresso and Robolectric tests!
@@ -52,3 +53,6 @@ Gif RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2, J
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjaredsburrows%2Fandroid-gif-example.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjaredsburrows%2Fandroid-gif-example?ref=badge_large)
