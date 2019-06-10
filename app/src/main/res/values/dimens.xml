@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="gif_adapter_item_offset">0.5dp</dimen>
+  <dimen name="gif_image_width">135dp</dimen>
+</resources>
