@@ -34,6 +34,8 @@ apply {
 
 tasks.withType<KotlinCompile> {
   kotlinOptions {
+    jvmTarget = "10"
+
     allWarningsAsErrors = true
     jvmTarget = deps.versions.java.toString()
   }
