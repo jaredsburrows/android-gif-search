@@ -10,7 +10,6 @@ before_install:
   # Download SDK
   - yes | sdkmanager "tools" &>/dev/null
   - yes | sdkmanager "platform-tools" &>/dev/null
-  - yes | sdkmanager "platforms;android-28" &>/dev/null
   # Download emulator
   - yes | sdkmanager "platforms;android-21" &>/dev/null
   - yes | sdkmanager "system-images;android-21;default;x86_64" &>/dev/null
@@ -29,16 +28,7 @@ before_script:
   # Make sure the emulator is available
   - android-wait-for-emulator
 
-  # Turn off animations
-  - adb shell settings put global window_animation_scale 0 &
-  - adb shell settings put global transition_animation_scale 0 &
-  - adb shell settings put global animator_duration_scale 0 &
-
-  # Wake up
-  - adb shell input keyevent 82 &
-
 script:
-  # Run all checks
   - ./gradlew testDebug connectedDebugAndroidTest -Pci -s --scan
 
 branches:
@@ -56,3 +46,4 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
+
