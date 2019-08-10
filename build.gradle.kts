@@ -205,6 +205,7 @@ configure<KaptExtension> {
   arguments {
     arg("dagger.formatGeneratedSource", "disabled")
     arg("dagger.gradle.incremental", "enabled")
+    arg("dagger.fastInit", "enabled")
   }
 }
 
