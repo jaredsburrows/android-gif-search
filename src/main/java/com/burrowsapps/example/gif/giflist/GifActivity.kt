@@ -22,7 +22,6 @@ import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.data.RiffsyApiClient
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
-import com.squareup.leakcanary.RefWatcher
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.recyclerView
@@ -43,7 +42,6 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
   }
 
   @Inject lateinit var gifPresenter: GifPresenter
-  @Inject lateinit var refWatcher: RefWatcher
   @Inject lateinit var imageService: ImageService
   private lateinit var gridLayoutManager: GridLayoutManager
   private lateinit var gifItemDecoration: GifItemDecoration
@@ -198,12 +196,6 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     gifPresenter.dropView()
 
     super.onPause()
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-
-    refWatcher.watch(this, TAG)
   }
 
   //

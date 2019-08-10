@@ -6,7 +6,6 @@ val okHttpVersion                   = "4.0.1"
 val moshiVersion                    = "1.8.0"
 val retrofitVersion                 = "2.6.1"
 val espressoVersion                 = "3.2.0"
-val leakCanaryVersion               = "1.5.4" // TODO 1.6.2 crash?
 val glideVersion                    = "4.9.0"
 
 // android plugin
@@ -50,10 +49,7 @@ extra["glide"]                      = "com.github.bumptech.glide:glide:$glideVer
 extra["okhttp3Integration"]         = "com.github.bumptech.glide:okhttp3-integration:$glideVersion@aar"
 
 // debugImplementation
-extra["leakcanaryAndroid"]          = "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-
-// releaseImplementation
-extra["leakcanaryAndroidNoOp"]      = "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+extra["leakcanaryAndroid"]          = "com.squareup.leakcanary:leakcanary-android:2.0-beta-2"
 
 // kapt
 extra["daggerCompiler"]             = "com.google.dagger:dagger-compiler:$daggerVersion"

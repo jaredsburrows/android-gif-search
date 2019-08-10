@@ -5,7 +5,7 @@ import android.content.Context
 import dagger.Binds
 import dagger.Module
 
-@Module(includes = [LeakCanaryModule::class])
+@Module
 abstract class AppModule {
   @Binds abstract fun providesContext(application: Application): Context
 }

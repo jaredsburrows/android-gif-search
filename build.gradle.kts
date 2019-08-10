@@ -173,7 +173,6 @@ dependencies {
   "kapt"(rootProject.extra["glideCompiler"] as String)
 
   "debugImplementation"(rootProject.extra["leakcanaryAndroid"] as String)
-  "releaseImplementation"(rootProject.extra["leakcanaryAndroidNoOp"] as String)
 
   "androidTestImplementation"(rootProject.extra["junit"] as String)
   "androidTestImplementation"(rootProject.extra["androidXCore"] as String)
@@ -193,7 +192,6 @@ dependencies {
   "testImplementation"(rootProject.extra["truth"] as String) { exclude(module = "checker-qual") }
   "testImplementation"(rootProject.extra["mockitoKotlin"] as String)
   "testImplementation"(rootProject.extra["mockitoInline"] as String)
-  "testImplementation"(rootProject.extra["leakcanaryAndroidNoOp"] as String)
   "testImplementation"(rootProject.extra["mockwebserver"] as String)
   "testImplementation"(rootProject.extra["reflections"] as String)
   "testImplementation"(rootProject.extra["robolectric"] as String)
