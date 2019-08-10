@@ -24,7 +24,7 @@ object TestFileUtils {
     return MockResponse().apply {
       status = HTTP_200_STATUS
       setResponseCode(HttpURLConnection.HTTP_OK)
-      body = readImage(fileName)
+      setBody(readImage(fileName))
       addHeader("Content-type: image/png")
     }
   }

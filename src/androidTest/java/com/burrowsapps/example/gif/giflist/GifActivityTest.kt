@@ -38,7 +38,7 @@ class GifActivityTest {
   @get:Rule val grantPermissionRule = GrantPermissionRule.grant(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
   @get:Rule val activityRule = ActivityTestRule<GifActivity>(GifActivity::class.java, true, false)
   private val server = MockWebServer()
-  private val dispatcher = object : Dispatcher() {
+  private val mockDispatcher = object : Dispatcher() {
     override fun dispatch(request: RecordedRequest): MockResponse = when {
       request.path.contains("v1/trending") -> getMockResponse("/trending_results.json")
       request.path.contains("v1/search") -> getMockResponse("/search_results.json")
@@ -50,7 +50,7 @@ class GifActivityTest {
   @Before fun setUp() {
     server.apply {
       start(MOCK_SERVER_PORT)
-      setDispatcher(dispatcher)
+      dispatcher = mockDispatcher
     }
   }
 

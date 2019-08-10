@@ -20,8 +20,8 @@ class RiffsyApiClientTest {
   private val server = MockWebServer()
   private val dispatcher = object : Dispatcher() {
     override fun dispatch(request: RecordedRequest): MockResponse = when {
-      request.path.contains("/v1/trending") -> getMockResponse("/trending_results.json")
-      request.path.contains("/v1/search") -> getMockResponse("/search_results.json")
+      request.path.orEmpty().contains("/v1/trending") -> getMockResponse("/trending_results.json")
+      request.path.orEmpty().contains("/v1/search") -> getMockResponse("/search_results.json")
       else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
     }
   }
@@ -29,7 +29,7 @@ class RiffsyApiClientTest {
 
   @Before fun setUp() {
     server.start(MOCK_SERVER_PORT)
-    server.setDispatcher(dispatcher)
+    server.dispatcher = dispatcher
 
     sut = RiffsyModule(server.url("/").toString()).providesRiffsyApi(
       NetModule().providesRetrofit(

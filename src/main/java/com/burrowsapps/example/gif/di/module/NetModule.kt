@@ -37,8 +37,9 @@ class NetModule {
     .build()
 
   @Provides fun providesOkHttpClient(cache: Cache?): OkHttpClient = OkHttpClient.Builder()
-    .addInterceptor(HttpLoggingInterceptor()
-      .setLevel(if (BuildConfig.DEBUG) Level.BODY else Level.NONE))
+    .addInterceptor(HttpLoggingInterceptor().apply {
+      level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
+    })
     .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
     .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
     .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
