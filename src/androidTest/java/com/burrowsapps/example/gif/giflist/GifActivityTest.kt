@@ -36,15 +36,15 @@ import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 @RunWith(AndroidJUnit4::class)
 class GifActivityTest {
-  @get:Rule(order = 1) val activityRule = ActivityTestRule<GifActivity>(GifActivity::class.java, true, false)
+  @get:Rule(order = 1) val activityRule = ActivityTestRule(GifActivity::class.java, true, false)
   @get:Rule(order = 2) val grantPermissionRule = GrantPermissionRule.grant(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
   @get:Rule(order = 3) val screenshotWatcher = ScreenshotWatcher()
   private val server = MockWebServer()
   private val mockDispatcher = object : Dispatcher() {
     override fun dispatch(request: RecordedRequest): MockResponse = when {
-      request.path.contains("v1/trending") -> getMockResponse("/trending_results.json")
-      request.path.contains("v1/search") -> getMockResponse("/search_results.json")
-      request.path.contains("images") -> getMockFileResponse("/ic_launcher.png")
+      request.path.orEmpty().contains("v1/trending") -> getMockResponse("/trending_results.json")
+      request.path.orEmpty().contains("v1/search") -> getMockResponse("/search_results.json")
+      request.path.orEmpty().contains("images") -> getMockFileResponse("/ic_launcher.png")
       else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
     }
   }
