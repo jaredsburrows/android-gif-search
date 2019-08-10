@@ -14,9 +14,9 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
-import com.burrowsapps.example.gif.R
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -26,6 +26,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import test.ScreenshotWatcher
 import test.TestFileUtils.MOCK_SERVER_PORT
 import test.TestFileUtils.getMockFileResponse
@@ -33,16 +34,17 @@ import test.TestFileUtils.getMockResponse
 import test.launchActivity
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
+@RunWith(AndroidJUnit4::class)
 class GifActivityTest {
-  @get:Rule val screenshotWatcher = ScreenshotWatcher()
-  @get:Rule val grantPermissionRule = GrantPermissionRule.grant(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
-  @get:Rule val activityRule = ActivityTestRule<GifActivity>(GifActivity::class.java, true, false)
+  @get:Rule(order = 1) val activityRule = ActivityTestRule(GifActivity::class.java, true, false)
+  @get:Rule(order = 2) val grantPermissionRule = GrantPermissionRule.grant(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
+  @get:Rule(order = 3) val screenshotWatcher = ScreenshotWatcher()
   private val server = MockWebServer()
-  private val dispatcher = object : Dispatcher() {
+  private val mockDispatcher = object : Dispatcher() {
     override fun dispatch(request: RecordedRequest): MockResponse = when {
-      request.path.contains("v1/trending") -> getMockResponse("/trending_results.json")
-      request.path.contains("v1/search") -> getMockResponse("/search_results.json")
-      request.path.contains("images") -> getMockFileResponse("/ic_launcher.png")
+      request.path.orEmpty().contains("v1/trending") -> getMockResponse("/trending_results.json")
+      request.path.orEmpty().contains("v1/search") -> getMockResponse("/search_results.json")
+      request.path.orEmpty().contains("images") -> getMockFileResponse("/ic_launcher.png")
       else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
     }
   }
@@ -50,7 +52,7 @@ class GifActivityTest {
   @Before fun setUp() {
     server.apply {
       start(MOCK_SERVER_PORT)
-      setDispatcher(dispatcher)
+      dispatcher = mockDispatcher
     }
   }
 
@@ -63,12 +65,12 @@ class GifActivityTest {
     activityRule.launchActivity()
 
     // Select 0, the response only contains 1 item
-    onView(withId(R.id.recyclerView))
+    onView(withId(com.burrowsapps.example.gif.R.id.recyclerView))
       .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
-    onView(withId(R.id.gifDialogImage))
+    onView(withId(com.burrowsapps.example.gif.R.id.gifDialogImage))
       .inRoot(isDialog())
       .check(matches(isDisplayed()))
-    onView(withId(R.id.gifDialogImage))
+    onView(withId(com.burrowsapps.example.gif.R.id.gifDialogImage))
       .inRoot(isDialog())
       .perform(pressBack())
   }
@@ -77,7 +79,7 @@ class GifActivityTest {
     activityRule.launchActivity()
     screenshotWatcher.capture("After launch")
 
-    onView(withId(R.id.menu_search))
+    onView(withId(com.burrowsapps.example.gif.R.id.menu_search))
       .perform(click())
     screenshotWatcher.capture("After click")
 
@@ -86,7 +88,7 @@ class GifActivityTest {
       .perform(click(), typeText("hello"), closeSoftKeyboard(), pressBack())
     screenshotWatcher.capture("After Search")
 
-    onView(withId(R.id.recyclerView))
+    onView(withId(com.burrowsapps.example.gif.R.id.recyclerView))
       .check(matches(isDisplayed()))
     screenshotWatcher.capture("List displayed")
   }

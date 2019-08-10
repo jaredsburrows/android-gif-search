@@ -1,12 +1,11 @@
 // common
-val androidGradleVersion            = "3.5.0-beta01"
-val kotlinVersion                   = "1.3.31"
-val daggerVersion                   = "2.23.1"
-val okHttpVersion                   = "3.14.0"
+val androidGradleVersion            = "3.5.0-rc03"
+val kotlinVersion                   = "1.3.41"
+val daggerVersion                   = "2.24"
+val okHttpVersion                   = "4.0.1"
 val moshiVersion                    = "1.8.0"
-val retrofitVersion                 = "2.5.0"
+val retrofitVersion                 = "2.6.1"
 val espressoVersion                 = "3.2.0"
-val leakCanaryVersion               = "1.5.4" // TODO 1.6.2 crash?
 val glideVersion                    = "4.9.0"
 
 // android plugin
@@ -21,11 +20,11 @@ extra["debugKeystorePass"]          = "android"
 extra["gradle"]                     = "com.android.tools.build:gradle:$androidGradleVersion"
 extra["kotlinGradlePlugin"]         = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:2.1.0"
-extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:2.3"
+extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:2.4"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.6"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
-extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.21.0"
-extra["ktlintGradle"]               = "org.jlleitschuh.gradle:ktlint-gradle:8.0.0"
+extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.22.0"
+extra["ktlintGradle"]               = "org.jlleitschuh.gradle:ktlint-gradle:8.2.0"
 extra["ktlint"]                     = "com.pinterest:ktlint:0.33.0"
 
 // implementation
@@ -50,10 +49,7 @@ extra["glide"]                      = "com.github.bumptech.glide:glide:$glideVer
 extra["okhttp3Integration"]         = "com.github.bumptech.glide:okhttp3-integration:$glideVersion@aar"
 
 // debugImplementation
-extra["leakcanaryAndroid"]          = "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-
-// releaseImplementation
-extra["leakcanaryAndroidNoOp"]      = "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+extra["leakcanaryAndroid"]          = "com.squareup.leakcanary:leakcanary-android:2.0-beta-2"
 
 // kapt
 extra["daggerCompiler"]             = "com.google.dagger:dagger-compiler:$daggerVersion"
@@ -73,9 +69,9 @@ extra["orchestrator"]               = "androidx.test:orchestrator:1.2.0"
 
 // testImplementation
 extra["junit"]                      = "junit:junit:4.13-beta-3"
-extra["mockitoInline"]              = "org.mockito:mockito-inline:2.28.2"
+extra["mockitoInline"]              = "org.mockito:mockito-inline:3.0.0"
 extra["mockitoKotlin"]              = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
-extra["truth"]                      = "com.google.truth:truth:0.45"
+extra["truth"]                      = "com.google.truth:truth:1.0"
 extra["mockwebserver"]              = "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 extra["reflections"]                = "org.reflections:reflections:0.9.11"
 extra["robolectric"]                = "org.robolectric:robolectric:4.3"

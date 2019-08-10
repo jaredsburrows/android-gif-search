@@ -1,9 +1,11 @@
 package com.burrowsapps.example.gif.data.model
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.squareup.moshi.Json
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.reflections.Reflections
 import org.reflections.scanners.FieldAnnotationsScanner
 import org.reflections.scanners.MemberUsageScanner
@@ -17,6 +19,7 @@ import org.reflections.util.ConfigurationBuilder
 import org.reflections.util.FilterBuilder
 import java.lang.reflect.Modifier
 
+@RunWith(AndroidJUnit4::class)
 class DtoConstructorTest {
   private val modelPackage = "burrows.apps.example.gif.data.rest.model"
   private val dataTransportObject = "Dto"
