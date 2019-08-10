@@ -24,7 +24,7 @@ extra["gradleAndroidCommandPlugin"] = "com.novoda:gradle-android-command-plugin:
 extra["buildScanPlugin"]            = "com.gradle:build-scan-plugin:2.3"
 extra["dexcountGradlePlugin"]       = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.6"
 extra["gradleAndroidApkSizePlugin"] = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
-extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.21.0"
+extra["gradleVersionsPlugin"]       = "com.github.ben-manes:gradle-versions-plugin:0.22.0"
 extra["ktlintGradle"]               = "org.jlleitschuh.gradle:ktlint-gradle:8.0.0"
 extra["ktlint"]                     = "com.pinterest:ktlint:0.33.0"
 
