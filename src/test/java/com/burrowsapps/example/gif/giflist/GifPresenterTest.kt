@@ -1,5 +1,6 @@
 package com.burrowsapps.example.gif.giflist
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.data.RiffsyApiClient
 import com.burrowsapps.example.gif.data.RiffsyApiClient.Companion.DEFAULT_LIMIT_COUNT
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
@@ -13,8 +14,10 @@ import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import test.TestImmediateSchedulerProvider
 
+@RunWith(AndroidJUnit4::class)
 class GifPresenterTest {
   private val provider = TestImmediateSchedulerProvider()
   private var view: GifContract.View = mock()

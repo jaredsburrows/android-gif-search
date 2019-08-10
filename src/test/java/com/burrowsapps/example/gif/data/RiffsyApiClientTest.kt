@@ -1,5 +1,6 @@
 package com.burrowsapps.example.gif.data
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
 import com.burrowsapps.example.gif.di.module.NetModule
 import com.burrowsapps.example.gif.di.module.RiffsyModule
@@ -12,10 +13,12 @@ import okhttp3.mockwebserver.RecordedRequest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import test.TestFileUtils.MOCK_SERVER_PORT
 import test.TestFileUtils.getMockResponse
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
+@RunWith(AndroidJUnit4::class)
 class RiffsyApiClientTest {
   private val server = MockWebServer()
   private val dispatcher = object : Dispatcher() {

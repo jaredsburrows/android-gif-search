@@ -14,6 +14,7 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import com.burrowsapps.example.gif.R
@@ -26,6 +27,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import test.ScreenshotWatcher
 import test.TestFileUtils.MOCK_SERVER_PORT
 import test.TestFileUtils.getMockFileResponse
@@ -33,6 +35,7 @@ import test.TestFileUtils.getMockResponse
 import test.launchActivity
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
+@RunWith(AndroidJUnit4::class)
 class GifActivityTest {
   @get:Rule val screenshotWatcher = ScreenshotWatcher()
   @get:Rule val grantPermissionRule = GrantPermissionRule.grant(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
