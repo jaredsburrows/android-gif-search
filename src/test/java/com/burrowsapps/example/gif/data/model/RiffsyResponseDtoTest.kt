@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class RiffsyResponseDtoTest {
   private val nextResponse = 1.0
-  private val results = arrayListOf<ResultDto>()
+  private val results = listOf<ResultDto>()
   private var sutDefault = RiffsyResponseDto()
   private var sut = RiffsyResponseDto(results, nextResponse)
 

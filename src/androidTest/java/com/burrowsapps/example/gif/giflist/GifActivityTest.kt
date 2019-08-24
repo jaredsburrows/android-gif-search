@@ -42,9 +42,9 @@ class GifActivityTest {
   private val server = MockWebServer()
   private val mockDispatcher = object : Dispatcher() {
     override fun dispatch(request: RecordedRequest): MockResponse = when {
-      request.path.orEmpty().contains("v1/trending") -> getMockResponse("/trending_results.json")
-      request.path.orEmpty().contains("v1/search") -> getMockResponse("/search_results.json")
-      request.path.orEmpty().contains("images") -> getMockFileResponse("/ic_launcher.png")
+      request.path!!.contains("v1/trending") -> getMockResponse("/trending_results.json")
+      request.path!!.contains("v1/search") -> getMockResponse("/search_results.json")
+      request.path!!.contains("images") -> getMockFileResponse("/ic_launcher.png")
       else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
     }
   }

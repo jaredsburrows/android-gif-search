@@ -27,12 +27,14 @@ class DtoConstructorTest {
 
   @Before fun setUp() {
     val reflections = Reflections(ConfigurationBuilder().filterInputsBy(
-      FilterBuilder().includePackage(modelPackage))
-      .setUrls(ClasspathHelper.forClassLoader())
+      FilterBuilder().includePackage(modelPackage)
+    ).setUrls(ClasspathHelper.forClassLoader())
       .setScanners(SubTypesScanner(false), TypeAnnotationsScanner(),
         FieldAnnotationsScanner(), MethodAnnotationsScanner(),
         MethodParameterScanner(), MethodParameterNamesScanner(),
-        MemberUsageScanner()))
+        MemberUsageScanner()
+      )
+    )
     classes = reflections.getSubTypesOf(Any::class.java)
   }
 

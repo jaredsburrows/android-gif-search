@@ -1,5 +1,6 @@
 package com.burrowsapps.example.gif.data
 
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
 import com.burrowsapps.example.gif.di.module.NetModule
@@ -23,8 +24,8 @@ class RiffsyApiClientTest {
   private val server = MockWebServer()
   private val dispatcher = object : Dispatcher() {
     override fun dispatch(request: RecordedRequest): MockResponse = when {
-      request.path.orEmpty().contains("/v1/trending") -> getMockResponse("/trending_results.json")
-      request.path.orEmpty().contains("/v1/search") -> getMockResponse("/search_results.json")
+      request.path!!.contains("/v1/trending") -> getMockResponse("/trending_results.json")
+      request.path!!.contains("/v1/search") -> getMockResponse("/search_results.json")
       else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
     }
   }
@@ -34,11 +35,8 @@ class RiffsyApiClientTest {
     server.start(MOCK_SERVER_PORT)
     server.dispatcher = dispatcher
 
-    sut = RiffsyModule(server.url("/").toString()).providesRiffsyApi(
-      NetModule().providesRetrofit(
-        NetModule().providesMoshi(),
-        NetModule().providesOkHttpClient(null)
-      )
+    sut = RiffsyModule(server.url("/").toString()).provideRiffsyApi(
+      NetModule.provideRetrofit(ApplicationProvider.getApplicationContext())
     )
   }
 
