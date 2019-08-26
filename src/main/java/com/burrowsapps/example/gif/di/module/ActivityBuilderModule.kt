@@ -8,5 +8,5 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ActivityBuilderModule {
   @ContributesAndroidInjector(modules = [GifModule::class])
-  abstract fun providesMainActivity(): GifActivity
+  abstract fun provideMainActivity(): GifActivity
 }

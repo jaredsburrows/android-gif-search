@@ -22,35 +22,39 @@ import java.util.concurrent.TimeUnit
  */
 @Module
 class NetModule {
+  @Module
   companion object {
     private const val CLIENT_TIME_OUT = 10L
     private const val CLIENT_CACHE_SIZE = 10 * 1024 * 1024L // 10 MiB
     private const val CLIENT_CACHE_DIRECTORY = "http"
+
+    @JvmStatic @Provides fun provideRetrofit(application: Application): Retrofit.Builder =
+      Retrofit.Builder()
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create(createMoshi()))
+        .client(createOkHttpClient(application))
+
+    private fun createHttpLoggingInterceptor(): HttpLoggingInterceptor {
+      return HttpLoggingInterceptor().apply {
+        level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
+      }
+    }
+
+    private fun createCache(application: Application): Cache =
+      Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
+
+    private fun createMoshi(): Moshi = Moshi.Builder()
+      .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
+      .build()
+
+    private fun createOkHttpClient(
+      application: Application
+    ): OkHttpClient = OkHttpClient.Builder()
+      .addInterceptor(createHttpLoggingInterceptor())
+      .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+      .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+      .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+      .cache(createCache(application))
+      .build()
   }
-
-  @Provides fun providesCache(
-    application: Application
-  ): Cache = Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
-
-  @Provides fun providesMoshi(): Moshi = Moshi.Builder()
-    .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
-    .build()
-
-  @Provides fun providesOkHttpClient(cache: Cache?): OkHttpClient = OkHttpClient.Builder()
-    .addInterceptor(HttpLoggingInterceptor().apply {
-      level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
-    })
-    .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
-    .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
-    .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
-    .cache(cache)
-    .build()
-
-  @Provides fun providesRetrofit(
-    moshi: Moshi,
-    okHttpClient: OkHttpClient
-  ): Retrofit.Builder = Retrofit.Builder()
-    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
-    .client(okHttpClient)
 }

@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ResultDtoTest {
   private val mediaTitle = "Good Luck"
-  private val media = arrayListOf<MediaDto>()
+  private val media = listOf<MediaDto>()
   private var sutDefault = ResultDto()
   private var sut = ResultDto(media, mediaTitle)
 
