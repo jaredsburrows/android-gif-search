@@ -201,7 +201,6 @@ configure<KaptExtension> {
   correctErrorTypes = true
   mapDiagnosticLocations = true
   arguments {
-    arg("dagger.gradle.incremental", "enabled")
     arg("dagger.formatGeneratedSource", "disabled")
     arg("dagger.fastInit", "enabled")
   }
