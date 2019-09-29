@@ -13,14 +13,14 @@ plugins {
 }
 
 android {
-  compileSdkVersion(rootProject.extra["compileSdkVersion"] as Int)
+  compileSdkVersion(deps.build.compileSdk)
 
   defaultConfig {
     applicationId = "com.burrowsapps.example.gif"
     versionCode = 1
     versionName = "1.0"
-    minSdkVersion(rootProject.extra["minSdkVersion"] as Int)
-    targetSdkVersion(rootProject.extra["targetSdkVersion"] as Int)
+    minSdkVersion(deps.build.minSdk)
+    targetSdkVersion(deps.build.targetSdk)
 
     testApplicationId = "burrows.apps.example.gif.test"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -34,8 +34,8 @@ android {
   }
 
   compileOptions {
-    setSourceCompatibility(rootProject.extra["javaVersion"])
-    setTargetCompatibility(rootProject.extra["javaVersion"])
+    sourceCompatibility = deps.versions.java
+    targetCompatibility = deps.versions.java
   }
 
   dexOptions.preDexLibraries = !(rootProject.extra["ci"] as Boolean)
@@ -59,9 +59,9 @@ android {
   signingConfigs {
     getByName("debug") {
       storeFile = file("../config/signing/debug.keystore")
-      storePassword = rootProject.extra["debugKeystorePass"] as String
-      keyAlias = rootProject.extra["debugKeystoreUser"] as String
-      keyPassword = rootProject.extra["debugKeystorePass"] as String
+      storePassword = deps.build.signing.pass
+      keyAlias = deps.build.signing.alias
+      keyPassword = deps.build.signing.pass
     }
   }
 
@@ -77,7 +77,7 @@ android {
       isMinifyEnabled = true
       isShrinkResources = true
       proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))
-      proguardFile(file("config/proguard/proguard-rules.txt"))
+      proguardFile(file("../config/proguard/proguard-rules.txt"))
       signingConfig = signingConfigs.getByName("debug")
 
       buildConfigField("String", "BASE_URL", "\"https://api.riffsy.com\"")
@@ -105,63 +105,61 @@ android {
 }
 
 dependencies {
-  implementation(rootProject.extra["material"] as String)
-  implementation(rootProject.extra["constraintLayout"] as String)
-  implementation(rootProject.extra["kotlinStdlib"] as String)
-  implementation(rootProject.extra["okio"] as String)
-  implementation(rootProject.extra["okhttp"] as String)
-  implementation(rootProject.extra["loggingInterceptor"] as String)
-  implementation(rootProject.extra["adapterRxjava2"] as String)
-  implementation(rootProject.extra["moshi"] as String)
-  implementation(rootProject.extra["converterMoshi"] as String)
-  implementation(rootProject.extra["moshiAdapters"] as String)
-  implementation(rootProject.extra["retrofit"] as String)
-  implementation(rootProject.extra["rxAndroid"] as String)
-  implementation(rootProject.extra["rxJava"] as String)
-  implementation(rootProject.extra["glide"] as String)
-  implementation(rootProject.extra["okhttp3Integration"] as String)
-  implementation(rootProject.extra["dagger"] as String)
-  implementation(rootProject.extra["daggerAndroid"] as String)
-  implementation(rootProject.extra["daggerAndroidSupport"] as String)
+  implementation(deps.android.constraintlayout)
+  implementation(deps.glide.glide)
+  implementation(deps.glide.integration)
+  implementation(deps.google.dagger.android)
+  implementation(deps.google.dagger.dagger)
+  implementation(deps.google.dagger.support)
+  implementation(deps.google.material)
+  implementation(deps.kotlin.stdlib)
+  implementation(deps.rxjava.rxandroid)
+  implementation(deps.rxjava.rxjava)
+  implementation(deps.squareup.moshi.moshi)
+  implementation(deps.squareup.moshi.adapters)
+  implementation(deps.squareup.okhttp.interceptor)
+  implementation(deps.squareup.okhttp.okhttp)
+  implementation(deps.squareup.okio)
+  implementation(deps.squareup.retrofit.moshi)
+  implementation(deps.squareup.retrofit.retrofit)
+  implementation(deps.squareup.retrofit.rxjava2)
 
-  kapt(rootProject.extra["daggerCompiler"] as String)
-  kapt(rootProject.extra["daggerAndroidProcessor"] as String)
-  kapt(rootProject.extra["glideCompiler"] as String)
+  kapt(deps.glide.compiler)
+  kapt(deps.google.dagger.compiler)
+  kapt(deps.google.dagger.processor)
 
-  debugImplementation(rootProject.extra["leakcanaryAndroid"] as String)
+  debugImplementation(deps.squareup.leakcanary)
 
-  androidTestImplementation(rootProject.extra["junit"] as String)
-  androidTestImplementation(rootProject.extra["androidXCore"] as String)
-  androidTestImplementation(rootProject.extra["androidXJunit"] as String)
-  androidTestImplementation(rootProject.extra["truth"] as String) { exclude(module = "checker-qual") }
-  androidTestImplementation(rootProject.extra["runner"] as String)
-  androidTestImplementation(rootProject.extra["espressoCore"] as String)
-  androidTestImplementation(rootProject.extra["espressoIntents"] as String)
-  androidTestImplementation(rootProject.extra["espressoContrib"] as String) { exclude(group = "com.android.support") }
-  androidTestImplementation(rootProject.extra["mockwebserver"] as String)
+  androidTestImplementation(deps.android.test.core)
+  androidTestImplementation(deps.android.test.espresso.contrib)
+  androidTestImplementation(deps.android.test.espresso.core)
+  androidTestImplementation(deps.android.test.espresso.intents)
+  androidTestImplementation(deps.android.test.junit)
+  androidTestImplementation(deps.android.test.runner)
+  androidTestImplementation(deps.google.truth) { exclude(module = "checker-qual") }
+  androidTestImplementation(deps.squareup.okhttp.mockwebserver)
+  androidTestImplementation(deps.test.junit)
 
-  androidTestUtil(rootProject.extra["orchestrator"] as String)
+  androidTestUtil(deps.android.test.orchestrator)
 
-  testImplementation(rootProject.extra["junit"] as String)
-  testImplementation(rootProject.extra["androidXCore"] as String)
-  testImplementation(rootProject.extra["androidXJunit"] as String)
-  testImplementation(rootProject.extra["truth"] as String) { exclude(module = "checker-qual") }
-  testImplementation(rootProject.extra["mockitoKotlin"] as String)
-  testImplementation(rootProject.extra["mockitoInline"] as String)
-  testImplementation(rootProject.extra["mockwebserver"] as String)
-  testImplementation(rootProject.extra["reflections"] as String)
-  testImplementation(rootProject.extra["robolectric"] as String)
+  testImplementation(deps.android.test.core)
+  testImplementation(deps.android.test.junit)
+  testImplementation(deps.google.truth) { exclude(module = "checker-qual") }
+  testImplementation(deps.squareup.okhttp.mockwebserver)
+  testImplementation(deps.test.junit)
+  testImplementation(deps.test.mockito.inline)
+  testImplementation(deps.test.mockito.kotlin)
+  testImplementation(deps.test.reflections)
+  testImplementation(deps.test.robolectric)
 }
 
 kapt {
   correctErrorTypes = true
   mapDiagnosticLocations = true
-
   arguments {
     arg("dagger.formatGeneratedSource", "disabled")
     arg("dagger.fastInit", "enabled")
   }
-
   javacOptions {
     option("-source", "8")
     option("-target", "8")
