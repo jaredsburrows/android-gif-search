@@ -10,8 +10,8 @@ val glideVersion                    = "4.10.0"
 
 // android plugin
 extra["minSdkVersion"]              = 19
-extra["targetSdkVersion"]           = 28
-extra["compileSdkVersion"]          = 28
+extra["targetSdkVersion"]           = 29
+extra["compileSdkVersion"]          = 29
 extra["javaVersion"]                = "1.8"
 extra["debugKeystoreUser"]          = "androiddebugkey"
 extra["debugKeystorePass"]          = "android"
