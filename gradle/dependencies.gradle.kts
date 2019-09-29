@@ -4,7 +4,7 @@ val kotlinVersion                   = "1.3.50"
 val daggerVersion                   = "2.24"
 val okHttpVersion                   = "4.0.1"
 val moshiVersion                    = "1.8.0"
-val retrofitVersion                 = "2.6.1"
+val retrofitVersion                 = "2.6.2"
 val espressoVersion                 = "3.2.0"
 val glideVersion                    = "4.9.0"
 
