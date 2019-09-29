@@ -1,10 +1,6 @@
 language: android
 
-env:
-  global:
-    - ADB_INSTALL_TIMEOUT=8
-
-jdk: oraclejdk8
+jdk: openjdk8
 
 before_install:
   # Download SDK
@@ -21,11 +17,9 @@ before_install:
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-accel -no-snapshot -no-window -camera-back none -camera-front none & &>/dev/null
 
 install:
-  # Build debug and release(run proguard)
   - ./gradlew clean ktlintCheck assemble assembleDebugAndroidTest -Pci -s --scan
 
 before_script:
-  # Make sure the emulator is available
   - android-wait-for-emulator
 
 script:
@@ -46,4 +40,3 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
-
