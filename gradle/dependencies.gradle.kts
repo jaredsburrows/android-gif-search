@@ -6,7 +6,7 @@ val okHttpVersion                   = "4.2.0"
 val moshiVersion                    = "1.8.0"
 val retrofitVersion                 = "2.6.2"
 val espressoVersion                 = "3.2.0"
-val glideVersion                    = "4.9.0"
+val glideVersion                    = "4.10.0"
 
 // android plugin
 extra["minSdkVersion"]              = 19
