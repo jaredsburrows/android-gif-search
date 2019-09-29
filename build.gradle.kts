@@ -210,5 +210,6 @@ configure<KaptExtension> {
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     allWarningsAsErrors = true
+    jvmTarget = rootProject.extra["javaVersion"] as String
   }
 }
