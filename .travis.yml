@@ -22,7 +22,7 @@ before_install:
 
 install:
   # Build debug and release(run proguard)
-  - ./gradlew clean ktlintCheck assemble assembleDebugAndroidTest -Pci -s --scan
+  - ./gradlew clean ktlintCheck assemble lintDebug assembleDebugAndroidTest -Pci -s --scan
 
 before_script:
   # Make sure the emulator is available

@@ -34,20 +34,11 @@ class NetModule {
         .addConverterFactory(MoshiConverterFactory.create(createMoshi()))
         .client(createOkHttpClient(application))
 
-    private fun createHttpLoggingInterceptor(): HttpLoggingInterceptor {
-      return HttpLoggingInterceptor().apply {
-        level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
-      }
-    }
-
-    private fun createCache(application: Application): Cache =
-      Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
-
-    private fun createMoshi(): Moshi = Moshi.Builder()
+    internal fun createMoshi(): Moshi = Moshi.Builder()
       .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
       .build()
 
-    private fun createOkHttpClient(
+    internal fun createOkHttpClient(
       application: Application
     ): OkHttpClient = OkHttpClient.Builder()
       .addInterceptor(createHttpLoggingInterceptor())
@@ -56,5 +47,14 @@ class NetModule {
       .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
       .cache(createCache(application))
       .build()
+
+    private fun createHttpLoggingInterceptor(): HttpLoggingInterceptor {
+      return HttpLoggingInterceptor().apply {
+        level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
+      }
+    }
+
+    private fun createCache(application: Application): Cache =
+      Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
   }
 }

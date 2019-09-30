@@ -43,20 +43,20 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
 
   @Inject lateinit var gifPresenter: GifPresenter
   @Inject lateinit var imageService: ImageService
-  private lateinit var gridLayoutManager: GridLayoutManager
+  internal lateinit var gridLayoutManager: GridLayoutManager
   private lateinit var gifItemDecoration: GifItemDecoration
   private lateinit var gifAdapter: GifAdapter
   private lateinit var gifDialog: AppCompatDialog
   private lateinit var gifDialogText: TextView
-  private lateinit var gifDialogProgressBar: ProgressBar
+  internal lateinit var gifDialogProgressBar: ProgressBar
   private lateinit var gifImageView: ImageView
-  private var hasSearchedImages = false
-  private var previousImageCount = 0
-  private var loadingImages = true
-  private var firstVisibleImage = 0
-  private var visibleImageCount = 0
-  private var totalImageCount = 0
-  private var nextPageNumber: Double? = null
+  internal var hasSearchedImages = false
+  internal var previousImageCount = 0
+  internal var loadingImages = true
+  internal var firstVisibleImage = 0
+  internal var visibleImageCount = 0
+  internal var totalImageCount = 0
+  internal var nextPageNumber: Double? = null
 
   //
   // Activity
