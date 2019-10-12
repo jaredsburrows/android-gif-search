@@ -37,20 +37,6 @@ apply {
   from(file("gradle/compile.gradle.kts"))
 }
 
-//configurations.all {
-//  resolutionStrategy {
-//    // classpath
-//    force(rootProject.extra["ktlint"] as String)
-//
-//    // implementation
-//    force(rootProject.extra["okio"] as String)
-//    force(rootProject.extra["moshi"] as String)
-//    force(rootProject.extra["rxJava"] as String)
-//    force(rootProject.extra["kotlinStdlib"] as String)
-//    force(rootProject.extra["kotlinReflect"] as String)
-//  }
-//}
-
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     allWarningsAsErrors = true
