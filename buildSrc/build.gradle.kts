@@ -1,9 +1,3 @@
-buildscript {
-  repositories {
-    gradlePluginPortal()
-  }
-}
-
 repositories {
   gradlePluginPortal()
 }

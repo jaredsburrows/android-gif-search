@@ -136,7 +136,7 @@ dependencies {
   androidTestImplementation(deps.android.test.espresso.intents)
   androidTestImplementation(deps.android.test.junit)
   androidTestImplementation(deps.android.test.runner)
-  androidTestImplementation(deps.google.truth) { exclude(module = "checker-qual") }
+  androidTestImplementation(deps.google.truth)
   androidTestImplementation(deps.squareup.okhttp.mockwebserver)
   androidTestImplementation(deps.test.junit)
 
@@ -144,7 +144,7 @@ dependencies {
 
   testImplementation(deps.android.test.core)
   testImplementation(deps.android.test.junit)
-  testImplementation(deps.google.truth) { exclude(module = "checker-qual") }
+  testImplementation(deps.google.truth)
   testImplementation(deps.squareup.okhttp.mockwebserver)
   testImplementation(deps.test.junit)
   testImplementation(deps.test.mockito.inline)

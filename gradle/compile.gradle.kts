@@ -2,8 +2,8 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 tasks.withType<JavaCompile> {
-  sourceCompatibility = rootProject.extra["javaVersion"] as String
-  targetCompatibility = rootProject.extra["javaVersion"] as String
+  sourceCompatibility = deps.versions.java.toString()
+  targetCompatibility = deps.versions.java.toString()
 
   // Show all warnings except boot classpath
   options.apply {
