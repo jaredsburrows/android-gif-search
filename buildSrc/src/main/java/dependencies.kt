@@ -4,7 +4,7 @@ import org.gradle.api.JavaVersion
 
 object deps {
   object versions {
-    const val androidGradle = "3.5.0-rc03"
+    const val androidGradle = "3.6.0-beta01"
     const val kotlin = "1.3.50"
     const val dagger = "2.24"
     const val okHttp = "4.2.0"
