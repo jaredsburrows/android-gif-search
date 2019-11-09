@@ -106,7 +106,7 @@ object deps {
 
   object test {
     const val junit = "junit:junit:4.13-beta-3"
-    const val robolectric = "org.robolectric:robolectric:4.3"
+    const val robolectric = "org.robolectric:robolectric:4.3.1"
     const val reflections = "org.reflections:reflections:0.9.11"
 
     object mockito {
