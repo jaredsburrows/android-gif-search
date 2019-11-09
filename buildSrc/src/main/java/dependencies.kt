@@ -33,7 +33,7 @@ object deps {
     const val scan = "com.gradle:build-scan-plugin:2.4.2"
     const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.6"
     const val apksize = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
-    const val versions = "com.github.ben-manes:gradle-versions-plugin:0.25.0"
+    const val versions = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
     const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:9.1.0"
   }
 

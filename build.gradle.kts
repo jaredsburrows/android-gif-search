@@ -20,10 +20,6 @@ buildscript {
   }
 }
 
-plugins {
-  id("com.github.ben-manes.versions") version "0.25.0"
-}
-
 allprojects {
   repositories {
     google()
@@ -32,6 +28,7 @@ allprojects {
 }
 
 apply {
+  plugin("com.github.ben-manes.versions")
   from(file("gradle/compile.gradle.kts"))
 }
 
