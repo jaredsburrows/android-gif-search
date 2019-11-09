@@ -60,7 +60,7 @@ object deps {
 
   object rxjava {
     const val rxandroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
-    const val rxjava = "io.reactivex.rxjava2:rxjava:2.2.4"
+    const val rxjava = "io.reactivex.rxjava2:rxjava:2.2.14"
   }
 
   object squareup {
