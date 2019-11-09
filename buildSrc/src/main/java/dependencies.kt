@@ -110,7 +110,7 @@ object deps {
     const val reflections = "org.reflections:reflections:0.9.11"
 
     object mockito {
-      const val inline = "org.mockito:mockito-inline:3.0.0"
+      const val inline = "org.mockito:mockito-inline:3.1.0"
       const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
     }
   }
