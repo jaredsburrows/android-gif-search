@@ -127,6 +127,7 @@ dependencies {
   kapt(deps.glide.compiler)
   kapt(deps.google.dagger.compiler)
   kapt(deps.google.dagger.processor)
+  kapt(deps.squareup.moshi.compiler)
 
   debugImplementation(deps.squareup.leakcanary)
 
@@ -159,6 +160,7 @@ kapt {
   arguments {
     arg("dagger.formatGeneratedSource", "disabled")
     arg("dagger.fastInit", "enabled")
+    arg("moshi.generated", "javax.annotation.Generated")
   }
   javacOptions {
     option("-source", "8")
