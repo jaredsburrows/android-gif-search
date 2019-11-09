@@ -17,6 +17,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
+import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -32,7 +33,6 @@ import test.TestFileUtils.MOCK_SERVER_PORT
 import test.TestFileUtils.getMockFileResponse
 import test.TestFileUtils.getMockResponse
 import test.launchActivity
-import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 @RunWith(AndroidJUnit4::class)
 class GifActivityTest {

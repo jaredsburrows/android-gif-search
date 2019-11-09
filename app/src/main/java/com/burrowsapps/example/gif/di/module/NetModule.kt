@@ -6,6 +6,9 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import dagger.Module
 import dagger.Provides
+import java.io.File
+import java.util.Date
+import java.util.concurrent.TimeUnit
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -13,9 +16,6 @@ import okhttp3.logging.HttpLoggingInterceptor.Level
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.io.File
-import java.util.Date
-import java.util.concurrent.TimeUnit
 
 /**
  * Creates services based on Retrofit interfaces.

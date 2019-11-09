@@ -6,8 +6,8 @@ object deps {
   object versions {
     const val androidGradle = "3.5.0-rc03"
     const val kotlin = "1.3.50"
-    const val dagger = "2.24"
-    const val okHttp = "4.2.0"
+    const val dagger = "2.25.2"
+    const val okHttp = "4.2.2"
     const val moshi = "1.8.0"
     const val retrofit = "2.6.2"
     const val espresso = "3.2.0"
@@ -33,8 +33,8 @@ object deps {
     const val scan = "com.gradle:build-scan-plugin:2.4.2"
     const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.6"
     const val apksize = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
-    const val versions = "com.github.ben-manes:gradle-versions-plugin:0.25.0"
-    const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:8.2.0"
+    const val versions = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
+    const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:9.1.0"
   }
 
   object kotlin {
@@ -60,12 +60,12 @@ object deps {
 
   object rxjava {
     const val rxandroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
-    const val rxjava = "io.reactivex.rxjava2:rxjava:2.2.4"
+    const val rxjava = "io.reactivex.rxjava2:rxjava:2.2.14"
   }
 
   object squareup {
     const val okio = "com.squareup.okio:okio:2.1.0"
-    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.0-beta-2"
+    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.0-beta-3"
 
     object okhttp {
       const val okhttp = "com.squareup.okhttp3:okhttp:${versions.okHttp}"
@@ -82,6 +82,7 @@ object deps {
     object moshi {
       const val moshi = "com.squareup.moshi:moshi:${versions.moshi}"
       const val adapters = "com.squareup.moshi:moshi-adapters:${versions.moshi}"
+      const val compiler = "com.squareup.moshi:moshi-kotlin-codegen:${versions.moshi}"
     }
   }
 
@@ -105,12 +106,12 @@ object deps {
   }
 
   object test {
-    const val junit = "junit:junit:4.13-beta-3"
-    const val robolectric = "org.robolectric:robolectric:4.3"
+    const val junit = "junit:junit:4.13-rc-1"
+    const val robolectric = "org.robolectric:robolectric:4.3.1"
     const val reflections = "org.reflections:reflections:0.9.11"
 
     object mockito {
-      const val inline = "org.mockito:mockito-inline:3.0.0"
+      const val inline = "org.mockito:mockito-inline:3.1.0"
       const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
     }
   }

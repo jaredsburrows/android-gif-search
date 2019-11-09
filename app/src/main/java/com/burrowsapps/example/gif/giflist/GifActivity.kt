@@ -24,12 +24,12 @@ import com.burrowsapps.example.gif.data.RiffsyApiClient
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_main.recyclerView
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.android.synthetic.main.dialog_preview.view.gifDialogImage
 import kotlinx.android.synthetic.main.dialog_preview.view.gifDialogProgress
 import kotlinx.android.synthetic.main.dialog_preview.view.gifDialogTitle
-import javax.inject.Inject
 
 /**
  * Main activity that will load our Fragments via the Support Fragment Manager.

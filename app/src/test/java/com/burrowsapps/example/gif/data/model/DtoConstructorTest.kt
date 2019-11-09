@@ -2,6 +2,7 @@ package com.burrowsapps.example.gif.data.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.squareup.moshi.Json
+import java.lang.reflect.Modifier
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
@@ -17,7 +18,6 @@ import org.reflections.scanners.TypeAnnotationsScanner
 import org.reflections.util.ClasspathHelper
 import org.reflections.util.ConfigurationBuilder
 import org.reflections.util.FilterBuilder
-import java.lang.reflect.Modifier
 
 @RunWith(AndroidJUnit4::class)
 class DtoConstructorTest {

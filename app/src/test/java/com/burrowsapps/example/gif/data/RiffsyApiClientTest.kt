@@ -7,6 +7,7 @@ import com.burrowsapps.example.gif.di.module.NetModule
 import com.burrowsapps.example.gif.di.module.RiffsyModule
 import com.google.common.truth.Truth.assertThat
 import io.reactivex.observers.TestObserver
+import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -17,7 +18,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import test.TestFileUtils.MOCK_SERVER_PORT
 import test.TestFileUtils.getMockResponse
-import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 @RunWith(AndroidJUnit4::class)
 class RiffsyApiClientTest {

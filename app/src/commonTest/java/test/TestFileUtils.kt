@@ -1,11 +1,11 @@
 package test
 
-import okhttp3.mockwebserver.MockResponse
-import okio.Buffer
-import okio.source
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import okhttp3.mockwebserver.MockResponse
+import okio.Buffer
+import okio.source
 
 object TestFileUtils {
   const val MOCK_SERVER_PORT = 8080
