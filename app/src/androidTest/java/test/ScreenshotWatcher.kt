@@ -2,10 +2,10 @@ package test
 
 import android.graphics.Bitmap
 import androidx.test.runner.screenshot.Screenshot
+import java.io.IOException
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import java.io.IOException
 
 class ScreenshotWatcher : TestWatcher() {
   private lateinit var description: Description
