@@ -21,7 +21,6 @@ buildscript {
 }
 
 plugins {
-  id("com.gradle.build-scan") version "2.4.2"
   id("com.github.ben-manes.versions") version "0.25.0"
 }
 
@@ -33,7 +32,6 @@ allprojects {
 }
 
 apply {
-  from(file("gradle/scan.gradle.kts"))
   from(file("gradle/compile.gradle.kts"))
 }
 
