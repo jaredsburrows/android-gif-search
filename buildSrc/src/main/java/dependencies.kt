@@ -6,7 +6,7 @@ object deps {
   object versions {
     const val androidGradle = "3.5.0-rc03"
     const val kotlin = "1.3.50"
-    const val dagger = "2.24"
+    const val dagger = "2.25.2"
     const val okHttp = "4.2.2"
     const val moshi = "1.9.1"
     const val retrofit = "2.6.2"
