@@ -65,7 +65,7 @@ object deps {
 
   object squareup {
     const val okio = "com.squareup.okio:okio:2.1.0"
-    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.0-beta-2"
+    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.0-beta-3"
 
     object okhttp {
       const val okhttp = "com.squareup.okhttp3:okhttp:${versions.okHttp}"
