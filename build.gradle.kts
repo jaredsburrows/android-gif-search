@@ -25,6 +25,20 @@ allprojects {
     google()
     gradlePluginPortal()
   }
+
+  configurations.all {
+    resolutionStrategy {
+      failOnVersionConflict()
+
+      preferProjectModules()
+
+      eachDependency {
+        if (requested.group == "org.jetbrains.kotlin") {
+          useVersion(deps.versions.kotlin)
+        }
+      }
+    }
+  }
 }
 
 apply {

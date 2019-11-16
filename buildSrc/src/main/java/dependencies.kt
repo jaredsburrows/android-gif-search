@@ -4,8 +4,8 @@ import org.gradle.api.JavaVersion
 
 object deps {
   object versions {
-    const val androidGradle = "3.5.0-rc03"
-    const val kotlin = "1.3.50"
+    const val androidGradle = "4.0.0-alpha03"
+    const val kotlin = "1.3.60"
     const val dagger = "2.25.2"
     const val okHttp = "4.2.2"
     const val moshi = "1.8.0"
@@ -31,7 +31,7 @@ object deps {
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.versions.kotlin}"
     const val command = "com.novoda:gradle-android-command-plugin:2.1.0"
     const val scan = "com.gradle:build-scan-plugin:2.4.2"
-    const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.6"
+    const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
     const val apksize = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
     const val versions = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
     const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:9.1.0"
