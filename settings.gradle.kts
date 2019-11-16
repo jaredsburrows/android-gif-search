@@ -1,5 +1,3 @@
-rootProject.name = "android-gif-example"
-
 plugins {
   id("com.gradle.enterprise").version("3.0")
 }
@@ -10,5 +8,7 @@ gradleEnterprise {
     termsOfServiceAgree = "yes"
   }
 }
+
+rootProject.name = "android-gif-example"
 
 include(":app")

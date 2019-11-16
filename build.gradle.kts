@@ -49,6 +49,6 @@ apply {
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     allWarningsAsErrors = true
-    jvmTarget = deps.versions.java.toString()
+//    jvmTarget = deps.versions.java.toString()
   }
 }

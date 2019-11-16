@@ -1,10 +1,20 @@
 language: android
 
-env:
-  global:
-    - ADB_INSTALL_TIMEOUT=8
+os: linux
 
-jdk: oraclejdk8
+jobs:
+  include:
+    - jdk: oraclejdk8
+    - jdk: openjdk9
+      env: AVDMANAGER_OPTS="-XX:+IgnoreUnrecognizedVMOptions --add-modules java.se.ee" SDKMANAGER_OPTS="-XX:+IgnoreUnrecognizedVMOptions --add-modules java.se.ee"
+    - jdk: openjdk11
+    - jdk: openjdk12
+    - jdk: openjdk13
+  allow_failures:
+    - jdk: openjdk9
+    - jdk: openjdk11
+    - jdk: openjdk12
+    - jdk: openjdk13
 
 before_install:
   # Download SDK
@@ -16,15 +26,15 @@ before_install:
   # Update remaining dependencies and accept licenses
   - yes | sdkmanager --update &>/dev/null
   - yes | sdkmanager --licenses &>/dev/null
-  # Setup emulator
-  - echo "no" | avdmanager create avd -n test -k "system-images;android-21;default;x86_64" -c 200M -f &>/dev/null
-  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-accel -no-snapshot -no-window -camera-back none -camera-front none & &>/dev/null
 
 install:
   # Build debug and release(run proguard)
   - ./gradlew clean ktlintCheck assemble lintDebug assembleDebugAndroidTest -Pci -s --scan
 
 before_script:
+  # Setup emulator
+  - echo "no" | avdmanager create avd -n test -k "system-images;android-21;default;x86_64" -c 200M -f &>/dev/null
+  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-accel -no-snapshot -no-window -camera-back none -camera-front none & &>/dev/null
   # Make sure the emulator is available
   - android-wait-for-emulator
 
@@ -34,8 +44,6 @@ script:
 branches:
   except:
     - gh-pages
-
-sudo: false
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

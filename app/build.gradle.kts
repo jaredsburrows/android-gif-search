@@ -33,10 +33,10 @@ android {
     vectorDrawables.useSupportLibrary = true
   }
 
-  compileOptions {
-    sourceCompatibility = deps.versions.java
-    targetCompatibility = deps.versions.java
-  }
+//  compileOptions {
+//    sourceCompatibility = deps.versions.java
+//    targetCompatibility = deps.versions.java
+//  }
 
   dexOptions.preDexLibraries = !(rootProject.extra["ci"] as Boolean)
 
@@ -160,10 +160,10 @@ kapt {
   arguments {
     arg("dagger.formatGeneratedSource", "disabled")
     arg("dagger.fastInit", "enabled")
-    arg("moshi.generated", "javax.annotation.Generated")
+//    arg("moshi.generated", "javax.annotation.Generated")
   }
-  javacOptions {
-    option("-source", "8")
-    option("-target", "8")
-  }
+//  javacOptions {
+//    option("-source", "8")
+//    option("-target", "8")
+//  }
 }
