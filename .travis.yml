@@ -1,5 +1,7 @@
 language: android
 
+dist: trusty
+
 env:
   global:
     - ADB_INSTALL_TIMEOUT=8
@@ -12,12 +14,12 @@ before_install:
   - yes | sdkmanager "platform-tools" &>/dev/null
   # Download emulator
   - yes | sdkmanager "platforms;android-21" &>/dev/null
-  - yes | sdkmanager "system-images;android-21;default;x86_64" &>/dev/null
+  - yes | sdkmanager "system-images;android-21;default;armeabi-v7a" &>/dev/null
   # Update remaining dependencies and accept licenses
   - yes | sdkmanager --update &>/dev/null
   - yes | sdkmanager --licenses &>/dev/null
   # Setup emulator
-  - echo "no" | avdmanager create avd -n test -k "system-images;android-21;default;x86_64" -c 200M -f &>/dev/null
+  - echo "no" | avdmanager create avd --force -n test -k "system-images;android-21;default;armeabi-v7a" -c 200M -f &>/dev/null
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-accel -no-snapshot -no-window -camera-back none -camera-front none & &>/dev/null
 
 install:
@@ -27,6 +29,7 @@ install:
 before_script:
   # Make sure the emulator is available
   - android-wait-for-emulator
+  - adb shell input keyevent 82
 
 script:
   - ./gradlew testDebug connectedDebugAndroidTest -Pci -s --scan
