@@ -5,13 +5,13 @@ import org.gradle.api.JavaVersion
 object deps {
   object versions {
     const val androidGradle = "4.0.0-alpha04"
-    const val kotlin = "1.3.60"
-    const val dagger = "2.25.2"
-    const val okHttp = "4.2.2"
+    const val kotlin = "1.3.61"
+    const val dagger = "2.26"
+    const val okHttp = "4.3.1"
     const val moshi = "1.9.2"
-    const val retrofit = "2.6.2"
+    const val retrofit = "2.7.1"
     const val espresso = "3.2.0"
-    const val glide = "4.10.0"
+    const val glide = "4.11.0"
     val java = JavaVersion.VERSION_1_8
   }
 
@@ -31,10 +31,10 @@ object deps {
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.versions.kotlin}"
     const val command = "com.novoda:gradle-android-command-plugin:2.1.0"
     const val scan = "com.gradle:build-scan-plugin:2.4.2"
-    const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.0"
+    const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.2"
     const val apksize = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
     const val versions = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
-    const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:9.1.1"
+    const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:9.2.1"
   }
 
   object kotlin {
@@ -60,12 +60,12 @@ object deps {
 
   object rxjava {
     const val rxandroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
-    const val rxjava = "io.reactivex.rxjava2:rxjava:2.2.14"
+    const val rxjava = "io.reactivex.rxjava2:rxjava:2.2.17"
   }
 
   object squareup {
     const val okio = "com.squareup.okio:okio:2.1.0"
-    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.0-beta-3"
+    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.2"
 
     object okhttp {
       const val okhttp = "com.squareup.okhttp3:okhttp:${versions.okHttp}"
@@ -88,7 +88,7 @@ object deps {
 
   object google {
     const val material = "com.google.android.material:material:1.0.0"
-    const val truth = "com.google.truth:truth:1.0"
+    const val truth = "com.google.truth:truth:1.0.1"
 
     object dagger {
       const val dagger = "com.google.dagger:dagger:${versions.dagger}"
@@ -106,12 +106,12 @@ object deps {
   }
 
   object test {
-    const val junit = "junit:junit:4.13-rc-1"
+    const val junit = "junit:junit:4.13"
     const val robolectric = "org.robolectric:robolectric:4.3.1"
-    const val reflections = "org.reflections:reflections:0.9.11"
+    const val reflections = "org.reflections:reflections:0.9.11" // Scanner SubTypesScanner was not configured
 
     object mockito {
-      const val inline = "org.mockito:mockito-inline:3.1.0"
+      const val inline = "org.mockito:mockito-inline:3.2.4"
       const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
     }
   }
