@@ -4,7 +4,7 @@ import org.gradle.api.JavaVersion
 
 object deps {
   object versions {
-    const val androidGradle = "4.0.0-alpha09"
+    const val androidGradle = "4.0.0-beta03"
     const val kotlin = "1.3.61"
     const val dagger = "2.26"
     const val okHttp = "4.3.1"
@@ -16,7 +16,7 @@ object deps {
   }
 
   object build {
-    const val minSdk = 19
+    const val minSdk = 21
     const val targetSdk = 29
     const val compileSdk = 29
 
@@ -43,6 +43,7 @@ object deps {
 
   object android {
     const val constraintlayout = "androidx.constraintlayout:constraintlayout:1.1.3"
+    const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.0.5"
 
     object test {
       const val core = "androidx.test:core:1.2.0"

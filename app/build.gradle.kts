@@ -34,6 +34,7 @@ android {
   }
 
   compileOptions {
+    coreLibraryDesugaringEnabled = true
     sourceCompatibility = deps.versions.java
     targetCompatibility = deps.versions.java
   }
@@ -102,6 +103,11 @@ android {
     exclude("**/*.xml")
     exclude("**/*.properties")
   }
+
+  dependenciesInfo {
+    includeInApk = false
+    includeInBundle = false
+  }
 }
 
 dependencies {
@@ -123,6 +129,8 @@ dependencies {
   implementation(deps.squareup.retrofit.moshi)
   implementation(deps.squareup.retrofit.retrofit)
   implementation(deps.squareup.retrofit.rxjava2)
+
+  coreLibraryDesugaring(deps.android.desugarJdkLibs)
 
   kapt(deps.glide.compiler)
   kapt(deps.google.dagger.compiler)
