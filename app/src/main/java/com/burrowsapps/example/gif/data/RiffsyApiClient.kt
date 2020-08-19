@@ -11,11 +11,6 @@ import retrofit2.http.Query
  * Custom Api interfaces for the Riffsy Api.
  */
 interface RiffsyApiClient {
-  companion object {
-    const val DEFAULT_LIMIT_COUNT = 24
-    private const val API_KEY = "LIVDSRZULELA"
-  }
-
   /**
    * Get trending gif results.
    *
@@ -56,4 +51,9 @@ interface RiffsyApiClient {
     @Query("limit") limit: Int,
     @Query("pos") pos: Double?
   ): Observable<RiffsyResponseDto>
+
+  companion object {
+    const val DEFAULT_LIMIT_COUNT = 24
+    private const val API_KEY = "LIVDSRZULELA"
+  }
 }

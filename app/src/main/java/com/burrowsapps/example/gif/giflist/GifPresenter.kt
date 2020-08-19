@@ -12,10 +12,6 @@ class GifPresenter @Inject constructor(
   private val riffsyApiClient: RiffsyApiClient,
   private val schedulerProvider: SchedulerProvider
 ) : GifContract.Presenter {
-  companion object {
-    private const val TAG = "MainPresenter"
-  }
-
   private val disposable = CompositeDisposable()
   private var view: GifContract.View? = null
 
@@ -68,5 +64,9 @@ class GifPresenter @Inject constructor(
       }, { throwable ->
         Log.e(TAG, "onError", throwable) // java.lang.UnsatisfiedLinkError - unit tests
       }))
+  }
+
+  companion object {
+    private const val TAG = "MainPresenter"
   }
 }

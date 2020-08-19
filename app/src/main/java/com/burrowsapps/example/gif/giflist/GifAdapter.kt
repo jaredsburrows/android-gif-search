@@ -23,17 +23,12 @@ class GifAdapter(
   private val onItemClickListener: OnItemClickListener,
   private val imageService: ImageService
 ) : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
-  companion object {
-    private const val TAG = "GifAdapter"
-  }
-
   private val data = arrayListOf<GifImageInfo>()
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
-  ): ViewHolder = ViewHolder(LayoutInflater.from(parent.context)
-    .inflate(R.layout.list_item, parent, false))
+  ) = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false))
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val imageInfoModel = getItem(position)
@@ -68,8 +63,7 @@ class GifAdapter(
 
           return false
         }
-      })
-      .into(holder.itemView.gifImage)
+      }).into(holder.itemView.gifImage)
 
     holder.itemView.setOnClickListener { onItemClickListener.onClick(imageInfoModel) }
   }
@@ -115,9 +109,13 @@ class GifAdapter(
     notifyItemInserted(location)
   }
 
-  inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+  class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
   interface OnItemClickListener {
     fun onClick(imageInfoModel: GifImageInfo)
+  }
+
+  companion object {
+    private const val TAG = "GifAdapter"
   }
 }
