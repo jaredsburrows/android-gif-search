@@ -3,6 +3,7 @@ apply {
   plugin("com.getkeepsafe.dexcount")
   plugin("com.vanniktech.android.apk.size")
   plugin("org.jlleitschuh.gradle.ktlint")
+  plugin("dagger.hilt.android.plugin")
 }
 
 plugins {
@@ -114,9 +115,7 @@ dependencies {
   implementation(deps.android.constraintlayout)
   implementation(deps.glide.glide)
   implementation(deps.glide.integration)
-  implementation(deps.google.dagger.android)
   implementation(deps.google.dagger.dagger)
-  implementation(deps.google.dagger.support)
   implementation(deps.google.material)
   implementation(deps.kotlin.stdlib)
   implementation(deps.rxjava.rxandroid)
@@ -134,7 +133,6 @@ dependencies {
 
   kapt(deps.glide.compiler)
   kapt(deps.google.dagger.compiler)
-  kapt(deps.google.dagger.processor)
   kapt(deps.squareup.moshi.compiler)
 
   debugImplementation(deps.squareup.leakcanary)

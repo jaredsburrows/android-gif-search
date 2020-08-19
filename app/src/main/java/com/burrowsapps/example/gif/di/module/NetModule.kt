@@ -6,6 +6,8 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import java.io.File
 import java.util.Date
 import java.util.concurrent.TimeUnit
@@ -21,40 +23,38 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  * Creates services based on Retrofit interfaces.
  */
 @Module
-class NetModule {
-  @Module
-  companion object {
-    private const val CLIENT_TIME_OUT = 10L
-    private const val CLIENT_CACHE_SIZE = 10 * 1024 * 1024L // 10 MiB
-    private const val CLIENT_CACHE_DIRECTORY = "http"
+@InstallIn(ActivityComponent::class)
+object NetModule {
+  private const val CLIENT_TIME_OUT = 10L
+  private const val CLIENT_CACHE_SIZE = 10 * 1024 * 1024L // 10 MiB
+  private const val CLIENT_CACHE_DIRECTORY = "http"
 
-    @JvmStatic @Provides fun provideRetrofit(application: Application): Retrofit.Builder =
-      Retrofit.Builder()
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .addConverterFactory(MoshiConverterFactory.create(createMoshi()))
-        .client(createOkHttpClient(application))
+  @Provides fun provideRetrofit(application: Application): Retrofit.Builder =
+    Retrofit.Builder()
+      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+      .addConverterFactory(MoshiConverterFactory.create(createMoshi()))
+      .client(createOkHttpClient(application))
 
-    internal fun createMoshi(): Moshi = Moshi.Builder()
-      .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
-      .build()
+  private fun createMoshi(): Moshi = Moshi.Builder()
+    .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
+    .build()
 
-    internal fun createOkHttpClient(
-      application: Application
-    ): OkHttpClient = OkHttpClient.Builder()
-      .addInterceptor(createHttpLoggingInterceptor())
-      .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
-      .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
-      .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
-      .cache(createCache(application))
-      .build()
+  private fun createOkHttpClient(
+    application: Application
+  ): OkHttpClient = OkHttpClient.Builder()
+    .addInterceptor(createHttpLoggingInterceptor())
+    .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+    .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+    .readTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
+    .cache(createCache(application))
+    .build()
 
-    private fun createHttpLoggingInterceptor(): HttpLoggingInterceptor {
-      return HttpLoggingInterceptor().apply {
-        level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
-      }
+  private fun createHttpLoggingInterceptor(): HttpLoggingInterceptor {
+    return HttpLoggingInterceptor().apply {
+      level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
     }
-
-    private fun createCache(application: Application): Cache =
-      Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
   }
+
+  private fun createCache(application: Application): Cache =
+    Cache(File(application.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
 }

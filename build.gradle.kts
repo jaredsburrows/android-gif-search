@@ -17,6 +17,7 @@ buildscript {
     classpath(deps.plugin.apksize)
     classpath(deps.plugin.versions)
     classpath(deps.plugin.ktlint)
+    classpath(deps.plugin.dagger)
   }
 }
 

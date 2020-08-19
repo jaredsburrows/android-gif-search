@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,8 +23,7 @@ import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.data.RiffsyApiClient
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
-import dagger.android.AndroidInjection
-import dagger.android.support.DaggerAppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_main.recyclerView
 import kotlinx.android.synthetic.main.activity_main.toolbar
@@ -34,13 +34,8 @@ import kotlinx.android.synthetic.main.dialog_preview.view.gifDialogTitle
 /**
  * Main activity that will load our Fragments via the Support Fragment Manager.
  */
-class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnItemClickListener {
-  companion object {
-    private const val TAG = "MainActivity"
-    private const val PORTRAIT_COLUMNS = 3
-    private const val VISIBLE_THRESHOLD = 5
-  }
-
+@AndroidEntryPoint
+class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClickListener {
   @Inject lateinit var gifPresenter: GifPresenter
   @Inject lateinit var imageService: ImageService
   internal lateinit var gridLayoutManager: GridLayoutManager
@@ -66,9 +61,6 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    // Injection dependencies
-    AndroidInjection.inject(this)
-
     // Setup
     toolbar.setTitle(R.string.main_screen_title)
     setSupportActionBar(toolbar)
@@ -76,7 +68,8 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
     gridLayoutManager = GridLayoutManager(this, PORTRAIT_COLUMNS)
     gifItemDecoration = GifItemDecoration(
       resources.getDimensionPixelSize(R.dimen.gif_adapter_item_offset),
-      gridLayoutManager.spanCount)
+      gridLayoutManager.spanCount
+    )
     gifAdapter = GifAdapter(this, imageService).apply {
       setHasStableIds(true)
     }
@@ -282,7 +275,12 @@ class GifActivity : DaggerAppCompatActivity(), GifContract.View, GifAdapter.OnIt
 
           return false
         }
-      })
-      .into(gifImageView)
+      }).into(gifImageView)
+  }
+
+  companion object {
+    private const val TAG = "MainActivity"
+    private const val PORTRAIT_COLUMNS = 3
+    private const val VISIBLE_THRESHOLD = 5
   }
 }
