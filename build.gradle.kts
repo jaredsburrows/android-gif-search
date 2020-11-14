@@ -1,3 +1,5 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
@@ -45,6 +47,19 @@ allprojects {
 apply {
   plugin("com.github.ben-manes.versions")
   from(file("gradle/compile.gradle.kts"))
+}
+
+tasks.named("dependencyUpdates", DependencyUpdatesTask::class.java).configure {
+  fun isNonStable(version: String): Boolean {
+    val stableKeyword = listOf("FINAL", "GA").any { version.toUpperCase().contains(it) }
+    val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+    val isStable = stableKeyword || regex.matches(version)
+    return isStable.not()
+  }
+
+  rejectVersionIf {
+    isNonStable(candidate.version)
+  }
 }
 
 tasks.withType<KotlinCompile> {

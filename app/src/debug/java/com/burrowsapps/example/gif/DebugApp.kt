@@ -6,14 +6,18 @@ import android.os.StrictMode.VmPolicy
 
 class DebugApp : App() {
   override fun onCreate() {
-    StrictMode.setThreadPolicy(ThreadPolicy.Builder()
-      .detectAll()
-      .penaltyLog()
-      .build())
-    StrictMode.setVmPolicy(VmPolicy.Builder()
-      .detectAll()
-      .penaltyLog()
-      .build())
+    StrictMode.setThreadPolicy(
+      ThreadPolicy.Builder()
+        .detectAll()
+        .penaltyLog()
+        .build()
+    )
+    StrictMode.setVmPolicy(
+      VmPolicy.Builder()
+        .detectAll()
+        .penaltyLog()
+        .build()
+    )
 
     super.onCreate()
   }
