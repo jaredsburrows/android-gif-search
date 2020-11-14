@@ -1,5 +1,9 @@
 language: android
 
+dist: xenial
+
+os: linux
+
 env:
   global:
     - ADB_INSTALL_TIMEOUT=8
@@ -34,8 +38,6 @@ script:
 branches:
   except:
     - gh-pages
-
-sudo: false
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

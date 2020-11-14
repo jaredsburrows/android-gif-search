@@ -8,9 +8,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import java.io.File
-import java.util.Date
-import java.util.concurrent.TimeUnit
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,6 +15,9 @@ import okhttp3.logging.HttpLoggingInterceptor.Level
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.io.File
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 /**
  * Creates services based on Retrofit interfaces.
@@ -29,19 +29,16 @@ object NetModule {
   private const val CLIENT_CACHE_SIZE = 10 * 1024 * 1024L // 10 MiB
   private const val CLIENT_CACHE_DIRECTORY = "http"
 
-  @Provides fun provideRetrofit(application: Application): Retrofit.Builder =
-    Retrofit.Builder()
-      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-      .addConverterFactory(MoshiConverterFactory.create(createMoshi()))
-      .client(createOkHttpClient(application))
+  @Provides fun provideRetrofit(application: Application): Retrofit.Builder = Retrofit.Builder()
+    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+    .addConverterFactory(MoshiConverterFactory.create(createMoshi()))
+    .client(createOkHttpClient(application))
 
   private fun createMoshi(): Moshi = Moshi.Builder()
     .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
     .build()
 
-  private fun createOkHttpClient(
-    application: Application
-  ): OkHttpClient = OkHttpClient.Builder()
+  private fun createOkHttpClient(application: Application): OkHttpClient = OkHttpClient.Builder()
     .addInterceptor(createHttpLoggingInterceptor())
     .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)
     .writeTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)

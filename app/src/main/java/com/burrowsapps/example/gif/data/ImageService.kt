@@ -16,11 +16,13 @@ class ImageService @Inject constructor(private val context: Context) {
   fun load(url: String): RequestBuilder<GifDrawable> {
     return Glide.with(context)
       .asGif()
-      .apply(RequestOptions.noTransformation()
-        .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher)
-        .override(imageWidth, imageHeight)
-        .diskCacheStrategy(RESOURCE))
+      .apply(
+        RequestOptions.noTransformation()
+          .error(R.mipmap.ic_launcher)
+          .fallback(R.mipmap.ic_launcher)
+          .override(imageWidth, imageHeight)
+          .diskCacheStrategy(RESOURCE)
+      )
       .load(url)
   }
 }
