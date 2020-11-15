@@ -16,7 +16,7 @@ object deps {
   }
 
   object build {
-    const val minSdk = 21
+    const val minSdk = 23
     const val targetSdk = 29
     const val compileSdk = 29
 

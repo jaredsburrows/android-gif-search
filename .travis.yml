@@ -15,13 +15,13 @@ before_install:
   - yes | sdkmanager "tools" &>/dev/null
   - yes | sdkmanager "platform-tools" &>/dev/null
   # Download emulator
-  - yes | sdkmanager "platforms;android-21" &>/dev/null
-  - yes | sdkmanager "system-images;android-21;default;x86_64" &>/dev/null
+  - yes | sdkmanager "platforms;android-23" &>/dev/null
+  - yes | sdkmanager "system-images;android-23;default;x86_64" &>/dev/null
   # Update remaining dependencies and accept licenses
   - yes | sdkmanager --update &>/dev/null
   - yes | sdkmanager --licenses &>/dev/null
   # Setup emulator
-  - echo "no" | avdmanager create avd -n test -k "system-images;android-21;default;x86_64" -c 200M -f &>/dev/null
+  - echo "no" | avdmanager create avd -n test -k "system-images;android-23;default;x86_64" -c 200M -f &>/dev/null
   - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-accel -no-snapshot -no-window -camera-back none -camera-front none & &>/dev/null
 
 install:
@@ -48,4 +48,3 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
-
