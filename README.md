@@ -1,9 +1,8 @@
 # Android RecyclerView Gif Example in Kotlin using the Kotlin DSL
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![TravisCI  Build](https://img.shields.io/travis/jaredsburrows/android-gif-example/master.svg)](https://travis-ci.org/jaredsburrows/android-gif-example)
+[![Build](https://github.com/jaredsburrows/android-gif-example/workflows/build/badge.svg)](https://github.com/jaredsburrows/android-gif-example/actions)
 [![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
-
 
 Gif RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2, Junit, Espresso and Robolectric tests!
 
@@ -26,7 +25,7 @@ Gif RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2, J
 **Run [Junit](http://junit.org/junit4/) Unit Tests:**
 
     $ gradlew testDebug
-    
+
 **Run [Espresso](https://developer.android.com/training/testing/ui-testing/espresso-testing.html) Instrumentation Tests:**
 
     $ gradlew connectedDebugAndroidTest
