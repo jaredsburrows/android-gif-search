@@ -5,8 +5,11 @@
   package="com.burrowsapps.example.gif"
   tools:ignore="GoogleAppIndexingWarning,AllowBackup">
 
+  <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-  <application android:name=".DebugApp"/>
+  <application
+    android:name=".DebugApp"
+    android:usesCleartextTraffic="true"/>
 </manifest>
