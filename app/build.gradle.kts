@@ -1,5 +1,5 @@
 apply {
-  plugin("com.novoda.android-command")
+//  plugin("com.novoda.android-command")
   plugin("com.getkeepsafe.dexcount")
   plugin("com.vanniktech.android.apk.size")
   plugin("org.jlleitschuh.gradle.ktlint")
@@ -25,17 +25,17 @@ android {
 
     testApplicationId = "burrows.apps.example.gif.test"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    testInstrumentationRunnerArguments = mapOf(
-      "disableAnalytics" to "true",
-      "clearPackageData" to "true"
-    )
+//    testInstrumentationRunnerArguments += mapOf(
+//      "disableAnalytics" to "true",
+//      "clearPackageData" to "true"
+//    )
 
     resConfigs("en")
     vectorDrawables.useSupportLibrary = true
   }
 
   compileOptions {
-    coreLibraryDesugaringEnabled = true
+//    isCoreLibraryDesugaringEnabled = true
     sourceCompatibility = deps.versions.java
     targetCompatibility = deps.versions.java
   }
