@@ -8,7 +8,7 @@ object deps {
     const val kotlin = "1.4.10"
     const val dagger = "2.28-alpha"
     const val okHttp = "4.9.0"
-    const val moshi = "1.9.2"
+    const val moshi = "1.11.0"
     const val retrofit = "2.9.0"
     const val espresso = "3.3.0"
     const val glide = "4.11.0"
