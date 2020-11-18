@@ -168,8 +168,4 @@ kapt {
     arg("dagger.fastInit", "enabled")
     arg("moshi.generated", "javax.annotation.Generated")
   }
-  javacOptions {
-    option("-source", "8")
-    option("-target", "8")
-  }
 }
