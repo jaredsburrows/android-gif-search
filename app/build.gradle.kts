@@ -34,6 +34,15 @@ android {
     vectorDrawables.useSupportLibrary = true
   }
 
+  buildFeatures {
+    aidl = false
+    // compose = true
+    renderScript = false
+    resValues = false
+    shaders = false
+    viewBinding = false
+  }
+
   compileOptions {
     coreLibraryDesugaringEnabled = true
     sourceCompatibility = deps.versions.java

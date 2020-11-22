@@ -47,6 +47,7 @@ allprojects {
   tasks.withType(KotlinCompile::class.java).all {
     kotlinOptions {
       // allWarningsAsErrors = true // migrate ActivityTestRule to ActivityScenario
+      // useIR = true
       jvmTarget = deps.versions.java.toString()
       languageVersion = "1.4"
       apiVersion = "1.4"
