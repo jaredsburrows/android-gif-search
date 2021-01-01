@@ -14,9 +14,11 @@ jobs:
       matrix:
         api-level:
           - 23
+          - 24
         java-version:
           - 1.8
           - 11
+          - 14
 
     steps:
       - name: Cache Gradle dependencies
@@ -47,7 +49,7 @@ jobs:
         run: ./gradlew testDebug -Pci -s --scan
 
       - name: Run Instrumentation Tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2.14.1
         with:
           api-level: ${{ matrix.api-level }}
           script: ./gradlew connectedDebugAndroidTest -Pci -s --scan
