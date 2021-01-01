@@ -3,7 +3,7 @@ repositories {
 }
 
 plugins {
-  kotlin("jvm") version "1.4.10"
+  kotlin("jvm") version "1.4.21-2"
   `kotlin-dsl`
 }
 
@@ -12,5 +12,5 @@ kotlinDslPluginOptions {
 }
 
 dependencies {
-  implementation(kotlin("stdlib-jdk8", version = "1.4.10"))
+  implementation(kotlin("stdlib-jdk8", version = "1.4.21-2"))
 }
