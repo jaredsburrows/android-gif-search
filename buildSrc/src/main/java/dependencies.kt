@@ -109,7 +109,7 @@ object deps {
     const val reflections = "org.reflections:reflections:0.9.11" // Scanner SubTypesScanner was not configured
 
     object mockito {
-      const val inline = "org.mockito:mockito-inline:3.6.0"
+      const val inline = "org.mockito:mockito-inline:3.6.28"
       const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
     }
   }
