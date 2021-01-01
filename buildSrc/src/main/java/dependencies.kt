@@ -30,7 +30,6 @@ object deps {
     const val gradle = "com.android.tools.build:gradle:${deps.versions.androidGradle}"
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.versions.kotlin}"
     const val command = "com.novoda:gradle-android-command-plugin:2.1.0"
-    const val scan = "com.gradle:build-scan-plugin:2.4.2"
     const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:2.0.0"
     const val apksize = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
     const val versions = "com.github.ben-manes:gradle-versions-plugin:0.36.0"

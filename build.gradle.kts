@@ -15,7 +15,6 @@ buildscript {
     classpath(deps.plugin.gradle)
     classpath(deps.plugin.kotlin)
     classpath(deps.plugin.command)
-    classpath(deps.plugin.scan)
     classpath(deps.plugin.dexcount)
     classpath(deps.plugin.apksize)
     classpath(deps.plugin.versions)
