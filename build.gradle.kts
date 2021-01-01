@@ -1,4 +1,3 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -15,7 +14,6 @@ buildscript {
     classpath(deps.plugin.gradle)
     classpath(deps.plugin.kotlin)
     classpath(deps.plugin.command)
-    classpath(deps.plugin.scan)
     classpath(deps.plugin.dexcount)
     classpath(deps.plugin.apksize)
     classpath(deps.plugin.versions)
@@ -109,17 +107,4 @@ allprojects {
 
 apply {
   plugin("com.github.ben-manes.versions")
-}
-
-tasks.named("dependencyUpdates", DependencyUpdatesTask::class.java).configure {
-  fun isNonStable(version: String): Boolean {
-    val stableKeyword = listOf("FINAL", "GA").any { version.toUpperCase().contains(it) }
-    val regex = "^[0-9,.v-]+(-r)?$".toRegex()
-    val isStable = stableKeyword || regex.matches(version)
-    return isStable.not()
-  }
-
-  rejectVersionIf {
-    isNonStable(candidate.version)
-  }
 }

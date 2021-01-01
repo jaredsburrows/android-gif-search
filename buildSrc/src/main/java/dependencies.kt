@@ -5,8 +5,8 @@ import org.gradle.api.JavaVersion
 object deps {
   object versions {
     const val androidGradle = "4.0.2"
-    const val kotlin = "1.4.10"
-    const val dagger = "2.28-alpha"
+    const val kotlin = "1.4.21-2"
+    const val dagger = "2.28-alpha" // 2.29+, error: incompatible types: NonExistentClass cannot be converted to Annotation
     const val okHttp = "4.9.0"
     const val moshi = "1.11.0"
     const val retrofit = "2.9.0"
@@ -30,7 +30,6 @@ object deps {
     const val gradle = "com.android.tools.build:gradle:${deps.versions.androidGradle}"
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.versions.kotlin}"
     const val command = "com.novoda:gradle-android-command-plugin:2.1.0"
-    const val scan = "com.gradle:build-scan-plugin:2.4.2"
     const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:2.0.0"
     const val apksize = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
     const val versions = "com.github.ben-manes:gradle-versions-plugin:0.36.0"
@@ -107,10 +106,10 @@ object deps {
   object test {
     const val junit = "junit:junit:4.13.1"
     const val robolectric = "org.robolectric:robolectric:4.4"
-    const val reflections = "org.reflections:reflections:0.9.11" // Scanner SubTypesScanner was not configured
+    const val reflections = "org.reflections:reflections:0.9.11" // 0.9.12+, Scanner SubTypesScanner was not configured
 
     object mockito {
-      const val inline = "org.mockito:mockito-inline:3.6.0"
+      const val inline = "org.mockito:mockito-inline:3.6.28"
       const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
     }
   }
