@@ -6,7 +6,7 @@ object deps {
   object versions {
     const val androidGradle = "4.0.2"
     const val kotlin = "1.4.21-2"
-    const val dagger = "2.28-alpha"
+    const val dagger = "2.28-alpha" // 2.29+, error: incompatible types: NonExistentClass cannot be converted to Annotation
     const val okHttp = "4.9.0"
     const val moshi = "1.11.0"
     const val retrofit = "2.9.0"
@@ -106,7 +106,7 @@ object deps {
   object test {
     const val junit = "junit:junit:4.13.1"
     const val robolectric = "org.robolectric:robolectric:4.4"
-    const val reflections = "org.reflections:reflections:0.9.11" // Scanner SubTypesScanner was not configured
+    const val reflections = "org.reflections:reflections:0.9.11" // 0.9.12+, Scanner SubTypesScanner was not configured
 
     object mockito {
       const val inline = "org.mockito:mockito-inline:3.6.28"
