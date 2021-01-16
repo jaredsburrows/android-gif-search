@@ -169,6 +169,7 @@ kapt {
   arguments {
     arg("dagger.formatGeneratedSource", "disabled")
     arg("dagger.fastInit", "enabled")
+    arg("dagger.experimentalDaggerErrorMessages", "enabled")
     arg("moshi.generated", "javax.annotation.Generated")
   }
 }
