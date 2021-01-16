@@ -26,8 +26,8 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper/
             ~/.android/build-cache
-          key: ${{ runner.os }}-gradle
-          restore-keys: ${{ runner.os }}-gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
 
       - name: Checkout Project
         uses: actions/checkout@v2
