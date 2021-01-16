@@ -9,7 +9,6 @@ apply {
 plugins {
   id("com.android.application")
   kotlin("android")
-  kotlin("android.extensions")
   kotlin("kapt")
 }
 
@@ -38,6 +37,10 @@ android {
     coreLibraryDesugaringEnabled = true
     sourceCompatibility = deps.versions.java
     targetCompatibility = deps.versions.java
+  }
+
+  buildFeatures {
+    viewBinding = true
   }
 
   dexOptions.preDexLibraries = !(rootProject.extra["ci"] as Boolean)
