@@ -2,9 +2,6 @@ name: build
 
 on: [push, pull_request]
 
-env:
-  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
-
 jobs:
   android:
     runs-on: macos-latest
