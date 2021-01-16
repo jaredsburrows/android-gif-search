@@ -23,12 +23,9 @@ import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.data.RiffsyApiClient
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
+import com.burrowsapps.example.gif.databinding.ActivityMainBinding
+import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.recyclerView
-import kotlinx.android.synthetic.main.activity_main.toolbar
-import kotlinx.android.synthetic.main.dialog_preview.view.gifDialogImage
-import kotlinx.android.synthetic.main.dialog_preview.view.gifDialogProgress
-import kotlinx.android.synthetic.main.dialog_preview.view.gifDialogTitle
 import javax.inject.Inject
 
 /**
@@ -38,6 +35,8 @@ import javax.inject.Inject
 class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClickListener {
   @Inject lateinit var gifPresenter: GifPresenter
   @Inject lateinit var imageService: ImageService
+  private lateinit var binding: ActivityMainBinding
+  private lateinit var dialogBinding: DialogPreviewBinding
   internal lateinit var gridLayoutManager: GridLayoutManager
   private lateinit var gifItemDecoration: GifItemDecoration
   private lateinit var gifAdapter: GifAdapter
@@ -59,11 +58,12 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
+    binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    dialogBinding = DialogPreviewBinding.inflate(layoutInflater)
 
     // Setup
-    toolbar.setTitle(R.string.main_screen_title)
-    setSupportActionBar(toolbar)
+    binding.toolbar.setTitle(R.string.main_screen_title)
+    setSupportActionBar(binding.toolbar)
 
     gridLayoutManager = GridLayoutManager(this, PORTRAIT_COLUMNS)
     gifItemDecoration = GifItemDecoration(
@@ -75,7 +75,7 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
     }
 
     // Setup RecyclerView
-    recyclerView.apply {
+    binding.recyclerView.apply {
       layoutManager = gridLayoutManager
       addItemDecoration(gifItemDecoration)
       adapter = gifAdapter
@@ -126,9 +126,9 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
     }
 
     // Dialog views
-    gifDialogText = dialogView.gifDialogTitle
-    gifDialogProgressBar = dialogView.gifDialogProgress
-    gifImageView = dialogView.gifDialogImage
+    gifDialogText = dialogBinding.gifDialogTitle
+    gifDialogProgressBar = dialogBinding.gifDialogProgress
+    gifImageView = dialogBinding.gifDialogImage
 
     // Load initial images
     gifPresenter.loadTrendingImages(nextPageNumber)
