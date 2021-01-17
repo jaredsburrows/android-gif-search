@@ -16,10 +16,6 @@ Gif RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2, J
 
     $ gradlew installDebug
 
-**Run the App:**
-
-    $ gradlew runDebug
-
 ## Testing
 
 **Run [Junit](http://junit.org/junit4/) Unit Tests:**

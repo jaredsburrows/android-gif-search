@@ -4,7 +4,7 @@ import org.gradle.api.JavaVersion
 
 object deps {
   object versions {
-    const val androidGradle = "4.0.2"
+    const val androidGradle = "4.1.1"
     const val kotlin = "1.4.21-2"
     const val dagger = "2.28-alpha" // 2.29+, error: incompatible types: NonExistentClass cannot be converted to Annotation
     const val okHttp = "4.9.0"
@@ -29,7 +29,6 @@ object deps {
   object plugin {
     const val gradle = "com.android.tools.build:gradle:${deps.versions.androidGradle}"
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.versions.kotlin}"
-    const val command = "com.novoda:gradle-android-command-plugin:2.1.0"
     const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:2.0.0"
     const val apksize = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
     const val versions = "com.github.ben-manes:gradle-versions-plugin:0.36.0"

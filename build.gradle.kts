@@ -13,7 +13,6 @@ buildscript {
   dependencies {
     classpath(deps.plugin.gradle)
     classpath(deps.plugin.kotlin)
-    classpath(deps.plugin.command)
     classpath(deps.plugin.dexcount)
     classpath(deps.plugin.apksize)
     classpath(deps.plugin.versions)
