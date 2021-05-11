@@ -46,8 +46,8 @@ allprojects {
     kotlinOptions {
       // allWarningsAsErrors = true // migrate ActivityTestRule to ActivityScenario
       jvmTarget = deps.versions.java.toString()
-      languageVersion = "1.4"
-      apiVersion = "1.4"
+      languageVersion = "1.5"
+      apiVersion = "1.5"
       freeCompilerArgs = freeCompilerArgs + listOf(
         "-progressive",
         "-Xjsr305=strict",
@@ -71,6 +71,7 @@ allprojects {
         add("-Xlint:-deprecation")       // Allow deprecations from Dagger 2
         add("-Xlint:-classfile")         // Ignore Java 8 method param meta data
         add("-Xlint:-unchecked")         // Dagger 2 unchecked issues
+        add("-Xlint:-cast")              // https://github.com/google/dagger/issues/2339
         add("-Werror")                   // Turn warnings into errors
       }
       encoding = "utf-8"
