@@ -48,6 +48,8 @@ jobs:
 
       - name: Run Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
+        if: matrix.api-level == '1.8'
+        continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
           script: ./gradlew connectedDebugAndroidTest -Pci -s --scan || ./gradlew connectedDebugAndroidTest -Pci -s --scan

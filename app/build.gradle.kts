@@ -24,7 +24,7 @@ android {
 
     testApplicationId = "burrows.apps.example.gif.test"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    testInstrumentationRunnerArguments = mapOf(
+    testInstrumentationRunnerArguments += mapOf(
       "disableAnalytics" to "true",
       "clearPackageData" to "true"
     )
@@ -34,7 +34,7 @@ android {
   }
 
   compileOptions {
-    coreLibraryDesugaringEnabled = true
+    isCoreLibraryDesugaringEnabled = true
     sourceCompatibility = deps.versions.java
     targetCompatibility = deps.versions.java
   }
@@ -59,6 +59,7 @@ android {
     lintConfig = file("../config/lint/lint.xml")
     isCheckReleaseBuilds = false
     isCheckTestSources = true
+    isAbortOnError = false
   }
 
   signingConfigs {
