@@ -132,12 +132,16 @@ dependencies {
   implementation(deps.squareup.retrofit.moshi)
   implementation(deps.squareup.retrofit.retrofit)
   implementation(deps.squareup.retrofit.rxjava2)
+  implementation(deps.misc.jsr305)
 
   coreLibraryDesugaring(deps.android.desugarJdkLibs)
 
   kapt(deps.glide.compiler)
   kapt(deps.google.dagger.compiler)
   kapt(deps.squareup.moshi.compiler)
+
+  compileOnly(deps.misc.javaxInject)
+  compileOnly(deps.misc.jsr250)
 
   debugImplementation(deps.squareup.leakcanary)
 

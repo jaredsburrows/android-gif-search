@@ -5,13 +5,13 @@ import org.gradle.api.JavaVersion
 object deps {
   object versions {
     const val androidGradle = "4.2.0"
-    const val kotlin = "1.4.21-2"
-    const val dagger = "2.28-alpha" // 2.29+, error: incompatible types: NonExistentClass cannot be converted to Annotation
-    const val okHttp = "4.9.0"
-    const val moshi = "1.11.0"
+    const val kotlin = "1.5.0"
+    const val dagger = "2.35.1"
+    const val okHttp = "4.9.1"
+    const val moshi = "1.12.0"
     const val retrofit = "2.9.0"
     const val espresso = "3.3.0"
-    const val glide = "4.11.0"
+    const val glide = "4.12.0"
     val java = JavaVersion.VERSION_1_8
   }
 
@@ -32,7 +32,7 @@ object deps {
     const val command = "com.novoda:gradle-android-command-plugin:2.1.0"
     const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:2.1.0-RC01"
     const val apksize = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
-    const val versions = "com.github.ben-manes:gradle-versions-plugin:0.36.0"
+    const val versions = "com.github.ben-manes:gradle-versions-plugin:0.38.0"
     const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.0.0"
     const val dagger = "com.google.dagger:hilt-android-gradle-plugin:${deps.versions.dagger}"
   }
@@ -61,12 +61,12 @@ object deps {
 
   object rxjava {
     const val rxandroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
-    const val rxjava = "io.reactivex.rxjava2:rxjava:2.2.20"
+    const val rxjava = "io.reactivex.rxjava2:rxjava:2.2.21"
   }
 
   object squareup {
-    const val okio = "com.squareup.okio:okio:2.9.0"
-    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.5"
+    const val okio = "com.squareup.okio:okio:2.10.0"
+    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.7"
 
     object okhttp {
       const val okhttp = "com.squareup.okhttp3:okhttp:${versions.okHttp}"
@@ -89,7 +89,7 @@ object deps {
 
   object google {
     const val material = "com.google.android.material:material:1.2.1"
-    const val truth = "com.google.truth:truth:1.1"
+    const val truth = "com.google.truth:truth:1.1.2"
 
     object dagger {
       const val dagger = "com.google.dagger:hilt-android:${versions.dagger}"
@@ -104,13 +104,19 @@ object deps {
   }
 
   object test {
-    const val junit = "junit:junit:4.13.1"
-    const val robolectric = "org.robolectric:robolectric:4.4"
+    const val junit = "junit:junit:4.13.2"
+    const val robolectric = "org.robolectric:robolectric:4.5"
     const val reflections = "org.reflections:reflections:0.9.11" // 0.9.12+, Scanner SubTypesScanner was not configured
 
     object mockito {
-      const val inline = "org.mockito:mockito-inline:3.6.28"
+      const val inline = "org.mockito:mockito-inline:3.8.0"
       const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
     }
+  }
+
+  object misc {
+    const val javaxInject = "org.glassfish:javax.annotation:10.0-b28"
+    const val jsr250 = "javax.annotation:jsr250-api:1.0"
+    const val jsr305 = "com.google.code.findbugs:jsr305:3.0.2"
   }
 }
