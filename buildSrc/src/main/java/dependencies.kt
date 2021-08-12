@@ -4,7 +4,7 @@ import org.gradle.api.JavaVersion
 
 object deps {
   object versions {
-    const val androidGradle = "4.2.2"
+    const val androidGradle = "7.0.0"
     const val kotlin = "1.5.21"
     const val dagger = "2.38.1"
     const val okHttp = "4.9.1"
@@ -12,13 +12,13 @@ object deps {
     const val retrofit = "2.9.0"
     const val espresso = "3.3.0" // 3.4.0 - https://github.com/android/android-test/issues/861
     const val glide = "4.12.0"
-    val java = JavaVersion.VERSION_1_8
+    val java = JavaVersion.VERSION_11
   }
 
   object build {
     const val minSdk = 23
-    const val targetSdk = 30
-    const val compileSdk = 30
+    const val targetSdk = 31
+    const val compileSdk = 31
 
     object signing {
       const val alias = "androiddebugkey"
@@ -30,7 +30,7 @@ object deps {
     const val gradle = "com.android.tools.build:gradle:${deps.versions.androidGradle}"
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.versions.kotlin}"
     const val command = "com.novoda:gradle-android-command-plugin:2.1.0"
-    const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:2.1.0-RC01"
+    const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:3.0.0"
     const val apksize = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
     const val versions = "com.github.ben-manes:gradle-versions-plugin:0.39.0"
     const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.0.0"
