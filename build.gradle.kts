@@ -35,8 +35,10 @@ allprojects {
       preferProjectModules()
 
       eachDependency {
-        if (requested.group == "org.jetbrains.kotlin") {
-          useVersion(deps.versions.kotlin)
+        requested.apply {
+          if (group == "org.jetbrains.kotlin") {
+            useVersion(deps.versions.kotlin)
+          }
         }
       }
     }
