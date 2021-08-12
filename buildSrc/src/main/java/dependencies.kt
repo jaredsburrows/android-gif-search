@@ -4,13 +4,13 @@ import org.gradle.api.JavaVersion
 
 object deps {
   object versions {
-    const val androidGradle = "4.2.0"
-    const val kotlin = "1.5.0"
-    const val dagger = "2.35.1"
+    const val androidGradle = "4.2.2"
+    const val kotlin = "1.5.21"
+    const val dagger = "2.38.1"
     const val okHttp = "4.9.1"
     const val moshi = "1.12.0"
     const val retrofit = "2.9.0"
-    const val espresso = "3.3.0"
+    const val espresso = "3.3.0" // 3.4.0 - https://github.com/android/android-test/issues/861
     const val glide = "4.12.0"
     val java = JavaVersion.VERSION_1_8
   }
@@ -32,7 +32,7 @@ object deps {
     const val command = "com.novoda:gradle-android-command-plugin:2.1.0"
     const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:2.1.0-RC01"
     const val apksize = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
-    const val versions = "com.github.ben-manes:gradle-versions-plugin:0.38.0"
+    const val versions = "com.github.ben-manes:gradle-versions-plugin:0.39.0"
     const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.0.0"
     const val dagger = "com.google.dagger:hilt-android-gradle-plugin:${deps.versions.dagger}"
   }
@@ -42,14 +42,14 @@ object deps {
   }
 
   object android {
-    const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.0.4"
-    const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.1"
+    const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.0"
+    const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
 
     object test {
-      const val core = "androidx.test:core:1.3.0"
-      const val junit = "androidx.test.ext:junit:1.1.2"
-      const val runner = "androidx.test:runner:1.3.0"
-      const val orchestrator = "androidx.test:orchestrator:1.3.0"
+      const val core = "androidx.test:core:1.4.0"
+      const val junit = "androidx.test.ext:junit:1.1.3"
+      const val runner = "androidx.test:runner:1.4.0"
+      const val orchestrator = "androidx.test:orchestrator:1.4.0"
 
       object espresso {
         const val core = "androidx.test.espresso:espresso-core:${versions.espresso}"
@@ -89,7 +89,7 @@ object deps {
 
   object google {
     const val material = "com.google.android.material:material:1.2.1"
-    const val truth = "com.google.truth:truth:1.1.2"
+    const val truth = "com.google.truth:truth:1.1.3"
 
     object dagger {
       const val dagger = "com.google.dagger:hilt-android:${versions.dagger}"
@@ -105,11 +105,11 @@ object deps {
 
   object test {
     const val junit = "junit:junit:4.13.2"
-    const val robolectric = "org.robolectric:robolectric:4.5"
+    const val robolectric = "org.robolectric:robolectric:4.6.1"
     const val reflections = "org.reflections:reflections:0.9.11" // 0.9.12+, Scanner SubTypesScanner was not configured
 
     object mockito {
-      const val inline = "org.mockito:mockito-inline:3.8.0"
+      const val inline = "org.mockito:mockito-inline:3.11.2"
       const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
     }
   }
