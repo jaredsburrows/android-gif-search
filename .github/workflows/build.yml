@@ -15,8 +15,8 @@ jobs:
         api-level:
           - 23
         java-version:
-          - 1.8
           - 11
+          - 14
 
     steps:
       - name: Cache Gradle dependencies
