@@ -7,8 +7,8 @@ buildscript {
 
   repositories {
     google()
-    mavenCentral()
     gradlePluginPortal()
+    mavenCentral()
   }
 
   dependencies {
@@ -24,9 +24,8 @@ buildscript {
 }
 
 allprojects {
-  repositories {
-    google()
-    gradlePluginPortal()
+  apply {
+    plugin("com.github.ben-manes.versions")
   }
 
   configurations.all {
@@ -106,8 +105,4 @@ allprojects {
       }
     }
   }
-}
-
-apply {
-  plugin("com.github.ben-manes.versions")
 }

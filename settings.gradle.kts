@@ -1,4 +1,11 @@
-rootProject.name = "android-gif-example"
+dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+    google()
+    gradlePluginPortal()
+    mavenCentral()
+  }
+}
 
 plugins {
   id("com.gradle.enterprise") version "3.4.1"
@@ -10,5 +17,7 @@ gradleEnterprise {
     termsOfServiceAgree = "yes"
   }
 }
+
+rootProject.name = "android-gif-example"
 
 include(":app")

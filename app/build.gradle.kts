@@ -13,14 +13,14 @@ plugins {
 }
 
 android {
-  compileSdkVersion(deps.build.compileSdk)
+  compileSdk = deps.build.compileSdk
 
   defaultConfig {
     applicationId = "com.burrowsapps.example.gif"
     versionCode = 1
     versionName = "1.0"
-    minSdkVersion(deps.build.minSdk)
-    targetSdkVersion(deps.build.targetSdk)
+    minSdk = deps.build.minSdk
+    targetSdk = deps.build.targetSdk
 
     testApplicationId = "burrows.apps.example.gif.test"
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -29,7 +29,7 @@ android {
       "clearPackageData" to "true"
     )
 
-    resConfigs("en")
+    resourceConfigurations += setOf("en")
     vectorDrawables.useSupportLibrary = true
   }
 
@@ -43,20 +43,18 @@ android {
     viewBinding = true
   }
 
-  dexOptions.preDexLibraries = !(rootProject.extra["ci"] as Boolean)
-
   sourceSets {
     val commonTest = "src/commonTest/java"
     getByName("androidTest").java.srcDirs(commonTest)
     getByName("test").java.srcDirs(commonTest)
   }
 
-  lintOptions {
+  lint {
     textReport = true
     textOutput("stdout")
     isCheckAllWarnings = true
     isWarningsAsErrors = true
-    lintConfig = file("../config/lint/lint.xml")
+    lintConfig = file("${project.rootDir}/config/lint/lint.xml")
     isCheckReleaseBuilds = false
     isCheckTestSources = true
     isAbortOnError = false
@@ -64,7 +62,7 @@ android {
 
   signingConfigs {
     getByName("debug") {
-      storeFile = file("../config/signing/debug.keystore")
+      storeFile = file("${project.rootDir}/config/signing/debug.keystore")
       storePassword = deps.build.signing.pass
       keyAlias = deps.build.signing.alias
       keyPassword = deps.build.signing.pass
@@ -82,8 +80,10 @@ android {
     getByName("release") {
       isMinifyEnabled = true
       isShrinkResources = true
-      proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))
-      proguardFile(file("../config/proguard/proguard-rules.txt"))
+      proguardFiles += listOf(
+        getDefaultProguardFile("proguard-android-optimize.txt"),
+        file("${project.rootDir}/config/proguard/proguard-rules.txt")
+      )
       signingConfig = signingConfigs.getByName("debug")
 
       buildConfigField("String", "BASE_URL", "\"https://api.riffsy.com\"")
@@ -99,19 +99,32 @@ android {
     execution = "ANDROIDX_TEST_ORCHESTRATOR"
   }
 
-  // Optimize APK size - remove excess files in the manifest and APK
   packagingOptions {
-    exclude("**/*.kotlin_module")
-    exclude("**/*.version")
-    exclude("**/kotlin/**")
-    exclude("**/*.txt")
-    exclude("**/*.xml")
-    exclude("**/*.properties")
+    resources.excludes += listOf(
+      "**/*.kotlin_module",
+      "**/*.version",
+      "**/kotlin/**",
+      "**/*.txt",
+      "**/*.xml",
+      "**/*.properties",
+    )
   }
 
   dependenciesInfo {
     includeInApk = false
     includeInBundle = false
+  }
+}
+
+kapt {
+  correctErrorTypes = true
+  mapDiagnosticLocations = true
+
+  arguments {
+    arg("dagger.formatGeneratedSource", "disabled")
+    arg("dagger.fastInit", "enabled")
+    arg("dagger.experimentalDaggerErrorMessages", "enabled")
+    arg("moshi.generated", "javax.annotation.Generated")
   }
 }
 
@@ -166,15 +179,4 @@ dependencies {
   testImplementation(deps.test.mockito.kotlin)
   testImplementation(deps.test.reflections)
   testImplementation(deps.test.robolectric)
-}
-
-kapt {
-  correctErrorTypes = true
-  mapDiagnosticLocations = true
-  arguments {
-    arg("dagger.formatGeneratedSource", "disabled")
-    arg("dagger.fastInit", "enabled")
-    arg("dagger.experimentalDaggerErrorMessages", "enabled")
-    arg("moshi.generated", "javax.annotation.Generated")
-  }
 }
