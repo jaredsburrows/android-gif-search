@@ -5,10 +5,10 @@ repositories {
 }
 
 plugins {
-  kotlin("jvm") version "1.5.21"
+  kotlin("jvm") version "1.6.10"
   `kotlin-dsl`
 }
 
 dependencies {
-  implementation(kotlin("stdlib-jdk8", version = "1.5.21"))
+  implementation(kotlin("stdlib-jdk8", version = "1.6.10"))
 }

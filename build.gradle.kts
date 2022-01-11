@@ -1,3 +1,4 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -35,9 +36,28 @@ allprojects {
       preferProjectModules()
 
       eachDependency {
-        requested.apply {
-          if (group == "org.jetbrains.kotlin") {
-            useVersion(deps.versions.kotlin)
+        when (requested.group) {
+          "org.jetbrains.kotlin" -> useVersion(deps.versions.kotlin)
+          "com.google.dagger" -> useVersion(deps.versions.dagger)
+        }
+      }
+    }
+  }
+
+  tasks.withType(DependencyUpdatesTask::class.java).all {
+    fun isNonStable(version: String): Boolean {
+      val stableKeyword =
+        listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
+      val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+      val isStable = stableKeyword || regex.matches(version)
+      return isStable.not()
+    }
+
+    resolutionStrategy {
+      componentSelection {
+        all {
+          if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
+            reject("Release candidate")
           }
         }
       }
@@ -45,36 +65,52 @@ allprojects {
   }
 
   tasks.withType(KotlinCompile::class.java).all {
+    sourceCompatibility = JavaVersion.VERSION_11.toString()
+    targetCompatibility = JavaVersion.VERSION_11.toString()
+
     kotlinOptions {
-      // allWarningsAsErrors = true // migrate ActivityTestRule to ActivityScenario
-      jvmTarget = deps.versions.java.toString()
-      languageVersion = "1.5"
-      apiVersion = "1.5"
+      // allWarningsAsErrors = true
+      jvmTarget = JavaVersion.VERSION_11.toString()
+      languageVersion = "1.6"
+      apiVersion = "1.6"
       freeCompilerArgs = freeCompilerArgs + listOf(
+        // https://kotlinlang.org/docs/compiler-reference.html#progressive
         "-progressive",
         "-Xjsr305=strict",
-        "-Xnew-inference",
-        "-Xjvm-default=all",
         "-Xemit-jvm-type-annotations",
+        // Match JVM assertion behavior: https://publicobject.com/2019/11/18/kotlins-assert-is-not-like-javas-assert/
         "-Xassertions=jvm",
-        "-Xstrict-java-nullability-assertions"
+        "-Xproper-ieee754-comparisons",
+        // Generate nullability assertions for non-null Java expressions
+        "-Xstrict-java-nullability-assertions",
+        // Enable new jvmdefault behavior
+        // https://blog.jetbrains.com/kotlin/2020/07/kotlin-1-4-m3-generating-default-methods-in-interfaces/
+        "-Xjvm-default=all", // "-Xjvm-default=enable",
+        "-P",
+        "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true",
       )
     }
   }
 
   tasks.withType(JavaCompile::class.java).all {
-    sourceCompatibility = deps.versions.java.toString()
-    targetCompatibility = deps.versions.java.toString()
+    sourceCompatibility = JavaVersion.VERSION_11.toString()
+    targetCompatibility = JavaVersion.VERSION_11.toString()
 
     // Show all warnings except boot classpath
     options.apply {
-      compilerArgs.apply {
-        add("-Xlint:all")                // Turn on all warnings
-        add("-Xlint:-deprecation")       // Allow deprecations from Dagger 2
-        add("-Xlint:-classfile")         // Ignore Java 8 method param meta data
-        add("-Xlint:-unchecked")         // Dagger 2 unchecked issues
-        add("-Werror")                   // Turn warnings into errors
-      }
+      compilerArgs = compilerArgs + listOf(
+        // Turn on all warnings
+        "-Xlint:all",
+        // Allow deprecations from Dagger 2
+        "-Xlint:-deprecation",
+        // Ignore Java 8 method param meta data
+        "-Xlint:-classfile",
+        // Dagger 2 unchecked issues
+        "-Xlint:-unchecked",
+        // Turn warnings into errors
+//                "-Werror",
+      )
+      compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "10000"))
       encoding = "utf-8"
       isFork = true
     }

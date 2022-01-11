@@ -30,7 +30,7 @@
       android:name=".giflist.GifActivity"
       android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
       android:windowSoftInputMode="adjustPan"
-      android:exported="false">
+      android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 

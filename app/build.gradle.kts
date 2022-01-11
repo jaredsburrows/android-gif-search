@@ -129,14 +129,35 @@ kapt {
 }
 
 dependencies {
+  // Java 8+
+  coreLibraryDesugaring(deps.android.desugarJdkLibs)
+
+  // Debug only
+  debugImplementation(deps.squareup.leakcanary)
+
+  // Kotlin
+  implementation(kotlin("stdlib", deps.versions.kotlin))
+  implementation(kotlin("stdlib-common", deps.versions.kotlin))
+  implementation(kotlin("stdlib-jdk7", deps.versions.kotlin))
+  implementation(kotlin("stdlib-jdk8", deps.versions.kotlin))
+
+  // Dagger / Dependency Injection
+  implementation(deps.google.dagger.dagger)
+  kapt(deps.google.dagger.compiler)
+  compileOnly(deps.misc.javaxInject)
+  compileOnly(deps.misc.jsr250)
+  compileOnly(deps.misc.jsr305)
+
+  // Android X UI
   implementation(deps.android.constraintlayout)
+  implementation(deps.google.material)
+
+  // Image Loading
   implementation(deps.glide.glide)
   implementation(deps.glide.integration)
-  implementation(deps.google.dagger.dagger)
-  implementation(deps.google.material)
-  implementation(deps.kotlin.stdlib)
-  implementation(deps.rxjava.rxandroid)
-  implementation(deps.rxjava.rxjava)
+  kapt(deps.glide.compiler)
+
+  // Http / Data
   implementation(deps.squareup.moshi.moshi)
   implementation(deps.squareup.moshi.adapters)
   implementation(deps.squareup.okhttp.interceptor)
@@ -145,18 +166,10 @@ dependencies {
   implementation(deps.squareup.retrofit.moshi)
   implementation(deps.squareup.retrofit.retrofit)
   implementation(deps.squareup.retrofit.rxjava2)
-  implementation(deps.misc.jsr305)
-
-  coreLibraryDesugaring(deps.android.desugarJdkLibs)
-
-  kapt(deps.glide.compiler)
-  kapt(deps.google.dagger.compiler)
   kapt(deps.squareup.moshi.compiler)
 
-  compileOnly(deps.misc.javaxInject)
-  compileOnly(deps.misc.jsr250)
-
-  debugImplementation(deps.squareup.leakcanary)
+  implementation(deps.rxjava.rxandroid)
+  implementation(deps.rxjava.rxjava)
 
   androidTestImplementation(deps.android.test.core)
   androidTestImplementation(deps.android.test.espresso.contrib)

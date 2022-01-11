@@ -12,5 +12,6 @@
   <application
     android:name=".DebugApp"
     android:usesCleartextTraffic="true"
-    tools:replace="android:name"/>
+    tools:replace="android:name"
+    tools:ignore="MissingApplicationIcon" />
 </manifest>

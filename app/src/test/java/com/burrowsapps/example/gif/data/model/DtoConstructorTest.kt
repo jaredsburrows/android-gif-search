@@ -7,13 +7,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.reflections.Reflections
-import org.reflections.scanners.FieldAnnotationsScanner
 import org.reflections.scanners.MemberUsageScanner
-import org.reflections.scanners.MethodAnnotationsScanner
 import org.reflections.scanners.MethodParameterNamesScanner
-import org.reflections.scanners.MethodParameterScanner
-import org.reflections.scanners.SubTypesScanner
-import org.reflections.scanners.TypeAnnotationsScanner
+import org.reflections.scanners.Scanners
 import org.reflections.util.ClasspathHelper
 import org.reflections.util.ConfigurationBuilder
 import org.reflections.util.FilterBuilder
@@ -31,11 +27,11 @@ class DtoConstructorTest {
         FilterBuilder().includePackage(modelPackage)
       ).setUrls(ClasspathHelper.forClassLoader())
         .setScanners(
-          SubTypesScanner(false),
-          TypeAnnotationsScanner(),
-          FieldAnnotationsScanner(),
-          MethodAnnotationsScanner(),
-          MethodParameterScanner(),
+          Scanners.SubTypes,
+          Scanners.TypesAnnotated,
+          Scanners.FieldsAnnotated,
+          Scanners.MethodsAnnotated,
+          Scanners.MethodsParameter,
           MethodParameterNamesScanner(),
           MemberUsageScanner()
         )
@@ -64,8 +60,8 @@ class DtoConstructorTest {
   /**
    * Make sure each DTO has a single no-args and public constructor:
    * public class Blah {
-   *      public Blah() {
-   *      }
+   *   public Blah() {
+   *   }
    * }
    */
   private fun hasNoArgConstructor(klass: Class<*>): Boolean {
@@ -76,7 +72,7 @@ class DtoConstructorTest {
 
   /**
    * None of this:
-   * @SerializedNamed("blah")
+   * @Json
    * private final String blah;
    */
   private fun hasNoFinalAnnotations(klass: Class<*>): Boolean {
