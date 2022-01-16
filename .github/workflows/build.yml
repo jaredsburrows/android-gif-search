@@ -12,12 +12,12 @@ env:
 
 jobs:
   android:
-    name: Android API ${{ matrix.api-level }} / JDK ${{ matrix.java-version }}
-    runs-on: macos-latest
+    name: OS ${{ matrix.platform }} / Android API ${{ matrix.api-level }} / JDK ${{ matrix.java-version }}
 
     strategy:
       fail-fast: false
       matrix:
+        platform: [ macos-latest, ubuntu-latest, windows-latest ]
         api-level:
           - 23
           - 30
@@ -25,6 +25,7 @@ jobs:
         java-version:
           - 11
           - 18
+    runs-on: ${{ matrix.platform }}
 
     steps:
       - name: Checkout Project
