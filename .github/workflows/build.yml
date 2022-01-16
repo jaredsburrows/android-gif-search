@@ -17,7 +17,7 @@ jobs:
           - 31
         java-version:
           - 11
-          - 14
+          - 17
 
     steps:
       - name: Cache Gradle dependencies
