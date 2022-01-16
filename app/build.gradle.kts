@@ -161,15 +161,12 @@ dependencies {
   testImplementation(deps.google.dagger.testing)
   androidTestImplementation(deps.google.dagger.testing)
 
-  // Android
-  debugImplementation(deps.android.test.core)
-  implementation("androidx.activity:activity:1.4.0")
-  implementation("androidx.activity:activity-ktx:1.4.0")
-  implementation("androidx.appcompat:appcompat:1.4.0")
-  implementation("androidx.core:core:1.7.0")
-  implementation("androidx.core:core-ktx:1.7.0")
-  implementation("androidx.fragment:fragment:1.4.0")
-  implementation("androidx.fragment:fragment-ktx:1.4.0")
+  // Android X
+  implementation(deps.android.activity)
+  implementation(deps.android.activityktx)
+  implementation(deps.android.appcompat)
+  implementation(deps.android.core)
+  implementation(deps.android.corektx)
 
   // Android X UI
   implementation(deps.android.constraintlayout)
@@ -180,12 +177,19 @@ dependencies {
   implementation(deps.glide.integration)
   kapt(deps.glide.compiler)
 
-  // Http / Data
+  // OkIO
+  implementation(deps.squareup.okio)
+
+  // OkHTTP
+  implementation(platform(deps.squareup.okhttp.bom))
+  implementation(deps.squareup.okhttp.okhttp)
+  implementation(deps.squareup.okhttp.interceptor)
+  testImplementation(deps.squareup.okhttp.mockwebserver)
+  androidTestImplementation(deps.squareup.okhttp.mockwebserver)
+
+  // Retrofit
   implementation(deps.squareup.moshi.moshi)
   implementation(deps.squareup.moshi.adapters)
-  implementation(deps.squareup.okhttp.interceptor)
-  implementation(deps.squareup.okhttp.okhttp)
-  implementation(deps.squareup.okio)
   implementation(deps.squareup.retrofit.moshi)
   implementation(deps.squareup.retrofit.retrofit)
   implementation(deps.squareup.retrofit.rxjava2)
@@ -197,7 +201,6 @@ dependencies {
   testImplementation(deps.android.test.core)
   testImplementation(deps.android.test.junit)
   testImplementation(deps.google.truth)
-  testImplementation(deps.squareup.okhttp.mockwebserver)
   testImplementation(deps.test.junit)
   testImplementation(deps.test.mockito.inline)
   testImplementation(deps.test.mockito.kotlin)
@@ -206,13 +209,15 @@ dependencies {
 
   androidTestUtil(deps.android.test.orchestrator)
 
+  debugImplementation(deps.android.test.core)
   androidTestImplementation(deps.android.test.core)
-  androidTestImplementation(deps.android.test.espresso.contrib)
+  androidTestImplementation(deps.android.test.espresso.contrib) {
+    exclude("org.checkerframework")
+  }
   androidTestImplementation(deps.android.test.espresso.core)
   androidTestImplementation(deps.android.test.espresso.intents)
   androidTestImplementation(deps.android.test.junit)
   androidTestImplementation(deps.android.test.runner)
   androidTestImplementation(deps.google.truth)
-  androidTestImplementation(deps.squareup.okhttp.mockwebserver)
   androidTestImplementation(deps.test.junit)
 }

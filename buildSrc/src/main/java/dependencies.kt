@@ -10,7 +10,7 @@ object deps {
     const val okHttp = "4.9.3"
     const val moshi = "1.13.0"
     const val retrofit = "2.9.0"
-    const val espresso = "3.3.0"
+    const val espresso = "3.4.0"
     const val glide = "4.12.0"
     val java = JavaVersion.VERSION_11
   }
@@ -38,7 +38,12 @@ object deps {
   }
 
   object android {
-    const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.2"
+    const val activity = "androidx.activity:activity:1.4.0"
+    const val activityktx = "androidx.activity:activity-ktx:1.4.0"
+    const val appcompat = "androidx.appcompat:appcompat:1.4.1"
+    const val core = "androidx.core:core:1.7.0"
+    const val corektx = "androidx.core:core-ktx:1.7.0"
+    const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
     const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
 
     object test {
@@ -61,10 +66,11 @@ object deps {
   }
 
   object squareup {
-    const val okio = "com.squareup.okio:okio:2.10.0"
+    const val okio = "com.squareup.okio:okio:3.0.0"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
 
     object okhttp {
+      const val bom = "com.squareup.okhttp3:okhttp-bom:${versions.okHttp}"
       const val okhttp = "com.squareup.okhttp3:okhttp:${versions.okHttp}"
       const val interceptor = "com.squareup.okhttp3:logging-interceptor:${versions.okHttp}"
       const val mockwebserver = "com.squareup.okhttp3:mockwebserver:${versions.okHttp}"
@@ -84,7 +90,7 @@ object deps {
   }
 
   object google {
-    const val material = "com.google.android.material:material:1.4.0"
+    const val material = "com.google.android.material:material:1.5.0"
     const val truth = "com.google.truth:truth:1.1.3"
 
     object dagger {
