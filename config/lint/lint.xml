@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lint>
   <!-- Unused will be removed on release -->
-  <issue id="UnusedResources" severity="ignore"/>
+  <issue id="UnusedResources" severity="ignore" />
 
   <!-- Manual upgrades -->
-  <issue id="GradleDependency" severity="ignore"/>
-  <issue id="NewerVersionAvailable" severity="ignore"/>
+  <issue id="GradleDependency" severity="ignore" />
+  <issue id="NewerVersionAvailable" severity="ignore" />
 
   <!-- Kotlin android extension issues -->
-  <issue id="UnusedIds" severity="ignore"/>
+  <issue id="UnusedIds" severity="ignore" />
+
+  <!-- AGP not seeing custon "Application" class -->
+  <issue id="Registered" severity="ignore" />
+
+  <!-- AGP seeing custon "Application" class -->
+  <issue id="ScopedStorage" severity="ignore" />
+
+  <!-- Not using this -->
+  <issue id="GoogleAppIndexingWarning" severity="ignore" />
+
+  <!-- Not using this -->
+  <issue id="MediaCapabilities" severity="ignore" />
 </lint>
