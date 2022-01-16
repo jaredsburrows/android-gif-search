@@ -23,7 +23,7 @@ android {
     targetSdk = deps.build.targetSdk
 
     testApplicationId = "burrows.apps.example.gif.test"
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner = "test.CustomTestRunner"
     testInstrumentationRunnerArguments += mapOf(
       "disableAnalytics" to "true",
       "clearPackageData" to "true"
@@ -72,8 +72,17 @@ android {
   buildTypes {
     getByName("debug") {
       applicationIdSuffix = ".debug"
+      versionNameSuffix = "-dev"
 
-      buildConfigField("String", "BASE_URL", if (rootProject.extra["ci"] as Boolean) "\"http://localhost:8080\"" else "\"https://api.riffsy.com\"")
+      buildConfigField(
+        "String",
+        "BASE_URL",
+        if (rootProject.extra["ci"] as Boolean) {
+          "\"http://localhost:8080\""
+        } else {
+          "\"https://api.riffsy.com\""
+        }
+      )
     }
 
     // Apply fake signing config to release to test "assembleRelease" locally
@@ -144,9 +153,23 @@ dependencies {
   // Dagger / Dependency Injection
   implementation(deps.google.dagger.dagger)
   kapt(deps.google.dagger.compiler)
+  kaptTest(deps.google.dagger.compiler)
+  kaptAndroidTest(deps.google.dagger.compiler)
   compileOnly(deps.misc.javaxInject)
   compileOnly(deps.misc.jsr250)
   compileOnly(deps.misc.jsr305)
+  testImplementation(deps.google.dagger.testing)
+  androidTestImplementation(deps.google.dagger.testing)
+
+  // Android
+  debugImplementation(deps.android.test.core)
+  implementation("androidx.activity:activity:1.4.0")
+  implementation("androidx.activity:activity-ktx:1.4.0")
+  implementation("androidx.appcompat:appcompat:1.4.0")
+  implementation("androidx.core:core:1.7.0")
+  implementation("androidx.core:core-ktx:1.7.0")
+  implementation("androidx.fragment:fragment:1.4.0")
+  implementation("androidx.fragment:fragment-ktx:1.4.0")
 
   // Android X UI
   implementation(deps.android.constraintlayout)
@@ -171,18 +194,6 @@ dependencies {
   implementation(deps.rxjava.rxandroid)
   implementation(deps.rxjava.rxjava)
 
-  androidTestImplementation(deps.android.test.core)
-  androidTestImplementation(deps.android.test.espresso.contrib)
-  androidTestImplementation(deps.android.test.espresso.core)
-  androidTestImplementation(deps.android.test.espresso.intents)
-  androidTestImplementation(deps.android.test.junit)
-  androidTestImplementation(deps.android.test.runner)
-  androidTestImplementation(deps.google.truth)
-  androidTestImplementation(deps.squareup.okhttp.mockwebserver)
-  androidTestImplementation(deps.test.junit)
-
-  androidTestUtil(deps.android.test.orchestrator)
-
   testImplementation(deps.android.test.core)
   testImplementation(deps.android.test.junit)
   testImplementation(deps.google.truth)
@@ -192,4 +203,16 @@ dependencies {
   testImplementation(deps.test.mockito.kotlin)
   testImplementation(deps.test.reflections)
   testImplementation(deps.test.robolectric)
+
+  androidTestUtil(deps.android.test.orchestrator)
+
+  androidTestImplementation(deps.android.test.core)
+  androidTestImplementation(deps.android.test.espresso.contrib)
+  androidTestImplementation(deps.android.test.espresso.core)
+  androidTestImplementation(deps.android.test.espresso.intents)
+  androidTestImplementation(deps.android.test.junit)
+  androidTestImplementation(deps.android.test.runner)
+  androidTestImplementation(deps.google.truth)
+  androidTestImplementation(deps.squareup.okhttp.mockwebserver)
+  androidTestImplementation(deps.test.junit)
 }

@@ -48,7 +48,7 @@ jobs:
 
       - name: Run Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
-        if: matrix.api-level == '1.8'
+        if: matrix.api-level == '23'
         continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}

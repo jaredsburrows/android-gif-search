@@ -90,6 +90,7 @@ object deps {
     object dagger {
       const val dagger = "com.google.dagger:hilt-android:${versions.dagger}"
       const val compiler = "com.google.dagger:hilt-android-compiler:${versions.dagger}"
+      const val testing = "com.google.dagger:hilt-android-testing:${versions.dagger}"
     }
   }
 

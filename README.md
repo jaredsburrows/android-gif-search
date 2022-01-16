@@ -4,9 +4,9 @@
 [![Build](https://github.com/jaredsburrows/android-gif-example/workflows/build/badge.svg)](https://github.com/jaredsburrows/android-gif-example/actions)
 [![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
 
-Gif RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2, Junit, Espresso and Robolectric tests!
+Gif RecyclerView MVP Grid Example using Dagger 2 Hilt, Retrofit 2, Moshi, RxJava 2, Junit, Espresso and Robolectric tests!
 
-<a href="http://i.imgur.com/zErC6JV.png" target="_blank"><img src="http://i.imgur.com/zErC6JV.png" width="250px" /></a>
+<a href="http://i.imgur.com/vB99ukK.png" target="_blank"><img src="http://i.imgur.com/vB99ukK.png" width="250px" /></a>
 
 **Build the APK:**
 
@@ -28,7 +28,13 @@ Gif RecyclerView MVP Grid Example using Dagger 2, Retrofit 2, Moshi, RxJava 2, J
 
 **Run [Espresso](https://developer.android.com/training/testing/ui-testing/espresso-testing.html) Instrumentation Tests:**
 
+This will use https://api.riffsy.com for the server.
+
     $ gradlew connectedDebugAndroidTest
+
+This will use http://localhost:8080 for the server for IDE and local testing.
+
+    $ gradlew connectedDebugAndroidTest -Pci
 
 ## Reports
 
