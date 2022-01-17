@@ -6,7 +6,10 @@
 
 Gif RecyclerView MVP Grid Example using Dagger 2 Hilt, Retrofit 2, Moshi, RxJava 2, Junit, Espresso and Robolectric tests!
 
-<a href="http://i.imgur.com/vB99ukK.png" target="_blank"><img src="http://i.imgur.com/vB99ukK.png" width="250px" /></a>
+<a href="https://i.imgur.com/EVjzfrW.png" target="_blank"><img src="https://i.imgur.com/EVjzfrW.png" width="250px" /></a>
+<a href="https://i.imgur.com/qujcQIz.png" target="_blank"><img src="https://i.imgur.com/qujcQIz.png" width="250px" /></a>
+
+## Build
 
 **Build the APK:**
 
@@ -20,7 +23,7 @@ Gif RecyclerView MVP Grid Example using Dagger 2 Hilt, Retrofit 2, Moshi, RxJava
 
     $ gradlew runDebug
 
-## Testing
+## Test
 
 **Run [Junit](http://junit.org/junit4/) Unit Tests:**
 
@@ -36,7 +39,7 @@ This will use http://localhost:8080 for the server for IDE and local testing.
 
     $ gradlew connectedDebugAndroidTest -Pci
 
-## Reports
+## Report
 
 **Generate [Lint](http://developer.android.com/tools/help/lint.html) Report:**
 

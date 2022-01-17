@@ -11,6 +11,6 @@
     android:maxSdkVersion="28" />
 
   <application
-    android:name=".DebugApp"
+    android:name=".DebugApplication"
     android:usesCleartextTraffic="true" />
 </manifest>

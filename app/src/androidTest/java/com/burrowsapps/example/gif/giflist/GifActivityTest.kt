@@ -98,7 +98,7 @@ class GifActivityTest {
   @Test fun testTrendingResultsThenSearchThenBackToTrending() {
     screenshotWatcher.capture("After launch")
 
-    onView(withId(com.burrowsapps.example.gif.R.id.menu_search))
+    onView(withId(com.burrowsapps.example.gif.R.id.menuSearch))
       .perform(click())
     screenshotWatcher.capture("After click")
 

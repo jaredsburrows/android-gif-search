@@ -138,7 +138,7 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
     super.onCreateOptionsMenu(menu)
     menuInflater.inflate(R.menu.menu_fragment_main, menu)
 
-    menu.findItem(R.id.menu_search).apply {
+    menu.findItem(R.id.menuSearch).apply {
       // Set contextual action on search icon click
       setOnActionExpandListener(
         object : MenuItem.OnActionExpandListener {

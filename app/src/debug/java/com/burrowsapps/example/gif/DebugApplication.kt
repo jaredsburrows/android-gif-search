@@ -4,7 +4,7 @@ import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.os.StrictMode.VmPolicy
 
-class DebugApp : App() {
+class DebugApplication : Application() {
   override fun onCreate() {
     StrictMode.setThreadPolicy(
       ThreadPolicy.Builder()
