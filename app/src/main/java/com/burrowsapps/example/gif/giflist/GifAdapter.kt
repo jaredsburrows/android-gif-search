@@ -58,7 +58,7 @@ class GifAdapter(
           ): Boolean {
             // Hide progressbar
             holder.binding.gifProgress.visibility = View.GONE
-            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+            if (Log.isLoggable(TAG, Log.ERROR)) Log.e(TAG, "finished loading\t $model", e)
 
             return false
           }

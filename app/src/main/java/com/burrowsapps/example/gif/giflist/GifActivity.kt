@@ -5,9 +5,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.widget.SearchView
@@ -41,9 +38,6 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
   private lateinit var gifItemDecoration: GifItemDecoration
   private lateinit var gifAdapter: GifAdapter
   private lateinit var gifDialog: AppCompatDialog
-  private lateinit var gifDialogText: TextView
-  internal lateinit var gifDialogProgressBar: ProgressBar
-  private lateinit var gifImageView: ImageView
   internal var hasSearchedImages = false
   internal var previousImageCount = 0
   internal var loadingImages = true
@@ -110,25 +104,18 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
     }
 
     // Custom view for Dialog
-    val dialogView = View.inflate(this, R.layout.dialog_preview, null)
-
-    // Customize Dialog
     gifDialog = AppCompatDialog(this).apply {
-      setContentView(dialogView)
+      setContentView(dialogBinding.root)
       setCancelable(true)
       setCanceledOnTouchOutside(true)
       setOnDismissListener {
         // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
-        Glide.with(gifImageView.context).clear(gifImageView) // Forget view, try to free resources
-        gifImageView.setImageDrawable(null)
-        gifDialogProgressBar.visibility = View.VISIBLE // Make sure to show progress when loadingImages new view
+        Glide.with(dialogBinding.gifDialogImage.context)
+          .clear(dialogBinding.gifDialogImage) // Forget view, try to free resources
+        dialogBinding.gifDialogImage.setImageDrawable(null)
+        dialogBinding.gifDialogProgress.visibility = View.VISIBLE // Make sure to show progress when loadingImages new view
       }
     }
-
-    // Dialog views
-    gifDialogText = dialogBinding.gifDialogTitle
-    gifDialogProgressBar = dialogBinding.gifDialogProgress
-    gifImageView = dialogBinding.gifDialogImage
 
     // Load initial images
     gifPresenter.loadTrendingImages(nextPageNumber)
@@ -240,14 +227,8 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
   //
 
   private fun showImageDialog(imageInfoModel: GifImageInfo) {
-    gifDialog.apply {
-      show()
-      // Remove "white" background for gifDialog
-      window?.decorView?.setBackgroundResource(android.R.color.transparent)
-    }
-
     // Load associated text
-    gifDialogText.apply {
+    dialogBinding.gifDialogTitle.apply {
       text = imageInfoModel.url
       visibility = View.VISIBLE
     }
@@ -265,7 +246,7 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
             isFirstResource: Boolean
           ): Boolean {
             // Hide progressbar
-            gifDialogProgressBar.visibility = View.GONE
+            dialogBinding.gifDialogProgress.visibility = View.GONE
             if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loadingImages\t $model")
 
             return false
@@ -278,13 +259,19 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
             isFirstResource: Boolean
           ): Boolean {
             // Hide progressbar
-            gifDialogProgressBar.visibility = View.GONE
-            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loadingImages\t $model")
+            dialogBinding.gifDialogProgress.visibility = View.GONE
+            if (Log.isLoggable(TAG, Log.ERROR)) Log.e(TAG, "finished loadingImages\t $model", e)
 
             return false
           }
         }
-      ).into(gifImageView)
+      ).into(dialogBinding.gifDialogImage)
+
+    gifDialog.apply {
+      show()
+      // Remove "white" background for gifDialog
+      window?.decorView?.setBackgroundResource(android.R.color.transparent)
+    }
   }
 
   companion object {

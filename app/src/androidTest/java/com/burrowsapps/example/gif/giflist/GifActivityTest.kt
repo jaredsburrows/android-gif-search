@@ -9,11 +9,8 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.action.ViewActions.typeText
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withHint
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -26,7 +23,6 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -79,19 +75,20 @@ class GifActivityTest {
     server.shutdown()
   }
 
-  @Ignore("on view 'Animations or transitions are enabled on the target device.")
   @Test fun testTrendingThenClickOpenDialog() {
     screenshotWatcher.capture("After launch")
 
     // Select 0, the response only contains 1 item
     onView(withId(com.burrowsapps.example.gif.R.id.recyclerView))
-      .check(matches(isDisplayed()))
-      .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+      .perform(
+        actionOnItem<RecyclerView.ViewHolder>(
+          hasDescendant(withId(com.burrowsapps.example.gif.R.id.gifImage)),
+          click()
+        ).atPosition(0)
+      )
     screenshotWatcher.capture("After click")
 
-    onView(withId(com.burrowsapps.example.gif.R.id.gifDialogImage))
-      .inRoot(isDialog())
-      .check(matches(isDisplayed()))
+    onView(withId(com.burrowsapps.example.gif.R.id.gifDialogTitle))
       .perform(pressBack())
   }
 
@@ -102,12 +99,12 @@ class GifActivityTest {
       .perform(click())
     screenshotWatcher.capture("After click")
 
-    onView(withHint("Search Gifs"))
+    onView(withId(androidx.appcompat.R.id.search_src_text))
       .perform(click(), typeText("hello"), closeSoftKeyboard(), pressBack())
     screenshotWatcher.capture("After Search")
 
     onView(withId(com.burrowsapps.example.gif.R.id.recyclerView))
-      .check(matches(isDisplayed()))
+      .perform(pressBack())
     screenshotWatcher.capture("List displayed")
   }
 }
