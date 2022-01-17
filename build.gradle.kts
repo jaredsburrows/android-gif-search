@@ -44,7 +44,7 @@ allprojects {
     }
   }
 
-  tasks.withType(DependencyUpdatesTask::class.java).all {
+  tasks.withType(DependencyUpdatesTask::class.java).configureEach {
     fun isNonStable(version: String): Boolean {
       val stableKeyword =
         listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
@@ -64,7 +64,7 @@ allprojects {
     }
   }
 
-  tasks.withType(KotlinCompile::class.java).all {
+  tasks.withType(KotlinCompile::class.java).configureEach {
     sourceCompatibility = JavaVersion.VERSION_11.toString()
     targetCompatibility = JavaVersion.VERSION_11.toString()
 
@@ -92,7 +92,7 @@ allprojects {
     }
   }
 
-  tasks.withType(JavaCompile::class.java).all {
+  tasks.withType(JavaCompile::class.java).configureEach {
     sourceCompatibility = JavaVersion.VERSION_11.toString()
     targetCompatibility = JavaVersion.VERSION_11.toString()
 
@@ -107,8 +107,10 @@ allprojects {
         "-Xlint:-classfile",
         // Dagger 2 unchecked issues
         "-Xlint:-unchecked",
+        // Ignore no process
+        "-Xlint:-processing",
         // Turn warnings into errors
-//                "-Werror",
+        "-Werror",
       )
       compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "10000"))
       encoding = "utf-8"
@@ -116,7 +118,7 @@ allprojects {
     }
   }
 
-  tasks.withType(Test::class.java).all {
+  tasks.withType(Test::class.java).configureEach {
     testLogging {
       exceptionFormat = TestExceptionFormat.FULL
       showCauses = true
@@ -130,7 +132,7 @@ allprojects {
     maxParallelForks = if (maxWorkerCount < 2) 1 else maxWorkerCount / 2
   }
 
-  tasks.all {
+  tasks.configureEach {
     when (this) {
       is JavaForkOptions -> {
         // should improve memory on a 64bit JVM

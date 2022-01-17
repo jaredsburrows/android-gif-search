@@ -6,6 +6,7 @@ object deps {
   object versions {
     const val androidGradle = "7.0.4"
     const val kotlin = "1.6.10"
+    const val kotlinx = "1.6.0"
     const val dagger = "2.40.5"
     const val okHttp = "4.9.3"
     const val moshi = "1.13.0"
@@ -35,6 +36,18 @@ object deps {
     const val versions = "com.github.ben-manes:gradle-versions-plugin:0.41.0"
     const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
     const val dagger = "com.google.dagger:hilt-android-gradle-plugin:${deps.versions.dagger}"
+  }
+
+  object kotlin {
+    object coroutines {
+      const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.kotlinx}"
+      const val bom = "org.jetbrains.kotlinx:kotlinx-coroutines-bom:${versions.kotlinx}"
+      const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.kotlinx}"
+      const val corejvm = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:${versions.kotlinx}"
+      const val corejdk8 = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${versions.kotlinx}"
+      const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.kotlinx}"
+      const val testjvm = "org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:${versions.kotlinx}"
+    }
   }
 
   object android {

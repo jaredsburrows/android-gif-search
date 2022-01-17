@@ -1,7 +1,6 @@
 package com.burrowsapps.example.gif.data
 
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
-import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -25,10 +24,11 @@ interface RiffsyApiClient {
    * @param pos Position of getResults.
    * @return Response of trending getResults.
    */
-  @GET("/v1/trending?key=$API_KEY&safesearch=strict") fun getTrendingResults(
+  @GET("/v1/trending?key=$API_KEY&safesearch=strict")
+  suspend fun getTrendingResults(
     @Query("limit") limit: Int,
     @Query("pos") pos: Double?
-  ): Observable<RiffsyResponseDto>
+  ): RiffsyResponseDto
 
   /**
    * Get search gif results by a search string.
@@ -46,11 +46,12 @@ interface RiffsyApiClient {
    * @param pos Position of getResults.
    * @return Response of search getResults.
    */
-  @GET("/v1/search?key=$API_KEY&safesearch=strict") fun getSearchResults(
+  @GET("/v1/search?key=$API_KEY&safesearch=strict")
+  suspend fun getSearchResults(
     @Query("tag") tag: String,
     @Query("limit") limit: Int,
     @Query("pos") pos: Double?
-  ): Observable<RiffsyResponseDto>
+  ): RiffsyResponseDto
 
   companion object {
     const val DEFAULT_LIMIT_COUNT = 24

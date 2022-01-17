@@ -1,16 +1,16 @@
 package com.burrowsapps.example.gif.giflist
 
 import android.util.Log
-import com.burrowsapps.example.gif.SchedulerProvider
+import com.burrowsapps.example.gif.AppCoroutineDispatchers
 import com.burrowsapps.example.gif.data.RiffsyApiClient
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class GifPresenter @Inject constructor(
-  private val riffsyApiClient: RiffsyApiClient,
-  private val schedulerProvider: SchedulerProvider
+  private val client: RiffsyApiClient,
+  private val dispatchers: AppCoroutineDispatchers
 ) : GifContract.Presenter {
   private val disposable = CompositeDisposable()
   private var view: GifContract.View? = null
@@ -33,8 +33,8 @@ class GifPresenter @Inject constructor(
   /**
    * Load gif trending images.
    */
-  override fun loadTrendingImages(next: Double?) {
-    loadImages(riffsyApiClient.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
+  override suspend fun loadTrendingImages(next: Double?) {
+    loadImages(client.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
   }
 
   /**
@@ -42,9 +42,9 @@ class GifPresenter @Inject constructor(
    *
    * @param searchString User input.
    */
-  override fun loadSearchImages(searchString: String, next: Double?) {
+  override suspend fun loadSearchImages(searchString: String, next: Double?) {
     loadImages(
-      riffsyApiClient
+      client
         .getSearchResults(searchString, RiffsyApiClient.DEFAULT_LIMIT_COUNT, next)
     )
   }
@@ -54,7 +54,11 @@ class GifPresenter @Inject constructor(
    *
    * @param observable Observable to added to the subscription.
    */
-  private fun loadImages(observable: Observable<RiffsyResponseDto>) {
+  private suspend fun loadImages(observable: RiffsyResponseDto) {
+    withContext(dispatchers.io) {
+
+    }
+
     disposable.add(
       observable
         .subscribeOn(schedulerProvider.io())

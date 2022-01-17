@@ -7,8 +7,8 @@ import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
 interface GifContract {
   interface Presenter : BasePresenter<View> {
     fun clearImages()
-    fun loadTrendingImages(next: Double?)
-    fun loadSearchImages(searchString: String, next: Double?)
+    suspend fun loadTrendingImages(next: Double?)
+    suspend fun loadSearchImages(searchString: String, next: Double?)
   }
 
   interface View : BaseView {
