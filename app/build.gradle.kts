@@ -145,10 +145,23 @@ dependencies {
   debugImplementation(deps.squareup.leakcanary)
 
   // Kotlin
-  implementation(kotlin("stdlib", deps.versions.kotlin))
-  implementation(kotlin("stdlib-common", deps.versions.kotlin))
-  implementation(kotlin("stdlib-jdk7", deps.versions.kotlin))
-  implementation(kotlin("stdlib-jdk8", deps.versions.kotlin))
+  implementation(platform(kotlin("bom", deps.versions.kotlin)))
+  implementation(kotlin("stdlib"))
+  implementation(kotlin("stdlib-common"))
+  implementation(kotlin("stdlib-jdk7"))
+  implementation(kotlin("stdlib-jdk8"))
+  testImplementation(kotlin("test"))
+  testImplementation(kotlin("test-junit"))
+  testImplementation(kotlin("test-common"))
+
+  // KotlinX
+  implementation(platform(deps.kotlin.coroutines.bom))
+  implementation(deps.kotlin.coroutines.android)
+  implementation(deps.kotlin.coroutines.core)
+  implementation(deps.kotlin.coroutines.corejvm)
+  implementation(deps.kotlin.coroutines.corejdk8)
+  testImplementation(deps.kotlin.coroutines.test)
+  testImplementation(deps.kotlin.coroutines.testjvm)
 
   // Dagger / Dependency Injection
   implementation(deps.google.dagger.dagger)
@@ -161,14 +174,14 @@ dependencies {
   testImplementation(deps.google.dagger.testing)
   androidTestImplementation(deps.google.dagger.testing)
 
-  // Android X
+  // AndroidX
   implementation(deps.android.activity)
   implementation(deps.android.activityktx)
   implementation(deps.android.appcompat)
   implementation(deps.android.core)
   implementation(deps.android.corektx)
 
-  // Android X UI
+  // AndroidX UI
   implementation(deps.android.constraintlayout)
   implementation(deps.google.material)
 
