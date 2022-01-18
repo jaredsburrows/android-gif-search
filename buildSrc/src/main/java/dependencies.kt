@@ -28,7 +28,6 @@ object deps {
 
   object plugin {
     const val command = "com.novoda:gradle-android-command-plugin:2.1.0"
-    const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:3.0.1"
     const val dagger = "com.google.dagger:hilt-android-gradle-plugin:${versions.dagger}"
   }
 

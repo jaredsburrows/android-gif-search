@@ -14,7 +14,6 @@ buildscript {
 
   dependencies {
     classpath(deps.plugin.command) // Plugin data not published
-    classpath(deps.plugin.dexcount) // Plugin data not published
     classpath(deps.plugin.dagger) // Plugin data not published
   }
 }
