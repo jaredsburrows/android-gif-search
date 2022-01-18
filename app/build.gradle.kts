@@ -2,11 +2,11 @@ plugins {
   id("com.android.application")
   kotlin("android")
   kotlin("kapt")
+  id("com.getkeepsafe.dexcount") version "3.0.1"
 }
 
 apply {
   plugin("com.novoda.android-command") // Plugin data not published
-  plugin("com.getkeepsafe.dexcount") // Plugin data not published
   plugin("dagger.hilt.android.plugin") // NPlugin data not published
 }
 
