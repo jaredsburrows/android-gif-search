@@ -3,15 +3,19 @@ package com.burrowsapps.example.gif.giflist
 import android.Manifest.permission.INTERNET
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import androidx.recyclerview.widget.RecyclerView
+import android.widget.TextView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withParent
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
@@ -21,8 +25,12 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.instanceOf
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -75,13 +83,28 @@ class GifActivityTest {
     server.shutdown()
   }
 
+  @Test fun testMainTitleIsShowing() {
+    onView(
+      allOf(
+        instanceOf(TextView::class.java),
+        withParent(withId(com.burrowsapps.example.gif.R.id.toolbar))
+      )
+    ).check(matches(withText(containsString("Top Trending Gifs"))))
+  }
+
+  @Test fun testTrendingVisibleAppLaunch() {
+    onView(withId(com.burrowsapps.example.gif.R.id.recyclerView))
+      .check(matches(isDisplayed()))
+  }
+
+  @Ignore("on view 'Animations or transitions are enabled on the target device.")
   @Test fun testTrendingThenClickOpenDialog() {
     screenshotWatcher.capture("After launch")
 
     // Select 0, the response only contains 1 item
     onView(withId(com.burrowsapps.example.gif.R.id.recyclerView))
       .perform(
-        actionOnItem<RecyclerView.ViewHolder>(
+        actionOnItem<GifAdapter.ViewHolder>(
           hasDescendant(withId(com.burrowsapps.example.gif.R.id.gifImage)),
           click()
         ).atPosition(0)

@@ -162,6 +162,8 @@ dependencies {
   implementation(deps.kotlin.coroutines.corejdk8)
   testImplementation(deps.kotlin.coroutines.test)
   testImplementation(deps.kotlin.coroutines.testjvm)
+  androidTestImplementation(deps.kotlin.coroutines.test)
+  androidTestImplementation(deps.kotlin.coroutines.testjvm)
 
   // Dagger / Dependency Injection
   implementation(deps.google.dagger.dagger)
@@ -205,11 +207,7 @@ dependencies {
   implementation(deps.squareup.moshi.adapters)
   implementation(deps.squareup.retrofit.moshi)
   implementation(deps.squareup.retrofit.retrofit)
-  implementation(deps.squareup.retrofit.rxjava2)
   kapt(deps.squareup.moshi.compiler)
-
-  implementation(deps.rxjava.rxandroid)
-  implementation(deps.rxjava.rxjava)
 
   testImplementation(deps.android.test.core)
   testImplementation(deps.android.test.junit)
@@ -222,7 +220,7 @@ dependencies {
 
   androidTestUtil(deps.android.test.orchestrator)
 
-  debugImplementation(deps.android.test.core)
+  debugImplementation(deps.android.test.core) // https://stackoverflow.com/a/69476166/950427
   androidTestImplementation(deps.android.test.core)
   androidTestImplementation(deps.android.test.espresso.contrib) {
     exclude("org.checkerframework")

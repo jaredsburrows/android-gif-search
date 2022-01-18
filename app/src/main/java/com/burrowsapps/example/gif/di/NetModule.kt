@@ -1,4 +1,4 @@
-package com.burrowsapps.example.gif.di.module
+package com.burrowsapps.example.gif.di
 
 import android.app.Application
 import com.burrowsapps.example.gif.BuildConfig
@@ -13,7 +13,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.File
 import java.util.Date
@@ -30,7 +29,6 @@ object NetModule {
   private const val CLIENT_CACHE_DIRECTORY = "http"
 
   @Provides fun provideRetrofit(application: Application): Retrofit.Builder = Retrofit.Builder()
-    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
     .addConverterFactory(MoshiConverterFactory.create(createMoshi()))
     .client(createOkHttpClient(application))
 

@@ -1,7 +1,7 @@
 package com.burrowsapps.example.gif.data
 
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
-import io.reactivex.Observable
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,7 +10,7 @@ import retrofit2.http.Query
  *
  * Custom Api interfaces for the Riffsy Api.
  */
-interface RiffsyApiClient {
+interface RiffsyApiService {
   /**
    * Get trending gif results.
    *
@@ -25,10 +25,13 @@ interface RiffsyApiClient {
    * @param pos Position of getResults.
    * @return Response of trending getResults.
    */
-  @GET("/v1/trending?key=$API_KEY&safesearch=strict") fun getTrendingResults(
-    @Query("limit") limit: Int,
-    @Query("pos") pos: Double?
-  ): Observable<RiffsyResponseDto>
+  @GET("/v1/trending?key=$API_KEY&safesearch=strict")
+  suspend fun getTrendingResults(
+    @Query("limit")
+    limit: Int,
+    @Query("pos")
+    pos: Double?
+  ): Response<RiffsyResponseDto>
 
   /**
    * Get search gif results by a search string.
@@ -46,11 +49,15 @@ interface RiffsyApiClient {
    * @param pos Position of getResults.
    * @return Response of search getResults.
    */
-  @GET("/v1/search?key=$API_KEY&safesearch=strict") fun getSearchResults(
-    @Query("tag") tag: String,
-    @Query("limit") limit: Int,
-    @Query("pos") pos: Double?
-  ): Observable<RiffsyResponseDto>
+  @GET("/v1/search?key=$API_KEY&safesearch=strict")
+  suspend fun getSearchResults(
+    @Query("tag")
+    tag: String,
+    @Query("limit")
+    limit: Int,
+    @Query("pos")
+    pos: Double?
+  ): Response<RiffsyResponseDto>
 
   companion object {
     const val DEFAULT_LIMIT_COUNT = 24

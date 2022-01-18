@@ -1,27 +1,26 @@
 package com.burrowsapps.example.gif.giflist
 
 import android.util.Log
-import com.burrowsapps.example.gif.SchedulerProvider
-import com.burrowsapps.example.gif.data.RiffsyApiClient
-import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
+import com.burrowsapps.example.gif.CoroutineDispatcherProvider
+import com.burrowsapps.example.gif.data.RiffsyApiService
+import com.burrowsapps.example.gif.data.RiffsyApiService.Companion.DEFAULT_LIMIT_COUNT
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(DelicateCoroutinesApi::class)
 class GifPresenter @Inject constructor(
-  private val riffsyApiClient: RiffsyApiClient,
-  private val schedulerProvider: SchedulerProvider
+  private val service: RiffsyApiService,
+  private val dispatcher: CoroutineDispatcherProvider,
 ) : GifContract.Presenter {
-  private val disposable = CompositeDisposable()
   private var view: GifContract.View? = null
 
   override fun takeView(view: GifContract.View) {
     this.view = view
-    // TODO load
   }
 
   override fun dropView() {
-    disposable.clear()
     view = null
   }
 
@@ -34,7 +33,23 @@ class GifPresenter @Inject constructor(
    * Load gif trending images.
    */
   override fun loadTrendingImages(next: Double?) {
-    loadImages(riffsyApiClient.getTrendingResults(RiffsyApiClient.DEFAULT_LIMIT_COUNT, next))
+    if (view?.isActive() == false) return
+
+    GlobalScope.launch(dispatcher.io()) {
+      try {
+        val response = service
+          .getTrendingResults(DEFAULT_LIMIT_COUNT, next)
+
+        val body = response.body()
+        if (response.isSuccessful && body != null) {
+          view?.addImages(body)
+        } else {
+          Log.e(TAG, "onError:\t${response.message()}")
+        }
+      } catch (e: Exception) {
+        Log.e(TAG, "onError", e)
+      }
+    }
   }
 
   /**
@@ -43,34 +58,23 @@ class GifPresenter @Inject constructor(
    * @param searchString User input.
    */
   override fun loadSearchImages(searchString: String, next: Double?) {
-    loadImages(
-      riffsyApiClient
-        .getSearchResults(searchString, RiffsyApiClient.DEFAULT_LIMIT_COUNT, next)
-    )
-  }
+    if (view?.isActive() == false) return
 
-  /**
-   * Common code for subscription.
-   *
-   * @param observable Observable to added to the subscription.
-   */
-  private fun loadImages(observable: Observable<RiffsyResponseDto>) {
-    disposable.add(
-      observable
-        .subscribeOn(schedulerProvider.io())
-        .observeOn(schedulerProvider.ui())
-        .subscribe(
-          { response ->
-            if (view?.isActive() == false) return@subscribe
+    GlobalScope.launch(dispatcher.io()) {
+      try {
+        val response = service
+          .getSearchResults(searchString, DEFAULT_LIMIT_COUNT, next)
 
-            // Iterate over data from response and grab the urls
-            view?.addImages(response)
-          },
-          { throwable ->
-            Log.e(TAG, "onError", throwable) // java.lang.UnsatisfiedLinkError - unit tests
-          }
-        )
-    )
+        val body = response.body()
+        if (response.isSuccessful && body != null) {
+          view?.addImages(body)
+        } else {
+          Log.e(TAG, "onError:\t${response.message()}")
+        }
+      } catch (e: Exception) {
+        Log.e(TAG, "onError", e)
+      }
+    }
   }
 
   companion object {

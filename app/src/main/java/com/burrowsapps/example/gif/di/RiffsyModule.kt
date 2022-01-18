@@ -1,7 +1,7 @@
-package com.burrowsapps.example.gif.di.module
+package com.burrowsapps.example.gif.di
 
 import com.burrowsapps.example.gif.BuildConfig
-import com.burrowsapps.example.gif.data.RiffsyApiClient
+import com.burrowsapps.example.gif.data.RiffsyApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,8 +11,8 @@ import retrofit2.Retrofit
 @Module
 @InstallIn(ActivityComponent::class)
 class RiffsyModule(private var baseUrl: String = BuildConfig.BASE_URL) {
-  @Provides fun provideRiffsyApi(retrofit: Retrofit.Builder): RiffsyApiClient = retrofit
+  @Provides fun provideRiffsyApi(retrofit: Retrofit.Builder): RiffsyApiService = retrofit
     .baseUrl(baseUrl)
     .build()
-    .create(RiffsyApiClient::class.java)
+    .create(RiffsyApiService::class.java)
 }
