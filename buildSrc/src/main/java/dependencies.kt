@@ -4,7 +4,6 @@ import org.gradle.api.JavaVersion
 
 object deps {
   object versions {
-    const val androidGradle = "7.0.4"
     const val kotlin = "1.6.10"
     const val kotlinx = "1.6.0"
     const val dagger = "2.40.5"
@@ -28,14 +27,9 @@ object deps {
   }
 
   object plugin {
-    const val gradle = "com.android.tools.build:gradle:${deps.versions.androidGradle}"
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${deps.versions.kotlin}"
     const val command = "com.novoda:gradle-android-command-plugin:2.1.0"
     const val dexcount = "com.getkeepsafe.dexcount:dexcount-gradle-plugin:3.0.1"
-    const val apksize = "com.vanniktech:gradle-android-apk-size-plugin:0.4.0"
-    const val versions = "com.github.ben-manes:gradle-versions-plugin:0.41.0"
-    const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
-    const val dagger = "com.google.dagger:hilt-android-gradle-plugin:${deps.versions.dagger}"
+    const val dagger = "com.google.dagger:hilt-android-gradle-plugin:${versions.dagger}"
   }
 
   object kotlin {

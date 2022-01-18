@@ -13,27 +13,25 @@ buildscript {
   }
 
   dependencies {
-    classpath(deps.plugin.gradle)
-    classpath(deps.plugin.kotlin)
-    classpath(deps.plugin.command)
-    classpath(deps.plugin.dexcount)
-    classpath(deps.plugin.apksize)
-    classpath(deps.plugin.versions)
-    classpath(deps.plugin.ktlint)
-    classpath(deps.plugin.dagger)
+    classpath(deps.plugin.command) // Plugin data not published
+    classpath(deps.plugin.dexcount) // Plugin data not published
+    classpath(deps.plugin.dagger) // Plugin data not published
   }
 }
 
-allprojects {
-  apply {
-    plugin("com.github.ben-manes.versions")
-  }
+plugins {
+  id("com.android.application") version "7.0.4" apply false
+  kotlin("android") version "1.6.10" apply false
+  id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
+  id("com.github.ben-manes.versions") version "0.41.0"
+}
 
+allprojects {
   configurations.all {
     resolutionStrategy {
-      failOnVersionConflict()
-
       preferProjectModules()
+
+      enableDependencyVerification()
 
       eachDependency {
         when (requested.group) {
@@ -86,7 +84,7 @@ allprojects {
         "-Xstrict-java-nullability-assertions",
         // Enable new jvmdefault behavior
         // https://blog.jetbrains.com/kotlin/2020/07/kotlin-1-4-m3-generating-default-methods-in-interfaces/
-        "-Xjvm-default=all", // "-Xjvm-default=enable",
+        "-Xjvm-default=all",
         "-P",
         "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true",
       )

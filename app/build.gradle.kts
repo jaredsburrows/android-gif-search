@@ -1,15 +1,13 @@
-apply {
-  plugin("com.novoda.android-command")
-  plugin("com.getkeepsafe.dexcount")
-  plugin("com.vanniktech.android.apk.size")
-  plugin("org.jlleitschuh.gradle.ktlint")
-  plugin("dagger.hilt.android.plugin")
-}
-
 plugins {
   id("com.android.application")
   kotlin("android")
   kotlin("kapt")
+}
+
+apply {
+  plugin("com.novoda.android-command") // Plugin data not published
+  plugin("com.getkeepsafe.dexcount") // Plugin data not published
+  plugin("dagger.hilt.android.plugin") // NPlugin data not published
 }
 
 android {
