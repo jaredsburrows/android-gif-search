@@ -18,7 +18,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.data.ImageService
-import com.burrowsapps.example.gif.data.RiffsyApiClient
+import com.burrowsapps.example.gif.data.RiffsyApiService.Companion.DEFAULT_LIMIT_COUNT
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
 import com.burrowsapps.example.gif.databinding.ActivityMainBinding
 import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
@@ -74,7 +74,7 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
       addItemDecoration(gifItemDecoration)
       adapter = gifAdapter
       setHasFixedSize(true)
-      setItemViewCacheSize(RiffsyApiClient.DEFAULT_LIMIT_COUNT)
+      setItemViewCacheSize(DEFAULT_LIMIT_COUNT)
       recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
       addOnScrollListener(
         object : RecyclerView.OnScrollListener() {

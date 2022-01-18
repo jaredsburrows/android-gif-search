@@ -77,6 +77,7 @@ allprojects {
         // https://kotlinlang.org/docs/compiler-reference.html#progressive
         "-progressive",
         "-Xjsr305=strict",
+        "-Xopt-in=kotlin.RequiresOptIn",
         "-Xemit-jvm-type-annotations",
         // Match JVM assertion behavior: https://publicobject.com/2019/11/18/kotlins-assert-is-not-like-javas-assert/
         "-Xassertions=jvm",

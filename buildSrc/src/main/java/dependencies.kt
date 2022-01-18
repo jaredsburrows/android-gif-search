@@ -73,11 +73,6 @@ object deps {
     }
   }
 
-  object rxjava {
-    const val rxandroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
-    const val rxjava = "io.reactivex.rxjava2:rxjava:2.2.21"
-  }
-
   object squareup {
     const val okio = "com.squareup.okio:okio:3.0.0"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
@@ -92,7 +87,6 @@ object deps {
     object retrofit {
       const val retrofit = "com.squareup.retrofit2:retrofit:${versions.retrofit}"
       const val moshi = "com.squareup.retrofit2:converter-moshi:${versions.retrofit}"
-      const val rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}"
     }
 
     object moshi {
