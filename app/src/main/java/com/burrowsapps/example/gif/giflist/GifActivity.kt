@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.burrowsapps.example.gif.licenses.LicenseActivity
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.data.RiffsyApiService.Companion.DEFAULT_LIMIT_COUNT
@@ -123,7 +124,7 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     super.onCreateOptionsMenu(menu)
-    menuInflater.inflate(R.menu.menu_fragment_main, menu)
+    menuInflater.inflate(R.menu.menu_main, menu)
 
     menu.findItem(R.id.menuSearch).apply {
       // Set contextual action on search icon click
@@ -169,8 +170,17 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
         )
       }
     }
-
     return true
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    return when (item.itemId) {
+      R.id.menuLicenses -> {
+        startActivity(LicenseActivity.createIntent(this))
+        true
+      }
+      else -> super.onOptionsItemSelected(item)
+    }
   }
 
   override fun onResume() {

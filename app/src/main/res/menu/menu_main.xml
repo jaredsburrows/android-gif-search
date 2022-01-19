@@ -10,4 +10,8 @@
     android:icon="@drawable/ic_search_white_24dp"
     app:showAsAction="ifRoom|collapseActionView"
     app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+
+  <item
+    android:id="@+id/menuLicenses"
+    android:title="@string/menu_licenses"/>
 </menu>

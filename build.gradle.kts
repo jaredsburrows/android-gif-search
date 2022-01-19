@@ -23,6 +23,7 @@ plugins {
   kotlin("android") version "1.6.10" apply false
   id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
   id("com.github.ben-manes.versions") version "0.41.0"
+  id("com.jaredsburrows.license") version "0.8.90" apply false
 }
 
 allprojects {

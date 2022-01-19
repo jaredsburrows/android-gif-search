@@ -4,8 +4,8 @@ import android.util.Log
 import com.burrowsapps.example.gif.CoroutineDispatcherProvider
 import com.burrowsapps.example.gif.data.RiffsyApiService
 import com.burrowsapps.example.gif.data.RiffsyApiService.Companion.DEFAULT_LIMIT_COUNT
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,7 +35,7 @@ class GifPresenter @Inject constructor(
   override fun loadTrendingImages(next: Double?) {
     if (view?.isActive() == false) return
 
-    GlobalScope.launch(dispatcher.io()) {
+    CoroutineScope(dispatcher.io()).launch {
       try {
         val response = service
           .getTrendingResults(DEFAULT_LIMIT_COUNT, next)
@@ -60,7 +60,7 @@ class GifPresenter @Inject constructor(
   override fun loadSearchImages(searchString: String, next: Double?) {
     if (view?.isActive() == false) return
 
-    GlobalScope.launch(dispatcher.io()) {
+    CoroutineScope(dispatcher.io()).launch {
       try {
         val response = service
           .getSearchResults(searchString, DEFAULT_LIMIT_COUNT, next)

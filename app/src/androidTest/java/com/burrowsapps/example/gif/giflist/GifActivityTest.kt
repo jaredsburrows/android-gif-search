@@ -4,13 +4,19 @@ import android.Manifest.permission.INTERNET
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
+import androidx.test.espresso.intent.Intents.init
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.Intents.release
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -18,7 +24,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
+import com.burrowsapps.example.gif.R
+import com.burrowsapps.example.gif.licenses.LicenseActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import okhttp3.mockwebserver.Dispatcher
@@ -35,7 +44,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import test.ScreenshotWatcher
-import test.TestFileUtils
+import test.TestFileUtils.MOCK_SERVER_PORT
 import test.TestFileUtils.getMockFileResponse
 import test.TestFileUtils.getMockResponse
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
@@ -75,7 +84,7 @@ class GifActivityTest {
         }
       }
 
-      start(TestFileUtils.MOCK_SERVER_PORT)
+      start(MOCK_SERVER_PORT)
     }
   }
 
@@ -87,13 +96,32 @@ class GifActivityTest {
     onView(
       allOf(
         instanceOf(TextView::class.java),
-        withParent(withId(com.burrowsapps.example.gif.R.id.toolbar))
+        withParent(withId(R.id.toolbar))
       )
     ).check(matches(withText(containsString("Top Trending Gifs"))))
   }
 
+  @Test fun testLicensesTitleIsShowing() {
+    init()
+
+    openActionBarOverflowOrOptionsMenu(getInstrumentation().targetContext)
+
+    onView(withText(R.string.menu_licenses)).perform(click())
+
+    intended(hasComponent(LicenseActivity::class.java.name))
+
+    onView(
+      allOf(
+        instanceOf(TextView::class.java),
+        withParent(instanceOf(Toolbar::class.java))
+      )
+    ).check(matches(withText(containsString("Open source licenses" ))))
+
+    release()
+  }
+
   @Test fun testTrendingVisibleAppLaunch() {
-    onView(withId(com.burrowsapps.example.gif.R.id.recyclerView))
+    onView(withId(R.id.recyclerView))
       .check(matches(isDisplayed()))
   }
 
@@ -102,23 +130,23 @@ class GifActivityTest {
     screenshotWatcher.capture("After launch")
 
     // Select 0, the response only contains 1 item
-    onView(withId(com.burrowsapps.example.gif.R.id.recyclerView))
+    onView(withId(R.id.recyclerView))
       .perform(
         actionOnItem<GifAdapter.ViewHolder>(
-          hasDescendant(withId(com.burrowsapps.example.gif.R.id.gifImage)),
+          hasDescendant(withId(R.id.gifImage)),
           click()
         ).atPosition(0)
       )
     screenshotWatcher.capture("After click")
 
-    onView(withId(com.burrowsapps.example.gif.R.id.gifDialogTitle))
+    onView(withId(R.id.gifDialogTitle))
       .perform(pressBack())
   }
 
   @Test fun testTrendingResultsThenSearchThenBackToTrending() {
     screenshotWatcher.capture("After launch")
 
-    onView(withId(com.burrowsapps.example.gif.R.id.menuSearch))
+    onView(withId(R.id.menuSearch))
       .perform(click())
     screenshotWatcher.capture("After click")
 
@@ -126,7 +154,7 @@ class GifActivityTest {
       .perform(click(), typeText("hello"), closeSoftKeyboard(), pressBack())
     screenshotWatcher.capture("After Search")
 
-    onView(withId(com.burrowsapps.example.gif.R.id.recyclerView))
+    onView(withId(R.id.recyclerView))
       .perform(pressBack())
     screenshotWatcher.capture("List displayed")
   }
