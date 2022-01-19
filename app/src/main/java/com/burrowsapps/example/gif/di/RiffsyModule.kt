@@ -11,7 +11,8 @@ import retrofit2.Retrofit
 @Module
 @InstallIn(ActivityComponent::class)
 class RiffsyModule(private var baseUrl: String = BuildConfig.BASE_URL) {
-  @Provides fun provideRiffsyApi(retrofit: Retrofit.Builder): RiffsyApiService = retrofit
+  @Provides
+  fun provideRiffsyApi(retrofit: Retrofit.Builder): RiffsyApiService = retrofit
     .baseUrl(baseUrl)
     .build()
     .create(RiffsyApiService::class.java)

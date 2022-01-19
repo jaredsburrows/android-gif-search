@@ -10,5 +10,6 @@ import dagger.hilt.android.components.ActivityComponent
 @Module
 @InstallIn(ActivityComponent::class)
 abstract class AppModule {
-  @Binds abstract fun provideContext(application: Application): Context
+  @Binds
+  abstract fun provideContext(application: Application): Context
 }

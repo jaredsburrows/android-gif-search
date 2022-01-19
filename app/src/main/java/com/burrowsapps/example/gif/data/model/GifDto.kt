@@ -5,8 +5,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class GifDto(
-  @field:Json(name = "url") val urlJson: String? = "",
-  @field:Json(name = "preview") val urlPreview: String? = ""
+  @field:Json(name = "url")
+  val urlJson: String? = "",
+  @field:Json(name = "preview")
+  val urlPreview: String? = ""
 ) {
   val url: String
     get() = urlJson.orEmpty()

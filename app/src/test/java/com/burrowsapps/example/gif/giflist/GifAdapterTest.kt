@@ -26,7 +26,8 @@ class GifAdapterTest {
   private lateinit var viewHolder: GifAdapter.ViewHolder
   private lateinit var sut: GifAdapter
 
-  @Before fun setUp() {
+  @Before
+  fun setUp() {
     imageService = ImageService(context)
     sut = GifAdapter(testOnItemClickListener, imageService).apply {
       add(gifImageInfo)
@@ -35,7 +36,8 @@ class GifAdapterTest {
     viewHolder = sut.onCreateViewHolder(LinearLayout(context), 0)
   }
 
-  @Test fun testOnCreateViewHolder() {
+  @Test
+  fun testOnCreateViewHolder() {
     val parent = object : ViewGroup(context) {
       override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
     }
@@ -44,7 +46,8 @@ class GifAdapterTest {
       .isInstanceOf(GifAdapter.ViewHolder::class.java)
   }
 
-  @Test fun testOnBindViewHolderOnAdapterItemClick() {
+  @Test
+  fun testOnBindViewHolderOnAdapterItemClick() {
     sut.clear()
     sut.add(gifImageInfo)
     sut.add(gifImageInfo2)
@@ -55,7 +58,8 @@ class GifAdapterTest {
     assertThat(viewHolder.itemView.performClick()).isTrue()
   }
 
-  @Test fun testGetItem() {
+  @Test
+  fun testGetItem() {
     sut.clear()
 
     val imageInfo = GifImageInfo()
@@ -64,33 +68,39 @@ class GifAdapterTest {
     assertThat(sut.getItem(0)).isEqualTo(imageInfo)
   }
 
-  @Test fun onViewRecycled() {
+  @Test
+  fun onViewRecycled() {
     sut.add(GifImageInfo())
 
     sut.onBindViewHolder(viewHolder, 0)
     sut.onViewRecycled(viewHolder)
   }
 
-  @Test fun testGetItemCountShouldReturnCorrectValues() {
+  @Test
+  fun testGetItemCountShouldReturnCorrectValues() {
     assertThat(sut.itemCount).isEqualTo(2)
   }
 
-  @Test fun testGetListCountShouldReturnCorrectValues() {
+  @Test
+  fun testGetListCountShouldReturnCorrectValues() {
     assertThat(sut.getItem(0)).isEqualTo(gifImageInfo)
     assertThat(sut.getItem(1)).isEqualTo(gifImageInfo2)
   }
 
-  @Test fun testGetItemShouldReturnCorrectValues() {
+  @Test
+  fun testGetItemShouldReturnCorrectValues() {
     assertThat(sut.getItem(1)).isEqualTo(gifImageInfo2)
   }
 
-  @Test fun testClearShouldClearAdapter() {
+  @Test
+  fun testClearShouldClearAdapter() {
     sut.clear()
 
     assertThat(sut.itemCount).isEqualTo(0)
   }
 
-  @Test fun testAddObjectShouldReturnCorrectValues() {
+  @Test
+  fun testAddObjectShouldReturnCorrectValues() {
     sut.add(gifImageInfo3)
 
     assertThat(sut.getItem(0)).isEqualTo(gifImageInfo)
@@ -98,7 +108,8 @@ class GifAdapterTest {
     assertThat(sut.getItem(2)).isEqualTo(gifImageInfo3)
   }
 
-  @Test fun testAddCollectionShouldReturnCorrectValues() {
+  @Test
+  fun testAddCollectionShouldReturnCorrectValues() {
     val imageInfos = listOf(gifImageInfo3)
 
     sut.addAll(imageInfos)
@@ -108,7 +119,8 @@ class GifAdapterTest {
     assertThat(sut.getItem(2)).isEqualTo(gifImageInfo3)
   }
 
-  @Test fun testAddLocationObjectShouldReturnCorrectValues() {
+  @Test
+  fun testAddLocationObjectShouldReturnCorrectValues() {
     sut.add(0, gifImageInfo3)
 
     assertThat(sut.getItem(0)).isEqualTo(gifImageInfo3)

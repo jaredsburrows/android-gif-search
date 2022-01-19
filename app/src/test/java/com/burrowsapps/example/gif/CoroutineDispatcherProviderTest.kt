@@ -10,11 +10,13 @@ import org.junit.runner.RunWith
 class CoroutineDispatcherProviderTest {
   private val sut = CoroutineDispatcherProvider()
 
-  @Test fun testIo() {
+  @Test
+  fun testIo() {
     assertThat(sut.io()).isEqualTo(Dispatchers.IO)
   }
 
-  @Test fun testUi() {
+  @Test
+  fun testUi() {
     assertThat(sut.ui()).isEqualTo(Dispatchers.Main)
   }
 }

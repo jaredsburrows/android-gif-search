@@ -5,7 +5,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class MediaDto(
-  @field:Json(name = "tinygif") val gifJson: GifDto? = GifDto() // Bug in 1.5.0
+  @field:Json(name = "tinygif")
+  val gifJson: GifDto? = GifDto()
 ) {
   val gif: GifDto
     get() = gifJson ?: GifDto()

@@ -21,7 +21,8 @@ import test.TestCoroutineDispatcherProvider
 class GifPresenterTest {
   private val dispatcherProvider = TestCoroutineDispatcherProvider()
 
-  @Test fun testLoadTrendingImagesSuccess() = runTest {
+  @Test
+  fun testLoadTrendingImagesSuccess() = runTest {
     val next = 0.0
     val response = RiffsyResponseDto()
     val view: GifContract.View = mock()
@@ -39,7 +40,8 @@ class GifPresenterTest {
     verify(view).addImages(eq(response))
   }
 
-  @Test fun testLoadTrendingImageNotActive() = runTest {
+  @Test
+  fun testLoadTrendingImageNotActive() = runTest {
     val next = 0.0
     val response = RiffsyResponseDto()
     val view: GifContract.View = mock()
@@ -57,7 +59,8 @@ class GifPresenterTest {
     verify(view, times(0)).addImages(eq(response))
   }
 
-  @Test fun testLoadSearchImagesSuccess() = runTest {
+  @Test
+  fun testLoadSearchImagesSuccess() = runTest {
     val searchString = "gifs"
     val next = 0.0
     val response = RiffsyResponseDto()
@@ -77,7 +80,8 @@ class GifPresenterTest {
     verify(view).addImages(eq(response))
   }
 
-  @Test fun testLoadSearchImagesNotActive() = runTest {
+  @Test
+  fun testLoadSearchImagesNotActive() = runTest {
     val searchString = "gifs"
     val next = 0.0
     val response = RiffsyResponseDto()

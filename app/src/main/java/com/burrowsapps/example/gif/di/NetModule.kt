@@ -28,7 +28,8 @@ object NetModule {
   private const val CLIENT_CACHE_SIZE = 10 * 1024 * 1024L // 10 MiB
   private const val CLIENT_CACHE_DIRECTORY = "http"
 
-  @Provides fun provideRetrofit(application: Application): Retrofit.Builder = Retrofit.Builder()
+  @Provides
+  fun provideRetrofit(application: Application): Retrofit.Builder = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(createMoshi()))
     .client(createOkHttpClient(application))
 

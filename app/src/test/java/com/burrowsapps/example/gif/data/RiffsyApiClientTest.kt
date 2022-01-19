@@ -27,7 +27,8 @@ class RiffsyApiClientTest {
   private val server = MockWebServer()
   private lateinit var sut: RiffsyApiService
 
-  @Before fun setUp() {
+  @Before
+  fun setUp() {
     server.apply {
       dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse {
@@ -50,11 +51,13 @@ class RiffsyApiClientTest {
     )
   }
 
-  @After fun tearDown() {
+  @After
+  fun tearDown() {
     server.shutdown()
   }
 
-  @Test fun testTrendingResultsURLShouldParseCorrectly() = runTest {
+  @Test
+  fun testTrendingResultsURLShouldParseCorrectly() = runTest {
     val response = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
     val body = response.body()!!
 
@@ -62,7 +65,8 @@ class RiffsyApiClientTest {
       .contains("/images/7d95a1f8a8750460a82b04451be26d69/raw")
   }
 
-  @Test fun testTrendingResultsURLPreviewShouldParseCorrectly() = runTest {
+  @Test
+  fun testTrendingResultsURLPreviewShouldParseCorrectly() = runTest {
     val response = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
     val body = response.body()!!
 
@@ -70,7 +74,8 @@ class RiffsyApiClientTest {
       .contains("/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw")
   }
 
-  @Test fun testSearchResultsURLShouldParseCorrectly() = runTest {
+  @Test
+  fun testSearchResultsURLShouldParseCorrectly() = runTest {
     val response = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
     val body = response.body()!!
 
@@ -78,7 +83,8 @@ class RiffsyApiClientTest {
       .contains("/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw")
   }
 
-  @Test fun testSearchResultsURLPreviewShouldParseCorrectly() = runTest {
+  @Test
+  fun testSearchResultsURLPreviewShouldParseCorrectly() = runTest {
     val response = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
     val body = response.body()!!
 

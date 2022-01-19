@@ -12,12 +12,14 @@ class GifImageInfoTest {
   private var sutDefault = GifImageInfo()
   private var sut = GifImageInfo(gifUrl, previewUrl)
 
-  @Test fun testGetURL() {
+  @Test
+  fun testGetURL() {
     assertThat(sutDefault.url).isEmpty()
     assertThat(sut.url).isEqualTo(gifUrl)
   }
 
-  @Test fun testGetURLPreview() {
+  @Test
+  fun testGetURLPreview() {
     assertThat(sutDefault.previewUrl).isEmpty()
     assertThat(sut.previewUrl).isEqualTo(previewUrl)
   }

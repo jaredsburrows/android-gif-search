@@ -16,13 +16,13 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.burrowsapps.example.gif.licenses.LicenseActivity
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.data.RiffsyApiService.Companion.DEFAULT_LIMIT_COUNT
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
 import com.burrowsapps.example.gif.databinding.ActivityMainBinding
 import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
+import com.burrowsapps.example.gif.licenses.LicenseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -114,7 +114,8 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
         Glide.with(dialogBinding.gifDialogImage.context)
           .clear(dialogBinding.gifDialogImage) // Forget view, try to free resources
         dialogBinding.gifDialogImage.setImageDrawable(null)
-        dialogBinding.gifDialogProgress.visibility = View.VISIBLE // Make sure to show progress when loadingImages new view
+        dialogBinding.gifDialogProgress.visibility =
+          View.VISIBLE // Make sure to show progress when loadingImages new view
       }
     }
 

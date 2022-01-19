@@ -67,7 +67,8 @@ class GifActivityTest {
 
   private val server = MockWebServer()
 
-  @Before fun setUp() {
+  @Before
+  fun setUp() {
     hiltRule.inject()
 
     server.apply {
@@ -88,11 +89,13 @@ class GifActivityTest {
     }
   }
 
-  @After fun tearDown() {
+  @After
+  fun tearDown() {
     server.shutdown()
   }
 
-  @Test fun testMainTitleIsShowing() {
+  @Test
+  fun testMainTitleIsShowing() {
     onView(
       allOf(
         instanceOf(TextView::class.java),
@@ -101,7 +104,8 @@ class GifActivityTest {
     ).check(matches(withText(containsString("Top Trending Gifs"))))
   }
 
-  @Test fun testLicensesTitleIsShowing() {
+  @Test
+  fun testLicensesTitleIsShowing() {
     init()
 
     openActionBarOverflowOrOptionsMenu(getInstrumentation().targetContext)
@@ -115,18 +119,20 @@ class GifActivityTest {
         instanceOf(TextView::class.java),
         withParent(instanceOf(Toolbar::class.java))
       )
-    ).check(matches(withText(containsString("Open source licenses" ))))
+    ).check(matches(withText(containsString("Open source licenses"))))
 
     release()
   }
 
-  @Test fun testTrendingVisibleAppLaunch() {
+  @Test
+  fun testTrendingVisibleAppLaunch() {
     onView(withId(R.id.recyclerView))
       .check(matches(isDisplayed()))
   }
 
   @Ignore("on view 'Animations or transitions are enabled on the target device.")
-  @Test fun testTrendingThenClickOpenDialog() {
+  @Test
+  fun testTrendingThenClickOpenDialog() {
     screenshotWatcher.capture("After launch")
 
     // Select 0, the response only contains 1 item
@@ -143,7 +149,8 @@ class GifActivityTest {
       .perform(pressBack())
   }
 
-  @Test fun testTrendingResultsThenSearchThenBackToTrending() {
+  @Test
+  fun testTrendingResultsThenSearchThenBackToTrending() {
     screenshotWatcher.capture("After launch")
 
     onView(withId(R.id.menuSearch))

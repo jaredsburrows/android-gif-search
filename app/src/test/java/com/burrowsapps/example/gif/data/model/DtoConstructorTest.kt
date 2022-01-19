@@ -21,7 +21,8 @@ class DtoConstructorTest {
   private val dataTransportObject = "Dto"
   private lateinit var classes: Set<Class<*>>
 
-  @Before fun setUp() {
+  @Before
+  fun setUp() {
     val reflections = Reflections(
       ConfigurationBuilder().filterInputsBy(
         FilterBuilder().includePackage(modelPackage)
@@ -39,7 +40,8 @@ class DtoConstructorTest {
     classes = reflections.getSubTypesOf(Any::class.java)
   }
 
-  @Test fun testMakeSureAllDTOsHaveNoArgsPublicConstructors() {
+  @Test
+  fun testMakeSureAllDTOsHaveNoArgsPublicConstructors() {
     classes.forEach { clazz ->
       val className = clazz.name
       if (className.endsWith(dataTransportObject) && !hasNoArgConstructor(clazz)) {
@@ -48,7 +50,8 @@ class DtoConstructorTest {
     }
   }
 
-  @Test fun testMakeSureAllHaveNoFinalAnnotations() {
+  @Test
+  fun testMakeSureAllHaveNoFinalAnnotations() {
     classes.forEach { clazz ->
       val className = clazz.name
       if (className.endsWith(dataTransportObject) && hasNoFinalAnnotations(clazz)) {
