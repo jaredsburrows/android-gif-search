@@ -3,6 +3,7 @@ plugins {
   kotlin("android")
   kotlin("kapt")
   id("com.getkeepsafe.dexcount") version "3.0.1"
+  id("com.jaredsburrows.license")
 }
 
 apply {
@@ -135,6 +136,12 @@ kapt {
   }
 }
 
+licenseReport {
+  generateCsvReport = false // TODO default should be false
+  generateHtmlReport = true
+  generateJsonReport = false // TODO default should be false
+}
+
 dependencies {
   // Java 8+
   coreLibraryDesugaring(deps.android.desugarJdkLibs)
@@ -218,10 +225,10 @@ dependencies {
 
   androidTestUtil(deps.android.test.orchestrator)
 
-  debugImplementation(deps.android.test.core) // https://stackoverflow.com/a/69476166/950427
+  debugImplementation(deps.android.test.core) // See https://stackoverflow.com/a/69476166/950427
   androidTestImplementation(deps.android.test.core)
   androidTestImplementation(deps.android.test.espresso.contrib) {
-    exclude("org.checkerframework")
+    exclude("org.checkerframework") // See https://github.com/android/android-test/issues/861#issuecomment-872582819
   }
   androidTestImplementation(deps.android.test.espresso.core)
   androidTestImplementation(deps.android.test.espresso.intents)

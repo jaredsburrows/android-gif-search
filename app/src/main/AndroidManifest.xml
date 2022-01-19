@@ -29,12 +29,24 @@
       android:name=".giflist.GifActivity"
       android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
       android:exported="true"
+      android:theme="@style/AppTheme"
       android:windowSoftInputMode="adjustPan">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
+    </activity>
+    <activity
+      android:name=".licenses.LicenseActivity"
+      android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+      android:exported="true"
+      android:parentActivityName=".giflist.GifActivity"
+      android:theme="@style/AppTheme.ActionBar"
+      android:windowSoftInputMode="adjustPan">
+      <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value=".giflist.GifActivity" />
     </activity>
   </application>
 </manifest>
