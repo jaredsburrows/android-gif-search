@@ -49,6 +49,16 @@ object deps {
     const val corektx = "androidx.core:core-ktx:1.7.0"
     const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
     const val recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
+    const val common = "androidx.lifecycle:lifecycle-common:2.4.0"
+    const val commonjdk8 = "androidx.lifecycle:lifecycle-common-java8:2.4.0"
+    const val compiler = "androidx.lifecycle:lifecycle-compiler:2.4.0"
+    const val extensions = "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel:2.4.0"
+    const val viewmodelktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+    const val livedata = "androidx.lifecycle:lifecycle-livedata:2.4.0"
+    const val livedatacore = "androidx.lifecycle:lifecycle-livedata-core:2.4.0"
+    const val livedatacorektx = "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
+    const val livedataktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
 
     object test {
       const val annotation = "androidx.test:annotation:1.0.0"
@@ -109,19 +119,17 @@ object deps {
     const val integration = "com.github.bumptech.glide:okhttp3-integration:${versions.glide}@aar"
   }
 
-  object test {
-    const val junit = "junit:junit:4.13.2"
-    const val reflections = "org.reflections:reflections:0.10.2"
+  const val junit = "junit:junit:4.13.2"
+  const val reflections = "org.reflections:reflections:0.10.2"
 
-    object robolectric {
-      const val robolectric = "org.robolectric:robolectric:4.7.3"
-      const val annotations = "org.robolectric:annotations:4.7.3"
-    }
+  object robolectric {
+    const val robolectric = "org.robolectric:robolectric:4.7.3"
+    const val annotations = "org.robolectric:annotations:4.7.3"
+  }
 
-    object mockito {
-      const val inline = "org.mockito:mockito-inline:4.2.0"
-      const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-    }
+  object mockito {
+    const val inline = "org.mockito:mockito-inline:4.2.0"
+    const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
   }
 
   object misc {

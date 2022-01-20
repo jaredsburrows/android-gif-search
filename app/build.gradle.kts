@@ -201,6 +201,18 @@ dependencies {
   implementation(deps.android.recyclerview)
   implementation(deps.google.material)
 
+  // AndroidX Lifecycle
+  implementation(deps.android.common)
+  implementation(deps.android.commonjdk8)
+  implementation(deps.android.extensions)
+  implementation(deps.android.viewmodel)
+  implementation(deps.android.viewmodelktx)
+  implementation(deps.android.livedata)
+  implementation(deps.android.livedatacore)
+  implementation(deps.android.livedatacorektx)
+  implementation(deps.android.livedataktx)
+  kapt(deps.android.compiler)
+
   // Image Loading
   implementation(deps.glide.glide)
   implementation(deps.glide.integration)
@@ -227,11 +239,11 @@ dependencies {
   testImplementation(deps.android.test.core)
   testImplementation(deps.android.test.ext.junit)
   testImplementation(deps.google.truth)
-  testImplementation(deps.test.junit)
-  testImplementation(deps.test.mockito.inline)
-  testImplementation(deps.test.mockito.kotlin)
-  testImplementation(deps.test.reflections)
-  testImplementation(deps.test.robolectric.robolectric)
+  testImplementation(deps.junit)
+  testImplementation(deps.mockito.inline)
+  testImplementation(deps.mockito.kotlin)
+  testImplementation(deps.reflections)
+  testImplementation(deps.robolectric.robolectric)
 
   androidTestUtil(deps.android.test.orchestrator)
 
@@ -247,6 +259,6 @@ dependencies {
   androidTestImplementation(deps.android.test.runner)
   androidTestImplementation(deps.android.test.rules)
   androidTestImplementation(deps.google.truth)
-  androidTestImplementation(deps.test.junit)
-  androidTestImplementation(deps.test.robolectric.annotations)
+  androidTestImplementation(deps.junit)
+  androidTestImplementation(deps.robolectric.annotations)
 }
