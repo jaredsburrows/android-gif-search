@@ -25,19 +25,15 @@ Gif RecyclerView MVP Grid Example using Dagger 2 Hilt, Retrofit 2, Moshi, Kotlin
 
 ## Test
 
+Use `-Pci` to run tests against http://localhost:8080 instead of https://api.riffsy.com.
+
 **Run [Junit](http://junit.org/junit4/) Unit Tests:**
 
     $ gradlew testDebug
 
 **Run [Espresso](https://developer.android.com/training/testing/ui-testing/espresso-testing.html) Instrumentation Tests:**
 
-This will use https://api.riffsy.com for the server.
-
     $ gradlew connectedDebugAndroidTest
-
-This will use http://localhost:8080 for the server for IDE and local testing.
-
-    $ gradlew connectedDebugAndroidTest -Pci
 
 ## Report
 

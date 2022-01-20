@@ -22,7 +22,7 @@ android {
     targetSdk = deps.build.targetSdk
 
     testApplicationId = "burrows.apps.example.gif.test"
-    testInstrumentationRunner = "test.CustomTestRunner"
+    testInstrumentationRunner = "test.CustomTestRunner" // "androidx.test.runner.AndroidJUnitRunner"
     testInstrumentationRunnerArguments += mapOf(
       "disableAnalytics" to "true",
       "clearPackageData" to "true"
@@ -43,9 +43,12 @@ android {
   }
 
   sourceSets {
-    val commonTest = "src/commonTest/java"
-    getByName("androidTest").java.srcDirs(commonTest)
-    getByName("test").java.srcDirs(commonTest)
+    val commonTestSources = "src/commonTest/java"
+    getByName("androidTest").java.srcDirs(commonTestSources)
+    getByName("test").java.srcDirs(commonTestSources)
+    val commonTestResources = "src/commonTest/resources"
+    getByName("androidTest").resources.srcDirs(commonTestResources)
+    getByName("test").resources.srcDirs(commonTestResources)
   }
 
   lint {
@@ -221,7 +224,7 @@ dependencies {
   testImplementation(deps.test.mockito.inline)
   testImplementation(deps.test.mockito.kotlin)
   testImplementation(deps.test.reflections)
-  testImplementation(deps.test.robolectric)
+  testImplementation(deps.test.robolectric.robolectric)
 
   androidTestUtil(deps.android.test.orchestrator)
 
@@ -236,4 +239,5 @@ dependencies {
   androidTestImplementation(deps.android.test.runner)
   androidTestImplementation(deps.google.truth)
   androidTestImplementation(deps.test.junit)
+  androidTestImplementation(deps.test.robolectric.annotations)
 }

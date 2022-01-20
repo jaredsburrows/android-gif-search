@@ -108,8 +108,12 @@ object deps {
 
   object test {
     const val junit = "junit:junit:4.13.2"
-    const val robolectric = "org.robolectric:robolectric:4.7.3"
     const val reflections = "org.reflections:reflections:0.10.2"
+
+    object robolectric {
+      const val robolectric = "org.robolectric:robolectric:4.7.3"
+      const val annotations = "org.robolectric:annotations:4.7.3"
+    }
 
     object mockito {
       const val inline = "org.mockito:mockito-inline:4.2.0"
