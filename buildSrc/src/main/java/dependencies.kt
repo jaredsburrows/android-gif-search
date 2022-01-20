@@ -26,10 +26,6 @@ object deps {
     }
   }
 
-  object plugin {
-    const val dagger = "com.google.dagger:hilt-android-gradle-plugin:${versions.dagger}"
-  }
-
   object kotlin {
     object coroutines {
       const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.kotlinx}"

@@ -2,13 +2,10 @@ plugins {
   id("com.android.application")
   kotlin("android")
   kotlin("kapt")
+  id("dagger.hilt.android.plugin")
   id("org.jlleitschuh.gradle.ktlint")
-  id("com.getkeepsafe.dexcount") version "3.0.1"
   id("com.jaredsburrows.license")
-}
-
-apply {
-  plugin("dagger.hilt.android.plugin") // Plugin data not published
+  id("com.getkeepsafe.dexcount") version "3.0.1"
 }
 
 android {

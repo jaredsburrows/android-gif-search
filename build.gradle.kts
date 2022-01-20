@@ -3,23 +3,12 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-buildscript {
-  rootProject.extra["ci"] = rootProject.hasProperty("ci")
-
-  repositories {
-    google()
-    gradlePluginPortal()
-    mavenCentral()
-  }
-
-  dependencies {
-    classpath(deps.plugin.dagger) // Plugin data not published
-  }
-}
+rootProject.extra["ci"] = rootProject.hasProperty("ci")
 
 plugins {
   id("com.android.application") version "7.0.4" apply false
   kotlin("android") version "1.6.10" apply false
+  id("dagger.hilt.android.plugin") version "2.40.5" apply false
   id("org.jlleitschuh.gradle.ktlint") version "10.2.1" apply false
   id("com.jaredsburrows.license") version "0.8.90" apply false
   id("com.github.ben-manes.versions") version "0.41.0"
