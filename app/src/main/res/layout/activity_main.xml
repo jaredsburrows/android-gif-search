@@ -17,7 +17,7 @@
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
       android:minHeight="?attr/actionBarSize"
-      app:layout_scrollFlags="scroll|enterAlways|snap"/>
+      app:layout_scrollFlags="scroll|enterAlways|snap" />
   </com.google.android.material.appbar.AppBarLayout>
 
   <androidx.recyclerview.widget.RecyclerView
@@ -27,5 +27,5 @@
     android:clipToPadding="false"
     android:scrollbars="none"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:listitem="@layout/list_item"/>
+    tools:listitem="@layout/list_item" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

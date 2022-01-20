@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Singleton
 
 /**
- * Creates services based on Retrofit interfaces.
+ * Injections for the network.
  */
 @Module
 @InstallIn(SingletonComponent::class)

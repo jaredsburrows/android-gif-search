@@ -81,7 +81,7 @@ class GifActivityTest {
             return when {
               contains("v1/trending") -> getMockResponse("/trending_results.json")
               contains("v1/search") -> getMockResponse("/search_results.json")
-              contains("images") -> getMockFileResponse("/ic_launcher.png")
+              contains("images") -> getMockFileResponse("/ic_launcher.webp")
               else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
             }
           }

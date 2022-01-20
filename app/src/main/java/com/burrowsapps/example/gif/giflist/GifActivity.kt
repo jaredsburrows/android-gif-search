@@ -1,16 +1,19 @@
 package com.burrowsapps.example.gif.giflist
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
@@ -22,6 +25,7 @@ import com.burrowsapps.example.gif.data.RiffsyApiService.Companion.DEFAULT_LIMIT
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
 import com.burrowsapps.example.gif.databinding.ActivityMainBinding
 import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
+import com.burrowsapps.example.gif.di.GlideApp
 import com.burrowsapps.example.gif.license.LicenseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -31,21 +35,22 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClickListener {
-  @Inject lateinit var gifPresenter: GifPresenter
-  @Inject lateinit var imageService: ImageService
+  @Inject internal lateinit var gifPresenter: GifPresenter
+  @Inject internal lateinit var imageService: ImageService
+  @Inject internal lateinit var clipboardManager: ClipboardManager
   private lateinit var binding: ActivityMainBinding
   private lateinit var dialogBinding: DialogPreviewBinding
-  internal lateinit var gridLayoutManager: GridLayoutManager
+  private lateinit var gridLayoutManager: GridLayoutManager
   private lateinit var gifItemDecoration: GifItemDecoration
   private lateinit var gifAdapter: GifAdapter
   private lateinit var gifDialog: AppCompatDialog
-  internal var hasSearchedImages = false
-  internal var previousImageCount = 0
-  internal var loadingImages = true
-  internal var firstVisibleImage = 0
-  internal var visibleImageCount = 0
-  internal var totalImageCount = 0
-  internal var nextPageNumber: Double? = null
+  private var hasSearchedImages = false
+  private var previousImageCount = 0
+  private var loadingImages = true
+  private var firstVisibleImage = 0
+  private var visibleImageCount = 0
+  private var totalImageCount = 0
+  private var nextPageNumber: Double? = null
 
   //
   // Activity
@@ -111,7 +116,7 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
       setCanceledOnTouchOutside(true)
       setOnDismissListener {
         // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
-        Glide.with(dialogBinding.gifDialogImage.context)
+        GlideApp.with(dialogBinding.gifDialogImage.context)
           .clear(dialogBinding.gifDialogImage) // Forget view, try to free resources
         dialogBinding.gifDialogImage.setImageDrawable(null)
         dialogBinding.gifDialogProgress.visibility =
@@ -242,6 +247,15 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
     dialogBinding.gifDialogTitle.apply {
       text = imageInfoModel.url
       visibility = View.VISIBLE
+      setOnClickListener {
+        clipboardManager.setPrimaryClip(
+          ClipData.newPlainText(
+            "https-image-url",
+            imageInfoModel.url
+          )
+        )
+        Toast.makeText(context, R.string.copied_to_clipboard, LENGTH_SHORT).show()
+      }
     }
 
     // Load image

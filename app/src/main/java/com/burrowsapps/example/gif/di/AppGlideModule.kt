@@ -20,7 +20,7 @@ class AppGlideModule : com.bumptech.glide.module.AppGlideModule() {
     builder.setDefaultRequestOptions(
       RequestOptions()
         .encodeFormat(PNG)
-        .encodeQuality(100)
+        .encodeQuality(ENCODE_QUALITY)
         .diskCacheStrategy(ALL)
         .format(PREFER_ARGB_8888)
         .error(R.mipmap.ic_launcher)
@@ -35,5 +35,6 @@ class AppGlideModule : com.bumptech.glide.module.AppGlideModule() {
 
   companion object {
     private const val GLIDE_CACHE_DIRECTORY = "https-image-cache"
+    private const val ENCODE_QUALITY = 100
   }
 }

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
@@ -13,6 +12,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.databinding.ListItemBinding
+import com.burrowsapps.example.gif.di.GlideApp
 
 /**
  * RecyclerView adapter for handling Gif Images in a Grid format.
@@ -74,7 +74,7 @@ class GifAdapter(
 
     // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
     // Forget view, try to free resources
-    Glide.with(holder.itemView.context).clear(holder.binding.gifImage)
+    GlideApp.with(holder.itemView.context).clear(holder.binding.gifImage)
     holder.binding.apply {
       gifImage.setImageDrawable(null)
       // Make sure to show progress when loading new view

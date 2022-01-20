@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import com.burrowsapps.example.gif.R
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Open source license activity.
  */
+@AndroidEntryPoint
 class LicenseActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
