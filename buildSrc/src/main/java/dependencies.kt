@@ -1,6 +1,6 @@
 @file:Suppress("ClassName", "SpellCheckingInspection")
 
-import org.gradle.api.JavaVersion
+import org.gradle.api.JavaVersion.VERSION_11
 
 object deps {
   object versions {
@@ -12,7 +12,7 @@ object deps {
     const val retrofit = "2.9.0"
     const val espresso = "3.4.0"
     const val glide = "4.12.0"
-    val java = JavaVersion.VERSION_11
+    val java = VERSION_11
   }
 
   object build {
@@ -39,19 +39,27 @@ object deps {
   }
 
   object android {
+    const val annotation = "androidx.annotation:annotation:1.3.0"
     const val activity = "androidx.activity:activity:1.4.0"
     const val activityktx = "androidx.activity:activity-ktx:1.4.0"
     const val appcompat = "androidx.appcompat:appcompat:1.4.1"
+    const val cardview = "androidx.cardview:cardview:1.0.0"
+    const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
     const val core = "androidx.core:core:1.7.0"
     const val corektx = "androidx.core:core-ktx:1.7.0"
-    const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
     const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
+    const val recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
 
     object test {
+      const val annotation = "androidx.test:annotation:1.0.0"
       const val core = "androidx.test:core:1.4.0"
-      const val junit = "androidx.test.ext:junit:1.1.3"
-      const val runner = "androidx.test:runner:1.4.0"
       const val orchestrator = "androidx.test:orchestrator:1.4.1"
+      const val runner = "androidx.test:runner:1.4.0"
+      const val rules = "androidx.test:rules:1.4.0"
+
+      object ext {
+        const val junit = "androidx.test.ext:junit:1.1.3"
+      }
 
       object espresso {
         const val core = "androidx.test.espresso:espresso-core:${versions.espresso}"

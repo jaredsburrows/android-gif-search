@@ -1,6 +1,8 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.gradle.api.JavaVersion.VERSION_11
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
+import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 rootProject.extra["ci"] = rootProject.hasProperty("ci")
@@ -51,12 +53,12 @@ allprojects {
   }
 
   tasks.withType(KotlinCompile::class.java).configureEach {
-    sourceCompatibility = JavaVersion.VERSION_11.toString()
-    targetCompatibility = JavaVersion.VERSION_11.toString()
+    sourceCompatibility = VERSION_11.toString()
+    targetCompatibility = VERSION_11.toString()
 
     kotlinOptions {
       // allWarningsAsErrors = true
-      jvmTarget = JavaVersion.VERSION_11.toString()
+      jvmTarget = VERSION_11.toString()
       languageVersion = "1.6"
       apiVersion = "1.6"
       freeCompilerArgs = freeCompilerArgs + listOf(
@@ -80,8 +82,8 @@ allprojects {
   }
 
   tasks.withType(JavaCompile::class.java).configureEach {
-    sourceCompatibility = JavaVersion.VERSION_11.toString()
-    targetCompatibility = JavaVersion.VERSION_11.toString()
+    sourceCompatibility = VERSION_11.toString()
+    targetCompatibility = VERSION_11.toString()
 
     // Show all warnings except boot classpath
     options.apply {
@@ -107,11 +109,11 @@ allprojects {
 
   tasks.withType(Test::class.java).configureEach {
     testLogging {
-      exceptionFormat = TestExceptionFormat.FULL
+      exceptionFormat = FULL
       showCauses = true
       showExceptions = true
       showStackTraces = true
-      events = setOf(TestLogEvent.FAILED, TestLogEvent.SKIPPED)
+      events = setOf(FAILED, SKIPPED)
     }
 
     failFast = true

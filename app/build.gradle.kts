@@ -41,11 +41,17 @@ android {
 
   sourceSets {
     val commonTestSources = "src/commonTest/java"
-    getByName("androidTest").java.srcDirs(commonTestSources)
-    getByName("test").java.srcDirs(commonTestSources)
     val commonTestResources = "src/commonTest/resources"
-    getByName("androidTest").resources.srcDirs(commonTestResources)
-    getByName("test").resources.srcDirs(commonTestResources)
+
+    getByName("test").apply {
+      java.srcDirs(commonTestSources)
+      resources.srcDirs(commonTestResources)
+    }
+
+    getByName("androidTest").apply {
+      java.srcDirs(commonTestSources)
+      resources.srcDirs(commonTestResources)
+    }
   }
 
   lint {
@@ -182,6 +188,7 @@ dependencies {
   androidTestImplementation(deps.google.dagger.testing)
 
   // AndroidX
+  implementation(deps.android.annotation)
   implementation(deps.android.activity)
   implementation(deps.android.activityktx)
   implementation(deps.android.appcompat)
@@ -189,7 +196,9 @@ dependencies {
   implementation(deps.android.corektx)
 
   // AndroidX UI
+  implementation(deps.android.cardview)
   implementation(deps.android.constraintlayout)
+  implementation(deps.android.recyclerview)
   implementation(deps.google.material)
 
   // Image Loading
@@ -214,8 +223,9 @@ dependencies {
   implementation(deps.squareup.retrofit.retrofit)
   kapt(deps.squareup.moshi.compiler)
 
+  testImplementation(deps.android.test.annotation)
   testImplementation(deps.android.test.core)
-  testImplementation(deps.android.test.junit)
+  testImplementation(deps.android.test.ext.junit)
   testImplementation(deps.google.truth)
   testImplementation(deps.test.junit)
   testImplementation(deps.test.mockito.inline)
@@ -226,14 +236,16 @@ dependencies {
   androidTestUtil(deps.android.test.orchestrator)
 
   debugImplementation(deps.android.test.core) // See https://stackoverflow.com/a/69476166/950427
+  androidTestImplementation(deps.android.test.annotation)
   androidTestImplementation(deps.android.test.core)
   androidTestImplementation(deps.android.test.espresso.contrib) {
     exclude("org.checkerframework") // See https://github.com/android/android-test/issues/861#issuecomment-872582819
   }
   androidTestImplementation(deps.android.test.espresso.core)
   androidTestImplementation(deps.android.test.espresso.intents)
-  androidTestImplementation(deps.android.test.junit)
+  androidTestImplementation(deps.android.test.ext.junit)
   androidTestImplementation(deps.android.test.runner)
+  androidTestImplementation(deps.android.test.rules)
   androidTestImplementation(deps.google.truth)
   androidTestImplementation(deps.test.junit)
   androidTestImplementation(deps.test.robolectric.annotations)

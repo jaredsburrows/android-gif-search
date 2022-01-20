@@ -36,15 +36,23 @@ object NetworkModule {
   @Singleton
   @Provides
   fun providesRiffsyApiService(
+    retrofit: Retrofit
+  ): RiffsyApiService {
+    return retrofit
+      .create(RiffsyApiService::class.java)
+  }
+
+  @Singleton
+  @Provides
+  fun providesRetrofit(
     converterFactory: MoshiConverterFactory,
     client: OkHttpClient
-  ): RiffsyApiService {
+  ): Retrofit {
     return Retrofit.Builder()
       .addConverterFactory(converterFactory)
       .client(client)
       .baseUrl(BuildConfig.BASE_URL)
       .build()
-      .create(RiffsyApiService::class.java)
   }
 
   @Singleton

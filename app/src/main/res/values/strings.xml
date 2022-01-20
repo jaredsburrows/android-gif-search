@@ -6,5 +6,5 @@
   <string name="search_gifs">Search Gifs</string>
   <string name="main_screen_title">Top Trending Gifs</string>
   <string name="gif_image">Gif image</string>
-    <string name="copied_to_clipboard">Copied to clipboard</string>
+  <string name="copied_to_clipboard">Copied to clipboard</string>
 </resources>
