@@ -8,8 +8,7 @@ plugins {
 }
 
 apply {
-  plugin("com.novoda.android-command") // Plugin data not published
-  plugin("dagger.hilt.android.plugin") // NPlugin data not published
+  plugin("dagger.hilt.android.plugin") // Plugin data not published
 }
 
 android {
