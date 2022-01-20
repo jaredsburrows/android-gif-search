@@ -1,4 +1,4 @@
-package com.burrowsapps.example.gif.licenses
+package com.burrowsapps.example.gif.license
 
 import android.content.Context
 import android.content.Intent
