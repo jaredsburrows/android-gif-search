@@ -21,8 +21,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.data.ImageService
-import com.burrowsapps.example.gif.data.RiffsyApiService.Companion.DEFAULT_LIMIT_COUNT
-import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
+import com.burrowsapps.example.gif.data.TenorService.Companion.DEFAULT_LIMIT_COUNT
+import com.burrowsapps.example.gif.data.model.TenorResponseDto
 import com.burrowsapps.example.gif.databinding.ActivityMainBinding
 import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
 import com.burrowsapps.example.gif.di.GlideApp
@@ -210,10 +210,10 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
     gifAdapter.clear()
   }
 
-  override fun addImages(riffsyResponseDto: RiffsyResponseDto) {
-    nextPageNumber = riffsyResponseDto.next
+  override fun addImages(responseDto: TenorResponseDto) {
+    nextPageNumber = responseDto.next
 
-    riffsyResponseDto.results.forEach { result ->
+    responseDto.results.forEach { result ->
       val gif = result.media.first().gif
       val gifUrl = gif.url
       val gifPreviewUrl = gif.preview
@@ -224,8 +224,8 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
     }
   }
 
-  override fun showDialog(imageInfoModel: GifImageInfo) {
-    showImageDialog(imageInfoModel)
+  override fun showDialog(imageInfo: GifImageInfo) {
+    showImageDialog(imageInfo)
   }
 
   override fun isActive() = !isFinishing

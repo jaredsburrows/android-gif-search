@@ -85,7 +85,7 @@ android {
         if (rootProject.extra["ci"] as Boolean) {
           "\"http://localhost:8080\""
         } else {
-          "\"https://api.riffsy.com\""
+          "\"https://g.tenor.com\""
         }
       )
     }
@@ -100,7 +100,7 @@ android {
       )
       signingConfig = signingConfigs.getByName("debug")
 
-      buildConfigField("String", "BASE_URL", "\"https://api.riffsy.com\"")
+      buildConfigField("String", "BASE_URL", "\"https://g.tenor.com\"")
     }
   }
 

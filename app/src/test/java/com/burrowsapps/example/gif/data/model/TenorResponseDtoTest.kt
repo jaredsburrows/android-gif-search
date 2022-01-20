@@ -6,11 +6,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class RiffsyResponseDtoTest {
+class TenorResponseDtoTest {
   private val nextResponse = 1.0
   private val results = listOf<ResultDto>()
-  private var sutDefault = RiffsyResponseDto()
-  private var sut = RiffsyResponseDto(results, nextResponse)
+  private var sutDefault = TenorResponseDto()
+  private var sut = TenorResponseDto(results, nextResponse)
 
   @Test
   fun testGetResults() {

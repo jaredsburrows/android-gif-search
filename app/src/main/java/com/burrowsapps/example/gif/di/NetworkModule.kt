@@ -3,7 +3,7 @@ package com.burrowsapps.example.gif.di
 import android.content.Context
 import com.burrowsapps.example.gif.BuildConfig
 import com.burrowsapps.example.gif.BuildConfig.DEBUG
-import com.burrowsapps.example.gif.data.RiffsyApiService
+import com.burrowsapps.example.gif.data.TenorService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import dagger.Module
@@ -35,11 +35,11 @@ object NetworkModule {
 
   @Singleton
   @Provides
-  fun providesRiffsyApiService(
+  fun providesTenorService(
     retrofit: Retrofit
-  ): RiffsyApiService {
+  ): TenorService {
     return retrofit
-      .create(RiffsyApiService::class.java)
+      .create(TenorService::class.java)
   }
 
   @Singleton

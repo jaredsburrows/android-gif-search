@@ -1,7 +1,7 @@
 package com.burrowsapps.example.gif.data
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.burrowsapps.example.gif.data.RiffsyApiService.Companion.DEFAULT_LIMIT_COUNT
+import com.burrowsapps.example.gif.data.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -28,13 +28,13 @@ import javax.inject.Inject
 @HiltAndroidTest
 @Config(application = HiltTestApplication::class)
 @RunWith(AndroidJUnit4::class)
-class RiffsyApiClientTest {
+class TenorServiceTest {
   @get:Rule(order = 0)
   val hiltRule = HiltAndroidRule(this)
 
   private val server = MockWebServer()
 
-  @Inject lateinit var sut: RiffsyApiService
+  @Inject lateinit var sut: TenorService
 
   @Before
   fun setUp() {

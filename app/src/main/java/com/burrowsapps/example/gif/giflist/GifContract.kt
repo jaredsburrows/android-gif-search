@@ -2,7 +2,7 @@ package com.burrowsapps.example.gif.giflist
 
 import com.burrowsapps.example.gif.BasePresenter
 import com.burrowsapps.example.gif.BaseView
-import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
+import com.burrowsapps.example.gif.data.model.TenorResponseDto
 
 interface GifContract {
   interface Presenter : BasePresenter<View> {
@@ -13,7 +13,7 @@ interface GifContract {
 
   interface View : BaseView {
     fun clearImages()
-    fun addImages(riffsyResponseDto: RiffsyResponseDto)
-    fun showDialog(imageInfoModel: GifImageInfo)
+    fun addImages(responseDto: TenorResponseDto)
+    fun showDialog(imageInfo: GifImageInfo)
   }
 }

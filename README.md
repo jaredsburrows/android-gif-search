@@ -25,7 +25,7 @@ Gif RecyclerView MVP Grid Example using Dagger 2 Hilt, Retrofit 2, Moshi, Kotlin
 
 ## Test
 
-Use `-Pci` to run tests against http://localhost:8080 instead of https://api.riffsy.com.
+Use `-Pci` to run tests against http://localhost:8080 instead of https://g.tenor.com.
 
 **Run [Junit](http://junit.org/junit4/) Unit Tests:**
 

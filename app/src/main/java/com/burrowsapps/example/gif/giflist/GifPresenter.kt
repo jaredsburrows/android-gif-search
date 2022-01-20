@@ -2,8 +2,8 @@ package com.burrowsapps.example.gif.giflist
 
 import android.util.Log
 import com.burrowsapps.example.gif.CoroutineDispatcherProvider
-import com.burrowsapps.example.gif.data.RiffsyApiService
-import com.burrowsapps.example.gif.data.RiffsyApiService.Companion.DEFAULT_LIMIT_COUNT
+import com.burrowsapps.example.gif.data.TenorService
+import com.burrowsapps.example.gif.data.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @OptIn(DelicateCoroutinesApi::class)
 class GifPresenter @Inject constructor(
-  private val service: RiffsyApiService,
+  private val service: TenorService,
   private val dispatcher: CoroutineDispatcherProvider,
 ) : GifContract.Presenter {
   private var view: GifContract.View? = null
