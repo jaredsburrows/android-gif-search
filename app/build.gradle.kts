@@ -22,7 +22,7 @@ android {
     targetSdk = deps.build.targetSdk
 
     testApplicationId = "burrows.apps.example.gif.test"
-    testInstrumentationRunner = "test.CustomTestRunner"
+    testInstrumentationRunner = "test.CustomTestRunner" // "androidx.test.runner.AndroidJUnitRunner"
     testInstrumentationRunnerArguments += mapOf(
       "disableAnalytics" to "true",
       "clearPackageData" to "true"
@@ -221,7 +221,7 @@ dependencies {
   testImplementation(deps.test.mockito.inline)
   testImplementation(deps.test.mockito.kotlin)
   testImplementation(deps.test.reflections)
-  testImplementation(deps.test.robolectric)
+  testImplementation(deps.test.robolectric.robolectric)
 
   androidTestUtil(deps.android.test.orchestrator)
 
@@ -236,4 +236,5 @@ dependencies {
   androidTestImplementation(deps.android.test.runner)
   androidTestImplementation(deps.google.truth)
   androidTestImplementation(deps.test.junit)
+  androidTestImplementation(deps.test.robolectric.annotations)
 }

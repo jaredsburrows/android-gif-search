@@ -38,7 +38,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".licenses.LicenseActivity"
+      android:name=".license.LicenseActivity"
       android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
       android:exported="true"
       android:parentActivityName=".giflist.GifActivity"

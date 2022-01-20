@@ -22,7 +22,7 @@ import com.burrowsapps.example.gif.data.RiffsyApiService.Companion.DEFAULT_LIMIT
 import com.burrowsapps.example.gif.data.model.RiffsyResponseDto
 import com.burrowsapps.example.gif.databinding.ActivityMainBinding
 import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
-import com.burrowsapps.example.gif.licenses.LicenseActivity
+import com.burrowsapps.example.gif.license.LicenseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

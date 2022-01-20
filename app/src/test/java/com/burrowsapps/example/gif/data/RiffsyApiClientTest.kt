@@ -1,11 +1,11 @@
 package com.burrowsapps.example.gif.data
 
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.data.RiffsyApiService.Companion.DEFAULT_LIMIT_COUNT
-import com.burrowsapps.example.gif.di.NetModule
-import com.burrowsapps.example.gif.di.RiffsyModule
 import com.google.common.truth.Truth.assertThat
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.HiltTestApplication
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.Dispatcher
@@ -14,21 +14,32 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import test.TestFileUtils
 import test.TestFileUtils.MOCK_SERVER_PORT
 import test.TestFileUtils.getMockResponse
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
+import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
+@HiltAndroidTest
+@Config(application = HiltTestApplication::class)
 @RunWith(AndroidJUnit4::class)
 class RiffsyApiClientTest {
+  @get:Rule(order = 0)
+  val hiltRule = HiltAndroidRule(this)
+
   private val server = MockWebServer()
-  private lateinit var sut: RiffsyApiService
+
+  @Inject lateinit var sut: RiffsyApiService
 
   @Before
   fun setUp() {
+    hiltRule.inject()
+
     server.apply {
       dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse {
@@ -45,10 +56,6 @@ class RiffsyApiClientTest {
 
       start(MOCK_SERVER_PORT)
     }
-
-    sut = RiffsyModule(server.url("/").toString()).provideRiffsyApi(
-      NetModule.provideRetrofit(ApplicationProvider.getApplicationContext())
-    )
   }
 
   @After

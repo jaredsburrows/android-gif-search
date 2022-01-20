@@ -27,9 +27,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import com.burrowsapps.example.gif.R
-import com.burrowsapps.example.gif.licenses.LicenseActivity
+import com.burrowsapps.example.gif.license.LicenseActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.HiltTestApplication
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -43,6 +44,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import test.ScreenshotWatcher
 import test.TestFileUtils.MOCK_SERVER_PORT
 import test.TestFileUtils.getMockFileResponse
@@ -50,6 +52,7 @@ import test.TestFileUtils.getMockResponse
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 @HiltAndroidTest
+@Config(application = HiltTestApplication::class)
 @RunWith(AndroidJUnit4::class)
 class GifActivityTest {
   @get:Rule(order = 0)
