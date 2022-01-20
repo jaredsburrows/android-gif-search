@@ -2,6 +2,7 @@ plugins {
   id("com.android.application")
   kotlin("android")
   kotlin("kapt")
+  id("org.jlleitschuh.gradle.ktlint")
   id("com.getkeepsafe.dexcount") version "3.0.1"
   id("com.jaredsburrows.license")
 }

@@ -64,7 +64,8 @@ object NetworkModule {
   @Singleton
   @Provides
   fun providesOkHttpClient(
-    interceptor: HttpLoggingInterceptor, cache: Cache
+    interceptor: HttpLoggingInterceptor,
+    cache: Cache
   ): OkHttpClient {
     return OkHttpClient.Builder()
       .addInterceptor(interceptor)

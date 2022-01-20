@@ -14,9 +14,11 @@ class LicenseActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    setContentView(WebView(this).apply {
-      loadUrl("file:///android_asset/open_source_licenses.html")
-    })
+    setContentView(
+      WebView(this).apply {
+        loadUrl("file:///android_asset/open_source_licenses.html")
+      }
+    )
 
     supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)

@@ -18,7 +18,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import test.TestFileUtils
 import test.TestFileUtils.MOCK_SERVER_PORT
 import test.TestFileUtils.getMockFileResponse
 import test.TestFileUtils.getMockResponse

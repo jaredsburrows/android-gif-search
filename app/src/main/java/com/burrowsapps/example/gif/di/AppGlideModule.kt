@@ -10,6 +10,7 @@ import com.bumptech.glide.load.engine.cache.DiskCache.Factory.DEFAULT_DISK_CACHE
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
 import com.bumptech.glide.load.engine.cache.LruResourceCache
 import com.bumptech.glide.request.RequestOptions
+import com.burrowsapps.example.gif.BuildConfig.DEBUG
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.di.NetworkModule.CLIENT_CACHE_SIZE
 
@@ -24,13 +25,12 @@ class AppGlideModule : com.bumptech.glide.module.AppGlideModule() {
         .format(PREFER_ARGB_8888)
         .error(R.mipmap.ic_launcher)
         .fallback(R.mipmap.ic_launcher)
-    )
-    builder.setDiskCache(
+    ).setDiskCache(
       InternalCacheDiskCacheFactory(
         context, GLIDE_CACHE_DIRECTORY, DEFAULT_DISK_CACHE_SIZE.toLong()
       )
-    )
-    builder.setMemoryCache(LruResourceCache(CLIENT_CACHE_SIZE))
+    ).setMemoryCache(LruResourceCache(CLIENT_CACHE_SIZE))
+      .setLogRequestOrigins(DEBUG)
   }
 
   companion object {
