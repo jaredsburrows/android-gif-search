@@ -1,4 +1,4 @@
-package com.burrowsapps.example.gif.data.model
+package com.burrowsapps.example.gif.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

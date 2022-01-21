@@ -1,7 +1,7 @@
-package com.burrowsapps.example.gif.data
+package com.burrowsapps.example.gif.data.remote
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.burrowsapps.example.gif.data.TenorService.Companion.DEFAULT_LIMIT_COUNT
+import com.burrowsapps.example.gif.data.remote.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

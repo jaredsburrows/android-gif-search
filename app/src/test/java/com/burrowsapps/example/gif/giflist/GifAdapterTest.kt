@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.burrowsapps.example.gif.data.ImageService
+import com.burrowsapps.example.gif.data.remote.GifImageLoader
 import com.burrowsapps.example.gif.giflist.GifAdapter.OnItemClickListener
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
@@ -22,13 +22,13 @@ class GifAdapterTest {
     override fun onClick(imageInfoModel: GifImageInfo) {
     }
   }
-  private lateinit var imageService: ImageService
+  private lateinit var imageService: GifImageLoader
   private lateinit var viewHolder: GifAdapter.ViewHolder
   private lateinit var sut: GifAdapter
 
   @Before
   fun setUp() {
-    imageService = ImageService(context)
+    imageService = GifImageLoader(context)
     sut = GifAdapter(testOnItemClickListener, imageService).apply {
       add(gifImageInfo)
       add(gifImageInfo2)

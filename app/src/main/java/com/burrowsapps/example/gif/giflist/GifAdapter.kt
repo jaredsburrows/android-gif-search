@@ -10,7 +10,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.burrowsapps.example.gif.data.ImageService
+import com.burrowsapps.example.gif.data.remote.GifImageLoader
 import com.burrowsapps.example.gif.databinding.ListItemBinding
 import com.burrowsapps.example.gif.di.GlideApp
 
@@ -19,7 +19,7 @@ import com.burrowsapps.example.gif.di.GlideApp
  */
 class GifAdapter(
   private val onItemClickListener: OnItemClickListener,
-  private val imageService: ImageService
+  private val imageService: GifImageLoader
 ) : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
   private val data = arrayListOf<GifImageInfo>()
 

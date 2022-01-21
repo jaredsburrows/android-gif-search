@@ -1,6 +1,7 @@
-package com.burrowsapps.example.gif.data.model
+package com.burrowsapps.example.gif.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.burrowsapps.example.gif.model.GifDto
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

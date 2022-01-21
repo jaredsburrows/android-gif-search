@@ -1,4 +1,4 @@
-package com.burrowsapps.example.gif.data
+package com.burrowsapps.example.gif.data.remote
 
 import android.content.Context
 import com.bumptech.glide.RequestBuilder
@@ -9,7 +9,7 @@ import com.burrowsapps.example.gif.di.GlideApp
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class ImageService @Inject constructor(@ApplicationContext private val context: Context) {
+class GifImageLoader @Inject constructor(@ApplicationContext private val context: Context) {
   private val imageHeight = context.resources.getDimensionPixelSize(R.dimen.gif_image_width)
   private val imageWidth = imageHeight
 
