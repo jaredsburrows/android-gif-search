@@ -1,9 +1,10 @@
 package com.burrowsapps.example.gif.giflist
 
 import android.util.Log
-import com.burrowsapps.example.gif.CoroutineDispatcherProvider
 import com.burrowsapps.example.gif.data.TenorService
 import com.burrowsapps.example.gif.data.TenorService.Companion.DEFAULT_LIMIT_COUNT
+import com.burrowsapps.example.gif.di.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
@@ -12,7 +13,7 @@ import javax.inject.Inject
 @OptIn(DelicateCoroutinesApi::class)
 class GifPresenter @Inject constructor(
   private val service: TenorService,
-  private val dispatcher: CoroutineDispatcherProvider,
+  @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : GifContract.Presenter {
   private var view: GifContract.View? = null
 
@@ -35,7 +36,7 @@ class GifPresenter @Inject constructor(
   override fun loadTrendingImages(next: Double?) {
     if (view?.isActive() == false) return
 
-    CoroutineScope(dispatcher.io()).launch {
+    CoroutineScope(dispatcher).launch {
       try {
         val response = service
           .getTrendingResults(DEFAULT_LIMIT_COUNT, next)
@@ -60,7 +61,7 @@ class GifPresenter @Inject constructor(
   override fun loadSearchImages(searchString: String, next: Double?) {
     if (view?.isActive() == false) return
 
-    CoroutineScope(dispatcher.io()).launch {
+    CoroutineScope(dispatcher).launch {
       try {
         val response = service
           .getSearchResults(searchString, DEFAULT_LIMIT_COUNT, next)

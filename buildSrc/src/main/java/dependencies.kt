@@ -62,6 +62,7 @@ object deps {
 
     object test {
       const val annotation = "androidx.test:annotation:1.0.0"
+      const val coretesting = "androidx.arch.core:core-testing:2.1.0"
       const val core = "androidx.test:core:1.4.0"
       const val orchestrator = "androidx.test:orchestrator:1.4.1"
       const val runner = "androidx.test:runner:1.4.0"

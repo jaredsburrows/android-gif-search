@@ -5,6 +5,7 @@ import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.click
@@ -59,13 +60,16 @@ class GifActivityTest {
   val hiltRule = HiltAndroidRule(this)
 
   @get:Rule(order = 1)
-  val activityScenarioRule = ActivityScenarioRule(GifActivity::class.java)
+  val instantTaskExecutorRule = InstantTaskExecutorRule()
 
   @get:Rule(order = 2)
+  val activityScenarioRule = ActivityScenarioRule(GifActivity::class.java)
+
+  @get:Rule(order = 3)
   val permissionRule: GrantPermissionRule = GrantPermissionRule
     .grant(INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
 
-  @get:Rule(order = 3)
+  @get:Rule(order = 4)
   val screenshotWatcher = ScreenshotWatcher()
 
   private val server = MockWebServer()

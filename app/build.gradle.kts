@@ -237,6 +237,7 @@ dependencies {
 
   testImplementation(deps.android.test.annotation)
   testImplementation(deps.android.test.core)
+  testImplementation(deps.android.test.coretesting)
   testImplementation(deps.android.test.ext.junit)
   testImplementation(deps.google.truth)
   testImplementation(deps.junit)
@@ -250,6 +251,7 @@ dependencies {
   debugImplementation(deps.android.test.core) // See https://stackoverflow.com/a/69476166/950427
   androidTestImplementation(deps.android.test.annotation)
   androidTestImplementation(deps.android.test.core)
+  androidTestImplementation(deps.android.test.coretesting)
   androidTestImplementation(deps.android.test.espresso.contrib) {
     exclude("org.checkerframework") // See https://github.com/android/android-test/issues/861#issuecomment-872582819
   }

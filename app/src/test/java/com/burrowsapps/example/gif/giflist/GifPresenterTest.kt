@@ -1,5 +1,6 @@
 package com.burrowsapps.example.gif.giflist
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.data.TenorService
 import com.burrowsapps.example.gif.data.TenorService.Companion.DEFAULT_LIMIT_COUNT
@@ -10,16 +11,20 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import retrofit2.Response
-import test.TestCoroutineDispatcherProvider
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class GifPresenterTest {
-  private val dispatcherProvider = TestCoroutineDispatcherProvider()
+  @get:Rule(order = 0)
+  val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+  private val testDispatcher = UnconfinedTestDispatcher()
 
   @Test
   fun testLoadTrendingImagesSuccess() = runTest {
@@ -27,7 +32,7 @@ class GifPresenterTest {
     val response = TenorResponseDto()
     val view: GifContract.View = mock()
     val service: TenorService = mock()
-    val sut = GifPresenter(service, dispatcherProvider)
+    val sut = GifPresenter(service, testDispatcher)
     whenever(view.isActive()).thenReturn(true)
     whenever(service.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Response.success(response))
@@ -46,7 +51,7 @@ class GifPresenterTest {
     val response = TenorResponseDto()
     val view: GifContract.View = mock()
     val service: TenorService = mock()
-    val sut = GifPresenter(service, dispatcherProvider)
+    val sut = GifPresenter(service, testDispatcher)
     whenever(view.isActive()).thenReturn(false)
     whenever(service.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
       .thenReturn(Response.success(response))
@@ -66,7 +71,7 @@ class GifPresenterTest {
     val response = TenorResponseDto()
     val view: GifContract.View = mock()
     val service: TenorService = mock()
-    val sut = GifPresenter(service, dispatcherProvider)
+    val sut = GifPresenter(service, testDispatcher)
 
     whenever(view.isActive()).thenReturn(true)
     whenever(service.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
@@ -87,7 +92,7 @@ class GifPresenterTest {
     val response = TenorResponseDto()
     val view: GifContract.View = mock()
     val service: TenorService = mock()
-    val sut = GifPresenter(service, dispatcherProvider)
+    val sut = GifPresenter(service, testDispatcher)
 
     whenever(view.isActive()).thenReturn(false)
     whenever(service.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
