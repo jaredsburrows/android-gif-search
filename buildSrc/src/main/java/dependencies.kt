@@ -59,6 +59,7 @@ object deps {
     const val livedatacore = "androidx.lifecycle:lifecycle-livedata-core:2.4.0"
     const val livedatacorektx = "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
     const val livedataktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
+    const val webkit = "androidx.webkit:webkit:1.4.0"
 
     object test {
       const val annotation = "androidx.test:annotation:1.0.0"

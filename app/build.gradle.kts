@@ -199,6 +199,7 @@ dependencies {
   implementation(deps.android.cardview)
   implementation(deps.android.constraintlayout)
   implementation(deps.android.recyclerview)
+  implementation(deps.android.webkit)
   implementation(deps.google.material)
 
   // AndroidX Lifecycle

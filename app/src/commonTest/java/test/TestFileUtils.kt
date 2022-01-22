@@ -7,7 +7,7 @@ import java.net.HttpURLConnection.HTTP_OK
 
 object TestFileUtils {
   const val MOCK_SERVER_PORT = 8_080
-  private const val HTTP_200_STATUS = "HTTP/1.1 200"
+  private const val HTTP_200_STATUS = "HTTP/1.1 200 OK"
 
   fun getMockResponse(fileName: String) = MockResponse().apply {
     status = HTTP_200_STATUS
@@ -20,7 +20,7 @@ object TestFileUtils {
     status = HTTP_200_STATUS
     setResponseCode(HTTP_OK)
     setBody(readImage(fileName))
-    addHeader("Content-type: image/png")
+    addHeader("Content-type: image/webp")
   }
 
   private fun readImage(fileName: String) = Buffer().apply {
