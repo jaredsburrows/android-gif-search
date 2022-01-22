@@ -1,8 +1,8 @@
-package com.burrowsapps.example.gif.giflist
+package com.burrowsapps.example.gif.ui.giflist
 
 import android.util.Log
-import com.burrowsapps.example.gif.data.TenorService
-import com.burrowsapps.example.gif.data.TenorService.Companion.DEFAULT_LIMIT_COUNT
+import com.burrowsapps.example.gif.data.source.network.TenorService
+import com.burrowsapps.example.gif.data.source.network.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import com.burrowsapps.example.gif.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

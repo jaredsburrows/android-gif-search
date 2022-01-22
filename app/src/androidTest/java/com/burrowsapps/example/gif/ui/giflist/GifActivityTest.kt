@@ -1,13 +1,13 @@
-package com.burrowsapps.example.gif.giflist
+package com.burrowsapps.example.gif.ui.giflist
 
 import android.Manifest.permission.INTERNET
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
+import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.pressBack
@@ -28,7 +28,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import com.burrowsapps.example.gif.R
-import com.burrowsapps.example.gif.license.LicenseActivity
+import com.burrowsapps.example.gif.ui.license.LicenseActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -112,7 +112,13 @@ class GifActivityTest {
   }
 
   @Test
-  fun testLicensesTitleIsShowing() {
+  fun testTrendingVisibleAppLaunch() {
+    onView(withId(R.id.recyclerView))
+      .check(matches(isDisplayed()))
+  }
+
+  @Test
+  fun testLicenseMenuOpensLicenseActivity() {
     init()
 
     openActionBarOverflowOrOptionsMenu(getInstrumentation().targetContext)
@@ -121,20 +127,29 @@ class GifActivityTest {
 
     intended(hasComponent(LicenseActivity::class.java.name))
 
-    onView(
-      allOf(
-        instanceOf(TextView::class.java),
-        withParent(instanceOf(Toolbar::class.java))
-      )
-    ).check(matches(withText(containsString("Open source licenses"))))
-
     release()
   }
 
   @Test
-  fun testTrendingVisibleAppLaunch() {
-    onView(withId(R.id.recyclerView))
-      .check(matches(isDisplayed()))
+  fun testOpensLicenseActivityAndGoBack() {
+    init()
+
+    openActionBarOverflowOrOptionsMenu(getInstrumentation().targetContext)
+
+    onView(withText(R.string.menu_licenses)).perform(click())
+
+    intended(hasComponent(LicenseActivity::class.java.name))
+
+    pressBackUnconditionally()
+
+    onView(
+      allOf(
+        instanceOf(TextView::class.java),
+        withParent(withId(R.id.toolbar))
+      )
+    ).check(matches(withText(containsString("Top Trending Gifs"))))
+
+    release()
   }
 
   @Ignore("on view 'Animations or transitions are enabled on the target device.")

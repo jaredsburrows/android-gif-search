@@ -1,4 +1,4 @@
-package com.burrowsapps.example.gif.giflist
+package com.burrowsapps.example.gif.ui.giflist
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -21,12 +21,12 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.data.ImageService
-import com.burrowsapps.example.gif.data.TenorService.Companion.DEFAULT_LIMIT_COUNT
-import com.burrowsapps.example.gif.data.model.TenorResponseDto
+import com.burrowsapps.example.gif.data.source.network.TenorResponseDto
+import com.burrowsapps.example.gif.data.source.network.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import com.burrowsapps.example.gif.databinding.ActivityMainBinding
 import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
 import com.burrowsapps.example.gif.di.GlideApp
-import com.burrowsapps.example.gif.license.LicenseActivity
+import com.burrowsapps.example.gif.ui.license.LicenseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

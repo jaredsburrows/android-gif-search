@@ -1,10 +1,10 @@
-package com.burrowsapps.example.gif.giflist
+package com.burrowsapps.example.gif.ui.giflist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.burrowsapps.example.gif.data.TenorService
-import com.burrowsapps.example.gif.data.TenorService.Companion.DEFAULT_LIMIT_COUNT
-import com.burrowsapps.example.gif.data.model.TenorResponseDto
+import com.burrowsapps.example.gif.data.source.network.TenorResponseDto
+import com.burrowsapps.example.gif.data.source.network.TenorService
+import com.burrowsapps.example.gif.data.source.network.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times

@@ -1,4 +1,4 @@
-package com.burrowsapps.example.gif.data.model
+package com.burrowsapps.example.gif.data.source.network
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
