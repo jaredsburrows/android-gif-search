@@ -1,6 +1,5 @@
-package com.burrowsapps.example.gif.data
+package com.burrowsapps.example.gif.data.source.network
 
-import com.burrowsapps.example.gif.data.model.TenorResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

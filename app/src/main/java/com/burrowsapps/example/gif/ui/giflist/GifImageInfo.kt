@@ -1,4 +1,4 @@
-package com.burrowsapps.example.gif.giflist
+package com.burrowsapps.example.gif.ui.giflist
 
 /**
  * Model for the GifAdapter in order to display the gifs.

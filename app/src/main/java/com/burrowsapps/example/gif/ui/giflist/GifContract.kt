@@ -1,8 +1,8 @@
-package com.burrowsapps.example.gif.giflist
+package com.burrowsapps.example.gif.ui.giflist
 
 import com.burrowsapps.example.gif.BasePresenter
 import com.burrowsapps.example.gif.BaseView
-import com.burrowsapps.example.gif.data.model.TenorResponseDto
+import com.burrowsapps.example.gif.data.source.network.TenorResponseDto
 
 interface GifContract {
   interface Presenter : BasePresenter<View> {

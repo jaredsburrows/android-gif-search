@@ -1,11 +1,11 @@
-package com.burrowsapps.example.gif.giflist
+package com.burrowsapps.example.gif.ui.giflist
 
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.data.ImageService
-import com.burrowsapps.example.gif.giflist.GifAdapter.OnItemClickListener
+import com.burrowsapps.example.gif.ui.giflist.GifAdapter.OnItemClickListener
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -26,6 +26,7 @@ class GifAdapterTest {
   val hiltRule = HiltAndroidRule(this)
 
   @Inject @ApplicationContext internal lateinit var context: Context
+  @Inject internal lateinit var imageService: ImageService
 
   private val gifImageInfo = GifImageInfo("http://some.url")
   private val gifImageInfo2 = GifImageInfo("http://some.url2")
@@ -34,7 +35,7 @@ class GifAdapterTest {
     override fun onClick(imageInfoModel: GifImageInfo) {
     }
   }
-  private lateinit var imageService: ImageService
+//  private lateinit var imageService: ImageService
   private lateinit var viewHolder: GifAdapter.ViewHolder
   private lateinit var sut: GifAdapter
 
@@ -42,7 +43,7 @@ class GifAdapterTest {
   fun setUp() {
     hiltRule.inject()
 
-    imageService = ImageService(context)
+//    imageService = ImageService(context)
     sut = GifAdapter(testOnItemClickListener, imageService).apply {
       add(gifImageInfo)
       add(gifImageInfo2)

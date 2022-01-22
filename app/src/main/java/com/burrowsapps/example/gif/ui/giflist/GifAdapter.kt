@@ -1,4 +1,4 @@
-package com.burrowsapps.example.gif.giflist
+package com.burrowsapps.example.gif.ui.giflist
 
 import android.util.Log
 import android.view.LayoutInflater
