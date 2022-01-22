@@ -35,7 +35,6 @@ class GifAdapterTest {
     override fun onClick(imageInfoModel: GifImageInfo) {
     }
   }
-//  private lateinit var imageService: ImageService
   private lateinit var viewHolder: GifAdapter.ViewHolder
   private lateinit var sut: GifAdapter
 
@@ -43,7 +42,6 @@ class GifAdapterTest {
   fun setUp() {
     hiltRule.inject()
 
-//    imageService = ImageService(context)
     sut = GifAdapter(testOnItemClickListener, imageService).apply {
       add(gifImageInfo)
       add(gifImageInfo2)
