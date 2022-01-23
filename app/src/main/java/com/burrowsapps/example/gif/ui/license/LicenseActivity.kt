@@ -7,6 +7,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.view.MenuItem
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
@@ -27,6 +28,9 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class LicenseActivity : AppCompatActivity() {
+
+  private lateinit var webView: WebView
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -35,15 +39,17 @@ class LicenseActivity : AppCompatActivity() {
       .addPathHandler("/assets/", AssetsPathHandler(this))
       .build()
 
-    val webView = WebView(this).apply {
+    webView = WebView(this).apply {
       // Override URLs for AssetsPathHandler
       webViewClient = object : WebViewClient() {
         override fun shouldInterceptRequest(
           view: WebView,
           request: WebResourceRequest
-        ): WebResourceResponse {
-          return assetLoader.shouldInterceptRequest(request.url)
-            ?: WebResourceResponse("text/html", Charsets.UTF_8.name(), null)
+        ): WebResourceResponse? {
+          return assetLoader.shouldInterceptRequest(request.url) ?: super.shouldInterceptRequest(
+            view,
+            request
+          )
         }
       }
 
@@ -72,8 +78,26 @@ class LicenseActivity : AppCompatActivity() {
 
     setContentView(webView)
 
-    supportActionBar?.apply {
-      title = getString(R.string.menu_licenses)
+    supportActionBar?.title = getString(R.string.menu_licenses)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    return when (item.itemId) {
+      android.R.id.home -> {
+        when {
+          webView.canGoBack() -> webView.goBack()
+          else -> super.onBackPressed()
+        }
+        true
+      }
+      else -> super.onOptionsItemSelected(item)
+    }
+  }
+
+  override fun onBackPressed() {
+    when {
+      webView.canGoBack() -> webView.goBack()
+      else -> super.onBackPressed()
     }
   }
 

@@ -97,11 +97,13 @@ class GifAdapter(
     }
   }
 
-  fun add(model: GifImageInfo) = data.add(model).apply {
+  fun add(model: GifImageInfo) {
+    data.add(model)
     notifyItemInserted(data.size + 1)
   }
 
-  fun addAll(collection: List<GifImageInfo>) = data.addAll(collection).apply {
+  fun addAll(collection: List<GifImageInfo>) {
+    data.addAll(collection)
     notifyItemRangeInserted(0, data.size + 1)
   }
 

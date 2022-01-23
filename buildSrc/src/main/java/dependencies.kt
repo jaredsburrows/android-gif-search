@@ -48,7 +48,6 @@ object deps {
     const val core = "androidx.core:core:1.7.0"
     const val corektx = "androidx.core:core-ktx:1.7.0"
     const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
-    const val recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
     const val common = "androidx.lifecycle:lifecycle-common:2.4.0"
     const val commonjdk8 = "androidx.lifecycle:lifecycle-common-java8:2.4.0"
     const val compiler = "androidx.lifecycle:lifecycle-compiler:2.4.0"
@@ -59,6 +58,8 @@ object deps {
     const val livedatacore = "androidx.lifecycle:lifecycle-livedata-core:2.4.0"
     const val livedatacorektx = "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
     const val livedataktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
+    const val recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
+    const val startup = "androidx.startup:startup-runtime:1.1.0"
     const val webkit = "androidx.webkit:webkit:1.4.0"
 
     object test {
@@ -83,7 +84,9 @@ object deps {
 
   object squareup {
     const val okio = "com.squareup.okio:okio:3.0.0"
-    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
+    const val leakcanary = "com.squareup.leakcanary:leakcanary-android-startup:2.8.1"
+    const val leakcanaryinstrumentation =
+      "com.squareup.leakcanary:leakcanary-android-instrumentation:2.8.1"
 
     object okhttp {
       const val bom = "com.squareup.okhttp3:okhttp-bom:${versions.okHttp}"

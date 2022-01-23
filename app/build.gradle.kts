@@ -21,8 +21,9 @@ android {
     testApplicationId = "burrows.apps.example.gif.test"
     testInstrumentationRunner = "test.CustomTestRunner" // "androidx.test.runner.AndroidJUnitRunner"
     testInstrumentationRunnerArguments += mapOf(
+      "clearPackageData" to "true",
       "disableAnalytics" to "true",
-      "clearPackageData" to "true"
+//      "listener" to "leakcanary.FailTestOnLeakRunListener",
     )
 
     resourceConfigurations += setOf("en")
@@ -152,9 +153,6 @@ dependencies {
   // Java 8+
   coreLibraryDesugaring(deps.android.desugarJdkLibs)
 
-  // Debug only
-  debugImplementation(deps.squareup.leakcanary)
-
   // Kotlin
   implementation(platform(kotlin("bom", deps.versions.kotlin)))
   implementation(kotlin("stdlib"))
@@ -194,6 +192,7 @@ dependencies {
   implementation(deps.android.appcompat)
   implementation(deps.android.core)
   implementation(deps.android.corektx)
+  implementation(deps.android.startup)
 
   // AndroidX UI
   implementation(deps.android.cardview)
@@ -235,6 +234,10 @@ dependencies {
   implementation(deps.squareup.retrofit.moshi)
   implementation(deps.squareup.retrofit.retrofit)
   kapt(deps.squareup.moshi.compiler)
+
+  // Leakcanary
+  debugImplementation(deps.squareup.leakcanary)
+  androidTestImplementation(deps.squareup.leakcanaryinstrumentation)
 
   testImplementation(deps.android.test.annotation)
   testImplementation(deps.android.test.core)
