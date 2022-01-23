@@ -152,9 +152,6 @@ dependencies {
   // Java 8+
   coreLibraryDesugaring(deps.android.desugarJdkLibs)
 
-  // Debug only
-  debugImplementation(deps.squareup.leakcanary)
-
   // Kotlin
   implementation(platform(kotlin("bom", deps.versions.kotlin)))
   implementation(kotlin("stdlib"))
@@ -235,6 +232,10 @@ dependencies {
   implementation(deps.squareup.retrofit.moshi)
   implementation(deps.squareup.retrofit.retrofit)
   kapt(deps.squareup.moshi.compiler)
+
+  // Leakcanary
+  debugImplementation(deps.squareup.leakcanary)
+  androidTestImplementation(deps.squareup.leakcanaryinstrumentation)
 
   testImplementation(deps.android.test.annotation)
   testImplementation(deps.android.test.core)

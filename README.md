@@ -26,12 +26,6 @@ gradlew assembleDebug
 gradlew installDebug
 ```
 
-**Run the App:**
-
-```shell
-gradlew runDebug
-```
-
 ## Test
 
 Use `-Pci` to run tests against http://localhost:8080 instead of https://g.tenor.com.
