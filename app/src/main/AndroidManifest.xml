@@ -36,6 +36,7 @@
         <action android:name="android.intent.action.MAIN" />
 
         <category android:name="android.intent.category.LAUNCHER" />
+        <category android:name="android.intent.category.MONKEY" />
       </intent-filter>
     </activity>
     <activity
@@ -45,6 +46,10 @@
       android:parentActivityName=".ui.giflist.GifActivity"
       android:theme="@style/AppTheme.ActionBar"
       android:windowSoftInputMode="adjustPan">
+      <intent-filter>
+        <category android:name="android.intent.category.MONKEY" />
+      </intent-filter>
+
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".ui.giflist.GifActivity" />
