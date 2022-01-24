@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.widget.SearchView
@@ -21,6 +22,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.data.ImageService
+import com.burrowsapps.example.gif.data.source.network.NetworkResult
 import com.burrowsapps.example.gif.data.source.network.TenorResponseDto
 import com.burrowsapps.example.gif.data.source.network.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import com.burrowsapps.example.gif.databinding.ActivityMainBinding
@@ -34,10 +36,10 @@ import javax.inject.Inject
  * Main activity that will load our Fragments via the Support Fragment Manager.
  */
 @AndroidEntryPoint
-class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClickListener {
-  @Inject internal lateinit var gifPresenter: GifPresenter
+class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
   @Inject internal lateinit var imageService: ImageService
   @Inject internal lateinit var clipboardManager: ClipboardManager
+  internal val gifViewModel by viewModels<GifViewModel>()
   private lateinit var binding: ActivityMainBinding
   private lateinit var dialogBinding: DialogPreviewBinding
   private lateinit var gridLayoutManager: GridLayoutManager
@@ -51,10 +53,6 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
   private var visibleImageCount = 0
   private var totalImageCount = 0
   private var nextPageNumber: Double? = null
-
-  //
-  // Activity
-  //
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -100,7 +98,7 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
             if (!loadingImages &&
               totalImageCount - visibleImageCount <= firstVisibleImage + VISIBLE_THRESHOLD
             ) {
-              gifPresenter.loadTrendingImages(nextPageNumber)
+              gifViewModel.loadTrendingImages(nextPageNumber)
 
               loadingImages = true
             }
@@ -125,7 +123,25 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
     }
 
     // Load initial images
-    gifPresenter.loadTrendingImages(nextPageNumber)
+    gifViewModel.loadTrendingImages(nextPageNumber)
+    gifViewModel.trendingResponse.observe(this) { response ->
+      when (response) {
+        is NetworkResult.Success -> addImages(response.data!!)
+        is NetworkResult.Error -> {
+          // show error message
+        }
+        is NetworkResult.Loading -> {} // show empty state
+      }
+    }
+    gifViewModel.searchResponse.observe(this) { response ->
+      when (response) {
+        is NetworkResult.Success -> addImages(response.data!!)
+        is NetworkResult.Error -> {
+          // show error message
+        }
+        is NetworkResult.Loading -> {} // show empty state
+      }
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -142,10 +158,9 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
             // When search is closed, go back to trending getResults
             if (hasSearchedImages) {
               // Reset
-              gifPresenter.apply {
-                clearImages()
-                loadTrendingImages(nextPageNumber)
-              }
+              clearImages()
+              gifViewModel.loadTrendingImages(nextPageNumber)
+
               hasSearchedImages = false
             }
             return true
@@ -162,10 +177,9 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
               // Search on type
               if (newText.isNotEmpty()) {
                 // Reset
-                gifPresenter.apply {
-                  clearImages()
-                  loadSearchImages(newText, nextPageNumber)
-                }
+                clearImages()
+                gifViewModel.loadSearchImages(newText, nextPageNumber)
+
                 hasSearchedImages = true
               }
               return false
@@ -189,28 +203,16 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
     }
   }
 
-  override fun onResume() {
-    super.onResume()
-
-    gifPresenter.takeView(this)
+  override fun onClick(imageInfoModel: GifImageInfo) {
+    showDialog(imageInfoModel)
   }
 
-  override fun onPause() {
-    gifPresenter.dropView()
-
-    super.onPause()
-  }
-
-  //
-  // MainContract.View
-  //
-
-  override fun clearImages() {
+  internal fun clearImages() {
     // Clear current data
     gifAdapter.clear()
   }
 
-  override fun addImages(responseDto: TenorResponseDto) {
+  private fun addImages(responseDto: TenorResponseDto) {
     nextPageNumber = responseDto.next
 
     responseDto.results.forEach { result ->
@@ -224,23 +226,9 @@ class GifActivity : AppCompatActivity(), GifContract.View, GifAdapter.OnItemClic
     }
   }
 
-  override fun showDialog(imageInfo: GifImageInfo) {
+  private fun showDialog(imageInfo: GifImageInfo) {
     showImageDialog(imageInfo)
   }
-
-  override fun isActive() = !isFinishing
-
-  //
-  // GifAdapter
-  //
-
-  override fun onClick(imageInfoModel: GifImageInfo) {
-    showDialog(imageInfoModel)
-  }
-
-  //
-  // Private
-  //
 
   private fun showImageDialog(imageInfoModel: GifImageInfo) {
     // Load associated text
