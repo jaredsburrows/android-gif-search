@@ -12,10 +12,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import retrofit2.Response
+import retrofit2.Response.success
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -24,15 +25,21 @@ class GifRepositoryTest {
   val instantTaskExecutorRule = InstantTaskExecutorRule()
 
   private val testDispatcher = UnconfinedTestDispatcher()
+  private val service = mock<TenorService>()
+  private val next = 0.0
+  private val response = TenorResponseDto()
+
+  private lateinit var sut: GifRepository
+
+  @Before
+  fun setUp() {
+    sut = GifRepository(service, testDispatcher)
+  }
 
   @Test
   fun testLoadTrendingImagesSuccess() = runTest {
-    val next = 0.0
-    val response = TenorResponseDto()
-    val service: TenorService = mock()
-    val sut = GifRepository(service, testDispatcher)
     whenever(service.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
-      .thenReturn(Response.success(response))
+      .thenReturn(success(response))
 
     val result = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, next).first()
 
@@ -43,12 +50,8 @@ class GifRepositoryTest {
   @Test
   fun testLoadSearchImagesSuccess() = runTest {
     val searchString = "gifs"
-    val next = 0.0
-    val response = TenorResponseDto()
-    val service: TenorService = mock()
-    val sut = GifRepository(service, testDispatcher)
     whenever(service.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
-      .thenReturn(Response.success(response))
+      .thenReturn(success(response))
 
     val result = sut.getSearchResults(searchString, DEFAULT_LIMIT_COUNT, next).first()
 

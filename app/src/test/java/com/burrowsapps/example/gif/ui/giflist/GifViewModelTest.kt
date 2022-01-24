@@ -3,7 +3,7 @@ package com.burrowsapps.example.gif.ui.giflist
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.data.source.network.GifRepository
-import com.burrowsapps.example.gif.data.source.network.NetworkResult
+import com.burrowsapps.example.gif.data.source.network.NetworkResult.Success
 import com.burrowsapps.example.gif.data.source.network.TenorResponseDto
 import com.burrowsapps.example.gif.data.source.network.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import com.nhaarman.mockitokotlin2.eq
@@ -12,8 +12,8 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,18 +24,22 @@ class GifViewModelTest {
   @get:Rule(order = 0)
   val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-  private val testDispatcher = UnconfinedTestDispatcher()
+  private val repository = mock<GifRepository>()
+  private val next = 0.0
+  private val response = TenorResponseDto()
 
   private lateinit var sut: GifViewModel
 
+  @Before
+  fun setUp() {
+    sut = GifViewModel(repository)
+  }
+
   @Test
   fun testLoadTrendingImagesSuccess() = runTest {
-    val next = 0.0
-    val response = TenorResponseDto()
-    val repository: GifRepository = mock()
     val sut = GifViewModel(repository)
     whenever(repository.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
-      .thenReturn(flowOf(NetworkResult.Success(response)))
+      .thenReturn(flowOf(Success(response)))
 
     sut.loadTrendingImages(next)
 
@@ -45,12 +49,9 @@ class GifViewModelTest {
   @Test
   fun testLoadSearchImagesSuccess() = runTest {
     val searchString = "gifs"
-    val next = 0.0
-    val response = TenorResponseDto()
-    val repository: GifRepository = mock()
     val sut = GifViewModel(repository)
     whenever(repository.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
-      .thenReturn(flowOf(NetworkResult.Success(response)))
+      .thenReturn(flowOf(Success(response)))
 
     sut.loadSearchImages(searchString, next)
 

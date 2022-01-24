@@ -120,24 +120,4 @@ class GifAdapterTest {
     assertThat(sut.getItem(1)).isEqualTo(gifImageInfo2)
     assertThat(sut.getItem(2)).isEqualTo(gifImageInfo3)
   }
-
-  @Test
-  fun testAddCollectionShouldReturnCorrectValues() {
-    val imageInfos = listOf(gifImageInfo3)
-
-    sut.addAll(imageInfos)
-
-    assertThat(sut.getItem(0)).isEqualTo(gifImageInfo)
-    assertThat(sut.getItem(1)).isEqualTo(gifImageInfo2)
-    assertThat(sut.getItem(2)).isEqualTo(gifImageInfo3)
-  }
-
-  @Test
-  fun testAddLocationObjectShouldReturnCorrectValues() {
-    sut.add(0, gifImageInfo3)
-
-    assertThat(sut.getItem(0)).isEqualTo(gifImageInfo3)
-    assertThat(sut.getItem(1)).isEqualTo(gifImageInfo)
-    assertThat(sut.getItem(2)).isEqualTo(gifImageInfo2)
-  }
 }

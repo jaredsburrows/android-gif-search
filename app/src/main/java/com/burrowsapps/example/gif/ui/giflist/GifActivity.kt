@@ -25,7 +25,7 @@ import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.data.source.network.NetworkResult
 import com.burrowsapps.example.gif.data.source.network.TenorResponseDto
 import com.burrowsapps.example.gif.data.source.network.TenorService.Companion.DEFAULT_LIMIT_COUNT
-import com.burrowsapps.example.gif.databinding.ActivityMainBinding
+import com.burrowsapps.example.gif.databinding.ActivityGifBinding
 import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
 import com.burrowsapps.example.gif.di.GlideApp
 import com.burrowsapps.example.gif.ui.license.LicenseActivity
@@ -40,7 +40,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
   @Inject internal lateinit var imageService: ImageService
   @Inject internal lateinit var clipboardManager: ClipboardManager
   internal val gifViewModel by viewModels<GifViewModel>()
-  private lateinit var binding: ActivityMainBinding
+  private lateinit var binding: ActivityGifBinding
   private lateinit var dialogBinding: DialogPreviewBinding
   private lateinit var gridLayoutManager: GridLayoutManager
   private lateinit var gifItemDecoration: GifItemDecoration
@@ -56,7 +56,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    binding = ActivityGifBinding.inflate(layoutInflater).also { setContentView(it.root) }
     dialogBinding = DialogPreviewBinding.inflate(layoutInflater)
 
     // Setup
@@ -204,7 +204,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
   }
 
   override fun onClick(imageInfoModel: GifImageInfo) {
-    showDialog(imageInfoModel)
+    showImageDialog(imageInfoModel)
   }
 
   internal fun clearImages() {
@@ -224,10 +224,6 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
 
       if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $gifUrl")
     }
-  }
-
-  private fun showDialog(imageInfo: GifImageInfo) {
-    showImageDialog(imageInfo)
   }
 
   private fun showImageDialog(imageInfoModel: GifImageInfo) {

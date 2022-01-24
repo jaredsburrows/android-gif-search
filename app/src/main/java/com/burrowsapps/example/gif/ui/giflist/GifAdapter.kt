@@ -102,16 +102,6 @@ class GifAdapter(
     notifyItemInserted(data.size + 1)
   }
 
-  fun addAll(collection: List<GifImageInfo>) {
-    data.addAll(collection)
-    notifyItemRangeInserted(0, data.size + 1)
-  }
-
-  fun add(location: Int, model: GifImageInfo) {
-    data.add(location, model)
-    notifyItemInserted(location)
-  }
-
   inner class ViewHolder(
     internal val binding: ListItemBinding
   ) : RecyclerView.ViewHolder(binding.root)
