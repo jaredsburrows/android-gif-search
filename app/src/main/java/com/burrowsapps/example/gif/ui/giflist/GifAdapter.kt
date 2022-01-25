@@ -64,6 +64,7 @@ class GifAdapter(
         }
       )
       .into(holder.binding.gifImage)
+      .clearOnDetach()
 
     holder.itemView.setOnClickListener { onItemClickListener.onClick(imageInfoModel) }
   }

@@ -78,8 +78,12 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
       addItemDecoration(gifItemDecoration)
       adapter = gifAdapter
       setHasFixedSize(true)
-      setItemViewCacheSize(DEFAULT_LIMIT_COUNT)
+      setItemViewCacheSize(DEFAULT_LIMIT_COUNT) // default 2
       recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
+      addRecyclerListener { holder ->
+        val gifViewHolder = holder as GifAdapter.ViewHolder
+        GlideApp.with(this).clear(gifViewHolder.binding.gifImage)
+      }
       addOnScrollListener(
         object : RecyclerView.OnScrollListener() {
           override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
