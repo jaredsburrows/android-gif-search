@@ -16,7 +16,7 @@
     android:layout_gravity="center"
     android:orientation="vertical">
 
-    <ProgressBar
+    <androidx.core.widget.ContentLoadingProgressBar
       android:id="@+id/gifDialogProgress"
       style="?android:attr/progressBarStyle"
       android:layout_width="match_parent"

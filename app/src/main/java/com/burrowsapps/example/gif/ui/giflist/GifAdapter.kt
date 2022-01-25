@@ -44,7 +44,7 @@ class GifAdapter(
             isFirstResource: Boolean
           ): Boolean {
             // Hide progressbar
-            holder.binding.gifProgress.visibility = View.GONE
+            holder.binding.gifProgress.hide()
             if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
 
             return false
@@ -57,7 +57,7 @@ class GifAdapter(
             isFirstResource: Boolean
           ): Boolean {
             // Hide progressbar
-            holder.binding.gifProgress.visibility = View.GONE
+            holder.binding.gifProgress.hide()
             if (Log.isLoggable(TAG, Log.ERROR)) Log.e(TAG, "finished loading\t $model", e)
 
             return false
@@ -78,7 +78,7 @@ class GifAdapter(
     holder.binding.apply {
       gifImage.setImageDrawable(null)
       // Make sure to show progress when loading new view
-      gifProgress.visibility = View.VISIBLE
+      gifProgress.show()
     }
   }
 

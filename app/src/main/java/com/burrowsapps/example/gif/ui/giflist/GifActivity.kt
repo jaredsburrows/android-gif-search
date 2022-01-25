@@ -117,8 +117,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
         GlideApp.with(dialogBinding.gifDialogImage.context)
           .clear(dialogBinding.gifDialogImage) // Forget view, try to free resources
         dialogBinding.gifDialogImage.setImageDrawable(null)
-        dialogBinding.gifDialogProgress.visibility =
-          View.VISIBLE // Make sure to show progress when loadingImages new view
+        dialogBinding.gifDialogProgress.show() // Make sure to show progress when loadingImages new view
       }
 
       // Remove "white" background for gifDialog
@@ -259,7 +258,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
             isFirstResource: Boolean
           ): Boolean {
             // Hide progressbar
-            dialogBinding.gifDialogProgress.visibility = View.GONE
+            dialogBinding.gifDialogProgress.hide()
             dialogBinding.gifDialogTitle.visibility = View.VISIBLE
 
             if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loadingImages\t $model")
@@ -274,7 +273,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
             isFirstResource: Boolean
           ): Boolean {
             // Hide progressbar
-            dialogBinding.gifDialogProgress.visibility = View.GONE
+            dialogBinding.gifDialogProgress.hide()
 
             if (Log.isLoggable(TAG, Log.ERROR)) Log.e(TAG, "finished loadingImages\t $model", e)
 
