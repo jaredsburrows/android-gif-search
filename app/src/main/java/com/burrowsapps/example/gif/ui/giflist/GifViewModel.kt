@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.burrowsapps.example.gif.data.source.network.GifRepository
 import com.burrowsapps.example.gif.data.source.network.NetworkResult
 import com.burrowsapps.example.gif.data.source.network.TenorResponseDto
-import com.burrowsapps.example.gif.data.source.network.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,13 +21,13 @@ class GifViewModel @Inject constructor(
   val searchResponse: LiveData<NetworkResult<TenorResponseDto>> = _searchResponse
 
   fun loadTrendingImages(next: String?) = viewModelScope.launch {
-    repository.getTrendingResults(DEFAULT_LIMIT_COUNT, next).collect { values ->
+    repository.getTrendingResults(next).collect { values ->
       _trendingResponse.value = values
     }
   }
 
   fun loadSearchImages(searchString: String, next: String?) = viewModelScope.launch {
-    repository.getSearchResults(searchString, DEFAULT_LIMIT_COUNT, next).collect { values ->
+    repository.getSearchResults(searchString, next).collect { values ->
       _searchResponse.value = values
     }
   }

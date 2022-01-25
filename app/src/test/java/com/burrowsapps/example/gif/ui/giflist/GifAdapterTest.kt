@@ -2,7 +2,7 @@ package com.burrowsapps.example.gif.ui.giflist
 
 import android.content.Context
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.ui.giflist.GifAdapter.OnItemClickListener
@@ -46,7 +46,7 @@ class GifAdapterTest {
       add(gifImageInfo)
       add(gifImageInfo2)
     }
-    viewHolder = sut.onCreateViewHolder(LinearLayout(context), 0)
+    viewHolder = sut.onCreateViewHolder(ConstraintLayout(context), 0)
   }
 
   @Test

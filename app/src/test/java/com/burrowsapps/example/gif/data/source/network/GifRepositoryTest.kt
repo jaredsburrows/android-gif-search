@@ -2,7 +2,6 @@ package com.burrowsapps.example.gif.data.source.network
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.burrowsapps.example.gif.data.source.network.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
@@ -38,24 +37,24 @@ class GifRepositoryTest {
 
   @Test
   fun testLoadTrendingImagesSuccess() = runTest {
-    whenever(service.getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next)))
+    whenever(service.getTrendingResults(eq(next)))
       .thenReturn(success(response))
 
-    val result = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, next).first()
+    val result = sut.getTrendingResults(next).first()
 
-    verify(service).getTrendingResults(eq(DEFAULT_LIMIT_COUNT), eq(next))
+    verify(service).getTrendingResults(eq(next))
     assertThat(response).isEqualTo(result.data)
   }
 
   @Test
   fun testLoadSearchImagesSuccess() = runTest {
     val searchString = "gifs"
-    whenever(service.getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next)))
+    whenever(service.getSearchResults(eq(searchString), eq(next)))
       .thenReturn(success(response))
 
-    val result = sut.getSearchResults(searchString, DEFAULT_LIMIT_COUNT, next).first()
+    val result = sut.getSearchResults(searchString, next).first()
 
-    verify(service).getSearchResults(eq(searchString), eq(DEFAULT_LIMIT_COUNT), eq(next))
+    verify(service).getSearchResults(eq(searchString), eq(next))
     assertThat(response).isEqualTo(result.data)
   }
 }

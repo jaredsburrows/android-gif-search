@@ -11,19 +11,15 @@ class GifRepository @Inject constructor(
   private val service: TenorService,
   @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) {
-  suspend fun getTrendingResults(limit: Int, pos: String?): Flow<NetworkResult<TenorResponseDto>> {
+  suspend fun getTrendingResults(pos: String?): Flow<NetworkResult<TenorResponseDto>> {
     return flow {
-      emit(safeApiCall { service.getTrendingResults(limit, pos) })
+      emit(safeApiCall { service.getTrendingResults(pos) })
     }.flowOn(dispatcher)
   }
 
-  suspend fun getSearchResults(
-    q: String,
-    limit: Int,
-    pos: String?
-  ): Flow<NetworkResult<TenorResponseDto>> {
+  suspend fun getSearchResults(q: String, pos: String?): Flow<NetworkResult<TenorResponseDto>> {
     return flow {
-      emit(safeApiCall { service.getSearchResults(q, limit, pos) })
+      emit(safeApiCall { service.getSearchResults(q, pos) })
     }.flowOn(dispatcher)
   }
 }

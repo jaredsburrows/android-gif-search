@@ -1,7 +1,6 @@
 package com.burrowsapps.example.gif.data.source.network
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.burrowsapps.example.gif.data.source.network.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -65,7 +64,7 @@ class TenorServiceTest {
 
   @Test
   fun testTrendingResultsURLShouldParseCorrectly() = runTest {
-    val response = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
+    val response = sut.getTrendingResults(null)
     val body = response.body()!!
 
     assertThat(body.results[0].media[0].tinyGif.url)
@@ -74,7 +73,7 @@ class TenorServiceTest {
 
   @Test
   fun testTrendingResultsURLPreviewShouldParseCorrectly() = runTest {
-    val response = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
+    val response = sut.getTrendingResults(null)
     val body = response.body()!!
 
     assertThat(body.results[0].media[0].tinyGif.preview)
@@ -83,7 +82,7 @@ class TenorServiceTest {
 
   @Test
   fun testSearchResultsURLShouldParseCorrectly() = runTest {
-    val response = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
+    val response = sut.getSearchResults("hello", null)
     val body = response.body()!!
 
     assertThat(body.results[0].media[0].tinyGif.url)
@@ -92,7 +91,7 @@ class TenorServiceTest {
 
   @Test
   fun testSearchResultsURLPreviewShouldParseCorrectly() = runTest {
-    val response = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
+    val response = sut.getSearchResults("hello", null)
     val body = response.body()!!
 
     assertThat(body.results[0].media[0].tinyGif.preview)
