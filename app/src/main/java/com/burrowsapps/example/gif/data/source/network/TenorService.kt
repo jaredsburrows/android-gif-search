@@ -16,6 +16,7 @@ interface TenorService {
    * URL: https://g.tenor.com/
    * Path: /v1/trending
    * Query: key REQUIRED, client key for privileged API access
+   * Query: media_filter STRONGLY RECOMMENDED, minimal - tinygif, gif, and mp4.
    * Query: limit OPTIONAL, fetch up to a specified number of results (max: 50).
    * Query: pos OPTIONAL, get results starting at position "value".
    * eg. https://g.tenor.com/v1/trending?key=LIVDSRZULELA&limit=10&pos=1
@@ -24,12 +25,12 @@ interface TenorService {
    * @param pos Position of getResults.
    * @return Response of trending getResults.
    */
-  @GET("/v1/trending?key=$API_KEY")
+  @GET("/v1/trending?key=$API_KEY&media_filter=minimal")
   suspend fun getTrendingResults(
     @Query("limit")
     limit: Int,
     @Query("pos")
-    pos: Double?
+    pos: String?
   ): Response<TenorResponseDto>
 
   /**
@@ -38,6 +39,7 @@ interface TenorService {
    * URL: https://g.tenor.com/
    * Path: /v1/search
    * Query: key REQUIRED, client key for privileged API access
+   * Query: media_filter STRONGLY RECOMMENDED, minimal - tinygif, gif, and mp4.
    * Query: q REQUIRED, a search string
    * Query: limit OPTIONAL, fetch up to a specified number of results (max: 50).
    * Query: pos OPTIONAL, get results starting at position "value".
@@ -48,14 +50,14 @@ interface TenorService {
    * @param pos Position of getResults.
    * @return Response of search getResults.
    */
-  @GET("/v1/search?key=$API_KEY")
+  @GET("/v1/search?key=$API_KEY&media_filter=minimal")
   suspend fun getSearchResults(
     @Query("q")
     q: String,
     @Query("limit")
     limit: Int,
     @Query("pos")
-    pos: Double?
+    pos: String?
   ): Response<TenorResponseDto>
 
   companion object {

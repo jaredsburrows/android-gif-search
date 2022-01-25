@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class TenorResponseDtoTest {
-  private val nextResponse = 1.0
+  private val nextResponse = "1.0"
   private val results = listOf<ResultDto>()
   private var sutDefault = TenorResponseDto()
   private var sut = TenorResponseDto(results, nextResponse)
@@ -20,7 +20,7 @@ class TenorResponseDtoTest {
 
   @Test
   fun testGetNext() {
-    assertThat(sutDefault.next).isEqualTo(0.0)
+    assertThat(sutDefault.next).isEqualTo("0.0")
     assertThat(sut.next).isEqualTo(nextResponse)
   }
 }

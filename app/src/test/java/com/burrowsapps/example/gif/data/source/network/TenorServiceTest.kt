@@ -68,7 +68,7 @@ class TenorServiceTest {
     val response = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].gif.url)
+    assertThat(body.results[0].media[0].tinyGif.url)
       .contains("/images/7d95a1f8a8750460a82b04451be26d69/raw")
   }
 
@@ -77,7 +77,7 @@ class TenorServiceTest {
     val response = sut.getTrendingResults(DEFAULT_LIMIT_COUNT, null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].gif.preview)
+    assertThat(body.results[0].media[0].tinyGif.preview)
       .contains("/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw")
   }
 
@@ -86,7 +86,7 @@ class TenorServiceTest {
     val response = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].gif.url)
+    assertThat(body.results[0].media[0].tinyGif.url)
       .contains("/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw")
   }
 
@@ -95,7 +95,7 @@ class TenorServiceTest {
     val response = sut.getSearchResults("hello", DEFAULT_LIMIT_COUNT, null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].gif.preview)
+    assertThat(body.results[0].media[0].tinyGif.preview)
       .contains("/images/6f2ed339fbdb5c1270e29945ee1f0d77/raw")
   }
 }

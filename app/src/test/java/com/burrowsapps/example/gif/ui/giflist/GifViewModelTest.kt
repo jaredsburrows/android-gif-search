@@ -25,7 +25,7 @@ class GifViewModelTest {
   val instantTaskExecutorRule = InstantTaskExecutorRule()
 
   private val repository = mock<GifRepository>()
-  private val next = 0.0
+  private val next = "0.0"
   private val response = TenorResponseDto()
 
   private lateinit var sut: GifViewModel

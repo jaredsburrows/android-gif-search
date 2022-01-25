@@ -32,8 +32,8 @@ class GifAdapter(
     val imageInfoModel = getItem(position)
 
     // Load images
-    imageService.load(imageInfoModel.url)
-      .thumbnail(imageService.load(imageInfoModel.previewUrl))
+    imageService.load(imageInfoModel.tinyGifUrl)
+      .thumbnail(imageService.load(imageInfoModel.tinyGifPreviewUrl))
       .listener(
         object : RequestListener<GifDrawable> {
           override fun onResourceReady(
@@ -84,7 +84,7 @@ class GifAdapter(
 
   override fun getItemCount() = data.size
 
-  override fun getItemId(position: Int) = getItem(position).url.hashCode().toLong()
+  override fun getItemId(position: Int) = getItem(position).tinyGifUrl.hashCode().toLong()
 
   fun getItem(location: Int) = data[location]
 

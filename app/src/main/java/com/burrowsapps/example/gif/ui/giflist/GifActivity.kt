@@ -52,7 +52,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
   private var firstVisibleImage = 0
   private var visibleImageCount = 0
   private var totalImageCount = 0
-  private var nextPageNumber: Double? = null
+  private var nextPageNumber: String? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -120,6 +120,9 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
         dialogBinding.gifDialogProgress.visibility =
           View.VISIBLE // Make sure to show progress when loadingImages new view
       }
+
+      // Remove "white" background for gifDialog
+      window?.decorView?.setBackgroundResource(android.R.color.transparent)
     }
 
     // Load initial images
@@ -216,11 +219,12 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
     nextPageNumber = responseDto.next
 
     responseDto.results.forEach { result ->
-      val gif = result.media.first().gif
+      val media = result.media.first()
+      val tinyGif = media.tinyGif
+      val gif = media.gif
       val gifUrl = gif.url
-      val gifPreviewUrl = gif.preview
 
-      gifAdapter.add(GifImageInfo(gifUrl, gifPreviewUrl))
+      gifAdapter.add(GifImageInfo(tinyGif.url, tinyGif.preview, gifUrl, gif.preview))
 
       if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $gifUrl")
     }
@@ -229,13 +233,12 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
   private fun showImageDialog(imageInfoModel: GifImageInfo) {
     // Load associated text
     dialogBinding.gifDialogTitle.apply {
-      text = imageInfoModel.url
-      visibility = View.VISIBLE
+      text = imageInfoModel.gifUrl
       setOnClickListener {
         clipboardManager.setPrimaryClip(
           ClipData.newPlainText(
             "https-image-url",
-            imageInfoModel.url
+            imageInfoModel.gifUrl
           )
         )
         Toast.makeText(context, R.string.copied_to_clipboard, LENGTH_SHORT).show()
@@ -243,8 +246,9 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
     }
 
     // Load image
-    imageService.load(imageInfoModel.url)
-      .thumbnail(imageService.load(imageInfoModel.previewUrl))
+    imageService.load(imageInfoModel.gifUrl)
+      .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+      .thumbnail(imageService.load(imageInfoModel.gifPreviewUrl))
       .listener(
         object : RequestListener<GifDrawable> {
           override fun onResourceReady(
@@ -256,6 +260,8 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
           ): Boolean {
             // Hide progressbar
             dialogBinding.gifDialogProgress.visibility = View.GONE
+            dialogBinding.gifDialogTitle.visibility = View.VISIBLE
+
             if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loadingImages\t $model")
 
             return false
@@ -269,6 +275,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
           ): Boolean {
             // Hide progressbar
             dialogBinding.gifDialogProgress.visibility = View.GONE
+
             if (Log.isLoggable(TAG, Log.ERROR)) Log.e(TAG, "finished loadingImages\t $model", e)
 
             return false
@@ -276,11 +283,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
         }
       ).into(dialogBinding.gifDialogImage)
 
-    gifDialog.apply {
-      show()
-      // Remove "white" background for gifDialog
-      window?.decorView?.setBackgroundResource(android.R.color.transparent)
-    }
+    gifDialog.show()
   }
 
   companion object {

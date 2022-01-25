@@ -26,7 +26,7 @@ class GifRepositoryTest {
 
   private val testDispatcher = UnconfinedTestDispatcher()
   private val service = mock<TenorService>()
-  private val next = 0.0
+  private val next = "0.0"
   private val response = TenorResponseDto()
 
   private lateinit var sut: GifRepository

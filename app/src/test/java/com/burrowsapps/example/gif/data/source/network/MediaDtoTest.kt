@@ -12,6 +12,12 @@ class MediaDtoTest {
   private var sut = MediaDto(gifDto)
 
   @Test
+  fun testTinyGetGif() {
+    assertThat(defaultSut.tinyGif).isEqualTo(GifDto())
+    assertThat(sut.tinyGif).isEqualTo(gifDto)
+  }
+
+  @Test
   fun testGetGif() {
     assertThat(defaultSut.gif).isEqualTo(GifDto())
     assertThat(sut.gif).isEqualTo(gifDto)

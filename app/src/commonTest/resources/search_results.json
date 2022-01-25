@@ -6,23 +6,6 @@
       "url": "https://localhost:8080/ytel.gif",
       "media": [
         {
-          "nanomp4": {
-            "url": "https://localhost:8080/videos/a53597e91c5d5ee989bce52fcb1ff142/mp4",
-            "dims": [
-              150,
-              138
-            ],
-            "duration": 2.0,
-            "preview": "https://localhost:8080/images/21accb6fe0c3d2ab562b9d429c7af88c/raw"
-          },
-          "nanowebm": {
-            "url": "https://localhost:8080/videos/9e54e727e3f615c52f611ce94ccfa400/webm",
-            "dims": [
-              150,
-              138
-            ],
-            "preview": "https://localhost:8080/images/21accb6fe0c3d2ab562b9d429c7af88c/raw"
-          },
           "tinygif": {
             "url": "https://localhost:8080/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw",
             "dims": [
@@ -31,31 +14,6 @@
             ],
             "preview": "https://localhost:8080/images/6f2ed339fbdb5c1270e29945ee1f0d77/raw",
             "size": 18228
-          },
-          "tinymp4": {
-            "url": "https://localhost:8080/videos/c927a84e57c7952aaeb4dd125cc898ed/mp4",
-            "dims": [
-              320,
-              296
-            ],
-            "duration": 2.0,
-            "preview": "https://localhost:8080/images/21accb6fe0c3d2ab562b9d429c7af88c/raw"
-          },
-          "tinywebm": {
-            "url": "https://localhost:8080/videos/b69f65ebe587be24c2786f264dde63d3/webm",
-            "dims": [
-              320,
-              296
-            ],
-            "preview": "https://localhost:8080/images/21accb6fe0c3d2ab562b9d429c7af88c/raw"
-          },
-          "webm": {
-            "url": "https://localhost:8080/videos/01a8443eb106065b258391878c9f326b/webm",
-            "dims": [
-              540,
-              500
-            ],
-            "preview": "https://localhost:8080/images/21accb6fe0c3d2ab562b9d429c7af88c/raw"
           },
           "gif": {
             "url": "https://localhost:8080/images/5b6a39aa00312575583031d2de4edbd4/raw",
@@ -73,24 +31,6 @@
               500
             ],
             "duration": 2.0,
-            "preview": "https://localhost:8080/images/21accb6fe0c3d2ab562b9d429c7af88c/raw"
-          },
-          "nanogif": {
-            "url": "https://localhost:8080/images/f85bbd038a243b1a21ca3fe8667636dd/raw",
-            "dims": [
-              97,
-              90
-            ],
-            "preview": "https://localhost:8080/images/b583e30155de53bbcd43ec91b24f1f1b/raw",
-            "size": 8338
-          },
-          "loopedmp4": {
-            "url": "https://localhost:8080/videos/26346a73f80b1e24c03d32599c72be77/mp4",
-            "dims": [
-              540,
-              500
-            ],
-            "duration": 6.0,
             "preview": "https://localhost:8080/images/21accb6fe0c3d2ab562b9d429c7af88c/raw"
           }
         }

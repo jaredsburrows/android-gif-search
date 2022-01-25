@@ -21,13 +21,13 @@ class GifViewModel @Inject constructor(
   private val _searchResponse = MutableLiveData<NetworkResult<TenorResponseDto>>()
   val searchResponse: LiveData<NetworkResult<TenorResponseDto>> = _searchResponse
 
-  fun loadTrendingImages(next: Double?) = viewModelScope.launch {
+  fun loadTrendingImages(next: String?) = viewModelScope.launch {
     repository.getTrendingResults(DEFAULT_LIMIT_COUNT, next).collect { values ->
       _trendingResponse.value = values
     }
   }
 
-  fun loadSearchImages(searchString: String, next: Double?) = viewModelScope.launch {
+  fun loadSearchImages(searchString: String, next: String?) = viewModelScope.launch {
     repository.getSearchResults(searchString, DEFAULT_LIMIT_COUNT, next).collect { values ->
       _searchResponse.value = values
     }
