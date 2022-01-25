@@ -7,8 +7,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
@@ -29,6 +27,8 @@ import com.burrowsapps.example.gif.databinding.ActivityGifBinding
 import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
 import com.burrowsapps.example.gif.di.GlideApp
 import com.burrowsapps.example.gif.ui.license.LicenseActivity
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -240,7 +240,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
             imageInfoModel.gifUrl
           )
         )
-        Toast.makeText(context, R.string.copied_to_clipboard, LENGTH_SHORT).show()
+        Snackbar.make(binding.root, getString(R.string.copied_to_clipboard), LENGTH_SHORT).show()
       }
     }
 
