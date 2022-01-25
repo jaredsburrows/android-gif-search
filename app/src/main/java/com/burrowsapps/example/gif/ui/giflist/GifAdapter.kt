@@ -3,6 +3,8 @@ package com.burrowsapps.example.gif.ui.giflist
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -19,7 +21,7 @@ import com.burrowsapps.example.gif.di.GlideApp
 class GifAdapter(
   private val onItemClickListener: OnItemClickListener,
   private val imageService: ImageService
-) : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
+) : ListAdapter<GifImageInfo, GifAdapter.ViewHolder>(DonutDiffCallback()) {
   private val data = arrayListOf<GifImageInfo>()
 
   override fun onCreateViewHolder(
@@ -81,29 +83,39 @@ class GifAdapter(
     }
   }
 
-  override fun getItemCount() = data.size
+//  override fun getItemCount() = data.size
 
   override fun getItemId(position: Int) = getItem(position).tinyGifUrl.hashCode().toLong()
 
-  fun getItem(location: Int) = data[location]
+//  fun getItem(location: Int) = data[location]
 
-  fun clear() {
-    val size = data.size
-    if (size > 0) {
-      for (i in 0 until size) data.removeAt(0)
+//  fun add(collection: List<GifImageInfo>) {
+//    data.addAll(collection)
+//    notifyItemRangeInserted(0, data.size)
+//  }
 
-      notifyItemRangeRemoved(0, size)
-    }
-  }
-
-  fun add(model: GifImageInfo) {
-    data.add(model)
-    notifyItemInserted(data.size + 1)
-  }
+//  fun clear() {
+//    val size = data.size
+//    if (size > 0) {
+//      for (i in 0 until size) data.removeAt(0)
+//
+//      notifyItemRangeRemoved(0, size)
+//    }
+//  }
 
   inner class ViewHolder(
     internal val binding: ListItemBinding
   ) : RecyclerView.ViewHolder(binding.root)
+
+  class DonutDiffCallback : DiffUtil.ItemCallback<GifImageInfo>() {
+    override fun areItemsTheSame(oldItem: GifImageInfo, newItem: GifImageInfo): Boolean {
+      return oldItem.tinyGifUrl == newItem.tinyGifUrl
+    }
+
+    override fun areContentsTheSame(oldItem: GifImageInfo, newItem: GifImageInfo): Boolean {
+      return oldItem == newItem
+    }
+  }
 
   interface OnItemClickListener {
     fun onClick(imageInfoModel: GifImageInfo)

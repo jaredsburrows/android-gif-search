@@ -61,7 +61,7 @@ interface TenorService {
   ): Response<TenorResponseDto>
 
   companion object {
-    const val DEFAULT_LIMIT_COUNT = 50
+    const val DEFAULT_LIMIT_COUNT = 48
     private const val API_KEY = "LIVDSRZULELA"
   }
 }

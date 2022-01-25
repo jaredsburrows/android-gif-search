@@ -43,8 +43,7 @@ class GifAdapterTest {
     hiltRule.inject()
 
     sut = GifAdapter(testOnItemClickListener, imageService).apply {
-      add(gifImageInfo)
-      add(gifImageInfo2)
+      add(listOf(gifImageInfo, gifImageInfo2))
     }
     viewHolder = sut.onCreateViewHolder(LinearLayout(context), 0)
   }
@@ -62,9 +61,7 @@ class GifAdapterTest {
   @Test
   fun testOnBindViewHolderOnAdapterItemClick() {
     sut.clear()
-    sut.add(gifImageInfo)
-    sut.add(gifImageInfo2)
-    sut.add(GifImageInfo())
+    sut.add(listOf(gifImageInfo, gifImageInfo2, GifImageInfo()))
 
     sut.onBindViewHolder(viewHolder, 0)
 
@@ -76,17 +73,9 @@ class GifAdapterTest {
     sut.clear()
 
     val imageInfo = GifImageInfo()
-    sut.add(imageInfo)
+    sut.add(listOf(imageInfo))
 
     assertThat(sut.getItem(0)).isEqualTo(imageInfo)
-  }
-
-  @Test
-  fun onViewRecycled() {
-    sut.add(GifImageInfo())
-
-    sut.onBindViewHolder(viewHolder, 0)
-    sut.onViewRecycled(viewHolder)
   }
 
   @Test
@@ -113,8 +102,10 @@ class GifAdapterTest {
   }
 
   @Test
-  fun testAddObjectShouldReturnCorrectValues() {
-    sut.add(gifImageInfo3)
+  fun testAddCollectionShouldReturnCorrectValues() {
+    val imageInfos = listOf(gifImageInfo3)
+
+    sut.add(imageInfos)
 
     assertThat(sut.getItem(0)).isEqualTo(gifImageInfo)
     assertThat(sut.getItem(1)).isEqualTo(gifImageInfo2)

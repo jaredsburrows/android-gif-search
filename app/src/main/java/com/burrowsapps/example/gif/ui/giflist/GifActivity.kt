@@ -46,6 +46,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
   private lateinit var gifItemDecoration: GifItemDecoration
   private lateinit var gifAdapter: GifAdapter
   private lateinit var gifDialog: AppCompatDialog
+  private lateinit var searchView: SearchView
   private var hasSearchedImages = false
   private var previousImageCount = 0
   private var loadingImages = true
@@ -80,31 +81,36 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
       setHasFixedSize(true)
       setItemViewCacheSize(DEFAULT_LIMIT_COUNT)
       recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
-      addOnScrollListener(
-        object : RecyclerView.OnScrollListener() {
-          override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-
-            // Continuous scrolling
-            visibleImageCount = recyclerView.childCount
-            totalImageCount = gridLayoutManager.itemCount
-            firstVisibleImage = gridLayoutManager.findFirstVisibleItemPosition()
-
-            if (loadingImages && totalImageCount > previousImageCount) {
-              loadingImages = false
-              previousImageCount = totalImageCount
-            }
-
-            if (!loadingImages &&
-              totalImageCount - visibleImageCount <= firstVisibleImage + VISIBLE_THRESHOLD
-            ) {
-              gifViewModel.loadTrendingImages(nextPageNumber)
-
-              loadingImages = true
-            }
-          }
+//      addOnScrollListener(
+//        object : RecyclerView.OnScrollListener() {
+//          override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//            super.onScrolled(recyclerView, dx, dy)
+//
+//            // Continuous scrolling
+//            visibleImageCount = recyclerView.childCount
+//            totalImageCount = gridLayoutManager.itemCount
+//            firstVisibleImage = gridLayoutManager.findFirstVisibleItemPosition()
+//
+//            if (loadingImages && totalImageCount > previousImageCount) {
+//              loadingImages = false
+//              previousImageCount = totalImageCount
+//            }
+//
+//            if (!loadingImages &&
+//              totalImageCount - visibleImageCount <= firstVisibleImage + VISIBLE_THRESHOLD
+//            ) {
+//              gifViewModel.loadTrendingImages(nextPageNumber)
+//
+//              loadingImages = true
+//            }
+//          }
+//        }
+//      )
+      addOnScrollListener(object : EndlessRecyclerViewScrollListener(gridLayoutManager) {
+        override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+          gifViewModel.loadTrendingImages(nextPageNumber)
         }
-      )
+      })
     }
 
     // Custom view for Dialog
@@ -125,7 +131,6 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
     }
 
     // Load initial images
-    gifViewModel.loadTrendingImages(nextPageNumber)
     gifViewModel.trendingResponse.observe(this) { response ->
       when (response) {
         is NetworkResult.Success -> addImages(response.data!!)
@@ -144,6 +149,14 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
         is NetworkResult.Loading -> {} // show empty state
       }
     }
+//    gifViewModel.nextPage.observe(this) { response ->
+//      nextPageNumber = response
+//    }
+  }
+
+  override fun onResume() {
+    super.onResume()
+    gifViewModel.loadTrendingImages(nextPageNumber)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -158,32 +171,33 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
 
           override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
             // When search is closed, go back to trending getResults
-            if (hasSearchedImages) {
+//            if (hasSearchedImages) {
               // Reset
               clearImages()
               gifViewModel.loadTrendingImages(nextPageNumber)
 
-              hasSearchedImages = false
-            }
+//              hasSearchedImages = false
+//            }
             return true
           }
         }
       )
 
-      (actionView as SearchView).apply {
+      searchView = actionView as SearchView
+      searchView.apply {
         queryHint = context.getString(R.string.search_gifs)
         // Query listener for search bar
         setOnQueryTextListener(
           object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String): Boolean {
               // Search on type
-              if (newText.isNotEmpty()) {
+//              if (newText.isNotEmpty()) {
                 // Reset
                 clearImages()
                 gifViewModel.loadSearchImages(newText, nextPageNumber)
 
-                hasSearchedImages = true
-              }
+//                hasSearchedImages = true
+//              }
               return false
             }
 
@@ -197,11 +211,30 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
+      android.R.id.home -> {
+        when {
+          !searchView.isIconified -> {
+            clearImages()
+
+            searchView.onActionViewCollapsed()
+            gifViewModel.loadTrendingImages(nextPageNumber)
+          }
+          else -> super.onBackPressed()
+        }
+        true
+      }
       R.id.menuLicenses -> {
         startActivity(LicenseActivity.createIntent(this))
         true
       }
       else -> super.onOptionsItemSelected(item)
+    }
+  }
+
+  override fun onBackPressed() {
+    when {
+      !searchView.isIconified -> searchView.onActionViewCollapsed()
+      else -> super.onBackPressed()
     }
   }
 
@@ -211,22 +244,27 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
 
   internal fun clearImages() {
     // Clear current data
-    gifAdapter.clear()
+//    gifAdapter.clear()
+//    gifAdapter.submitList(null)
+    gifAdapter.submitList(null)
   }
 
   private fun addImages(responseDto: TenorResponseDto) {
     nextPageNumber = responseDto.next
 
-    responseDto.results.forEach { result ->
+    val imageInfos: List<GifImageInfo> = responseDto.results.orEmpty().map { result ->
       val media = result.media.first()
       val tinyGif = media.tinyGif
       val gif = media.gif
       val gifUrl = gif.url
 
-      gifAdapter.add(GifImageInfo(tinyGif.url, tinyGif.preview, gifUrl, gif.preview))
+      if (Log.isLoggable("GifViewModel", Log.INFO)) Log.i("GifViewModel", "ORIGINAL_IMAGE_URL\t $gifUrl")
 
-      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $gifUrl")
+      GifImageInfo(tinyGif.url, tinyGif.preview, gifUrl, gif.preview)
     }
+
+//    gifAdapter.add(imageInfos)
+    gifAdapter.submitList(gifAdapter.currentList + imageInfos)
   }
 
   private fun showImageDialog(imageInfoModel: GifImageInfo) {
@@ -235,10 +273,7 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
       text = imageInfoModel.gifUrl
       setOnClickListener {
         clipboardManager.setPrimaryClip(
-          ClipData.newPlainText(
-            "https-image-url",
-            imageInfoModel.gifUrl
-          )
+          ClipData.newPlainText("https-image-url", imageInfoModel.gifUrl)
         )
         Snackbar.make(binding.root, getString(R.string.copied_to_clipboard), LENGTH_SHORT).show()
       }

@@ -78,9 +78,7 @@ class LicenseActivity : AppCompatActivity() {
 
     setContentView(webView)
 
-    supportActionBar?.apply {
-      title = getString(R.string.menu_licenses)
-    }
+    supportActionBar?.title = getString(R.string.menu_licenses)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
