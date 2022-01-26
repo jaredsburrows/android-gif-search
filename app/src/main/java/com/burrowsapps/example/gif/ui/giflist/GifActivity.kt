@@ -45,12 +45,12 @@ class GifActivity : AppCompatActivity() {
   private lateinit var gifAdapter: GifAdapter
   private lateinit var gifDialog: AppCompatDialog
   private var hasSearchedImages = false
-  private var previousImageCount = 0
   private var loadingImages = true
   private var firstVisibleImage = 0
   private var visibleImageCount = 0
   private var totalImageCount = 0
   private var nextPageNumber: String? = null
+  private var searchedImageText: String = ""
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -92,17 +92,18 @@ class GifActivity : AppCompatActivity() {
             totalImageCount = gridLayoutManager.itemCount
             firstVisibleImage = gridLayoutManager.findFirstVisibleItemPosition()
 
-            if (loadingImages && totalImageCount > previousImageCount) {
-              loadingImages = false
-              previousImageCount = totalImageCount
-            }
+            if (loadingImages) {
+              if ((visibleImageCount + firstVisibleImage) >= totalImageCount) {
+                loadingImages = false
 
-            if (!loadingImages &&
-              totalImageCount - visibleImageCount <= firstVisibleImage + VISIBLE_THRESHOLD
-            ) {
-              gifViewModel.loadTrendingImages(nextPageNumber)
+                if (hasSearchedImages) {
+                  gifViewModel.loadSearchImages(searchedImageText, nextPageNumber)
+                } else {
+                  gifViewModel.loadTrendingImages(nextPageNumber)
+                }
 
-              loadingImages = true
+                loadingImages = true
+              }
             }
           }
         }
@@ -128,7 +129,7 @@ class GifActivity : AppCompatActivity() {
 
     // Load initial images
     gifViewModel.apply {
-      loadTrendingImages(nextPageNumber)
+      loadTrendingImages()
 
       trendingResponse.observe(this@GifActivity) { response ->
         updateList(response)
@@ -159,8 +160,8 @@ class GifActivity : AppCompatActivity() {
             if (hasSearchedImages) {
               // Reset
               clearImages()
-              nextPageNumber = null // Needed to reset the initial request
-              gifViewModel.loadTrendingImages(nextPageNumber)
+              nextPageNumber = null // reset pagination
+              gifViewModel.loadTrendingImages()
 
               hasSearchedImages = false
             }
@@ -179,7 +180,9 @@ class GifActivity : AppCompatActivity() {
               if (newText.isNotEmpty()) {
                 // Reset
                 clearImages()
-                gifViewModel.loadSearchImages(newText, nextPageNumber)
+                searchedImageText = newText
+                nextPageNumber = null // reset pagination
+                gifViewModel.loadSearchImages(searchedImageText)
 
                 hasSearchedImages = true
               }
@@ -223,10 +226,7 @@ class GifActivity : AppCompatActivity() {
       text = imageInfoModel.gifUrl
       setOnClickListener {
         clipboardManager.setPrimaryClip(
-          ClipData.newPlainText(
-            "https-image-url",
-            imageInfoModel.gifUrl
-          )
+          ClipData.newPlainText(CLIP_DATA_IMAGE_URL, imageInfoModel.gifUrl)
         )
         Snackbar.make(binding.root, getString(R.string.copied_to_clipboard), LENGTH_SHORT).show()
       }
@@ -275,7 +275,7 @@ class GifActivity : AppCompatActivity() {
 
   companion object {
     private const val TAG = "MainActivity"
+    private const val CLIP_DATA_IMAGE_URL = "https-image-url"
     private const val PORTRAIT_COLUMNS = 3
-    private const val VISIBLE_THRESHOLD = 5
   }
 }
