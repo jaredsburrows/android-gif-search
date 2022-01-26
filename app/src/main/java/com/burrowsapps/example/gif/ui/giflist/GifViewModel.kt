@@ -15,6 +15,8 @@ import javax.inject.Inject
 class GifViewModel @Inject constructor(
   private val repository: GifRepository,
 ) : ViewModel() {
+  private val _nextPageResponse = MutableLiveData<String>()
+  val nextPageResponse: LiveData<String> = _nextPageResponse
   private val _trendingResponse = MutableLiveData<NetworkResult<TenorResponseDto>>()
   val trendingResponse: LiveData<NetworkResult<TenorResponseDto>> = _trendingResponse
   private val _searchResponse = MutableLiveData<NetworkResult<TenorResponseDto>>()
@@ -22,12 +24,14 @@ class GifViewModel @Inject constructor(
 
   fun loadTrendingImages(next: String?) = viewModelScope.launch {
     repository.getTrendingResults(next).collect { values ->
+      _nextPageResponse.value = values.data?.next
       _trendingResponse.value = values
     }
   }
 
   fun loadSearchImages(searchString: String, next: String?) = viewModelScope.launch {
     repository.getSearchResults(searchString, next).collect { values ->
+      _nextPageResponse.value = values.data?.next
       _searchResponse.value = values
     }
   }

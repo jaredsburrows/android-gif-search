@@ -129,23 +129,31 @@ class GifActivity : AppCompatActivity() {
     }
 
     // Load initial images
-    gifViewModel.loadTrendingImages(nextPageNumber)
-    gifViewModel.trendingResponse.observe(this) { response ->
-      when (response) {
-        is NetworkResult.Success -> addImages(response.data!!)
-        is NetworkResult.Error -> {
-          // show error message
+    gifViewModel.apply {
+      loadTrendingImages(nextPageNumber)
+
+      trendingResponse.observe(this@GifActivity) { response ->
+        when (response) {
+          is NetworkResult.Success -> addImages(response.data!!)
+          is NetworkResult.Error -> {
+            // show error message
+          }
+          is NetworkResult.Loading -> {} // show empty state
         }
-        is NetworkResult.Loading -> {} // show empty state
       }
-    }
-    gifViewModel.searchResponse.observe(this) { response ->
-      when (response) {
-        is NetworkResult.Success -> addImages(response.data!!)
-        is NetworkResult.Error -> {
-          // show error message
+
+      searchResponse.observe(this@GifActivity) { response ->
+        when (response) {
+          is NetworkResult.Success -> addImages(response.data!!)
+          is NetworkResult.Error -> {
+            // show error message
+          }
+          is NetworkResult.Loading -> {} // show empty state
         }
-        is NetworkResult.Loading -> {} // show empty state
+      }
+
+      nextPageResponse.observe(this@GifActivity) { response ->
+        nextPageNumber = response
       }
     }
   }
@@ -165,6 +173,7 @@ class GifActivity : AppCompatActivity() {
             if (hasSearchedImages) {
               // Reset
               clearImages()
+              nextPageNumber = null
               gifViewModel.loadTrendingImages(nextPageNumber)
 
               hasSearchedImages = false
@@ -215,8 +224,6 @@ class GifActivity : AppCompatActivity() {
   }
 
   private fun addImages(responseDto: TenorResponseDto) {
-    nextPageNumber = responseDto.next
-
     val newList = responseDto.results.map { result ->
       val media = result.media.first()
       val tinyGif = media.tinyGif

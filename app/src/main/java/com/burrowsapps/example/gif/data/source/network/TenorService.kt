@@ -19,7 +19,7 @@ interface TenorService {
    * Query: media_filter STRONGLY RECOMMENDED, minimal - tinygif, gif, and mp4.
    * Query: limit OPTIONAL, fetch up to a specified number of results (max: 50).
    * Query: pos OPTIONAL, get results starting at position "value".
-   * eg. https://g.tenor.com/v1/trending?key=LIVDSRZULELA&limit=10&pos=1
+   * eg. https://g.tenor.com/v1/trending?key=LIVDSRZULELA&media_filter=minimal&limit=50
    *
    * @param pos Position of getResults.
    * @return Response of trending getResults.
@@ -40,7 +40,7 @@ interface TenorService {
    * Query: q REQUIRED, a search string
    * Query: limit OPTIONAL, fetch up to a specified number of results (max: 50).
    * Query: pos OPTIONAL, get results starting at position "value".
-   * eg. https://g.tenor.com/v1/search?key=LIVDSRZULELA&q=goodluck&limit=10&pos=1
+   * eg. https://g.tenor.com/v1/search?key=LIVDSRZULELA&media_filter=minimal&q=hello&limit=50
    *
    * @param q Search string to find gifs.
    * @param pos Position of getResults.
