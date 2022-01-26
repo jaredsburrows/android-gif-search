@@ -1,6 +1,8 @@
 package com.burrowsapps.example.gif.ui.giflist
 
-import android.util.Log
+import android.util.Log.INFO
+import android.util.Log.i
+import android.util.Log.isLoggable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -64,7 +66,7 @@ class GifViewModel @Inject constructor(
       val gif = media.gif
       val gifUrl = gif.url
 
-      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $gifUrl")
+      if (isLoggable(TAG, INFO)) i(TAG, "ORIGINAL_IMAGE_URL\t $gifUrl")
 
       GifImageInfo(tinyGif.url, tinyGif.preview, gifUrl, gif.preview)
     }.orEmpty()

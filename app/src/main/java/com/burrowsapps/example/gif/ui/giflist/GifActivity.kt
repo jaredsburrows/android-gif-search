@@ -3,7 +3,11 @@ package com.burrowsapps.example.gif.ui.giflist
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
-import android.util.Log
+import android.util.Log.ERROR
+import android.util.Log.INFO
+import android.util.Log.e
+import android.util.Log.i
+import android.util.Log.isLoggable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -81,6 +85,11 @@ class GifActivity : AppCompatActivity() {
       addRecyclerListener { holder ->
         val gifViewHolder = holder as GifAdapter.ViewHolder
         GlideApp.with(this).clear(gifViewHolder.binding.gifImage)
+
+        if (isLoggable(TAG, INFO)) i(
+          TAG,
+          "addRecyclerListener:\t ${gifViewHolder.binding.gifImage}"
+        )
       }
       addOnScrollListener(
         object : RecyclerView.OnScrollListener() {
@@ -98,8 +107,10 @@ class GifActivity : AppCompatActivity() {
 
                 if (hasSearchedImages) {
                   gifViewModel.loadSearchImages(searchedImageText, nextPageNumber)
+                  if (isLoggable(TAG, INFO)) i(TAG, "onScrolled:\t loadSearchImages")
                 } else {
                   gifViewModel.loadTrendingImages(nextPageNumber)
+                  if (isLoggable(TAG, INFO)) i(TAG, "onScrolled:\t loadTrendingImages")
                 }
 
                 loadingImages = true
@@ -249,7 +260,7 @@ class GifActivity : AppCompatActivity() {
             dialogBinding.gifDialogProgress.hide()
             dialogBinding.gifDialogTitle.visibility = View.VISIBLE
 
-            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loadingImages\t $model")
+            if (isLoggable(TAG, INFO)) i(TAG, "finished loadingImages\t $model")
 
             return false
           }
@@ -263,7 +274,7 @@ class GifActivity : AppCompatActivity() {
             // Hide progressbar
             dialogBinding.gifDialogProgress.hide()
 
-            if (Log.isLoggable(TAG, Log.ERROR)) Log.e(TAG, "finished loadingImages\t $model", e)
+            if (isLoggable(TAG, ERROR)) e(TAG, "finished loadingImages\t $model", e)
 
             return false
           }

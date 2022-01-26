@@ -7,6 +7,9 @@ import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.util.Log.ERROR
+import android.util.Log.e
+import android.util.Log.isLoggable
 import android.view.MenuItem
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -51,6 +54,14 @@ class LicenseActivity : AppCompatActivity() {
             request
           )
         }
+
+        override fun onReceivedHttpError(
+          view: WebView,
+          request: WebResourceRequest,
+          errorResponse: WebResourceResponse
+        ) {
+          if (isLoggable(TAG, ERROR)) e(TAG, "onReceivedHttpError:\t $errorResponse")
+        }
       }
 
       settings.apply {
@@ -78,9 +89,7 @@ class LicenseActivity : AppCompatActivity() {
 
     setContentView(webView)
 
-    supportActionBar?.apply {
-      title = getString(R.string.menu_licenses)
-    }
+    supportActionBar?.title = getString(R.string.menu_licenses)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -104,6 +113,8 @@ class LicenseActivity : AppCompatActivity() {
   }
 
   companion object {
+    private const val TAG = "LicenseActivity"
+
     fun createIntent(context: Context): Intent {
       return Intent().setClass(context, LicenseActivity::class.java)
     }

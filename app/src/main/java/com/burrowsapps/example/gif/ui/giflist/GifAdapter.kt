@@ -1,6 +1,10 @@
 package com.burrowsapps.example.gif.ui.giflist
 
-import android.util.Log
+import android.util.Log.ERROR
+import android.util.Log.INFO
+import android.util.Log.e
+import android.util.Log.i
+import android.util.Log.isLoggable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -48,7 +52,7 @@ class GifAdapter(
           ): Boolean {
             // Hide progressbar
             holder.binding.gifProgress.hide()
-            if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "finished loading\t $model")
+            if (isLoggable(TAG, INFO)) i(TAG, "onResourceReady:\t $model")
 
             return false
           }
@@ -61,7 +65,7 @@ class GifAdapter(
           ): Boolean {
             // Hide progressbar
             holder.binding.gifProgress.hide()
-            if (Log.isLoggable(TAG, Log.ERROR)) Log.e(TAG, "finished loading\t $model", e)
+            if (isLoggable(TAG, ERROR)) e(TAG, "onLoadFailed:\t $model", e)
 
             return false
           }
@@ -84,11 +88,19 @@ class GifAdapter(
       // Make sure to show progress when loading new view
       gifProgress.show()
     }
+    if (isLoggable(TAG, INFO)) i(TAG, "onViewRecycled:\t $holder")
+    if (isLoggable(TAG, INFO)) i(TAG, "onViewRecycled:\t ${holder.binding.gifImage}")
+  }
+
+  override fun onFailedToRecycleView(holder: ViewHolder): Boolean {
+    if (isLoggable(TAG, ERROR)) e(TAG, "onFailedToRecycleView:\t $holder")
+    if (isLoggable(TAG, ERROR)) e(TAG, "onFailedToRecycleView:\t ${holder.binding.gifImage}")
+    return false
   }
 
   override fun getItemCount() = data.size
 
-  override fun getItemId(position: Int) = getItem(position).tinyGifUrl.hashCode().toLong()
+  override fun getItemId(position: Int) = getItem(position).hashCode().toLong()
 
   fun getItem(location: Int) = data[location]
 
