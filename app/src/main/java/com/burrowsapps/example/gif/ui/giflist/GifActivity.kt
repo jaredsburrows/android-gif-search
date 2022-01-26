@@ -36,7 +36,7 @@ import javax.inject.Inject
  * Main activity that will load our Fragments via the Support Fragment Manager.
  */
 @AndroidEntryPoint
-class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
+class GifActivity : AppCompatActivity() {
   @Inject internal lateinit var imageService: ImageService
   @Inject internal lateinit var clipboardManager: ClipboardManager
   internal val gifViewModel by viewModels<GifViewModel>()
@@ -68,9 +68,9 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
       resources.getDimensionPixelSize(R.dimen.gif_adapter_item_offset),
       gridLayoutManager.spanCount
     )
-    gifAdapter = GifAdapter(this, imageService).apply {
-      setHasStableIds(true)
-    }
+    gifAdapter = GifAdapter(onItemClick = { imageInfoModel ->
+      showImageDialog(imageInfoModel)
+    }, imageService)
 
     // Setup RecyclerView
     binding.recyclerView.apply {
@@ -207,10 +207,6 @@ class GifActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
       }
       else -> super.onOptionsItemSelected(item)
     }
-  }
-
-  override fun onClick(imageInfoModel: GifImageInfo) {
-    showImageDialog(imageInfoModel)
   }
 
   internal fun clearImages() {

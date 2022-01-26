@@ -11,12 +11,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class TenorResponseDto(
   @field:Json(name = "results")
-  val resultsJson: List<ResultDto>? = emptyList(),
+  val results: List<ResultDto> = emptyList(),
   @field:Json(name = "next")
-  val nextJson: String? = "0.0"
-) {
-  val results: List<ResultDto>
-    get() = resultsJson.orEmpty()
-  val next: String
-    get() = nextJson.orEmpty()
-}
+  val next: String = "0.0"
+)

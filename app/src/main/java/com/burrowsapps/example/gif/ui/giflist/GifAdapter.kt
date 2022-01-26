@@ -17,10 +17,14 @@ import com.burrowsapps.example.gif.di.GlideApp
  * RecyclerView adapter for handling Gif Images in a Grid format.
  */
 class GifAdapter(
-  private val onItemClickListener: OnItemClickListener,
+  private var onItemClick: (GifImageInfo) -> Unit,
   private val imageService: ImageService
 ) : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
-  private val data = arrayListOf<GifImageInfo>()
+  private val data = mutableListOf<GifImageInfo>()
+
+  init {
+    setHasStableIds(true)
+  }
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
@@ -66,7 +70,7 @@ class GifAdapter(
       .into(holder.binding.gifImage)
       .clearOnDetach()
 
-    holder.itemView.setOnClickListener { onItemClickListener.onClick(imageInfoModel) }
+    holder.itemView.setOnClickListener { onItemClick.invoke(imageInfoModel) }
   }
 
   override fun onViewRecycled(holder: ViewHolder) {
@@ -105,10 +109,6 @@ class GifAdapter(
   inner class ViewHolder(
     internal val binding: ListItemBinding
   ) : RecyclerView.ViewHolder(binding.root)
-
-  interface OnItemClickListener {
-    fun onClick(imageInfoModel: GifImageInfo)
-  }
 
   companion object {
     private const val TAG = "GifAdapter"

@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.data.ImageService
-import com.burrowsapps.example.gif.ui.giflist.GifAdapter.OnItemClickListener
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -31,10 +30,6 @@ class GifAdapterTest {
   private val gifImageInfo = GifImageInfo("http://some.url")
   private val gifImageInfo2 = GifImageInfo("http://some.url2")
   private val gifImageInfo3 = GifImageInfo("http://some.url3")
-  private val testOnItemClickListener = object : OnItemClickListener {
-    override fun onClick(imageInfoModel: GifImageInfo) {
-    }
-  }
   private lateinit var viewHolder: GifAdapter.ViewHolder
   private lateinit var sut: GifAdapter
 
@@ -42,7 +37,11 @@ class GifAdapterTest {
   fun setUp() {
     hiltRule.inject()
 
-    sut = GifAdapter(testOnItemClickListener, imageService).apply {
+    sut = GifAdapter(
+      onItemClick = {
+      },
+      imageService
+    ).apply {
       add(gifImageInfo)
       add(gifImageInfo2)
     }
