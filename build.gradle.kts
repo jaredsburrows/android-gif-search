@@ -29,8 +29,8 @@ allprojects {
 
       eachDependency {
         when (requested.group) {
-          "org.jetbrains.kotlin" -> useVersion(deps.versions.kotlin)
-          "com.google.dagger" -> useVersion(deps.versions.dagger)
+          "org.jetbrains.kotlin" -> useVersion(libs.versions.kotlin.get())
+          "com.google.dagger" -> useVersion(libs.versions.dagger.get())
         }
       }
     }

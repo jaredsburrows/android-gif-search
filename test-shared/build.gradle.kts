@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-  implementation(platform(kotlin("bom", deps.versions.kotlin)))
+  implementation(platform(libs.kotlin.bom))
   implementation(kotlin("stdlib-jdk8"))
-  implementation(deps.squareup.okhttp.mockwebserver)
+  implementation(libs.squareup.okhttp.mockwebserver)
 }
