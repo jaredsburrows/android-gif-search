@@ -4,7 +4,7 @@
 [![Build](https://github.com/jaredsburrows/android-gif-example/workflows/build/badge.svg)](https://github.com/jaredsburrows/android-gif-example/actions)
 [![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
 
-Gif RecyclerView MVP Grid Example using Dagger 2 Hilt, Retrofit 2, Moshi, Kotlin Coroutines, Junit,
+Gif RecyclerView MVVM Grid Example using Dagger 2 Hilt, Retrofit 2, Moshi, Kotlin Coroutines, Junit,
 Espresso and Robolectric tests!
 
 <p align="center">

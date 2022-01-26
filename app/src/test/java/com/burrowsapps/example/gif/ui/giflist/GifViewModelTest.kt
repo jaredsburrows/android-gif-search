@@ -3,8 +3,9 @@ package com.burrowsapps.example.gif.ui.giflist
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.data.source.network.GifRepository
-import com.burrowsapps.example.gif.data.source.network.NetworkResult.Success
+import com.burrowsapps.example.gif.data.source.network.NetworkResult
 import com.burrowsapps.example.gif.data.source.network.TenorResponseDto
+import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -38,11 +39,30 @@ class GifViewModelTest {
   fun testLoadTrendingImagesSuccess() = runTest {
     val sut = GifViewModel(repository)
     whenever(repository.getTrendingResults(eq(next)))
-      .thenReturn(flowOf(Success(response)))
+      .thenReturn(flowOf(NetworkResult.Success(response)))
 
     sut.loadTrendingImages(next)
+    val nextResult = sut.nextPageResponse.value
+    val trendingResult = sut.trendingResponse.value?.data
 
     verify(repository).getTrendingResults(eq(next))
+    assertThat(nextResult).isEqualTo("0.0")
+    assertThat(trendingResult).isEqualTo(response)
+  }
+
+  @Test
+  fun testLoadTrendingImagesError() = runTest {
+    val sut = GifViewModel(repository)
+    whenever(repository.getTrendingResults(eq(next)))
+      .thenReturn(flowOf(NetworkResult.Error(message = "Broken!")))
+
+    sut.loadTrendingImages(next)
+    val nextResult = sut.nextPageResponse.value
+    val trendingResult = sut.trendingResponse.value?.data
+
+    verify(repository).getTrendingResults(eq(next))
+    assertThat(nextResult).isNull()
+    assertThat(trendingResult).isNull()
   }
 
   @Test
@@ -50,10 +70,30 @@ class GifViewModelTest {
     val searchString = "gifs"
     val sut = GifViewModel(repository)
     whenever(repository.getSearchResults(eq(searchString), eq(next)))
-      .thenReturn(flowOf(Success(response)))
+      .thenReturn(flowOf(NetworkResult.Success(response)))
 
     sut.loadSearchImages(searchString, next)
+    val nextResult = sut.nextPageResponse.value
+    val searchResult = sut.searchResponse.value?.data
 
     verify(repository).getSearchResults(eq(searchString), eq(next))
+    assertThat(nextResult).isEqualTo("0.0")
+    assertThat(searchResult).isEqualTo(response)
+  }
+
+  @Test
+  fun testLoadSearchImagesError() = runTest {
+    val searchString = "gifs"
+    val sut = GifViewModel(repository)
+    whenever(repository.getSearchResults(eq(searchString), eq(next)))
+      .thenReturn(flowOf(NetworkResult.Error(message = "Broken!")))
+
+    sut.loadSearchImages(searchString, next)
+    val nextResult = sut.nextPageResponse.value
+    val searchResult = sut.searchResponse.value?.data
+
+    verify(repository).getSearchResults(eq(searchString), eq(next))
+    assertThat(nextResult).isNull()
+    assertThat(searchResult).isNull()
   }
 }

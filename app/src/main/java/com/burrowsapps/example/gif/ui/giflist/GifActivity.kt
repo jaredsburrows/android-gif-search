@@ -138,7 +138,6 @@ class GifActivity : AppCompatActivity() {
           is NetworkResult.Error -> {
             // show error message
           }
-          is NetworkResult.Loading -> {} // show empty state
         }
       }
 
@@ -148,7 +147,6 @@ class GifActivity : AppCompatActivity() {
           is NetworkResult.Error -> {
             // show error message
           }
-          is NetworkResult.Loading -> {} // show empty state
         }
       }
 

@@ -7,23 +7,23 @@ sealed class NetworkResult<T>(
   val message: String? = null
 ) {
   class Success<T>(data: T) : NetworkResult<T>(data)
-  class Error<T>(message: String, data: T? = null) : NetworkResult<T>(data, message)
-  class Loading<T> : NetworkResult<T>()
-}
+  class Error<T>(data: T? = null, message: String) : NetworkResult<T>(data, message)
 
-suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): NetworkResult<T> {
-  try {
-    val response = apiCall()
-    if (response.isSuccessful) {
-      response.body()?.let {
-        return NetworkResult.Success(it)
+  companion object {
+    suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): NetworkResult<T> {
+      return try {
+        val response = apiCall()
+        val body = response.body()
+        if (response.isSuccessful && body != null) {
+          return Success(body)
+        }
+        error("${response.code()} ${response.message()}")
+      } catch (e: Exception) {
+        error(e.message ?: e.toString())
       }
     }
-    return error("${response.code()} ${response.message()}")
-  } catch (e: Exception) {
-    return error(e.message ?: e.toString())
+
+    private fun <T> error(errorMessage: String): NetworkResult<T> =
+      Error(null, "Api call failed $errorMessage")
   }
 }
-
-private fun <T> error(errorMessage: String): NetworkResult<T> =
-  NetworkResult.Error("Api call failed $errorMessage")

@@ -1,5 +1,6 @@
 package com.burrowsapps.example.gif.data.source.network
 
+import com.burrowsapps.example.gif.data.source.network.NetworkResult.Companion.safeApiCall
 import com.burrowsapps.example.gif.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
