@@ -211,7 +211,7 @@ dependencies {
   implementation(deps.android.livedataktx)
   kapt(deps.android.compiler)
 
-  // Image Loading
+  // Glide
   implementation(deps.glide.glide)
   implementation(deps.glide.integration)
   kapt(deps.glide.compiler)
@@ -236,6 +236,9 @@ dependencies {
   // Leakcanary
   debugImplementation(deps.squareup.leakcanary)
   androidTestImplementation(deps.squareup.leakcanaryinstrumentation)
+
+  // Other
+  implementation(deps.jakewharton.timber)
 
   testImplementation(deps.android.test.annotation)
   testImplementation(deps.android.test.core)

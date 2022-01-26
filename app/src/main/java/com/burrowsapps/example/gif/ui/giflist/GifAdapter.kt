@@ -1,10 +1,5 @@
 package com.burrowsapps.example.gif.ui.giflist
 
-import android.util.Log.ERROR
-import android.util.Log.INFO
-import android.util.Log.e
-import android.util.Log.i
-import android.util.Log.isLoggable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +11,7 @@ import com.bumptech.glide.request.target.Target
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.databinding.ListItemBinding
 import com.burrowsapps.example.gif.di.GlideApp
+import timber.log.Timber
 
 /**
  * RecyclerView adapter for handling Gif Images in a Grid format.
@@ -53,7 +49,7 @@ class GifAdapter(
           ): Boolean {
             // Hide progressbar
             holder.binding.gifProgress.hide()
-            if (isLoggable(TAG, INFO)) i(TAG, "onResourceReady:\t $model")
+            Timber.i("onResourceReady:\t$model")
 
             return false
           }
@@ -66,7 +62,7 @@ class GifAdapter(
           ): Boolean {
             // Hide progressbar
             holder.binding.gifProgress.hide()
-            if (isLoggable(TAG, ERROR)) e(TAG, "onLoadFailed:\t $model", e)
+            Timber.e(e, "onLoadFailed:\t$model")
 
             return false
           }
@@ -89,13 +85,13 @@ class GifAdapter(
       // Make sure to show progress when loading new view
       gifProgress.show()
     }
-    if (isLoggable(TAG, INFO)) i(TAG, "onViewRecycled:\t $holder")
-    if (isLoggable(TAG, INFO)) i(TAG, "onViewRecycled:\t ${holder.binding.gifImage}")
+    Timber.i("onViewRecycled:\t$holder")
+    Timber.i("onViewRecycled:\t${holder.binding.gifImage}")
   }
 
   override fun onFailedToRecycleView(holder: ViewHolder): Boolean {
-    if (isLoggable(TAG, ERROR)) e(TAG, "onFailedToRecycleView:\t $holder")
-    if (isLoggable(TAG, ERROR)) e(TAG, "onFailedToRecycleView:\t ${holder.binding.gifImage}")
+    Timber.e("onFailedToRecycleView:\t$holder")
+    Timber.e("onFailedToRecycleView:\t${holder.binding.gifImage}")
     return false
   }
 
@@ -122,8 +118,4 @@ class GifAdapter(
   inner class ViewHolder(
     internal val binding: ListItemBinding
   ) : RecyclerView.ViewHolder(binding.root)
-
-  companion object {
-    private const val TAG = "GifAdapter"
-  }
 }

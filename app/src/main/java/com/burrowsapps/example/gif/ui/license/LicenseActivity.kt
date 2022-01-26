@@ -7,9 +7,6 @@ import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
-import android.util.Log.ERROR
-import android.util.Log.e
-import android.util.Log.isLoggable
 import android.view.MenuItem
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -25,6 +22,7 @@ import androidx.webkit.WebViewFeature.FORCE_DARK
 import androidx.webkit.WebViewFeature.isFeatureSupported
 import com.burrowsapps.example.gif.R
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 /**
  * Open source license activity.
@@ -60,7 +58,7 @@ class LicenseActivity : AppCompatActivity() {
           request: WebResourceRequest,
           errorResponse: WebResourceResponse
         ) {
-          if (isLoggable(TAG, ERROR)) e(TAG, "onReceivedHttpError:\t $errorResponse")
+          Timber.e("onReceivedHttpError:\t$errorResponse")
         }
       }
 
@@ -113,8 +111,6 @@ class LicenseActivity : AppCompatActivity() {
   }
 
   companion object {
-    private const val TAG = "LicenseActivity"
-
     fun createIntent(context: Context): Intent {
       return Intent().setClass(context, LicenseActivity::class.java)
     }

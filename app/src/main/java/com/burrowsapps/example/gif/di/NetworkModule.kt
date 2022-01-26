@@ -18,6 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
 import java.io.File
 import java.util.Date
 import java.util.concurrent.TimeUnit.SECONDS
@@ -90,7 +91,9 @@ object NetworkModule {
   @Singleton
   @Provides
   fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor {
-    return HttpLoggingInterceptor().apply {
+    return HttpLoggingInterceptor { message ->
+      Timber.i(message)
+    }.apply {
       level = if (DEBUG) BODY else NONE
     }
   }

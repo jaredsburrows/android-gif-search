@@ -3,11 +3,6 @@ package com.burrowsapps.example.gif.ui.giflist
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
-import android.util.Log.ERROR
-import android.util.Log.INFO
-import android.util.Log.e
-import android.util.Log.i
-import android.util.Log.isLoggable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -32,6 +27,7 @@ import com.burrowsapps.example.gif.ui.license.LicenseActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -86,10 +82,7 @@ class GifActivity : AppCompatActivity() {
         val gifViewHolder = holder as GifAdapter.ViewHolder
         GlideApp.with(this).clear(gifViewHolder.binding.gifImage)
 
-        if (isLoggable(TAG, INFO)) i(
-          TAG,
-          "addRecyclerListener:\t ${gifViewHolder.binding.gifImage}"
-        )
+        Timber.i("addRecyclerListener:\t${gifViewHolder.binding.gifImage}")
       }
       addOnScrollListener(
         object : RecyclerView.OnScrollListener() {
@@ -107,10 +100,10 @@ class GifActivity : AppCompatActivity() {
 
                 if (hasSearchedImages) {
                   gifViewModel.loadSearchImages(searchedImageText, nextPageNumber)
-                  if (isLoggable(TAG, INFO)) i(TAG, "onScrolled:\t loadSearchImages")
+                  Timber.i("onScrolled:\tloadSearchImages")
                 } else {
                   gifViewModel.loadTrendingImages(nextPageNumber)
-                  if (isLoggable(TAG, INFO)) i(TAG, "onScrolled:\t loadTrendingImages")
+                  Timber.i("onScrolled:\tloadTrendingImages")
                 }
 
                 loadingImages = true
@@ -260,7 +253,7 @@ class GifActivity : AppCompatActivity() {
             dialogBinding.gifDialogProgress.hide()
             dialogBinding.gifDialogTitle.visibility = View.VISIBLE
 
-            if (isLoggable(TAG, INFO)) i(TAG, "finished loadingImages\t $model")
+            Timber.i("onResourceReady:\t$model")
 
             return false
           }
@@ -274,7 +267,7 @@ class GifActivity : AppCompatActivity() {
             // Hide progressbar
             dialogBinding.gifDialogProgress.hide()
 
-            if (isLoggable(TAG, ERROR)) e(TAG, "finished loadingImages\t $model", e)
+            Timber.e(e, "onLoadFailed:\t$model")
 
             return false
           }
@@ -287,7 +280,6 @@ class GifActivity : AppCompatActivity() {
   }
 
   companion object {
-    private const val TAG = "MainActivity"
     private const val CLIP_DATA_IMAGE_URL = "https-image-url"
     private const val PORTRAIT_COLUMNS = 3
   }

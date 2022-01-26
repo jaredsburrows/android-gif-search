@@ -1,8 +1,5 @@
 package com.burrowsapps.example.gif.ui.giflist
 
-import android.util.Log.INFO
-import android.util.Log.i
-import android.util.Log.isLoggable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,12 +9,11 @@ import com.burrowsapps.example.gif.data.source.network.NetworkResult
 import com.burrowsapps.example.gif.data.source.network.TenorResponseDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class GifViewModel @Inject constructor(
-  private val repository: GifRepository,
-) : ViewModel() {
+class GifViewModel @Inject constructor(private val repository: GifRepository) : ViewModel() {
   private val _nextPageResponse = MutableLiveData<String?>()
   val nextPageResponse: LiveData<String?> = _nextPageResponse
   private val _trendingResponse = MutableLiveData<List<GifImageInfo>?>()
@@ -66,13 +62,9 @@ class GifViewModel @Inject constructor(
       val gif = media.gif
       val gifUrl = gif.url
 
-      if (isLoggable(TAG, INFO)) i(TAG, "ORIGINAL_IMAGE_URL\t $gifUrl")
+      Timber.i("buildGifList:\t$gifUrl")
 
       GifImageInfo(tinyGif.url, tinyGif.preview, gifUrl, gif.preview)
     }.orEmpty()
-  }
-
-  companion object {
-    private const val TAG = "GifViewModel"
   }
 }

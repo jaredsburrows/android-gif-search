@@ -107,6 +107,10 @@ object deps {
     }
   }
 
+  object jakewharton {
+    const val timber = "com.jakewharton.timber:timber:5.0.1"
+  }
+
   object google {
     const val material = "com.google.android.material:material:1.5.0"
     const val truth = "com.google.truth:truth:1.1.3"
