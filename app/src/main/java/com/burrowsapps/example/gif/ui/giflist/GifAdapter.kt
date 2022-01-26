@@ -2,6 +2,8 @@ package com.burrowsapps.example.gif.ui.giflist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -19,7 +21,7 @@ import timber.log.Timber
 class GifAdapter(
   private var onItemClick: (GifImageInfo) -> Unit,
   private val imageService: ImageService
-) : RecyclerView.Adapter<GifAdapter.ViewHolder>() {
+) : ListAdapter<GifImageInfo, GifAdapter.ViewHolder>(DonutDiffCallback()) {
   private val data = mutableListOf<GifImageInfo>()
 
   init {
@@ -95,11 +97,11 @@ class GifAdapter(
     return false
   }
 
-  override fun getItemCount() = data.size
+//  override fun getItemCount() = data.size
 
   override fun getItemId(position: Int) = getItem(position).hashCode().toLong()
 
-  fun getItem(location: Int) = data[location]
+//  fun getItem(location: Int) = data[location]
 
   fun add(model: List<GifImageInfo>) {
     data.addAll(model)
@@ -112,6 +114,16 @@ class GifAdapter(
       for (i in 0 until size) data.removeAt(0)
 
       notifyItemRangeRemoved(0, size)
+    }
+  }
+
+  internal class DonutDiffCallback : DiffUtil.ItemCallback<GifImageInfo>() {
+    override fun areItemsTheSame(oldItem: GifImageInfo, newItem: GifImageInfo): Boolean {
+      return oldItem.gifUrl == newItem.gifUrl
+    }
+
+    override fun areContentsTheSame(oldItem: GifImageInfo, newItem: GifImageInfo): Boolean {
+      return oldItem == newItem
     }
   }
 

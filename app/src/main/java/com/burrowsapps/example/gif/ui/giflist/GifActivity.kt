@@ -213,14 +213,16 @@ class GifActivity : AppCompatActivity() {
 
   internal fun clearImages() {
     // Clear current data
-    gifAdapter.clear()
+//    gifAdapter.clear()
+    gifAdapter.submitList(null)
   }
 
   private fun updateList(newList: List<GifImageInfo>?) {
     if (newList == null) {
       Snackbar.make(binding.root, getString(R.string.error_loading_list), LENGTH_SHORT).show()
     } else {
-      gifAdapter.add(newList)
+//      gifAdapter.sub(newList)
+      gifAdapter.submitList(gifAdapter.currentList + newList)
     }
   }
 
