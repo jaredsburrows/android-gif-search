@@ -243,10 +243,10 @@ class GifActivity : AppCompatActivity() {
       }
     }
 
-    // Load image
-    imageService.load(imageInfoModel.gifUrl)
+    // Load image - click on 'tinyGifPreviewUrl' -> 'tinyGifUrl' -> 'gifUrl'
+    imageService.loadGif(imageInfoModel.gifUrl)
       .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-      .thumbnail(imageService.load(imageInfoModel.gifPreviewUrl))
+      .thumbnail(imageService.loadGif(imageInfoModel.tinyGifUrl))
       .listener(
         object : RequestListener<GifDrawable> {
           override fun onResourceReady(
@@ -279,7 +279,9 @@ class GifActivity : AppCompatActivity() {
             return false
           }
         }
-      ).into(dialogBinding.gifDialogImage)
+      )
+      .into(dialogBinding.gifDialogImage)
+      .clearOnDetach()
 
     gifDialog.show()
   }

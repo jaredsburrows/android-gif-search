@@ -38,9 +38,10 @@ class GifAdapter(
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val imageInfoModel = getItem(position)
 
-    // Load images
-    imageService.load(imageInfoModel.tinyGifUrl)
-      .thumbnail(imageService.load(imageInfoModel.tinyGifPreviewUrl))
+    // Load images - 'tinyGifPreviewUrl' -> 'tinyGifUrl'
+    imageService.loadGif(imageInfoModel.tinyGifUrl)
+      .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+      .thumbnail(imageService.loadGif(imageInfoModel.tinyGifPreviewUrl))
       .listener(
         object : RequestListener<GifDrawable> {
           override fun onResourceReady(
