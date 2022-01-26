@@ -92,6 +92,11 @@ class GifAdapter(
 
   fun getItem(location: Int) = data[location]
 
+  fun add(model: List<GifImageInfo>) {
+    data.addAll(model)
+    notifyItemRangeInserted(data.size, data.size + 1)
+  }
+
   fun clear() {
     val size = data.size
     if (size > 0) {
@@ -99,11 +104,6 @@ class GifAdapter(
 
       notifyItemRangeRemoved(0, size)
     }
-  }
-
-  fun add(model: GifImageInfo) {
-    data.add(model)
-    notifyItemInserted(data.size + 1)
   }
 
   inner class ViewHolder(

@@ -217,16 +217,18 @@ class GifActivity : AppCompatActivity() {
   private fun addImages(responseDto: TenorResponseDto) {
     nextPageNumber = responseDto.next
 
-    responseDto.results.forEach { result ->
+    val newList = responseDto.results.map { result ->
       val media = result.media.first()
       val tinyGif = media.tinyGif
       val gif = media.gif
       val gifUrl = gif.url
 
-      gifAdapter.add(GifImageInfo(tinyGif.url, tinyGif.preview, gifUrl, gif.preview))
-
       if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $gifUrl")
+
+      GifImageInfo(tinyGif.url, tinyGif.preview, gifUrl, gif.preview)
     }
+
+    gifAdapter.add(newList)
   }
 
   private fun showImageDialog(imageInfoModel: GifImageInfo) {
