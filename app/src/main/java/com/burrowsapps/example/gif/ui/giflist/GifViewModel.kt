@@ -1,5 +1,6 @@
 package com.burrowsapps.example.gif.ui.giflist
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,24 +16,61 @@ import javax.inject.Inject
 class GifViewModel @Inject constructor(
   private val repository: GifRepository,
 ) : ViewModel() {
-  private val _nextPageResponse = MutableLiveData<String>()
-  val nextPageResponse: LiveData<String> = _nextPageResponse
-  private val _trendingResponse = MutableLiveData<NetworkResult<TenorResponseDto>>()
-  val trendingResponse: LiveData<NetworkResult<TenorResponseDto>> = _trendingResponse
-  private val _searchResponse = MutableLiveData<NetworkResult<TenorResponseDto>>()
-  val searchResponse: LiveData<NetworkResult<TenorResponseDto>> = _searchResponse
+  private val _nextPageResponse = MutableLiveData<String?>()
+  val nextPageResponse: LiveData<String?> = _nextPageResponse
+  private val _trendingResponse = MutableLiveData<List<GifImageInfo>?>()
+  val trendingResponse: LiveData<List<GifImageInfo>?> = _trendingResponse
+  private val _searchResponse = MutableLiveData<List<GifImageInfo>?>()
+  val searchResponse: LiveData<List<GifImageInfo>?> = _searchResponse
 
-  fun loadTrendingImages(next: String?) = viewModelScope.launch {
+  fun loadTrendingImages(next: String? = null) = viewModelScope.launch {
     repository.getTrendingResults(next).collect { values ->
-      _nextPageResponse.value = values.data?.next
-      _trendingResponse.value = values
+      when (values) {
+        is NetworkResult.Success -> {
+          _nextPageResponse.value = values.data?.next
+
+          _trendingResponse.value = buildGifList(values.data)
+        }
+        is NetworkResult.Error -> {
+          _nextPageResponse.value = null
+
+          _trendingResponse.value = null
+        }
+      }
     }
   }
 
-  fun loadSearchImages(searchString: String, next: String?) = viewModelScope.launch {
+  fun loadSearchImages(searchString: String, next: String? = null) = viewModelScope.launch {
     repository.getSearchResults(searchString, next).collect { values ->
-      _nextPageResponse.value = values.data?.next
-      _searchResponse.value = values
+      when (values) {
+        is NetworkResult.Success -> {
+          _nextPageResponse.value = values.data?.next
+
+          _searchResponse.value = buildGifList(values.data)
+        }
+        is NetworkResult.Error -> {
+          _nextPageResponse.value = null
+
+          _searchResponse.value = null
+        }
+      }
     }
+  }
+
+  private fun buildGifList(response: TenorResponseDto?): List<GifImageInfo> {
+    return response?.results?.map { result ->
+      val media = result.media.first()
+      val tinyGif = media.tinyGif
+      val gif = media.gif
+      val gifUrl = gif.url
+
+      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $gifUrl")
+
+      GifImageInfo(tinyGif.url, tinyGif.preview, gifUrl, gif.preview)
+    }.orEmpty()
+  }
+
+  companion object {
+    private const val TAG = "GifViewModel"
   }
 }

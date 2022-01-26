@@ -43,11 +43,11 @@ class GifViewModelTest {
 
     sut.loadTrendingImages(next)
     val nextResult = sut.nextPageResponse.value
-    val trendingResult = sut.trendingResponse.value?.data
+    val trendingResult = sut.trendingResponse.value
 
     verify(repository).getTrendingResults(eq(next))
     assertThat(nextResult).isEqualTo("0.0")
-    assertThat(trendingResult).isEqualTo(response)
+    assertThat(trendingResult).isEqualTo(listOf<TenorResponseDto>())
   }
 
   @Test
@@ -58,7 +58,7 @@ class GifViewModelTest {
 
     sut.loadTrendingImages(next)
     val nextResult = sut.nextPageResponse.value
-    val trendingResult = sut.trendingResponse.value?.data
+    val trendingResult = sut.trendingResponse.value
 
     verify(repository).getTrendingResults(eq(next))
     assertThat(nextResult).isNull()
@@ -74,11 +74,11 @@ class GifViewModelTest {
 
     sut.loadSearchImages(searchString, next)
     val nextResult = sut.nextPageResponse.value
-    val searchResult = sut.searchResponse.value?.data
+    val searchResult = sut.searchResponse.value
 
     verify(repository).getSearchResults(eq(searchString), eq(next))
     assertThat(nextResult).isEqualTo("0.0")
-    assertThat(searchResult).isEqualTo(response)
+    assertThat(searchResult).isEqualTo(listOf<TenorResponseDto>())
   }
 
   @Test
@@ -90,7 +90,7 @@ class GifViewModelTest {
 
     sut.loadSearchImages(searchString, next)
     val nextResult = sut.nextPageResponse.value
-    val searchResult = sut.searchResponse.value?.data
+    val searchResult = sut.searchResponse.value
 
     verify(repository).getSearchResults(eq(searchString), eq(next))
     assertThat(nextResult).isNull()

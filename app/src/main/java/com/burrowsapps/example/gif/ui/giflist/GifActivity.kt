@@ -20,8 +20,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.data.ImageService
-import com.burrowsapps.example.gif.data.source.network.NetworkResult
-import com.burrowsapps.example.gif.data.source.network.TenorResponseDto
 import com.burrowsapps.example.gif.data.source.network.TenorService.Companion.DEFAULT_LIMIT_COUNT
 import com.burrowsapps.example.gif.databinding.ActivityGifBinding
 import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
@@ -133,21 +131,11 @@ class GifActivity : AppCompatActivity() {
       loadTrendingImages(nextPageNumber)
 
       trendingResponse.observe(this@GifActivity) { response ->
-        when (response) {
-          is NetworkResult.Success -> addImages(response.data!!)
-          is NetworkResult.Error -> {
-            // show error message
-          }
-        }
+        updateList(response)
       }
 
       searchResponse.observe(this@GifActivity) { response ->
-        when (response) {
-          is NetworkResult.Success -> addImages(response.data!!)
-          is NetworkResult.Error -> {
-            // show error message
-          }
-        }
+        updateList(response)
       }
 
       nextPageResponse.observe(this@GifActivity) { response ->
@@ -171,7 +159,7 @@ class GifActivity : AppCompatActivity() {
             if (hasSearchedImages) {
               // Reset
               clearImages()
-              nextPageNumber = null
+              nextPageNumber = null // Needed to reset the initial request
               gifViewModel.loadTrendingImages(nextPageNumber)
 
               hasSearchedImages = false
@@ -221,19 +209,12 @@ class GifActivity : AppCompatActivity() {
     gifAdapter.clear()
   }
 
-  private fun addImages(responseDto: TenorResponseDto) {
-    val newList = responseDto.results.map { result ->
-      val media = result.media.first()
-      val tinyGif = media.tinyGif
-      val gif = media.gif
-      val gifUrl = gif.url
-
-      if (Log.isLoggable(TAG, Log.INFO)) Log.i(TAG, "ORIGINAL_IMAGE_URL\t $gifUrl")
-
-      GifImageInfo(tinyGif.url, tinyGif.preview, gifUrl, gif.preview)
+  private fun updateList(newList: List<GifImageInfo>?) {
+    if (newList == null) {
+      Snackbar.make(binding.root, getString(R.string.error_loading_list), LENGTH_SHORT).show()
+    } else {
+      gifAdapter.add(newList)
     }
-
-    gifAdapter.add(newList)
   }
 
   private fun showImageDialog(imageInfoModel: GifImageInfo) {
