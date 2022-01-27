@@ -5,7 +5,7 @@ plugins {
   id("dagger.hilt.android.plugin")
   id("org.jlleitschuh.gradle.ktlint")
   id("com.jaredsburrows.license")
-  id("com.getkeepsafe.dexcount") version "3.0.1"
+  id("com.getkeepsafe.dexcount") version "3.1.0"
 }
 
 android {
@@ -191,6 +191,7 @@ dependencies {
   implementation(deps.android.appcompat)
   implementation(deps.android.core)
   implementation(deps.android.corektx)
+  implementation(deps.android.startup)
 
   // AndroidX UI
   implementation(deps.android.cardview)

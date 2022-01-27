@@ -137,7 +137,7 @@ object deps {
   }
 
   object mockito {
-    const val inline = "org.mockito:mockito-inline:4.2.0"
+    const val inline = "org.mockito:mockito-inline:4.3.1"
     const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
   }
 

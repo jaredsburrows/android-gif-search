@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="com.burrowsapps.example.gif"
   android:installLocation="auto"
-  tools:ignore="UnusedAttribute">
+  tools:ignore="UnusedAttribute,DataExtractionRules">
 
   <supports-screens
     android:anyDensity="true"
