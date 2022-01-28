@@ -4,4 +4,8 @@
   </style>
   <style name="AppTheme.ActionBar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
   </style>
+
+  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+  <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Dark" />
 </resources>

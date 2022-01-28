@@ -9,7 +9,7 @@
   <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
+    android:theme="@style/AppTheme.AppBarOverlay"
     app:liftOnScroll="true">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -17,7 +17,8 @@
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
       android:minHeight="?attr/actionBarSize"
-      app:layout_scrollFlags="scroll|enterAlways|snap" />
+      app:layout_scrollFlags="scroll|enterAlways|snap"
+      app:popupTheme="@style/AppTheme.PopupOverlay" />
   </com.google.android.material.appbar.AppBarLayout>
 
   <androidx.recyclerview.widget.RecyclerView
