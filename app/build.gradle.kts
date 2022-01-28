@@ -56,13 +56,12 @@ android {
 
   lint {
     textReport = true
-    textOutput("stdout")
-    isCheckAllWarnings = true
-    isWarningsAsErrors = true
+    checkAllWarnings = true
+    warningsAsErrors = true
     lintConfig = file("${project.rootDir}/config/lint/lint.xml")
-    isCheckReleaseBuilds = false
-    isCheckTestSources = true
-    isAbortOnError = false
+    checkReleaseBuilds = false
+    checkTestSources = true
+    abortOnError = true
   }
 
   signingConfigs {
