@@ -27,6 +27,16 @@ android {
 
     resourceConfigurations += setOf("en")
     vectorDrawables.useSupportLibrary = true
+
+    buildConfigField(
+      "String",
+      "BASE_URL",
+      if (rootProject.extra["ci"] as Boolean) {
+        "\"http://localhost:8080\""
+      } else {
+        "\"https://g.tenor.com\""
+      }
+    )
   }
 
   compileOptions {
@@ -74,24 +84,18 @@ android {
     }
   }
 
+  testBuildType = if (rootProject.extra["release"] as Boolean) "release" else "debug"
+
   buildTypes {
     getByName("debug") {
+      isDebuggable = true
       applicationIdSuffix = ".debug"
       versionNameSuffix = "-dev"
-
-      buildConfigField(
-        "String",
-        "BASE_URL",
-        if (rootProject.extra["ci"] as Boolean) {
-          "\"http://localhost:8080\""
-        } else {
-          "\"https://g.tenor.com\""
-        }
-      )
     }
 
     // Apply fake signing config to release to test "assembleRelease" locally
     getByName("release") {
+      isDebuggable = rootProject.extra["release"] as Boolean
       isMinifyEnabled = true
       isShrinkResources = true
       proguardFiles += listOf(
@@ -99,8 +103,6 @@ android {
         file("${project.rootDir}/config/proguard/proguard-rules.txt")
       )
       signingConfig = signingConfigs.getByName("debug")
-
-      buildConfigField("String", "BASE_URL", "\"https://g.tenor.com\"")
     }
   }
 
@@ -161,6 +163,9 @@ dependencies {
   testImplementation(kotlin("test"))
   testImplementation(kotlin("test-junit"))
   testImplementation(kotlin("test-common"))
+  androidTestImplementation(kotlin("test"))
+  androidTestImplementation(kotlin("test-junit"))
+  androidTestImplementation(kotlin("test-common"))
 
   // KotlinX
   implementation(platform(deps.kotlin.coroutines.bom))
@@ -175,6 +180,7 @@ dependencies {
 
   // Dagger / Dependency Injection
   implementation(deps.google.dagger.dagger)
+  androidTestImplementation(deps.google.dagger.dagger)
   kapt(deps.google.dagger.compiler)
   kaptTest(deps.google.dagger.compiler)
   kaptAndroidTest(deps.google.dagger.compiler)
@@ -236,7 +242,9 @@ dependencies {
 
   // Leakcanary
   debugImplementation(deps.squareup.leakcanary)
-  androidTestImplementation(deps.squareup.leakcanaryinstrumentation)
+  if (!(rootProject.extra["release"] as Boolean)) {
+    androidTestImplementation(deps.squareup.leakcanaryinstrumentation)
+  }
 
   // Other
   implementation(deps.jakewharton.timber)

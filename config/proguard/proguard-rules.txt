@@ -7,6 +7,9 @@
 # Dagger 2
 ##########################################################################################
 -dontwarn com.google.errorprone.annotations.**
+# dagger/hilt/android/internal/testing/TestApplicationComponentManagerHolder
+-keep class dagger.** { *; }
+-keep class dagge.hilt.android.internal.testing.root.** { *; }
 
 ##########################################################################################
 # Retrofit 2
@@ -101,3 +104,4 @@
 ##########################################################################################
 -dontnote android.net.http.**
 -dontnote org.apache.http.**
+-dontwarn net.bytebuddy.**

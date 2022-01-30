@@ -1,8 +1,5 @@
 package com.burrowsapps.example.gif.ui.giflist
 
-import android.Manifest.permission.INTERNET
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.widget.TextView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.espresso.Espresso.onView
@@ -26,7 +23,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import androidx.test.rule.GrantPermissionRule
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.ui.license.LicenseActivity
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -66,10 +62,6 @@ class GifActivityTest {
   val activityScenarioRule = ActivityScenarioRule(GifActivity::class.java)
 
   @get:Rule(order = 3)
-  val permissionRule: GrantPermissionRule = GrantPermissionRule
-    .grant(INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
-
-  @get:Rule(order = 4)
   val screenshotWatcher = ScreenshotWatcher()
 
   private val server = MockWebServer()

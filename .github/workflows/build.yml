@@ -46,13 +46,13 @@ jobs:
         with:
           java-version: ${{ matrix.java-version }}
 
-      - name: Build APK
-        run: ./gradlew clean ktlintCheck assemble lintDebug assembleDebugAndroidTest -Pci -s --scan
+      - name: Build Debug APK
+        run: ./gradlew clean ktlintCheck assembleDebug lintDebug assembleDebugAndroidTest -Pci -s --scan
 
-      - name: Run Unit Tests
+      - name: Run Debug Unit Tests
         run: ./gradlew testDebug -Pci -s --scan
 
-      - name: Run Instrumentation Tests
+      - name: Run Debug Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
         if: matrix.api-level == '23'
         continue-on-error: true
@@ -61,6 +61,22 @@ jobs:
           script: ./gradlew connectedDebugAndroidTest -Pci -s --scan || ./gradlew connectedDebugAndroidTest -Pci -s --scan
         env:
           API_LEVEL: ${{ matrix.api-level }}
+
+      - name: Build Release APK
+        run: ./gradlew clean assembleRelease lintRelease assembleReleaseAndroidTest -Pci -Prelease -s --scan
+
+      - name: Run Release Unit Tests
+        run: ./gradlew testRelease -Pci -Prelease -s --scan
+
+#      - name: Run Release Instrumentation Tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#        if: matrix.api-level == '23'
+#        continue-on-error: true
+#        with:
+#          api-level: ${{ matrix.api-level }}
+#          script: ./gradlew connectedReleaseAndroidTest -Pci -Prelease -s --scan || ./gradlew connectedReleaseAndroidTest -Pci -Prelease -s --scan
+#        env:
+#          API_LEVEL: ${{ matrix.api-level }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2

@@ -5,7 +5,10 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-rootProject.extra["ci"] = rootProject.hasProperty("ci")
+rootProject.apply {
+  extra["ci"] = hasProperty("ci")
+  extra["release"] = hasProperty("release")
+}
 
 plugins {
   id("com.android.application") version "7.0.4" apply false
