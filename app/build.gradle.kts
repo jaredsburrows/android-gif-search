@@ -178,6 +178,7 @@ dependencies {
   // AndroidX UI
   implementation(deps.android.constraintlayout)
   implementation(deps.android.recyclerview)
+  implementation(deps.android.swiperefreshlayout)
   implementation(deps.android.webkit)
   implementation(deps.google.material)
 

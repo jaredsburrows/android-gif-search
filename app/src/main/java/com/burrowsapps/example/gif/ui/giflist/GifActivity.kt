@@ -96,22 +96,16 @@ class GifActivity : AppCompatActivity() {
 
             if (loadingImages) {
               if ((visibleImageCount + firstVisibleImage) >= totalImageCount) {
-                loadingImages = false
-
-                if (hasSearchedImages) {
-                  gifViewModel.loadSearchImages(searchedImageText, nextPageNumber)
-                  Timber.i("onScrolled:\tloadSearchImages")
-                } else {
-                  gifViewModel.loadTrendingImages(nextPageNumber)
-                  Timber.i("onScrolled:\tloadTrendingImages")
-                }
-
-                loadingImages = true
+                loadImages()
               }
             }
           }
         }
       )
+    }
+
+    binding.swipeRefresh.setOnRefreshListener {
+      loadImages()
     }
 
     // Custom view for Dialog
@@ -211,6 +205,22 @@ class GifActivity : AppCompatActivity() {
     }
   }
 
+  internal fun loadImages() {
+    loadingImages = false
+
+    binding.swipeRefresh.isRefreshing = true
+
+    if (hasSearchedImages) {
+      gifViewModel.loadSearchImages(searchedImageText, nextPageNumber)
+      Timber.i("onScrolled:\tloadSearchImages")
+    } else {
+      gifViewModel.loadTrendingImages(nextPageNumber)
+      Timber.i("onScrolled:\tloadTrendingImages")
+    }
+
+    loadingImages = true
+  }
+
   internal fun clearImages() {
     // Clear current data
     gifAdapter.clear()
@@ -222,6 +232,7 @@ class GifActivity : AppCompatActivity() {
     } else {
       gifAdapter.add(newList)
     }
+    binding.swipeRefresh.isRefreshing = false
   }
 
   private fun showImageDialog(imageInfoModel: GifImageInfo) {

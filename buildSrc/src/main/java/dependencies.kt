@@ -59,6 +59,7 @@ object deps {
     const val livedataktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
     const val recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
     const val startup = "androidx.startup:startup-runtime:1.1.0"
+    const val swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     const val webkit = "androidx.webkit:webkit:1.4.0"
 
     object test {
