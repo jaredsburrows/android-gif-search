@@ -5,7 +5,7 @@ on:
     branches:
       - master
   pull_request:
-    types: [opened, labeled, unlabeled, synchronize]
+    types: [ opened, labeled, unlabeled, synchronize ]
 
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
@@ -46,13 +46,16 @@ jobs:
         with:
           java-version: ${{ matrix.java-version }}
 
-      - name: Build APK
-        run: ./gradlew clean ktlintCheck assemble lintDebug assembleDebugAndroidTest -Pci -s --scan
+      - name: Build Debug APKs
+        run: ./gradlew clean assembleDebug assembleDebugAndroidTest -Pci -s --scan
 
-      - name: Run Unit Tests
+      - name: Run Debug Checks
+        run: ./gradlew ktlintCheck lintDebug -Pci -s --scan
+
+      - name: Run Debug Unit Tests
         run: ./gradlew testDebug -Pci -s --scan
 
-      - name: Run Instrumentation Tests
+      - name: Run Debug Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
         if: matrix.api-level == '23'
         continue-on-error: true
@@ -61,6 +64,12 @@ jobs:
           script: ./gradlew connectedDebugAndroidTest -Pci -s --scan || ./gradlew connectedDebugAndroidTest -Pci -s --scan
         env:
           API_LEVEL: ${{ matrix.api-level }}
+
+      - name: Build Release APKs
+        run: ./gradlew assembleRelease assembleReleaseAndroidTest -Pci -Prelease -s --scan
+
+      - name: Run Release Checks
+        run: ./gradlew lintRelease -Pci -Prelease -s --scan
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2

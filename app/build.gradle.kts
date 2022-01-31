@@ -27,6 +27,16 @@ android {
 
     resourceConfigurations += setOf("en")
     vectorDrawables.useSupportLibrary = true
+
+    buildConfigField(
+      "String",
+      "BASE_URL",
+      if (rootProject.extra["ci"] as Boolean) {
+        "\"http://localhost:8080\""
+      } else {
+        "\"https://g.tenor.com\""
+      }
+    )
   }
 
   compileOptions {
@@ -74,20 +84,12 @@ android {
     }
   }
 
+  testBuildType = if (rootProject.extra["release"] as Boolean) "release" else "debug"
+
   buildTypes {
     getByName("debug") {
       applicationIdSuffix = ".debug"
       versionNameSuffix = "-dev"
-
-      buildConfigField(
-        "String",
-        "BASE_URL",
-        if (rootProject.extra["ci"] as Boolean) {
-          "\"http://localhost:8080\""
-        } else {
-          "\"https://g.tenor.com\""
-        }
-      )
     }
 
     // Apply fake signing config to release to test "assembleRelease" locally
@@ -99,8 +101,6 @@ android {
         file("${project.rootDir}/config/proguard/proguard-rules.txt")
       )
       signingConfig = signingConfigs.getByName("debug")
-
-      buildConfigField("String", "BASE_URL", "\"https://g.tenor.com\"")
     }
   }
 
