@@ -37,7 +37,8 @@ class LicenseActivityTest {
   val instantTaskExecutorRule = InstantTaskExecutorRule()
 
   @get:Rule(order = 2)
-  val activityScenarioRule = ActivityScenarioRule(LicenseActivity::class.java)
+  val activityScenarioRule: ActivityScenarioRule<LicenseActivity> =
+    ActivityScenarioRule(LicenseActivity::class.java)
 
   @get:Rule(order = 3)
   val permissionRule: GrantPermissionRule = GrantPermissionRule

@@ -63,7 +63,8 @@ class GifActivityTest {
   val instantTaskExecutorRule = InstantTaskExecutorRule()
 
   @get:Rule(order = 2)
-  val activityScenarioRule = ActivityScenarioRule(GifActivity::class.java)
+  val activityScenarioRule: ActivityScenarioRule<GifActivity> =
+    ActivityScenarioRule(GifActivity::class.java)
 
   @get:Rule(order = 3)
   val permissionRule: GrantPermissionRule = GrantPermissionRule
