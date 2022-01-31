@@ -49,21 +49,6 @@ android {
     viewBinding = true
   }
 
-  sourceSets {
-    val commonTestSources = "src/commonTest/java"
-    val commonTestResources = "src/commonTest/resources"
-
-    getByName("test").apply {
-      java.srcDirs(commonTestSources)
-      resources.srcDirs(commonTestResources)
-    }
-
-    getByName("androidTest").apply {
-      java.srcDirs(commonTestSources)
-      resources.srcDirs(commonTestResources)
-    }
-  }
-
   lint {
     textReport = true
     textOutput("stdout")
@@ -240,6 +225,7 @@ dependencies {
   // Other
   implementation(deps.jakewharton.timber)
 
+  testImplementation(project(":test-shared"))
   testImplementation(deps.android.test.annotation)
   testImplementation(deps.android.test.core)
   testImplementation(deps.android.test.coretesting)
@@ -254,6 +240,7 @@ dependencies {
   androidTestUtil(deps.android.test.orchestrator)
 
   debugImplementation(deps.android.test.core) // See https://stackoverflow.com/a/69476166/950427
+  androidTestImplementation(project(":test-shared"))
   androidTestImplementation(deps.android.test.annotation)
   androidTestImplementation(deps.android.test.core)
   androidTestImplementation(deps.android.test.coretesting)

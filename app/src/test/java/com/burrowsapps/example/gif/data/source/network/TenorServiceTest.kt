@@ -1,6 +1,9 @@
 package com.burrowsapps.example.gif.data.source.network
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.burrowsapps.example.gif.test.TestFileUtils.MOCK_SERVER_PORT
+import com.burrowsapps.example.gif.test.TestFileUtils.getMockFileResponse
+import com.burrowsapps.example.gif.test.TestFileUtils.getMockResponse
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -17,9 +20,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import test.TestFileUtils.MOCK_SERVER_PORT
-import test.TestFileUtils.getMockFileResponse
-import test.TestFileUtils.getMockResponse
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import javax.inject.Inject
 

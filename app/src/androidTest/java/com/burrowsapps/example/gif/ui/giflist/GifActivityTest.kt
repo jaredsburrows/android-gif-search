@@ -28,6 +28,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import com.burrowsapps.example.gif.R
+import com.burrowsapps.example.gif.test.TestFileUtils.MOCK_SERVER_PORT
+import com.burrowsapps.example.gif.test.TestFileUtils.getMockFileResponse
+import com.burrowsapps.example.gif.test.TestFileUtils.getMockResponse
 import com.burrowsapps.example.gif.ui.license.LicenseActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -47,9 +50,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import test.ScreenshotWatcher
-import test.TestFileUtils.MOCK_SERVER_PORT
-import test.TestFileUtils.getMockFileResponse
-import test.TestFileUtils.getMockResponse
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 @HiltAndroidTest

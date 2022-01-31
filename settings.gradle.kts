@@ -1,5 +1,4 @@
 pluginManagement {
-
   repositories {
     google()
     gradlePluginPortal()
@@ -40,3 +39,4 @@ gradleEnterprise {
 rootProject.name = "android-gif-example"
 
 include(":app")
+include(":test-shared")

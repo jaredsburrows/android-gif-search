@@ -1,4 +1,4 @@
-package test
+package com.burrowsapps.example.gif.test
 
 import okhttp3.mockwebserver.MockResponse
 import okio.Buffer
