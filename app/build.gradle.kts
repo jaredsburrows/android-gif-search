@@ -45,9 +45,7 @@ android {
     targetCompatibility = deps.versions.java
   }
 
-  buildFeatures {
-    viewBinding = true
-  }
+  buildFeatures.viewBinding = true
 
   lint {
     textReport = true
