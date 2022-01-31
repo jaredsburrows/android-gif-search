@@ -43,7 +43,6 @@ object deps {
     const val activity = "androidx.activity:activity:1.4.0"
     const val activityktx = "androidx.activity:activity-ktx:1.4.0"
     const val appcompat = "androidx.appcompat:appcompat:1.4.1"
-    const val cardview = "androidx.cardview:cardview:1.0.0"
     const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
     const val core = "androidx.core:core:1.7.0"
     const val corektx = "androidx.core:core-ktx:1.7.0"
