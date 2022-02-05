@@ -1,7 +1,5 @@
 @file:Suppress("ClassName", "SpellCheckingInspection")
 
-import org.gradle.api.JavaVersion.VERSION_11
-
 object deps {
   object versions {
     const val kotlin = "1.6.10"
@@ -12,7 +10,6 @@ object deps {
     const val retrofit = "2.9.0"
     const val espresso = "3.4.0"
     const val glide = "4.12.0"
-    val java = VERSION_11
   }
 
   object build {

@@ -1,3 +1,5 @@
+import org.gradle.api.JavaVersion.VERSION_11
+
 plugins {
   id("com.android.application")
   kotlin("android")
@@ -41,8 +43,8 @@ android {
 
   compileOptions {
     isCoreLibraryDesugaringEnabled = true
-    sourceCompatibility = deps.versions.java
-    targetCompatibility = deps.versions.java
+    sourceCompatibility = VERSION_11
+    targetCompatibility = VERSION_11
   }
 
   buildFeatures.viewBinding = true
@@ -66,6 +68,7 @@ android {
     }
   }
 
+  // Allows "connectedDebugAndroidTest"
   testBuildType = if (rootProject.extra["release"] as Boolean) "release" else "debug"
 
   buildTypes {
