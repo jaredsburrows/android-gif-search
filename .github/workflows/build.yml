@@ -71,6 +71,9 @@ jobs:
       - name: Run Release Checks
         run: ./gradlew lintRelease -Pci -Prelease -s --scan
 
+      - name: Run Release Unit Tests
+        run: ./gradlew testRelease -Pci -Prelease -s --scan
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         if: always()
