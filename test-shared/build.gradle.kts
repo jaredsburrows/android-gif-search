@@ -1,4 +1,5 @@
 import org.gradle.api.JavaVersion.VERSION_11
+import java.net.URL
 
 plugins {
   id("com.android.library")
@@ -43,6 +44,32 @@ android {
       "**/*.xml",
       "**/*.properties",
     )
+  }
+}
+
+tasks.register("updateTestFiles") {
+  doLast {
+    // test-shared/src/main/resources
+    val resourcesFolder = android.sourceSets["main"].resources.srcDirs.first()
+
+    mapOf(
+      // Show enough to emulate a filtered "search" for testing
+      "search_results.json" to
+        "https://g.tenor.com/v1/search?key=LIVDSRZULELA&media_filter=minimal&q=hello&limit=10",
+      // Show just enough to fill the screen for testing
+      "trending_results.json" to
+        "https://g.tenor.com/v1/trending?key=LIVDSRZULELA&media_filter=minimal&limit=24"
+    ).forEach { (file, url) ->
+      File(resourcesFolder, file)
+        .writeText(
+          URL(url)
+            .readText()
+            // Point our mock JSON to point to local OkHTTP Mock server
+            .replace("media.tenor.com", "localhost:8080")
+            // Enforce HTTPS
+            .replace("http:", "https:")
+        )
+    }
   }
 }
 

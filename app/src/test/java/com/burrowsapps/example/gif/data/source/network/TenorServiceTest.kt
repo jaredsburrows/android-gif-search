@@ -68,7 +68,7 @@ class TenorServiceTest {
     val body = response.body()!!
 
     assertThat(body.results[0].media[0].tinyGif.url)
-      .contains("/images/7d95a1f8a8750460a82b04451be26d69/raw")
+      .contains("/images/7c05ba9bdad525e9b2ff5b45e276c7c6/tenor.gif")
   }
 
   @Test
@@ -77,7 +77,7 @@ class TenorServiceTest {
     val body = response.body()!!
 
     assertThat(body.results[0].media[0].tinyGif.preview)
-      .contains("/images/511fdce5dc8f5f2b88ac2de6c74b92e7/raw")
+      .contains("/images/7b770b669d4b11c453256abefcd499f4/tenor.gif")
   }
 
   @Test
@@ -86,7 +86,7 @@ class TenorServiceTest {
     val body = response.body()!!
 
     assertThat(body.results[0].media[0].tinyGif.url)
-      .contains("/images/6088f94e6eb5dd7584dedda0fe1e52e1/raw")
+      .contains("/images/f1b1086cd3f8ca158b09fd3ef522bdea/tenor.gif")
   }
 
   @Test
@@ -95,6 +95,6 @@ class TenorServiceTest {
     val body = response.body()!!
 
     assertThat(body.results[0].media[0].tinyGif.preview)
-      .contains("/images/6f2ed339fbdb5c1270e29945ee1f0d77/raw")
+      .contains("/images/5fe0406aeeb8dbe28977f2336334b206/tenor.gif")
   }
 }
