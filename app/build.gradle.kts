@@ -47,7 +47,14 @@ android {
     targetCompatibility = VERSION_11
   }
 
-  buildFeatures.viewBinding = true
+  kotlinOptions {
+    jvmTarget = VERSION_11.toString()
+  }
+
+  buildFeatures {
+    buildConfig = true
+    viewBinding = true
+  }
 
   lint {
     textReport = true
@@ -200,7 +207,7 @@ dependencies {
 
   // Glide
   implementation(libs.bumptech.glide)
-  implementation(libs.bumptech.glide.okhttp3)
+  implementation(libs.bumptech.glide.okhttp)
   kapt(libs.bumptech.glide.compiler)
 
   // OkIO
@@ -227,6 +234,7 @@ dependencies {
   // Other
   implementation(libs.jakewharton.timber)
 
+  // Unit Tests
   testImplementation(project(":test-shared"))
   testImplementation(libs.androidx.test.annotation)
   testImplementation(libs.androidx.test.core)
@@ -239,8 +247,8 @@ dependencies {
   testImplementation(libs.reflections)
   testImplementation(libs.robolectric)
 
+  // Android Tests
   androidTestUtil(libs.androidx.test.orchestrator)
-
   debugImplementation(libs.androidx.test.core) // See https://stackoverflow.com/a/69476166/950427
   androidTestImplementation(project(":test-shared"))
   androidTestImplementation(libs.androidx.test.annotation)
