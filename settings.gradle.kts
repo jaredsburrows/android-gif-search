@@ -18,6 +18,7 @@ pluginManagement {
 
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
   repositories {
     google()
     gradlePluginPortal()
@@ -40,3 +41,5 @@ rootProject.name = "android-gif-example"
 
 include(":app")
 include(":test-shared")
+
+enableFeaturePreview("VERSION_CATALOGS")

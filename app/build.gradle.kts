@@ -11,14 +11,14 @@ plugins {
 }
 
 android {
-  compileSdk = deps.build.compileSdk
+  compileSdk = libs.versions.sdk.compile.get().toInt()
 
   defaultConfig {
     applicationId = "com.burrowsapps.example.gif"
     versionCode = 1
     versionName = "1.0"
-    minSdk = deps.build.minSdk
-    targetSdk = deps.build.targetSdk
+    minSdk = libs.versions.sdk.min.get().toInt()
+    targetSdk = libs.versions.sdk.target.get().toInt()
 
     testApplicationId = "burrows.apps.example.gif.test"
     testInstrumentationRunner = "test.CustomTestRunner" // "androidx.test.runner.AndroidJUnitRunner"
@@ -62,9 +62,9 @@ android {
   signingConfigs {
     getByName("debug") {
       storeFile = file("${project.rootDir}/config/signing/debug.keystore")
-      storePassword = deps.build.signing.pass
-      keyAlias = deps.build.signing.alias
-      keyPassword = deps.build.signing.pass
+      storePassword = libs.versions.debug.password.get()
+      keyAlias = libs.versions.debug.alias.get()
+      keyPassword = libs.versions.debug.password.get()
     }
   }
 
@@ -135,10 +135,10 @@ licenseReport {
 
 dependencies {
   // Java 8+
-  coreLibraryDesugaring(deps.android.desugarJdkLibs)
+  coreLibraryDesugaring(libs.android.desugar)
 
   // Kotlin
-  implementation(platform(kotlin("bom", deps.versions.kotlin)))
+  implementation(platform(libs.kotlin.bom))
   implementation(kotlin("stdlib"))
   implementation(kotlin("stdlib-common"))
   implementation(kotlin("stdlib-jdk7"))
@@ -148,112 +148,113 @@ dependencies {
   testImplementation(kotlin("test-common"))
 
   // KotlinX
-  implementation(platform(deps.kotlin.coroutines.bom))
-  implementation(deps.kotlin.coroutines.android)
-  implementation(deps.kotlin.coroutines.core)
-  implementation(deps.kotlin.coroutines.corejvm)
-  implementation(deps.kotlin.coroutines.corejdk8)
-  testImplementation(deps.kotlin.coroutines.test)
-  testImplementation(deps.kotlin.coroutines.testjvm)
-  androidTestImplementation(deps.kotlin.coroutines.test)
-  androidTestImplementation(deps.kotlin.coroutines.testjvm)
+  implementation(platform(libs.kotlinx.coroutines.bom))
+  implementation(libs.kotlinx.coroutines.android)
+  implementation(libs.kotlinx.coroutines.core)
+  implementation(libs.kotlinx.coroutines.corejvm)
+  implementation(libs.kotlinx.coroutinesjdk8)
+  testImplementation(libs.kotlinx.coroutines.test)
+  testImplementation(libs.kotlinx.coroutines.testjvm)
+  androidTestImplementation(libs.kotlinx.coroutines.test)
+  androidTestImplementation(libs.kotlinx.coroutines.testjvm)
 
   // Dagger / Dependency Injection
-  implementation(deps.google.dagger.dagger)
-  kapt(deps.google.dagger.compiler)
-  kaptTest(deps.google.dagger.compiler)
-  kaptAndroidTest(deps.google.dagger.compiler)
-  compileOnly(deps.misc.javaxInject)
-  compileOnly(deps.misc.jsr250)
-  compileOnly(deps.misc.jsr305)
-  testImplementation(deps.google.dagger.testing)
-  androidTestImplementation(deps.google.dagger.testing)
+  implementation(libs.google.hilt.android)
+  kapt(libs.google.hilt.compiler)
+  kaptTest(libs.google.hilt.compiler)
+  kaptAndroidTest(libs.google.hilt.compiler)
+  compileOnly(libs.glassfish.javax.annotation)
+  compileOnly(libs.javax.annotation.jsr250)
+  compileOnly(libs.google.findbugs.jsr305)
+  testImplementation(libs.google.hilt.testing)
+  androidTestImplementation(libs.google.hilt.testing)
 
   // AndroidX
-  implementation(deps.android.annotation)
-  implementation(deps.android.activity)
-  implementation(deps.android.activityktx)
-  implementation(deps.android.appcompat)
-  implementation(deps.android.core)
-  implementation(deps.android.corektx)
-  implementation(deps.android.startup)
+  implementation(libs.androidx.annotation)
+  implementation(libs.androidx.activity)
+  implementation(libs.androidx.activityktx)
+  implementation(libs.androidx.appcompat)
+  implementation(libs.androidx.core)
+  implementation(libs.androidx.corektx)
+  implementation(libs.androidx.startup)
 
   // AndroidX UI
-  implementation(deps.android.constraintlayout)
-  implementation(deps.android.recyclerview)
-  implementation(deps.android.swiperefreshlayout)
-  implementation(deps.android.webkit)
-  implementation(deps.google.material)
+  implementation(libs.androidx.cardview)
+  implementation(libs.androidx.constraintlayout)
+  implementation(libs.androidx.recyclerview)
+  implementation(libs.androidx.swiperefreshlayout)
+  implementation(libs.androidx.webkit)
+  implementation(libs.google.material)
 
   // AndroidX Lifecycle
-  implementation(deps.android.common)
-  implementation(deps.android.commonjdk8)
-  implementation(deps.android.extensions)
-  implementation(deps.android.viewmodel)
-  implementation(deps.android.viewmodelktx)
-  implementation(deps.android.livedata)
-  implementation(deps.android.livedatacore)
-  implementation(deps.android.livedatacorektx)
-  implementation(deps.android.livedataktx)
-  kapt(deps.android.compiler)
+  implementation(libs.androidx.lifecycle.common)
+  implementation(libs.androidx.lifecycle.commonjdk8)
+  implementation(libs.androidx.lifecycle.extensions)
+  implementation(libs.androidx.lifecycle.viewmodel)
+  implementation(libs.androidx.lifecycle.viewmodelktx)
+  implementation(libs.androidx.lifecycle.livedata)
+  implementation(libs.androidx.lifecycle.livedatacore)
+  implementation(libs.androidx.lifecycle.livedatacorektx)
+  implementation(libs.androidx.lifecycle.livedataktx)
+  kapt(libs.androidx.lifecycle.compiler)
 
   // Glide
-  implementation(deps.glide.glide)
-  implementation(deps.glide.integration)
-  kapt(deps.glide.compiler)
+  implementation(libs.bumptech.glide)
+  implementation(libs.bumptech.glide.okhttp3)
+  kapt(libs.bumptech.glide.compiler)
 
   // OkIO
-  implementation(deps.squareup.okio)
+  implementation(libs.squareup.okio)
 
   // OkHTTP
-  implementation(platform(deps.squareup.okhttp.bom))
-  implementation(deps.squareup.okhttp.okhttp)
-  implementation(deps.squareup.okhttp.interceptor)
-  testImplementation(deps.squareup.okhttp.mockwebserver)
-  androidTestImplementation(deps.squareup.okhttp.mockwebserver)
+  implementation(platform(libs.squareup.okhttp.bom))
+  implementation(libs.squareup.okhttp)
+  implementation(libs.squareup.okhttp.logging)
+  testImplementation(libs.squareup.okhttp.mockwebserver)
+  androidTestImplementation(libs.squareup.okhttp.mockwebserver)
 
   // Retrofit
-  implementation(deps.squareup.moshi.moshi)
-  implementation(deps.squareup.moshi.adapters)
-  implementation(deps.squareup.retrofit.moshi)
-  implementation(deps.squareup.retrofit.retrofit)
-  kapt(deps.squareup.moshi.compiler)
+  implementation(libs.squareup.moshi)
+  implementation(libs.squareup.moshi.adapters)
+  kapt(libs.squareup.moshi.kotlin)
+  implementation(libs.squareup.retrofit)
+  implementation(libs.squareup.retrofit.moshi)
 
   // Leakcanary
-  debugImplementation(deps.squareup.leakcanary)
-  androidTestImplementation(deps.squareup.leakcanaryinstrumentation)
+  debugImplementation(libs.squareup.leakcanary)
+  androidTestImplementation(libs.squareup.leakcanary.instrumentation)
 
   // Other
-  implementation(deps.jakewharton.timber)
+  implementation(libs.jakewharton.timber)
 
   testImplementation(project(":test-shared"))
-  testImplementation(deps.android.test.annotation)
-  testImplementation(deps.android.test.core)
-  testImplementation(deps.android.test.coretesting)
-  testImplementation(deps.android.test.ext.junit)
-  testImplementation(deps.google.truth)
-  testImplementation(deps.junit)
-  testImplementation(deps.mockito.inline)
-  testImplementation(deps.mockito.kotlin)
-  testImplementation(deps.reflections)
-  testImplementation(deps.robolectric.robolectric)
+  testImplementation(libs.androidx.test.annotation)
+  testImplementation(libs.androidx.test.core)
+  testImplementation(libs.androidx.core.testing)
+  testImplementation(libs.androidx.test.junit)
+  testImplementation(libs.google.truth)
+  testImplementation(libs.junit)
+  testImplementation(libs.mockito.inline)
+  testImplementation(libs.mockito.kotlin)
+  testImplementation(libs.reflections)
+  testImplementation(libs.robolectric)
 
-  androidTestUtil(deps.android.test.orchestrator)
+  androidTestUtil(libs.androidx.test.orchestrator)
 
-  debugImplementation(deps.android.test.core) // See https://stackoverflow.com/a/69476166/950427
+  debugImplementation(libs.androidx.test.core) // See https://stackoverflow.com/a/69476166/950427
   androidTestImplementation(project(":test-shared"))
-  androidTestImplementation(deps.android.test.annotation)
-  androidTestImplementation(deps.android.test.core)
-  androidTestImplementation(deps.android.test.coretesting)
-  androidTestImplementation(deps.android.test.espresso.contrib) {
+  androidTestImplementation(libs.androidx.test.annotation)
+  androidTestImplementation(libs.androidx.test.core)
+  androidTestImplementation(libs.androidx.core.testing)
+  androidTestImplementation(libs.androidx.espresso.contrib) {
     exclude("org.checkerframework") // See https://github.com/android/android-test/issues/861#issuecomment-872582819
   }
-  androidTestImplementation(deps.android.test.espresso.core)
-  androidTestImplementation(deps.android.test.espresso.intents)
-  androidTestImplementation(deps.android.test.ext.junit)
-  androidTestImplementation(deps.android.test.runner)
-  androidTestImplementation(deps.android.test.rules)
-  androidTestImplementation(deps.google.truth)
-  androidTestImplementation(deps.junit)
-  androidTestImplementation(deps.robolectric.annotations)
+  androidTestImplementation(libs.androidx.espresso.core)
+  androidTestImplementation(libs.androidx.espresso.intents)
+  androidTestImplementation(libs.androidx.test.junit)
+  androidTestImplementation(libs.androidx.test.runner)
+  androidTestImplementation(libs.androidx.test.rules)
+  androidTestImplementation(libs.google.truth)
+  androidTestImplementation(libs.junit)
+  androidTestImplementation(libs.robolectric.annotations)
 }
