@@ -1,9 +1,10 @@
 [versions]
-dagger = "2.40.5"
+dagger = "2.41"
 espresso = "3.4.0"
-glide = "4.12.0"
+glide = "4.13.0"
 kotlinx = "1.6.0"
 leakcanary = "2.8.1"
+lifecycle = "2.4.1"
 moshi = "1.13.0"
 okhttp = "4.9.3"
 retrofit = "2.9.0"
@@ -33,18 +34,18 @@ androidx-corektx = { module = "androidx.core:core-ktx", version = "1.7.0" }
 androidx-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espresso" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 androidx-espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espresso" }
-androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version = "2.4.0" }
-androidx-lifecycle-commonjdk8 = { module = "androidx.lifecycle:lifecycle-common-java8", version = "2.4.0" }
-androidx-lifecycle-compiler = { module = "androidx.lifecycle:lifecycle-compiler", version = "2.4.0" }
+androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
+androidx-lifecycle-commonjdk8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifecycle" }
+androidx-lifecycle-compiler = { module = "androidx.lifecycle:lifecycle-compiler", version.ref = "lifecycle" }
 androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version = "2.2.0" }
-androidx-lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata", version = "2.4.0" }
-androidx-lifecycle-livedatacore = { module = "androidx.lifecycle:lifecycle-livedata-core", version = "2.4.0" }
-androidx-lifecycle-livedatacorektx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version = "2.4.0" }
-androidx-lifecycle-livedataktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version = "2.4.0" }
-androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version = "2.4.0" }
-androidx-lifecycle-viewmodelktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version = "2.4.0" }
+androidx-lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata", version.ref = "lifecycle" }
+androidx-lifecycle-livedatacore = { module = "androidx.lifecycle:lifecycle-livedata-core", version.ref = "lifecycle" }
+androidx-lifecycle-livedatacorektx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-livedataktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodelktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version = "1.2.1" }
-androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.1.0" }
+androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.1.1" }
 androidx-test-annotation = { module = "androidx.test:annotation", version = "1.0.0" }
 androidx-test-core = { module = "androidx.test:core", version = "1.4.0" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version = "1.1.3" }

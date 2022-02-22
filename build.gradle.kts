@@ -15,7 +15,7 @@ plugins {
   id("com.android.library") version "7.1.1" apply false
   kotlin("android") version "1.6.10" apply false
   kotlin("jvm") version "1.6.10" apply false
-  id("dagger.hilt.android.plugin") version "2.40.5" apply false
+  id("com.google.dagger.hilt.android") version "2.41" apply false
   id("org.jlleitschuh.gradle.ktlint") version "10.2.1" apply false
   id("com.jaredsburrows.license") version "0.8.90" apply false
   id("com.github.ben-manes.versions") version "0.42.0"
