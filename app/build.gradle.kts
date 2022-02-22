@@ -4,7 +4,7 @@ plugins {
   id("com.android.application")
   kotlin("android")
   kotlin("kapt")
-  id("dagger.hilt.android.plugin")
+  id("com.google.dagger.hilt.android")
   id("org.jlleitschuh.gradle.ktlint")
   id("com.jaredsburrows.license")
   id("com.getkeepsafe.dexcount") version "3.1.0"

@@ -4,16 +4,6 @@ pluginManagement {
     gradlePluginPortal()
     mavenCentral()
   }
-
-  resolutionStrategy {
-    eachPlugin {
-      when (requested.id.id) {
-        // See https://github.com/google/dagger/issues/3170, https://github.com/google/dagger/issues/2774
-        "dagger.hilt.android.plugin" ->
-          useModule("com.google.dagger:hilt-android-gradle-plugin:${requested.version}")
-      }
-    }
-  }
 }
 
 dependencyResolutionManagement {
