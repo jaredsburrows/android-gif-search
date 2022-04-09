@@ -20,7 +20,7 @@ android {
     minSdk = libs.versions.sdk.min.get().toInt()
     targetSdk = libs.versions.sdk.target.get().toInt()
 
-    testApplicationId = "burrows.apps.example.gif.test"
+    testApplicationId = "com.burrowsapps.example.gif.test"
     testInstrumentationRunner = "test.CustomTestRunner" // "androidx.test.runner.AndroidJUnitRunner"
     testInstrumentationRunnerArguments += mapOf(
       "clearPackageData" to "true",
