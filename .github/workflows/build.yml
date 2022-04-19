@@ -19,10 +19,10 @@ jobs:
       matrix:
         api-level:
           - 23
-          - 31
+          - 32
         java-version:
           - 11
-          - 17
+          - 18
 
     steps:
       - name: Checkout Project
