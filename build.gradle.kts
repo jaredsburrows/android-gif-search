@@ -13,11 +13,11 @@ rootProject.apply {
 plugins {
   id("com.android.application") version "7.1.3" apply false
   id("com.android.library") version "7.1.3" apply false
-  kotlin("android") version "1.6.20" apply false
-  kotlin("jvm") version "1.6.20" apply false
+  kotlin("android") version "1.6.21" apply false
+  kotlin("jvm") version "1.6.21" apply false
   id("com.google.dagger.hilt.android") version "2.41" apply false
   id("org.jlleitschuh.gradle.ktlint") version "10.2.1" apply false
-  id("com.jaredsburrows.license") version "0.8.90" apply false
+  id("com.jaredsburrows.license") version "0.8.91" apply false
   id("com.github.ben-manes.versions") version "0.42.0"
 }
 
