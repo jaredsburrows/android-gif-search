@@ -1,13 +1,13 @@
 import org.gradle.api.JavaVersion.VERSION_11
 
 plugins {
-  id("com.android.application")
+  alias(libs.plugins.android.application)
   kotlin("android")
   kotlin("kapt")
-  id("com.google.dagger.hilt.android")
-  id("org.jlleitschuh.gradle.ktlint")
-  id("com.jaredsburrows.license")
-  id("com.getkeepsafe.dexcount") version "3.1.0"
+  alias(libs.plugins.dagger)
+  alias(libs.plugins.ktlint)
+  alias(libs.plugins.license)
+  alias(libs.plugins.dexcount)
 }
 
 android {

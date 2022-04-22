@@ -2,9 +2,9 @@ import org.gradle.api.JavaVersion.VERSION_11
 import java.net.URL
 
 plugins {
-  id("com.android.library")
+  alias(libs.plugins.android.library)
   kotlin("android")
-  id("org.jlleitschuh.gradle.ktlint")
+  alias(libs.plugins.ktlint)
 }
 
 android {

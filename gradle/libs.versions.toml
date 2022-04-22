@@ -1,4 +1,5 @@
 [versions]
+android = "7.1.3"
 dagger = "2.41"
 espresso = "3.4.0"
 glide = "4.13.1"
@@ -19,6 +20,15 @@ sdk-target = "31"
 # signing
 debug-alias = "androiddebugkey"
 debug-password = "android"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android" }
+android-library = { id = "com.android.library", version.ref = "android" }
+dagger = { id = "com.google.dagger.hilt.android", version = "2.41" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "10.2.1" }
+license = { id = "com.jaredsburrows.license", version = "0.9.0" }
+versions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
+dexcount = { id = "com.getkeepsafe.dexcount", version = "3.1.0" }
 
 [libraries]
 android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "1.1.5" }
