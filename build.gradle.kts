@@ -62,7 +62,6 @@ allprojects {
     targetCompatibility = VERSION_11.toString()
 
     kotlinOptions {
-      // allWarningsAsErrors = true
       jvmTarget = VERSION_11.toString()
       languageVersion = "1.6"
       apiVersion = "1.6"
@@ -70,14 +69,11 @@ allprojects {
         // https://kotlinlang.org/docs/compiler-reference.html#progressive
         "-progressive",
         "-Xjsr305=strict",
-        "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
         "-Xemit-jvm-type-annotations",
-        // Match JVM assertion behavior: https://publicobject.com/2019/11/18/kotlins-assert-is-not-like-javas-assert/
+        // https://publicobject.com/2019/11/18/kotlins-assert-is-not-like-javas-assert/
         "-Xassertions=jvm",
         "-Xproper-ieee754-comparisons",
-        // Generate nullability assertions for non-null Java expressions
-        "-Xstrict-java-nullability-assertions",
-        // Enable new jvmdefault behavior
         // https://blog.jetbrains.com/kotlin/2020/07/kotlin-1-4-m3-generating-default-methods-in-interfaces/
         "-Xjvm-default=all",
         "-P",
@@ -103,8 +99,6 @@ allprojects {
         "-Xlint:-unchecked",
         // Ignore no process
         "-Xlint:-processing",
-        // Turn warnings into errors
-        "-Werror",
       )
       compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "10000"))
       encoding = "utf-8"
@@ -121,7 +115,6 @@ allprojects {
       events = setOf(FAILED, SKIPPED)
     }
 
-    failFast = true
     val maxWorkerCount = gradle.startParameter.maxWorkerCount
     maxParallelForks = if (maxWorkerCount < 2) 1 else maxWorkerCount / 2
   }
