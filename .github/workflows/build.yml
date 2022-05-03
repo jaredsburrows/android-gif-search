@@ -57,7 +57,7 @@ jobs:
         run: ./gradlew testDebug -Pci -s --scan
 
       - name: Run Debug Instrumentation Tests
-        uses: reactivecircus/android-emulator-runner@v2.23.0
+        uses: reactivecircus/android-emulator-runner@v2.24.0
         if: matrix.api-level == '23'
         continue-on-error: true
         with:
