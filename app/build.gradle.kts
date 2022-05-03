@@ -135,9 +135,7 @@ kapt {
 }
 
 licenseReport {
-  generateCsvReport = false // TODO default should be false
   generateHtmlReport = true
-  generateJsonReport = false // TODO default should be false
 }
 
 dependencies {
