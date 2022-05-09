@@ -17,7 +17,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-  id("com.gradle.enterprise") version "3.8.1"
+  id("com.gradle.enterprise") version "3.10"
 }
 
 gradleEnterprise {
@@ -32,4 +32,3 @@ rootProject.name = "android-gif-example"
 
 include(":app")
 include(":test-shared")
-
