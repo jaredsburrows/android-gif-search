@@ -76,7 +76,7 @@ jobs:
         run: ./gradlew testRelease -Pci -Prelease -s
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3.0.0
+        uses: actions/upload-artifact@v3.1.0
         if: always()
         with:
           name: android-gif-example-${{ github.workflow }}-${{ github.run_id }}
