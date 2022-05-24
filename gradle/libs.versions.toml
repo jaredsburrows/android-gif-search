@@ -9,7 +9,7 @@ lifecycle = "2.4.1"
 moshi = "1.13.0"
 okhttp = "4.9.3"
 retrofit = "2.9.0"
-robolectric = "4.8"
+robolectric = "4.8.1"
 # language
 java = "11"
 kotlin = "1.6.21"
