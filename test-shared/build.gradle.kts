@@ -1,3 +1,4 @@
+import org.gradle.api.JavaVersion.VERSION_11
 import java.net.URL
 
 plugins {
@@ -16,12 +17,12 @@ android {
 
   compileOptions {
     isCoreLibraryDesugaringEnabled = true
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = VERSION_11
+    targetCompatibility = VERSION_11
   }
 
   kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_11.toString()
+    jvmTarget = VERSION_11.toString()
   }
 
   lint {
