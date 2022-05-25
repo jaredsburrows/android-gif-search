@@ -2,7 +2,7 @@
 android = "7.1.3" # 7.2.0-rc01
 dagger = "2.42"
 espresso = "3.4.0"
-glide = "4.13.1"
+glide = "4.13.2"
 kotlinx = "1.6.1"
 leakcanary = "2.9.1"
 lifecycle = "2.4.1"
