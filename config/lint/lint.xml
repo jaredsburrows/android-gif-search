@@ -10,11 +10,14 @@
   <!-- Kotlin android extension issues -->
   <issue id="UnusedIds" severity="ignore" />
 
-  <!-- AGP not seeing custon "Application" class -->
+  <!-- AGP not seeing custom "Application" class -->
   <issue id="Registered" severity="ignore" />
 
-  <!-- AGP seeing custon "Application" class -->
+  <!-- AGP seeing custom "Application" class -->
   <issue id="ScopedStorage" severity="ignore" />
+
+  <!-- AGP 7.2.0 - java.applet -->
+  <issue id="InvalidPackage" severity="ignore" />
 
   <!-- Not using this -->
   <issue id="GoogleAppIndexingWarning" severity="ignore" />
