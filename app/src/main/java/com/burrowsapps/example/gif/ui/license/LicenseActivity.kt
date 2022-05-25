@@ -3,24 +3,29 @@ package com.burrowsapps.example.gif.ui.license
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
-import android.view.MenuItem
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
-import android.webkit.WebViewClient
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF
 import androidx.webkit.WebSettingsCompat.FORCE_DARK_ON
 import androidx.webkit.WebSettingsCompat.setForceDark
 import androidx.webkit.WebViewAssetLoader
-import androidx.webkit.WebViewAssetLoader.AssetsPathHandler
 import androidx.webkit.WebViewFeature.FORCE_DARK
 import androidx.webkit.WebViewFeature.isFeatureSupported
 import com.burrowsapps.example.gif.R
+import com.google.accompanist.web.AccompanistWebViewClient
+import com.google.accompanist.web.rememberWebViewState
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -30,39 +35,61 @@ import timber.log.Timber
 @AndroidEntryPoint
 class LicenseActivity : AppCompatActivity() {
 
-  private lateinit var webView: WebView
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    // Instead of loading files using "files://" directly
-    val assetLoader = WebViewAssetLoader.Builder()
-      .addPathHandler("/assets/", AssetsPathHandler(this))
-      .build()
+    supportActionBar?.title = getString(R.string.menu_licenses)
 
-    webView = WebView(this).apply {
-      // Override URLs for AssetsPathHandler
-      webViewClient = object : WebViewClient() {
-        override fun shouldInterceptRequest(
-          view: WebView,
-          request: WebResourceRequest
-        ): WebResourceResponse? {
-          return assetLoader.shouldInterceptRequest(request.url) ?: super.shouldInterceptRequest(
-            view,
-            request
-          )
-        }
+    setContent {
+      TheContent()
+    }
+  }
 
-        override fun onReceivedHttpError(
-          view: WebView,
-          request: WebResourceRequest,
-          errorResponse: WebResourceResponse
-        ) {
-          Timber.e("onReceivedHttpError:\t$errorResponse")
-        }
-      }
+  companion object {
+    fun createIntent(context: Context): Intent {
+      return Intent().setClass(context, LicenseActivity::class.java)
+    }
+  }
+}
 
-      settings.apply {
+@Preview(
+  name = "one",
+  showBackground = true,
+  device = Devices.PIXEL,
+  locale = "en",
+  showSystemUi = true,
+  uiMode = UI_MODE_NIGHT_YES,
+)
+@Preview(
+  name = "two",
+  showBackground = true,
+  device = Devices.PIXEL,
+  locale = "en",
+  showSystemUi = true,
+  uiMode = UI_MODE_NIGHT_NO,
+)
+@Composable
+fun DefaultPreview() {
+  TheContent()
+}
+
+@Composable
+fun TheContent() {
+  val context = LocalContext.current
+  // https://developer.android.com/reference/androidx/webkit/WebViewAssetLoader
+  val state =
+    rememberWebViewState("https://appassets.androidplatform.net/assets/open_source_licenses.html")
+  val pathHandler = WebViewAssetLoader.AssetsPathHandler(context)
+  // Instead of loading files using "files://" directly
+  val assetLoader = WebViewAssetLoader.Builder()
+    .addPathHandler("/assets/", pathHandler)
+    .build()
+
+  com.google.accompanist.web.WebView(
+    state,
+    captureBackPresses = true,
+    onCreated = { webView ->
+      webView.settings.apply {
         allowFileAccess = false
         allowContentAccess = false
         setGeolocationEnabled(false)
@@ -74,45 +101,32 @@ class LicenseActivity : AppCompatActivity() {
 
         // Handle dark mode for webview
         if (isFeatureSupported(FORCE_DARK)) {
-          when (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
-            UI_MODE_NIGHT_YES -> setForceDark(settings, FORCE_DARK_ON)
-            else -> setForceDark(settings, FORCE_DARK_OFF)
+          when (webView.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
+            UI_MODE_NIGHT_YES -> setForceDark(this, FORCE_DARK_ON)
+            else -> setForceDark(this, FORCE_DARK_OFF)
           }
         }
       }
-
-      // https://developer.android.com/reference/androidx/webkit/WebViewAssetLoader
-      loadUrl("https://appassets.androidplatform.net/assets/open_source_licenses.html")
-    }
-
-    setContentView(webView)
-
-    supportActionBar?.title = getString(R.string.menu_licenses)
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return when (item.itemId) {
-      android.R.id.home -> {
-        when {
-          webView.canGoBack() -> webView.goBack()
-          else -> super.onBackPressed()
-        }
-        true
+    },
+    client = object : AccompanistWebViewClient() {
+      override fun shouldInterceptRequest(
+        view: WebView,
+        request: WebResourceRequest
+      ): WebResourceResponse? {
+        // Override URLs for AssetsPathHandler
+        return assetLoader.shouldInterceptRequest(request.url) ?: super.shouldInterceptRequest(
+          view,
+          request
+        )
       }
-      else -> super.onOptionsItemSelected(item)
-    }
-  }
 
-  override fun onBackPressed() {
-    when {
-      webView.canGoBack() -> webView.goBack()
-      else -> super.onBackPressed()
-    }
-  }
-
-  companion object {
-    fun createIntent(context: Context): Intent {
-      return Intent().setClass(context, LicenseActivity::class.java)
-    }
-  }
+      override fun onReceivedHttpError(
+        view: WebView,
+        request: WebResourceRequest,
+        errorResponse: WebResourceResponse
+      ) {
+        Timber.e("onReceivedHttpError:\t$errorResponse")
+      }
+    },
+  )
 }
