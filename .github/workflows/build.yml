@@ -38,6 +38,8 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper/
             ~/.android/build-cache
+            ~/.android/avd/*
+            ~/.android/adb*
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-
 
