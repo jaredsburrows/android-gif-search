@@ -42,7 +42,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-
 
-      - name: Configure JDK
+      - name: Configure JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v3.3.0
         with:
           distribution: temurin
@@ -57,7 +57,7 @@ jobs:
       - name: Run Debug Unit Tests
         run: ./gradlew testDebug -Pci -s
 
-      - name: Run Debug Instrumentation Tests
+      - name: Run Debug Instrumentation Tests on Android API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2.24.0
         if: matrix.api-level == '23'
         continue-on-error: true
