@@ -12,7 +12,7 @@ env:
 
 jobs:
   android:
-    name: Android API ${{ matrix.api-level }} | JDK ${{ matrix.java-version }}
+    name: Android API ${{ matrix.api-level }} / JDK ${{ matrix.java-version }}
     runs-on: macos-latest
 
     strategy:
