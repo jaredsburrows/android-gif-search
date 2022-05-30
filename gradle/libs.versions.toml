@@ -1,5 +1,5 @@
 [versions]
-android = "7.2.0"
+android = "7.2.1"
 dagger = "2.42"
 espresso = "3.4.0"
 glide = "4.13.2"
