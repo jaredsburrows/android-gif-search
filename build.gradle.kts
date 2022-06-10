@@ -58,13 +58,10 @@ allprojects {
   }
 
   tasks.withType(KotlinCompile::class.java).configureEach {
-    sourceCompatibility = VERSION_11.toString()
-    targetCompatibility = VERSION_11.toString()
-
     kotlinOptions {
       jvmTarget = VERSION_11.toString()
-      languageVersion = "1.6"
-      apiVersion = "1.6"
+      languageVersion = "1.7"
+      apiVersion = "1.7"
       freeCompilerArgs = freeCompilerArgs + listOf(
         // https://kotlinlang.org/docs/compiler-reference.html#progressive
         "-progressive",
