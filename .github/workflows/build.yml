@@ -20,7 +20,9 @@ jobs:
       matrix:
         api-level:
           - 23
-          - 32
+          - 25
+          - 28
+          - 33
         java-version:
           - 11
           - 18
@@ -61,7 +63,7 @@ jobs:
 
       - name: Run Debug Instrumentation Tests on Android API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2.24.0
-        if: matrix.api-level == '23'
+        if: matrix.api-level <= 28
         continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
