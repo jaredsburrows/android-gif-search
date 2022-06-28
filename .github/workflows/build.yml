@@ -20,8 +20,6 @@ jobs:
       matrix:
         api-level:
           - 23
-          - 25
-          - 29
           - 30
           - 33
         java-version:
