@@ -5,7 +5,7 @@ espresso = "3.4.0"
 glide = "4.13.2"
 kotlinx = "1.6.3"
 leakcanary = "2.9.1"
-lifecycle = "2.4.1"
+lifecycle = "2.5.0"
 core = "1.8.0"
 moshi = "1.13.0"
 okhttp = "4.10.0"
@@ -32,9 +32,9 @@ versions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
 dexcount = { id = "com.getkeepsafe.dexcount", version = "3.1.0" }
 
 [libraries]
-android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "1.1.5" }
-androidx-activity = { module = "androidx.activity:activity", version = "1.4.0" }
-androidx-activityktx = { module = "androidx.activity:activity-ktx", version = "1.4.0" }
+android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "1.1.6" } # 1.1.6
+androidx-activity = { module = "androidx.activity:activity", version = "1.5.0" }
+androidx-activityktx = { module = "androidx.activity:activity-ktx", version = "1.5.0" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.4.0" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.4.2" }
 androidx-cardview = { module = "androidx.cardview:cardview", version = "1.0.0" }

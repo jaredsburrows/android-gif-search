@@ -2,8 +2,8 @@ package com.burrowsapps.example.gif.ui.license
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
@@ -16,8 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF
 import androidx.webkit.WebSettingsCompat.FORCE_DARK_ON
 import androidx.webkit.WebSettingsCompat.setForceDark
+import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewAssetLoader.AssetsPathHandler
-import androidx.webkit.WebViewAssetLoader.Builder
 import androidx.webkit.WebViewFeature.FORCE_DARK
 import androidx.webkit.WebViewFeature.isFeatureSupported
 import com.burrowsapps.example.gif.R
@@ -36,7 +36,7 @@ class LicenseActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
 
     // Instead of loading files using "files://" directly
-    val assetLoader = Builder()
+    val assetLoader = WebViewAssetLoader.Builder()
       .addPathHandler("/assets/", AssetsPathHandler(this))
       .build()
 
@@ -75,7 +75,7 @@ class LicenseActivity : AppCompatActivity() {
         // Handle dark mode for webview
         if (isFeatureSupported(FORCE_DARK)) {
           when (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> setForceDark(settings, FORCE_DARK_ON)
+            UI_MODE_NIGHT_YES -> setForceDark(settings, FORCE_DARK_ON)
             else -> setForceDark(settings, FORCE_DARK_OFF)
           }
         }
