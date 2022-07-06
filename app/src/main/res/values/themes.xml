@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+  <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
+    <item name="android:statusBarColor">@android:color/transparent</item>
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+  </style>
 
-  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar" />
 
-  <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Dark" />
+  <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.Material3.Dark" />
 </resources>
