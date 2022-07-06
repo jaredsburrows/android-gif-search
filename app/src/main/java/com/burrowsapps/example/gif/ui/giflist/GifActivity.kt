@@ -2,6 +2,7 @@ package com.burrowsapps.example.gif.ui.giflist
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -29,6 +30,7 @@ import com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 /**
  * Main activity that will load our Fragments via the Support Fragment Manager.
@@ -63,7 +65,7 @@ class GifActivity : AppCompatActivity() {
 
     gridLayoutManager = GridLayoutManager(this, PORTRAIT_COLUMNS)
     gifItemDecoration = GifItemDecoration(
-      resources.getDimensionPixelSize(R.dimen.gif_adapter_item_offset),
+      (1.0 * Resources.getSystem().displayMetrics.density).roundToInt(), // TODO 1.dp in compose
       gridLayoutManager.spanCount
     )
     gifAdapter = GifAdapter(onItemClick = { imageInfoModel ->

@@ -4,7 +4,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="@dimen/gif_image_width">
+  android:layout_height="wrap_content">
 
   <androidx.core.widget.ContentLoadingProgressBar
     android:id="@+id/gifProgress"
@@ -20,7 +20,7 @@
   <ImageView
     android:id="@+id/gifImage"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/gif_image_width"
+    android:layout_height="135dp"
     android:adjustViewBounds="true"
     android:contentDescription="@string/gif_image"
     android:scaleType="centerCrop"
