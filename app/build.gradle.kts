@@ -53,7 +53,12 @@ android {
 
   buildFeatures {
     buildConfig = true
+    compose = true
     viewBinding = true
+  }
+
+  composeOptions {
+    kotlinCompilerExtensionVersion = libs.versions.compose.get()
   }
 
   lint {
@@ -183,14 +188,6 @@ dependencies {
   implementation(libs.androidx.corektx)
   implementation(libs.androidx.startup)
 
-  // AndroidX UI
-  implementation(libs.androidx.cardview)
-  implementation(libs.androidx.constraintlayout)
-  implementation(libs.androidx.recyclerview)
-  implementation(libs.androidx.swiperefreshlayout)
-  implementation(libs.androidx.webkit)
-  implementation(libs.google.material)
-
   // AndroidX Lifecycle
   implementation(libs.androidx.lifecycle.common)
   implementation(libs.androidx.lifecycle.commonjdk8)
@@ -202,6 +199,25 @@ dependencies {
   implementation(libs.androidx.lifecycle.livedatacorektx)
   implementation(libs.androidx.lifecycle.livedataktx)
   kapt(libs.androidx.lifecycle.compiler)
+
+  // AndroidX UI
+  implementation(libs.androidx.cardview)
+  implementation(libs.androidx.constraintlayout)
+  implementation(libs.androidx.recyclerview)
+  implementation(libs.androidx.swiperefreshlayout)
+  implementation(libs.androidx.webkit)
+  implementation(libs.google.material)
+
+  // AndroidX Jetpack Compose
+  debugImplementation(libs.androidx.compose.uitoolingpreview)
+  implementation(libs.androidx.activity.compose)
+  implementation(libs.androidx.compose.compiler)
+  implementation(libs.androidx.compose.runtime)
+  implementation(libs.androidx.compose.material)
+  implementation(libs.androidx.compose.ui)
+  implementation(libs.androidx.compose.uitooling)
+  implementation(libs.google.material.compose)
+  implementation(libs.google.accompanist.webview)
 
   // Glide
   implementation(libs.bumptech.glide)
