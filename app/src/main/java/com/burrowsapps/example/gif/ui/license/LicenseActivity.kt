@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
-import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -24,6 +23,7 @@ import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewFeature.FORCE_DARK
 import androidx.webkit.WebViewFeature.isFeatureSupported
 import com.burrowsapps.example.gif.R
+import com.burrowsapps.example.gif.databinding.ActivityLicenseBinding
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.rememberWebViewState
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,12 +35,19 @@ import timber.log.Timber
 @AndroidEntryPoint
 class LicenseActivity : AppCompatActivity() {
 
+  private lateinit var binding: ActivityLicenseBinding
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    supportActionBar?.title = getString(R.string.menu_licenses)
+    binding = ActivityLicenseBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
-    setContent {
+    binding.toolbar.setTitle(R.string.menu_licenses)
+    setSupportActionBar(binding.toolbar)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+    binding.composeView.setContent {
       TheContent()
     }
   }
@@ -89,6 +96,7 @@ fun TheContent() {
     state,
     captureBackPresses = true,
     onCreated = { webView ->
+      webView.isVerticalScrollBarEnabled = false
       webView.settings.apply {
         allowFileAccess = false
         allowContentAccess = false

@@ -30,7 +30,6 @@
       android:name=".ui.giflist.GifActivity"
       android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
       android:exported="true"
-      android:theme="@style/AppTheme"
       android:windowSoftInputMode="adjustPan">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -44,7 +43,6 @@
       android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
       android:exported="true"
       android:parentActivityName=".ui.giflist.GifActivity"
-      android:theme="@style/AppTheme.ActionBar"
       android:windowSoftInputMode="adjustPan">
       <intent-filter>
         <category android:name="android.intent.category.MONKEY" />

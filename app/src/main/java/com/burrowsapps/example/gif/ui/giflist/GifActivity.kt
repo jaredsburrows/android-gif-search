@@ -56,7 +56,8 @@ class GifActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    binding = ActivityGifBinding.inflate(layoutInflater).also { setContentView(it.root) }
+    binding = ActivityGifBinding.inflate(layoutInflater)
+    setContentView(binding.root)
     dialogBinding = DialogPreviewBinding.inflate(layoutInflater)
 
     // Setup
