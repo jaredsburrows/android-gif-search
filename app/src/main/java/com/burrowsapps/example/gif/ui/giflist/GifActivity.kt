@@ -145,59 +145,67 @@ class GifActivity : AppCompatActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     super.onCreateOptionsMenu(menu)
-    menuInflater.inflate(R.menu.menu_main, menu)
 
-    menu.findItem(R.id.menuSearch).apply {
-      // Set contextual action on search icon click
-      setOnActionExpandListener(
-        object : MenuItem.OnActionExpandListener {
-          override fun onMenuItemActionExpand(item: MenuItem) = true
+    // Search for Gifs
+    menu.add(0, MENU_SEARCH, 0, R.string.menu_search).apply {
+      setIcon(R.drawable.ic_search_white_24dp)
+      setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM or MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+      actionView = SearchView(this@GifActivity)
+      apply {
+        // Set contextual action on search icon click
+        setOnActionExpandListener(
+          object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem) = true
 
-          override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-            // When search is closed, go back to trending getResults
-            if (hasSearchedImages) {
-              // Reset
-              clearImages()
-              nextPageNumber = null // reset pagination
-              gifViewModel.loadTrendingImages()
-
-              hasSearchedImages = false
-            }
-            return true
-          }
-        }
-      )
-
-      (actionView as SearchView).apply {
-        queryHint = context.getString(R.string.search_gifs)
-        // Query listener for search bar
-        setOnQueryTextListener(
-          object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String): Boolean {
-              // Search on type
-              if (newText.isNotEmpty()) {
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+              // When search is closed, go back to trending getResults
+              if (hasSearchedImages) {
                 // Reset
                 clearImages()
-                searchedImageText = newText
                 nextPageNumber = null // reset pagination
-                gifViewModel.loadSearchImages(searchedImageText)
+                gifViewModel.loadTrendingImages()
 
-                hasSearchedImages = true
+                hasSearchedImages = false
               }
-              return false
+              return true
             }
-
-            override fun onQueryTextSubmit(query: String) = false
           }
         )
+
+        (actionView as SearchView).apply {
+          queryHint = context.getString(R.string.search_gifs)
+          // Query listener for search bar
+          setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+              override fun onQueryTextChange(newText: String): Boolean {
+                // Search on type
+                if (newText.isNotEmpty()) {
+                  // Reset
+                  clearImages()
+                  searchedImageText = newText
+                  nextPageNumber = null // reset pagination
+                  gifViewModel.loadSearchImages(searchedImageText)
+
+                  hasSearchedImages = true
+                }
+                return false
+              }
+
+              override fun onQueryTextSubmit(query: String) = false
+            }
+          )
+        }
       }
     }
+
+    // License Activity
+    menu.add(0, MENU_LICENSE, 1, R.string.menu_licenses)
     return true
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
-      R.id.menuLicenses -> {
+      MENU_LICENSE -> {
         startActivity(LicenseActivity.createIntent(this))
         true
       }
@@ -293,5 +301,7 @@ class GifActivity : AppCompatActivity() {
   companion object {
     private const val CLIP_DATA_IMAGE_URL = "https-image-url"
     private const val PORTRAIT_COLUMNS = 3
+    private const val MENU_SEARCH = 0
+    private const val MENU_LICENSE = 1
   }
 }

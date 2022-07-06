@@ -176,7 +176,7 @@ class GifActivityTest {
   fun testTrendingResultsThenSearchThenBackToTrending() {
     screenshotWatcher.capture("After launch")
 
-    onView(withId(R.id.menuSearch))
+    onView(withId(0)) // MENU_SEARCH
       .perform(click())
     screenshotWatcher.capture("After click")
 
