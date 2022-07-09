@@ -3,11 +3,6 @@ package com.burrowsapps.example.gif.ui.giflist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.databinding.ListItemBinding
 import com.burrowsapps.example.gif.di.GlideApp
@@ -34,44 +29,7 @@ class GifAdapter(
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val imageInfoModel = getItem(position)
 
-    // Load images - 'tinyGifPreviewUrl' -> 'tinyGifUrl'
-    imageService.loadGif(imageInfoModel.tinyGifUrl)
-      .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-      .thumbnail(imageService.loadGif(imageInfoModel.tinyGifPreviewUrl))
-      .listener(
-        object : RequestListener<GifDrawable> {
-          override fun onResourceReady(
-            resource: GifDrawable?,
-            model: Any?,
-            target: Target<GifDrawable>?,
-            dataSource: DataSource?,
-            isFirstResource: Boolean
-          ): Boolean {
-            // Hide progressbar
-            holder.binding.gifProgress.hide()
-            Timber.i("onResourceReady:\t$model")
-
-            return false
-          }
-
-          override fun onLoadFailed(
-            e: GlideException?,
-            model: Any?,
-            target: Target<GifDrawable>?,
-            isFirstResource: Boolean
-          ): Boolean {
-            // Hide progressbar
-            holder.binding.gifProgress.hide()
-            Timber.e(e, "onLoadFailed:\t$model")
-
-            return false
-          }
-        }
-      )
-      .into(holder.binding.gifImage)
-      .clearOnDetach()
-
-    holder.itemView.setOnClickListener { onItemClick.invoke(imageInfoModel) }
+    holder.bind(imageInfoModel)
   }
 
   override fun onViewRecycled(holder: ViewHolder) {
@@ -85,13 +43,11 @@ class GifAdapter(
       // Make sure to show progress when loading new view
       gifProgress.show()
     }
-    Timber.i("onViewRecycled:\t$holder")
-    Timber.i("onViewRecycled:\t${holder.binding.gifImage}")
+    Timber.i("onViewRecycled")
   }
 
   override fun onFailedToRecycleView(holder: ViewHolder): Boolean {
-    Timber.e("onFailedToRecycleView:\t$holder")
-    Timber.e("onFailedToRecycleView:\t${holder.binding.gifImage}")
+    Timber.e("onFailedToRecycleView")
     return false
   }
 
@@ -117,5 +73,27 @@ class GifAdapter(
 
   inner class ViewHolder(
     internal val binding: ListItemBinding
-  ) : RecyclerView.ViewHolder(binding.root)
+  ) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(imageInfoModel: GifImageInfo) {
+      itemView.setOnClickListener { onItemClick.invoke(imageInfoModel) }
+
+      // Load images - 'tinyGifPreviewUrl' -> 'tinyGifUrl'
+      imageService.loadGif(
+        imageUrl = imageInfoModel.tinyGifUrl,
+        thumbnailUrl = imageInfoModel.tinyGifPreviewUrl,
+        imageView = binding.gifImage,
+        onResourceReady = {
+          // Hide progressbar
+          binding.gifProgress.hide()
+          Timber.i("onResourceReady")
+        },
+        onLoadFailed = { e ->
+          // Hide progressbar
+          binding.gifProgress.hide()
+          Timber.e(e, "onLoadFailed")
+        },
+      )
+    }
+  }
 }

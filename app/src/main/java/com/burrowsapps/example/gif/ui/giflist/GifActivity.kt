@@ -13,11 +13,6 @@ import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.data.source.network.TenorService.Companion.DEFAULT_LIMIT_COUNT
@@ -85,7 +80,7 @@ class GifActivity : AppCompatActivity() {
         val gifViewHolder = holder as GifAdapter.ViewHolder
         GlideApp.with(this).clear(gifViewHolder.binding.gifImage)
 
-        Timber.i("addRecyclerListener:\t${gifViewHolder.binding.gifImage}")
+        Timber.i("addRecyclerListener")
       }
       addOnScrollListener(
         object : RecyclerView.OnScrollListener() {
@@ -259,44 +254,24 @@ class GifActivity : AppCompatActivity() {
     }
 
     // Load image - click on 'tinyGifPreviewUrl' -> 'tinyGifUrl' -> 'gifUrl'
-    imageService.loadGif(imageInfoModel.gifUrl)
-      .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-      .thumbnail(imageService.loadGif(imageInfoModel.tinyGifUrl))
-      .listener(
-        object : RequestListener<GifDrawable> {
-          override fun onResourceReady(
-            resource: GifDrawable?,
-            model: Any?,
-            target: Target<GifDrawable>?,
-            dataSource: DataSource?,
-            isFirstResource: Boolean
-          ): Boolean {
-            // Hide progressbar
-            dialogBinding.gifDialogProgress.hide()
-            dialogBinding.gifDialogTitle.visibility = View.VISIBLE
+    imageService.loadGif(
+      imageUrl = imageInfoModel.tinyGifUrl,
+      thumbnailUrl = imageInfoModel.tinyGifPreviewUrl,
+      imageView = dialogBinding.gifDialogImage,
+      onResourceReady = {
+        // Hide progressbar
+        dialogBinding.gifDialogProgress.hide()
+        dialogBinding.gifDialogTitle.visibility = View.VISIBLE
 
-            Timber.i("onResourceReady:\t$model")
+        Timber.i("onResourceReady")
+      },
+      onLoadFailed = { e ->
+        // Hide progressbar
+        dialogBinding.gifDialogProgress.hide()
 
-            return false
-          }
-
-          override fun onLoadFailed(
-            e: GlideException?,
-            model: Any?,
-            target: Target<GifDrawable>?,
-            isFirstResource: Boolean
-          ): Boolean {
-            // Hide progressbar
-            dialogBinding.gifDialogProgress.hide()
-
-            Timber.e(e, "onLoadFailed:\t$model")
-
-            return false
-          }
-        }
-      )
-      .into(dialogBinding.gifDialogImage)
-      .clearOnDetach()
+        Timber.e(e, "onLoadFailed")
+      },
+    )
 
     gifDialog.show()
   }
