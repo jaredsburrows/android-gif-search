@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.children
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.DataSource
@@ -82,10 +83,14 @@ class GifActivity : AppCompatActivity() {
       setItemViewCacheSize(DEFAULT_LIMIT_COUNT) // default 2
       recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
       addRecyclerListener { holder ->
-        val gifViewHolder = holder as GifAdapter.ViewHolder
-        GlideApp.with(this).clear(gifViewHolder.binding.gifImage)
+        val gifViewHolder = holder as GifViewHolder
+//        GlideApp.with(this).clear(holder.composeView)
+        for (view in holder.composeView.children) {
+          GlideApp.with(holder.itemView.context).clear(view)
+        }
+        GlideApp.with(holder.itemView.context).clear(holder.composeView)
 
-        Timber.i("addRecyclerListener:\t${gifViewHolder.binding.gifImage}")
+        Timber.i("addRecyclerListener:\t${gifViewHolder.composeView}")
       }
       addOnScrollListener(
         object : RecyclerView.OnScrollListener() {

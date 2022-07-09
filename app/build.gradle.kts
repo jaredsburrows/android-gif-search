@@ -217,6 +217,7 @@ dependencies {
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.uitooling)
   implementation(libs.google.material.compose)
+  implementation(libs.google.accompanist.drawablepainter)
   implementation(libs.google.accompanist.webview)
 
   // Glide
