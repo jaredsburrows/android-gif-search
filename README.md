@@ -8,8 +8,8 @@ Gif RecyclerView MVVM Grid Example using Dagger 2 Hilt, Retrofit 2, Moshi, Kotli
 Espresso and Robolectric tests!
 
 <p align="center">
-  <a href="https://i.imgur.com/EVjzfrW.png" target="_blank"><img src="https://i.imgur.com/EVjzfrW.png" width="250px" /></a>
-  <a href="https://i.imgur.com/qujcQIz.png" target="_blank"><img src="https://i.imgur.com/qujcQIz.png" width="250px" /></a>
+  <a href="https://i.imgur.com/BATyXSX_d.webp?maxwidth=760&fidelity=grand" target="_blank"><img src="https://i.imgur.com/BATyXSX_d.webp?maxwidth=760&fidelity=grand" width="250px" /></a>
+  <a href="https://i.imgur.com/TXiAiS2_d.webp?maxwidth=760&fidelity=grand" target="_blank"><img src="https://i.imgur.com/TXiAiS2_d.webp?maxwidth=760&fidelity=grand" width="250px" /></a>
 </p>
 
 ## Build

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
-    <item name="android:statusBarColor">@android:color/transparent</item>
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
+
+    <item name="android:statusBarColor">@android:color/transparent</item>
+    <item name="android:navigationBarColor">@android:color/transparent</item>
+    <item name="android:windowLightStatusBar">?isLightTheme</item>
+    <item name="android:windowLightNavigationBar" tools:ignore="NewApi">?isLightTheme</item>
   </style>
-
-  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar" />
-
-  <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.Material3.Dark" />
 </resources>
