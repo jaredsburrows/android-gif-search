@@ -73,8 +73,8 @@ allprojects {
         "-Xproper-ieee754-comparisons",
         // https://blog.jetbrains.com/kotlin/2020/07/kotlin-1-4-m3-generating-default-methods-in-interfaces/
         "-Xjvm-default=all",
-//        "-P",
-//        "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true",
+        "-P",
+        "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true",
       )
     }
   }

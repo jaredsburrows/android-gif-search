@@ -1,10 +1,10 @@
 [versions]
 android = "7.2.1"
 compose = "1.2.0"
-dagger = "2.42"
+dagger = "2.43"
 espresso = "3.4.0"
 glide = "4.13.2"
-kotlinx = "1.6.3"
+kotlinx = "1.6.4"
 leakcanary = "2.9.1"
 lifecycle = "2.5.0"
 core = "1.8.0"
@@ -14,7 +14,7 @@ retrofit = "2.9.0"
 robolectric = "4.8.1"
 # language
 java = "11"
-kotlin = "1.7.0"
+kotlin = "1.7.10"
 # build
 sdk-compile = "32"
 sdk-min = "23"
