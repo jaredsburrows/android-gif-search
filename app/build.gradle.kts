@@ -213,11 +213,16 @@ dependencies {
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.compose.compiler)
   implementation(libs.androidx.compose.runtime)
-  implementation(libs.androidx.compose.material)
+  implementation(libs.androidx.compose.material) // TODO remove
+  implementation(libs.androidx.compose.material3)
+  implementation(libs.androidx.compose.navigation)
+  implementation(libs.androidx.compose.runtime)
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.uitooling)
-  implementation(libs.google.material.compose)
+  implementation(libs.google.material.compose) // TODO remove
+  implementation(libs.google.material.compose3)
   implementation(libs.google.accompanist.webview)
+  androidTestImplementation(libs.androidx.compose.junit)
 
   // Glide
   implementation(libs.bumptech.glide)

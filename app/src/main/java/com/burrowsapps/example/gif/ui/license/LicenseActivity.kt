@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.burrowsapps.example.gif.ui.license
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
@@ -11,11 +14,27 @@ import android.os.Bundle
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF
 import androidx.webkit.WebSettingsCompat.FORCE_DARK_ON
 import androidx.webkit.WebSettingsCompat.setForceDark
@@ -23,9 +42,9 @@ import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewFeature.FORCE_DARK
 import androidx.webkit.WebViewFeature.isFeatureSupported
 import com.burrowsapps.example.gif.R
-import com.burrowsapps.example.gif.databinding.ActivityLicenseBinding
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.rememberWebViewState
+import com.google.android.material.composethemeadapter3.Mdc3Theme
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -33,22 +52,14 @@ import timber.log.Timber
  * Open source license activity.
  */
 @AndroidEntryPoint
-class LicenseActivity : AppCompatActivity() {
-
-  private lateinit var binding: ActivityLicenseBinding
-
+class LicenseActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    binding = ActivityLicenseBinding.inflate(layoutInflater)
-    setContentView(binding.root)
-
-    binding.toolbar.setTitle(R.string.menu_licenses)
-    setSupportActionBar(binding.toolbar)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-    binding.composeView.setContent {
-      TheContent()
+    setContent {
+      Mdc3Theme {
+        LicenseScreen()
+      }
     }
   }
 
@@ -77,11 +88,58 @@ class LicenseActivity : AppCompatActivity() {
 )
 @Composable
 fun DefaultPreview() {
-  TheContent()
+  LicenseScreen()
 }
 
 @Composable
-fun TheContent() {
+fun LicenseScreen() {
+  val navController = rememberNavController()
+
+  Scaffold(
+    topBar = { TheToolbar(navController) },
+    content = { paddingValues ->
+      TheContent(innerPadding = paddingValues)
+    },
+  )
+}
+
+@Composable
+fun TheToolbar(navController: NavHostController) {
+  val activity = (LocalContext.current as? Activity)
+
+  SmallTopAppBar(
+    title = {
+      Text(
+        text = stringResource(R.string.menu_licenses),
+      )
+    },
+    navigationIcon = {
+      IconButton(
+        onClick = {
+          activity?.finish()
+          navController.popBackStack() // TODO implement using nav host controller
+        },
+      ) {
+        Icon(
+          imageVector = Icons.Filled.ArrowBack,
+          contentDescription = "Back",
+        )
+      }
+    },
+  )
+}
+
+@Composable
+fun TheContent(innerPadding: PaddingValues) {
+  Column(
+    modifier = Modifier.padding(innerPadding),
+  ) {
+    TheWebView()
+  }
+}
+
+@Composable
+fun TheWebView() {
   val context = LocalContext.current
   // https://developer.android.com/reference/androidx/webkit/WebViewAssetLoader
   val state =
@@ -119,19 +177,17 @@ fun TheContent() {
     client = object : AccompanistWebViewClient() {
       override fun shouldInterceptRequest(
         view: WebView,
-        request: WebResourceRequest
+        request: WebResourceRequest,
       ): WebResourceResponse? {
         // Override URLs for AssetsPathHandler
-        return assetLoader.shouldInterceptRequest(request.url) ?: super.shouldInterceptRequest(
-          view,
-          request
-        )
+        return assetLoader.shouldInterceptRequest(request.url)
+          ?: super.shouldInterceptRequest(view, request)
       }
 
       override fun onReceivedHttpError(
         view: WebView,
         request: WebResourceRequest,
-        errorResponse: WebResourceResponse
+        errorResponse: WebResourceResponse,
       ) {
         Timber.e("onReceivedHttpError:\t$errorResponse")
       }
