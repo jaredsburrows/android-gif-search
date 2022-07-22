@@ -6,11 +6,11 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -37,8 +37,7 @@ class LicenseActivityTest {
   val instantTaskExecutorRule = InstantTaskExecutorRule()
 
   @get:Rule(order = 2)
-  val activityScenarioRule: ActivityScenarioRule<LicenseActivity> =
-    ActivityScenarioRule(LicenseActivity::class.java)
+  var composeTestRule = createAndroidComposeRule<LicenseActivity>()
 
   @get:Rule(order = 3)
   val permissionRule: GrantPermissionRule = GrantPermissionRule
