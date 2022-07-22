@@ -76,12 +76,12 @@ class LicenseActivity : AppCompatActivity() {
   uiMode = UI_MODE_NIGHT_NO,
 )
 @Composable
-fun DefaultPreview() {
+private fun DefaultPreview() {
   TheContent()
 }
 
 @Composable
-fun TheContent() {
+private fun TheContent() {
   val context = LocalContext.current
   // https://developer.android.com/reference/androidx/webkit/WebViewAssetLoader
   val state =
