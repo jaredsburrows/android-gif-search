@@ -19,6 +19,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,8 +29,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -94,17 +100,19 @@ fun DefaultPreview() {
 @Composable
 fun LicenseScreen() {
   val navController = rememberNavController()
+  val scrollBehavior = enterAlwaysScrollBehavior(rememberTopAppBarScrollState())
 
   Scaffold(
-    topBar = { TheToolbar(navController) },
+    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    topBar = { TheToolbar(navController = navController, scrollBehavior = scrollBehavior) },
     content = { paddingValues ->
       TheContent(innerPadding = paddingValues)
-    },
+    }
   )
 }
 
 @Composable
-fun TheToolbar(navController: NavHostController) {
+fun TheToolbar(navController: NavHostController, scrollBehavior: TopAppBarScrollBehavior) {
   val activity = (LocalContext.current as? Activity)
 
   SmallTopAppBar(
@@ -117,7 +125,8 @@ fun TheToolbar(navController: NavHostController) {
       IconButton(
         onClick = {
           activity?.finish()
-          navController.popBackStack() // TODO implement using nav host controller
+          // TODO implement using nav host controller
+          navController.popBackStack()
         },
       ) {
         Icon(
@@ -126,14 +135,18 @@ fun TheToolbar(navController: NavHostController) {
         )
       }
     },
+    scrollBehavior = scrollBehavior,
   )
 }
 
 @Composable
 fun TheContent(innerPadding: PaddingValues) {
   Column(
-    modifier = Modifier.padding(innerPadding),
+    modifier = Modifier
+      .padding(innerPadding)
+      .verticalScroll(rememberScrollState()),
   ) {
+    // TODO Nested WebView prevent anchor clicks
     TheWebView()
   }
 }
@@ -152,7 +165,6 @@ fun TheWebView() {
 
   com.google.accompanist.web.WebView(
     state,
-    captureBackPresses = true,
     onCreated = { webView ->
       webView.isVerticalScrollBarEnabled = false
       webView.settings.apply {
@@ -180,8 +192,9 @@ fun TheWebView() {
         request: WebResourceRequest,
       ): WebResourceResponse? {
         // Override URLs for AssetsPathHandler
-        return assetLoader.shouldInterceptRequest(request.url)
-          ?: super.shouldInterceptRequest(view, request)
+        return assetLoader.shouldInterceptRequest(request.url) ?: super.shouldInterceptRequest(
+          view, request
+        )
       }
 
       override fun onReceivedHttpError(
