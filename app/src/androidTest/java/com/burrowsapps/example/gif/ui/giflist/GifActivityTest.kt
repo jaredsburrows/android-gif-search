@@ -3,6 +3,7 @@ package com.burrowsapps.example.gif.ui.giflist
 import android.Manifest.permission.INTERNET
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.content.Context
 import android.widget.TextView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -14,12 +15,10 @@ import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.intent.Intents.init
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.release
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withParent
@@ -32,6 +31,7 @@ import com.burrowsapps.example.gif.test.TestFileUtils.MOCK_SERVER_PORT
 import com.burrowsapps.example.gif.test.TestFileUtils.getMockFileResponse
 import com.burrowsapps.example.gif.test.TestFileUtils.getMockResponse
 import com.burrowsapps.example.gif.ui.license.LicenseActivity
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -44,13 +44,13 @@ import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.instanceOf
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import test.ScreenshotWatcher
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
+import javax.inject.Inject
 
 @HiltAndroidTest
 @Config(application = HiltTestApplication::class)
@@ -71,6 +71,8 @@ class GifActivityTest {
 
   @get:Rule(order = 4)
   val screenshotWatcher = ScreenshotWatcher()
+
+  @Inject @ApplicationContext internal lateinit var context: Context
 
   private val server = MockWebServer()
 
@@ -102,13 +104,13 @@ class GifActivityTest {
   }
 
   @Test
-  fun testMainTitleIsShowing() {
+  fun testGifActivityTitleIsShowing() {
     onView(
       allOf(
         instanceOf(TextView::class.java),
-        withParent(withId(R.id.toolbar))
+        withParent(withId(R.id.toolbar)),
       )
-    ).check(matches(withText(containsString("Top Trending Gifs"))))
+    ).check(matches(withText(containsString(context.getString(R.string.main_screen_title)))))
   }
 
   @Test
@@ -145,31 +147,31 @@ class GifActivityTest {
     onView(
       allOf(
         instanceOf(TextView::class.java),
-        withParent(withId(R.id.toolbar))
+        withParent(withId(R.id.toolbar)),
       )
     ).check(matches(withText(containsString("Top Trending Gifs"))))
 
     release()
   }
 
-  @Ignore("on view 'Animations or transitions are enabled on the target device.")
-  @Test
-  fun testTrendingThenClickOpenDialog() {
-    screenshotWatcher.capture("After launch")
-
-    // Select 0, the response only contains 1 item
-    onView(withId(R.id.recyclerView))
-      .perform(
-        actionOnItem<GifAdapter.ViewHolder>(
-          hasDescendant(withId(R.id.gifImage)),
-          click()
-        ).atPosition(0)
-      )
-    screenshotWatcher.capture("After click")
-
-    onView(withId(R.id.gifDialogTitle))
-      .perform(pressBack())
-  }
+//  @Ignore("on view 'Animations or transitions are enabled on the target device.")
+//  @Test
+//  fun testTrendingThenClickOpenDialog() {
+//    screenshotWatcher.capture("After launch")
+//
+//    // Select 0, the response only contains 1 item
+//    onView(withId(R.id.recyclerView))
+//      .perform(
+//        actionOnItem<GifAdapter.ViewHolder>(
+//          hasDescendant(withId(R.id.gifImage)),
+//          click(),
+//        ).atPosition(0)
+//      )
+//    screenshotWatcher.capture("After click")
+//
+//    onView(withId(R.id.gifDialogTitle))
+//      .perform(pressBack())
+//  }
 
   @Test
   fun testTrendingResultsThenSearchThenBackToTrending() {

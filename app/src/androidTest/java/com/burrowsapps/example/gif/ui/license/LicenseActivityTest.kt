@@ -3,28 +3,25 @@ package com.burrowsapps.example.gif.ui.license
 import android.Manifest.permission.INTERNET
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
+import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withParent
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
+import com.burrowsapps.example.gif.R
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.instanceOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import test.ScreenshotWatcher
+import javax.inject.Inject
 
 @HiltAndroidTest
 @Config(application = HiltTestApplication::class)
@@ -46,18 +43,16 @@ class LicenseActivityTest {
   @get:Rule(order = 4)
   val screenshotWatcher = ScreenshotWatcher()
 
+  @Inject @ApplicationContext internal lateinit var context: Context
+
   @Before
   fun setUp() {
     hiltRule.inject()
   }
 
   @Test
-  fun testLicensesTitleIsShowing() {
-    onView(
-      allOf(
-        instanceOf(TextView::class.java),
-        withParent(instanceOf(Toolbar::class.java))
-      )
-    ).check(matches(withText(containsString("Open source licenses"))))
+  fun testLicensesActivityTitleIsShowing() {
+    composeTestRule.onNodeWithText(context.getString(R.string.menu_licenses))
+      .assertIsDisplayed()
   }
 }

@@ -64,9 +64,9 @@ class GifActivity : AppCompatActivity() {
       (1.0 * Resources.getSystem().displayMetrics.density).roundToInt(), // TODO 1.dp in compose
       gridLayoutManager.spanCount
     )
-    gifAdapter = GifAdapter(onItemClick = { imageInfoModel ->
+    gifAdapter = GifAdapter(imageService) { imageInfoModel ->
       showImageDialog(imageInfoModel)
-    }, imageService)
+    }
 
     // Setup RecyclerView
     activityBinding.recyclerView.apply {
@@ -76,12 +76,6 @@ class GifActivity : AppCompatActivity() {
       setHasFixedSize(true)
       setItemViewCacheSize(DEFAULT_LIMIT_COUNT) // default 2
       recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
-      addRecyclerListener { holder ->
-        val gifViewHolder = holder as GifAdapter.ViewHolder
-        GlideApp.with(this).clear(gifViewHolder.listBinding.gifImage)
-
-        Timber.i("addRecyclerListener")
-      }
       addOnScrollListener(
         object : RecyclerView.OnScrollListener() {
           override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
