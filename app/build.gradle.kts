@@ -219,8 +219,6 @@ dependencies {
   implementation(libs.androidx.compose.runtime)
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.uitooling)
-  implementation(libs.google.material.compose) // TODO remove
-  implementation(libs.google.material.compose3)
   implementation(libs.google.accompanist.webview)
   androidTestImplementation(libs.androidx.compose.junit)
 

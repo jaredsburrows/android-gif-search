@@ -48,9 +48,9 @@ import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewFeature.FORCE_DARK
 import androidx.webkit.WebViewFeature.isFeatureSupported
 import com.burrowsapps.example.gif.R
+import com.burrowsapps.example.gif.ui.theme.GifTheme
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.rememberWebViewState
-import com.google.android.material.composethemeadapter3.Mdc3Theme
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -63,7 +63,7 @@ class LicenseActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
 
     setContent {
-      Mdc3Theme {
+      GifTheme {
         LicenseScreen()
       }
     }
@@ -94,7 +94,9 @@ class LicenseActivity : ComponentActivity() {
 )
 @Composable
 fun DefaultPreview() {
-  LicenseScreen()
+  GifTheme {
+    LicenseScreen()
+  }
 }
 
 @Composable
