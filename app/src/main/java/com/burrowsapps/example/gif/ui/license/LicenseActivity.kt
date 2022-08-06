@@ -133,7 +133,7 @@ fun TheToolbar(navController: NavHostController, scrollBehavior: TopAppBarScroll
       ) {
         Icon(
           imageVector = Icons.Filled.ArrowBack,
-          contentDescription = "Back",
+          contentDescription = stringResource(R.string.menu_back),
         )
       }
     },
@@ -204,7 +204,7 @@ fun TheWebView() {
         request: WebResourceRequest,
         errorResponse: WebResourceResponse,
       ) {
-        Timber.e("onReceivedHttpError:\t$errorResponse")
+        Timber.e("onReceivedHttpError:\t${errorResponse.statusCode}\t${errorResponse.reasonPhrase}")
       }
     },
   )

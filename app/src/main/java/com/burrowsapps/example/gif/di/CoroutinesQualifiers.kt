@@ -5,16 +5,16 @@ import kotlin.annotation.AnnotationRetention.BINARY
 
 @Retention(BINARY)
 @Qualifier
-annotation class DefaultDispatcher
+internal annotation class DefaultDispatcher
 
 @Retention(BINARY)
 @Qualifier
-annotation class IoDispatcher
+internal annotation class IoDispatcher
 
 @Retention(BINARY)
 @Qualifier
-annotation class MainDispatcher
+internal annotation class MainDispatcher
 
 @Retention(BINARY)
 @Qualifier
-annotation class MainImmediateDispatcher
+internal annotation class MainImmediateDispatcher

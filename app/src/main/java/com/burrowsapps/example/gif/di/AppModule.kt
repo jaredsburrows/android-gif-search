@@ -13,7 +13,7 @@ import dagger.hilt.components.SingletonComponent
  */
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+internal object AppModule {
   @Provides
   fun providesClipboardManager(@ApplicationContext context: Context): ClipboardManager {
     return context.applicationContext.getSystemService(ClipboardManager::class.java)

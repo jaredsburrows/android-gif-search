@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class GifItemDecoration(
   private val offSet: Int,
-  private val columns: Int
+  private val columns: Int,
 ) : RecyclerView.ItemDecoration() {
   override fun getItemOffsets(
     outRect: Rect,

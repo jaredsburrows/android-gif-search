@@ -8,5 +8,5 @@ data class ResultDto(
   @field:Json(name = "media")
   val media: List<MediaDto> = emptyList(),
   @field:Json(name = "title")
-  val title: String = ""
+  val title: String = "",
 )

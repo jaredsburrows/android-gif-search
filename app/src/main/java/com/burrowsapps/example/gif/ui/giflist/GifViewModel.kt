@@ -62,7 +62,7 @@ class GifViewModel @Inject constructor(private val repository: GifRepository) : 
       val gif = media.gif
       val gifUrl = gif.url
 
-      Timber.i("buildGifList:\t$gifUrl")
+      Timber.i("gif url:\t$gifUrl")
 
       GifImageInfo(tinyGif.url, tinyGif.preview, gifUrl, gif.preview)
     }.orEmpty()

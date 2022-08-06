@@ -6,7 +6,7 @@ import android.os.StrictMode.VmPolicy
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-class DebugApplication : Application() {
+class DebugGifApplication : GifApplication() {
   override fun onCreate() {
     super.onCreate()
 

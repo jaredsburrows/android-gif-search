@@ -31,7 +31,7 @@ interface TenorService {
     @Query("q")
     q: String,
     @Query("pos")
-    pos: String?
+    pos: String?,
   ): Response<TenorResponseDto>
 
   /**
@@ -51,7 +51,7 @@ interface TenorService {
   @GET("/v1/trending?key=$API_KEY&media_filter=$MEDIA_FILTER&limit=$DEFAULT_LIMIT_COUNT")
   suspend fun getTrendingResults(
     @Query("pos")
-    pos: String?
+    pos: String?,
   ): Response<TenorResponseDto>
 
   companion object {

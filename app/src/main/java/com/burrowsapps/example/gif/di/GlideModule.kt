@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.cache.DiskCache.Factory.DEFAULT_DISK_CACHE
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
 import com.bumptech.glide.load.engine.cache.LruResourceCache
 import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 import com.burrowsapps.example.gif.BuildConfig.DEBUG
 import com.burrowsapps.example.gif.R
@@ -32,7 +33,7 @@ import java.io.InputStream
 
 @GlideModule
 @Excludes(OkHttpLibraryGlideModule::class)
-class AppGlideModule : com.bumptech.glide.module.AppGlideModule() {
+internal class GlideModule : AppGlideModule() {
   @EntryPoint
   @InstallIn(SingletonComponent::class)
   internal interface GlideModuleEntryPoint {
@@ -69,7 +70,7 @@ class AppGlideModule : com.bumptech.glide.module.AppGlideModule() {
     )
   }
 
-  companion object {
+  private companion object {
     private const val GLIDE_CACHE_DIRECTORY = "https-image-cache"
     private const val ENCODE_QUALITY = 100
   }

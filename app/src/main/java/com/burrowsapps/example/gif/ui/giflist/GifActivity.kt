@@ -35,7 +35,7 @@ class GifActivity : AppCompatActivity() {
   @Inject internal lateinit var imageService: ImageService
   @Inject internal lateinit var clipboardManager: ClipboardManager
   internal val gifViewModel by viewModels<GifViewModel>()
-  private lateinit var binding: ActivityGifBinding
+  private lateinit var activityBinding: ActivityGifBinding
   private lateinit var dialogBinding: DialogPreviewBinding
   private lateinit var gridLayoutManager: GridLayoutManager
   private lateinit var gifItemDecoration: GifItemDecoration
@@ -51,13 +51,13 @@ class GifActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    binding = ActivityGifBinding.inflate(layoutInflater)
-    setContentView(binding.root)
+    activityBinding = ActivityGifBinding.inflate(layoutInflater)
+    setContentView(activityBinding.root)
     dialogBinding = DialogPreviewBinding.inflate(layoutInflater)
 
     // Setup
-    binding.toolbar.setTitle(R.string.main_screen_title)
-    setSupportActionBar(binding.toolbar)
+    activityBinding.toolbar.setTitle(R.string.main_screen_title)
+    setSupportActionBar(activityBinding.toolbar)
 
     gridLayoutManager = GridLayoutManager(this, PORTRAIT_COLUMNS)
     gifItemDecoration = GifItemDecoration(
@@ -69,7 +69,7 @@ class GifActivity : AppCompatActivity() {
     }, imageService)
 
     // Setup RecyclerView
-    binding.recyclerView.apply {
+    activityBinding.recyclerView.apply {
       layoutManager = gridLayoutManager
       addItemDecoration(gifItemDecoration)
       adapter = gifAdapter
@@ -78,7 +78,7 @@ class GifActivity : AppCompatActivity() {
       recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
       addRecyclerListener { holder ->
         val gifViewHolder = holder as GifAdapter.ViewHolder
-        GlideApp.with(this).clear(gifViewHolder.binding.gifImage)
+        GlideApp.with(this).clear(gifViewHolder.listBinding.gifImage)
 
         Timber.i("addRecyclerListener")
       }
@@ -102,7 +102,7 @@ class GifActivity : AppCompatActivity() {
       )
     }
 
-    binding.swipeRefresh.setOnRefreshListener {
+    activityBinding.swipeRefresh.setOnRefreshListener {
       loadImages()
     }
 
@@ -214,7 +214,7 @@ class GifActivity : AppCompatActivity() {
   internal fun loadImages() {
     loadingImages = false
 
-    binding.swipeRefresh.isRefreshing = true
+    activityBinding.swipeRefresh.isRefreshing = true
 
     if (hasSearchedImages) {
       gifViewModel.loadSearchImages(searchedImageText, nextPageNumber)
@@ -234,11 +234,12 @@ class GifActivity : AppCompatActivity() {
 
   private fun updateList(newList: List<GifImageInfo>?) {
     if (newList == null) {
-      Snackbar.make(binding.root, getString(R.string.error_loading_list), LENGTH_SHORT).show()
+      Snackbar.make(activityBinding.root, getString(R.string.error_loading_list), LENGTH_SHORT)
+        .show()
     } else {
       gifAdapter.add(newList)
     }
-    binding.swipeRefresh.isRefreshing = false
+    activityBinding.swipeRefresh.isRefreshing = false
   }
 
   private fun showImageDialog(imageInfoModel: GifImageInfo) {
@@ -249,7 +250,8 @@ class GifActivity : AppCompatActivity() {
         clipboardManager.setPrimaryClip(
           ClipData.newPlainText(CLIP_DATA_IMAGE_URL, imageInfoModel.gifUrl)
         )
-        Snackbar.make(binding.root, getString(R.string.copied_to_clipboard), LENGTH_SHORT).show()
+        Snackbar.make(activityBinding.root, getString(R.string.copied_to_clipboard), LENGTH_SHORT)
+          .show()
       }
     }
 
@@ -276,7 +278,7 @@ class GifActivity : AppCompatActivity() {
     gifDialog.show()
   }
 
-  companion object {
+  private companion object {
     private const val CLIP_DATA_IMAGE_URL = "https-image-url"
     private const val PORTRAIT_COLUMNS = 3
     private const val MENU_SEARCH = 0

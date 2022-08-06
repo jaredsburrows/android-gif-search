@@ -5,7 +5,7 @@ import timber.log.Timber
 
 sealed class NetworkResult<T>(
   val data: T? = null,
-  val message: String? = null
+  val message: String? = null,
 ) {
   class Success<T>(data: T) : NetworkResult<T>(data)
   class Error<T>(data: T? = null, message: String) : NetworkResult<T>(data, message)
@@ -18,7 +18,7 @@ sealed class NetworkResult<T>(
         if (response.isSuccessful && body != null) {
           return Success(body)
         }
-        Timber.e("request failed:\t $response")
+        Timber.e("request failed")
         error("${response.code()} ${response.message()}")
       } catch (e: Exception) {
         Timber.e(e, "request failed")

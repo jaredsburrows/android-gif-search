@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-open class Application : Application() {
+open class GifApplication : Application() {
   override fun onCreate() {
     super.onCreate()
     setDefaultNightMode(if (SDK_INT >= Q) MODE_NIGHT_FOLLOW_SYSTEM else MODE_NIGHT_AUTO_BATTERY)

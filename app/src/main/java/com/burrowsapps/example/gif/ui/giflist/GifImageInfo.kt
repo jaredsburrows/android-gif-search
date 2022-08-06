@@ -7,5 +7,5 @@ data class GifImageInfo(
   var tinyGifUrl: String = "",
   var tinyGifPreviewUrl: String = "",
   var gifUrl: String = "",
-  var gifPreviewUrl: String = ""
+  var gifPreviewUrl: String = "",
 )

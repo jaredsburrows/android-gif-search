@@ -8,5 +8,5 @@ data class MediaDto(
   @field:Json(name = "tinygif")
   val tinyGif: GifDto = GifDto(),
   @field:Json(name = "gif")
-  val gif: GifDto = GifDto()
+  val gif: GifDto = GifDto(),
 )

@@ -13,5 +13,5 @@ data class TenorResponseDto(
   @field:Json(name = "results")
   val results: List<ResultDto> = emptyList(),
   @field:Json(name = "next")
-  val next: String = "0.0"
+  val next: String = "0.0",
 )

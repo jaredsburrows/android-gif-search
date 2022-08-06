@@ -29,7 +29,7 @@ import javax.inject.Singleton
  */
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+internal object NetworkModule {
   const val CLIENT_CACHE_SIZE = 2 * 10 * 1024 * 1024L // 20 MiB
   private const val CLIENT_CACHE_DIRECTORY = "https-json-cache"
   private const val CLIENT_TIME_OUT = 10_000L // milliseconds

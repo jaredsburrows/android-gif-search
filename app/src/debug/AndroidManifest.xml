@@ -10,7 +10,7 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
   <application
-    android:name=".DebugApplication"
+    android:name=".DebugGifApplication"
     android:usesCleartextTraffic="true"
     tools:ignore="MissingApplicationIcon"
     tools:replace="android:name" />
