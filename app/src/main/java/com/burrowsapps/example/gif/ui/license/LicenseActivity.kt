@@ -16,6 +16,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
@@ -53,7 +55,7 @@ import com.google.accompanist.web.rememberWebViewState
 import com.google.android.material.composethemeadapter3.Mdc3Theme
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-
+class b : AppCompatActivity()
 /**
  * Open source license activity.
  */
@@ -63,7 +65,13 @@ class LicenseActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
 
     setContent {
-      Mdc3Theme {
+      androidx.compose.material3.MaterialTheme {
+
+      }
+      androidx.compose.material.MaterialTheme() {
+
+      }
+      Mdc3Theme { // TODO Look into custom theme
         LicenseScreen()
       }
     }

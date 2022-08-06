@@ -37,8 +37,8 @@ class GifAdapter(
 
     // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
     // Forget view, try to free resources
-    GlideApp.with(holder.itemView.context).clear(holder.binding.gifImage)
-    holder.binding.apply {
+    GlideApp.with(holder.itemView.context).clear(holder.listItemBinding.gifImage)
+    holder.listItemBinding.apply {
       gifImage.setImageDrawable(null)
       // Make sure to show progress when loading new view
       gifProgress.show()
@@ -72,8 +72,8 @@ class GifAdapter(
   }
 
   inner class ViewHolder(
-    internal val binding: ListItemBinding
-  ) : RecyclerView.ViewHolder(binding.root) {
+    internal val listItemBinding: ListItemBinding
+  ) : RecyclerView.ViewHolder(listItemBinding.root) {
 
     fun bind(imageInfoModel: GifImageInfo) {
       itemView.setOnClickListener { onItemClick.invoke(imageInfoModel) }
@@ -82,15 +82,15 @@ class GifAdapter(
       imageService.loadGif(
         imageUrl = imageInfoModel.tinyGifUrl,
         thumbnailUrl = imageInfoModel.tinyGifPreviewUrl,
-        imageView = binding.gifImage,
+        imageView = listItemBinding.gifImage,
         onResourceReady = {
           // Hide progressbar
-          binding.gifProgress.hide()
+          listItemBinding.gifProgress.hide()
           Timber.i("onResourceReady")
         },
         onLoadFailed = { e ->
           // Hide progressbar
-          binding.gifProgress.hide()
+          listItemBinding.gifProgress.hide()
           Timber.e(e, "onLoadFailed")
         },
       )
