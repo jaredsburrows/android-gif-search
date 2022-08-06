@@ -5,6 +5,7 @@ import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.widget.TextView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.Espresso.pressBackUnconditionally
@@ -23,7 +24,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
@@ -63,8 +63,7 @@ class GifActivityTest {
   val instantTaskExecutorRule = InstantTaskExecutorRule()
 
   @get:Rule(order = 2)
-  val activityScenarioRule: ActivityScenarioRule<GifActivity> =
-    ActivityScenarioRule(GifActivity::class.java)
+  var composeTestRule = createAndroidComposeRule<GifActivity>()
 
   @get:Rule(order = 3)
   val permissionRule: GrantPermissionRule = GrantPermissionRule
