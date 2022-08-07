@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.widget.SearchView
+import androidx.compose.ui.platform.ComposeView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.burrowsapps.example.gif.R
@@ -20,6 +21,7 @@ import com.burrowsapps.example.gif.databinding.ActivityGifBinding
 import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
 import com.burrowsapps.example.gif.di.GlideApp
 import com.burrowsapps.example.gif.ui.license.LicenseActivity
+import com.burrowsapps.example.gif.ui.theme.GifTheme
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,6 +56,13 @@ class GifActivity : AppCompatActivity() {
     activityBinding = ActivityGifBinding.inflate(layoutInflater)
     setContentView(activityBinding.root)
     dialogBinding = DialogPreviewBinding.inflate(layoutInflater)
+
+    val greeting = findViewById<ComposeView>(R.id.greeting)
+    greeting.setContent {
+      GifTheme {
+
+      }
+    }
 
     // Setup
     activityBinding.toolbar.setTitle(R.string.main_screen_title)
@@ -106,11 +115,7 @@ class GifActivity : AppCompatActivity() {
       setCancelable(true)
       setCanceledOnTouchOutside(true)
       setOnDismissListener {
-        // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
-        GlideApp.with(dialogBinding.gifDialogImage.context)
-          .clear(dialogBinding.gifDialogImage) // Forget view, try to free resources
-        dialogBinding.gifDialogImage.setImageDrawable(null)
-        dialogBinding.gifDialogProgress.show() // Make sure to show progress when loadingImages new view
+//        dialogBinding.gifDialogProgress.show() // Make sure to show progress when loadingImages new view
       }
 
       // Remove "white" background for gifDialog
@@ -238,38 +243,38 @@ class GifActivity : AppCompatActivity() {
 
   private fun showImageDialog(imageInfoModel: GifImageInfo) {
     // Load associated text
-    dialogBinding.gifDialogTitle.apply {
-      text = imageInfoModel.gifUrl
-      setOnClickListener {
-        clipboardManager.setPrimaryClip(
-          ClipData.newPlainText(CLIP_DATA_IMAGE_URL, imageInfoModel.gifUrl)
-        )
-        Snackbar.make(activityBinding.root, getString(R.string.copied_to_clipboard), LENGTH_SHORT)
-          .show()
-      }
-    }
-
-    // Load image - click on 'tinyGifPreviewUrl' -> 'tinyGifUrl' -> 'gifUrl'
-    imageService.loadGif(
-      imageUrl = imageInfoModel.tinyGifUrl,
-      thumbnailUrl = imageInfoModel.tinyGifPreviewUrl,
-      imageView = dialogBinding.gifDialogImage,
-      onResourceReady = {
-        // Hide progressbar
-        dialogBinding.gifDialogProgress.hide()
-        dialogBinding.gifDialogTitle.visibility = View.VISIBLE
-
-        Timber.i("onResourceReady")
-      },
-      onLoadFailed = { e ->
-        // Hide progressbar
-        dialogBinding.gifDialogProgress.hide()
-
-        Timber.e(e, "onLoadFailed")
-      },
-    )
-
-    gifDialog.show()
+//    dialogBinding.gifDialogTitle.apply {
+//      text = imageInfoModel.gifUrl
+//      setOnClickListener {
+//        clipboardManager.setPrimaryClip(
+//          ClipData.newPlainText(CLIP_DATA_IMAGE_URL, imageInfoModel.gifUrl)
+//        )
+//        Snackbar.make(activityBinding.root, getString(R.string.copied_to_clipboard), LENGTH_SHORT)
+//          .show()
+//      }
+//    }
+//
+//    // Load image - click on 'tinyGifPreviewUrl' -> 'tinyGifUrl' -> 'gifUrl'
+//    imageService.loadGif(
+//      imageUrl = imageInfoModel.tinyGifUrl,
+//      thumbnailUrl = imageInfoModel.tinyGifPreviewUrl,
+//      imageView = dialogBinding.gifDialogImage,
+//      onResourceReady = {
+//        // Hide progressbar
+//        dialogBinding.gifDialogProgress.hide()
+//        dialogBinding.gifDialogTitle.visibility = View.VISIBLE
+//
+//        Timber.i("onResourceReady")
+//      },
+//      onLoadFailed = { e ->
+//        // Hide progressbar
+//        dialogBinding.gifDialogProgress.hide()
+//
+//        Timber.e(e, "onLoadFailed")
+//      },
+//    )
+//
+//    gifDialog.show()
   }
 
   private companion object {
