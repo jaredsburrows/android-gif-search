@@ -52,7 +52,7 @@ jobs:
           java-version: ${{ matrix.java-version }}
 
       - name: Build Debug APKs
-        run: ./gradlew clean assembleDebug -s
+        run: ./gradlew assembleDebug -Pci -s
 
       - name: Run Debug Checks
         run: ./gradlew ktlintCheck lintDebug -s
