@@ -31,7 +31,7 @@ import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberTopAppBarScrollState
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -53,6 +53,7 @@ import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.rememberWebViewState
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import com.google.accompanist.web.WebView as AccompanistWebView
 
 /**
  * Open source license activity.
@@ -102,7 +103,7 @@ fun DefaultPreview() {
 @Composable
 fun LicenseScreen() {
   val navController = rememberNavController()
-  val scrollBehavior = enterAlwaysScrollBehavior(rememberTopAppBarScrollState())
+  val scrollBehavior = enterAlwaysScrollBehavior(rememberTopAppBarState())
 
   Scaffold(
     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -165,8 +166,8 @@ fun TheWebView() {
     .addPathHandler("/assets/", pathHandler)
     .build()
 
-  com.google.accompanist.web.WebView(
-    state,
+  AccompanistWebView(
+    state = state,
     onCreated = { webView ->
       webView.isVerticalScrollBarEnabled = false
       webView.settings.apply {
