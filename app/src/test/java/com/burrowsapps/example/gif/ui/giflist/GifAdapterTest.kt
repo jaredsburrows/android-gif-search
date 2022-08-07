@@ -38,9 +38,9 @@ class GifAdapterTest {
     hiltRule.inject()
 
     sut = GifAdapter(
+      imageService,
       onItemClick = {
       },
-      imageService
     ).apply {
       add(listOf(gifImageInfo, gifImageInfo2))
     }

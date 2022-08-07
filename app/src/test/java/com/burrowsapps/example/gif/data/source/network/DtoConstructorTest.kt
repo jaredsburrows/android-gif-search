@@ -17,7 +17,7 @@ import java.lang.reflect.Modifier
 
 @RunWith(AndroidJUnit4::class)
 class DtoConstructorTest {
-  private val modelPackage = "burrows.apps.example.gif.data.rest.model"
+  private val modelPackage = "com.burrowsapps.example.gif.data.source.network"
   private val dataTransportObject = "Dto"
   private lateinit var classes: Set<Class<*>>
 
@@ -34,7 +34,7 @@ class DtoConstructorTest {
           Scanners.MethodsAnnotated,
           Scanners.MethodsParameter,
           MethodParameterNamesScanner(),
-          MemberUsageScanner()
+          MemberUsageScanner(),
         )
     )
     classes = reflections.getSubTypesOf(Any::class.java)
