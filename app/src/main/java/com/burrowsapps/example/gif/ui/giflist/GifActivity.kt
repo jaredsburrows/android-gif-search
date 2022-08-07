@@ -4,13 +4,31 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.res.Resources
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.widget.SearchView
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.burrowsapps.example.gif.R
@@ -20,6 +38,8 @@ import com.burrowsapps.example.gif.databinding.ActivityGifBinding
 import com.burrowsapps.example.gif.databinding.DialogPreviewBinding
 import com.burrowsapps.example.gif.di.GlideApp
 import com.burrowsapps.example.gif.ui.license.LicenseActivity
+import com.burrowsapps.example.gif.ui.license.LicenseScreen
+import com.burrowsapps.example.gif.ui.theme.GifTheme
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +51,7 @@ import kotlin.math.roundToInt
  * Main activity that will load our Fragments via the Support Fragment Manager.
  */
 @AndroidEntryPoint
+//class GifActivity : ComponentActivity() {
 class GifActivity : AppCompatActivity() {
   @Inject internal lateinit var imageService: ImageService
   @Inject internal lateinit var clipboardManager: ClipboardManager
@@ -52,12 +73,6 @@ class GifActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     activityBinding = ActivityGifBinding.inflate(layoutInflater)
-    setContentView(activityBinding.root)
-    dialogBinding = DialogPreviewBinding.inflate(layoutInflater)
-
-    // Setup
-    activityBinding.toolbar.setTitle(R.string.main_screen_title)
-    setSupportActionBar(activityBinding.toolbar)
 
     gridLayoutManager = GridLayoutManager(this, PORTRAIT_COLUMNS)
     gifItemDecoration = GifItemDecoration(
@@ -68,72 +83,98 @@ class GifActivity : AppCompatActivity() {
       showImageDialog(imageInfoModel)
     }
 
-    // Setup RecyclerView
-    activityBinding.recyclerView.apply {
-      layoutManager = gridLayoutManager
-      addItemDecoration(gifItemDecoration)
-      adapter = gifAdapter
-      setHasFixedSize(true)
-      setItemViewCacheSize(DEFAULT_LIMIT_COUNT) // default 2
-      recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
-      addOnScrollListener(
-        object : RecyclerView.OnScrollListener() {
-          override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-
-            // Continuous scrolling
-            visibleImageCount = recyclerView.childCount
-            totalImageCount = gridLayoutManager.itemCount
-            firstVisibleImage = gridLayoutManager.findFirstVisibleItemPosition()
-
-            if (loadingImages) {
-              if ((visibleImageCount + firstVisibleImage) >= totalImageCount) {
-                loadImages()
-              }
-            }
-          }
-        }
-      )
-    }
-
-    activityBinding.swipeRefresh.setOnRefreshListener {
-      loadImages()
-    }
-
-    // Custom view for Dialog
-    gifDialog = AppCompatDialog(this).apply {
-      setContentView(dialogBinding.root)
-      setCancelable(true)
-      setCanceledOnTouchOutside(true)
-      setOnDismissListener {
-        // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
-        GlideApp.with(dialogBinding.gifDialogImage.context)
-          .clear(dialogBinding.gifDialogImage) // Forget view, try to free resources
-        dialogBinding.gifDialogImage.setImageDrawable(null)
-        dialogBinding.gifDialogProgress.show() // Make sure to show progress when loadingImages new view
-      }
-
-      // Remove "white" background for gifDialog
-      window?.decorView?.setBackgroundResource(android.R.color.transparent)
-    }
-
-    // Load initial images
-    gifViewModel.apply {
-      loadTrendingImages()
-
-      trendingResponse.observe(this@GifActivity) { response ->
-        updateList(response)
-      }
-
-      searchResponse.observe(this@GifActivity) { response ->
-        updateList(response)
-      }
-
-      nextPageResponse.observe(this@GifActivity) { response ->
-        nextPageNumber = response
+    setContent {
+      GifTheme {
+        EmbeddedAndroidViewDemo()
       }
     }
   }
+
+//  override fun onCreate(savedInstanceState: Bundle?) {
+//    super.onCreate(savedInstanceState)
+//    activityBinding = ActivityGifBinding.inflate(layoutInflater)
+//    setContentView(activityBinding.root)
+//    dialogBinding = DialogPreviewBinding.inflate(layoutInflater)
+//
+//    // Setup
+//    activityBinding.toolbar.setTitle(R.string.main_screen_title)
+//    setSupportActionBar(activityBinding.toolbar)
+//
+//    gridLayoutManager = GridLayoutManager(this, PORTRAIT_COLUMNS)
+//    gifItemDecoration = GifItemDecoration(
+//      (1.0 * Resources.getSystem().displayMetrics.density).roundToInt(), // TODO 1.dp in compose
+//      gridLayoutManager.spanCount
+//    )
+//    gifAdapter = GifAdapter(imageService) { imageInfoModel ->
+//      showImageDialog(imageInfoModel)
+//    }
+//
+//    // Setup RecyclerView
+//    activityBinding.recyclerView.apply {
+//      layoutManager = gridLayoutManager
+//      addItemDecoration(gifItemDecoration)
+//      adapter = gifAdapter
+//      setHasFixedSize(true)
+//      setItemViewCacheSize(DEFAULT_LIMIT_COUNT) // default 2
+//      recycledViewPool.setMaxRecycledViews(0, PORTRAIT_COLUMNS * 2) // default 5
+//      addOnScrollListener(
+//        object : RecyclerView.OnScrollListener() {
+//          override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//            super.onScrolled(recyclerView, dx, dy)
+//
+//            // Continuous scrolling
+//            visibleImageCount = recyclerView.childCount
+//            totalImageCount = gridLayoutManager.itemCount
+//            firstVisibleImage = gridLayoutManager.findFirstVisibleItemPosition()
+//
+//            if (loadingImages) {
+//              if ((visibleImageCount + firstVisibleImage) >= totalImageCount) {
+//                loadImages()
+//              }
+//            }
+//          }
+//        }
+//      )
+//    }
+//
+//    activityBinding.swipeRefresh.setOnRefreshListener {
+//      loadImages()
+//    }
+//
+//    // Custom view for Dialog
+//    gifDialog = AppCompatDialog(this).apply {
+//      setContentView(dialogBinding.root)
+//      setCancelable(true)
+//      setCanceledOnTouchOutside(true)
+//      setOnDismissListener {
+//        // https://github.com/bumptech/glide/issues/624#issuecomment-140134792
+//        GlideApp.with(dialogBinding.gifDialogImage.context)
+//          .clear(dialogBinding.gifDialogImage) // Forget view, try to free resources
+//        dialogBinding.gifDialogImage.setImageDrawable(null)
+//        dialogBinding.gifDialogProgress.show() // Make sure to show progress when loadingImages new view
+//      }
+//
+//      // Remove "white" background for gifDialog
+//      window?.decorView?.setBackgroundResource(android.R.color.transparent)
+//    }
+//
+//    // Load initial images
+//    gifViewModel.apply {
+//      loadTrendingImages()
+//
+//      trendingResponse.observe(this@GifActivity) { response ->
+//        updateList(response)
+//      }
+//
+//      searchResponse.observe(this@GifActivity) { response ->
+//        updateList(response)
+//      }
+//
+//      nextPageResponse.observe(this@GifActivity) { response ->
+//        nextPageNumber = response
+//      }
+//    }
+//  }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     super.onCreateOptionsMenu(menu)
@@ -277,5 +318,48 @@ class GifActivity : AppCompatActivity() {
     private const val PORTRAIT_COLUMNS = 3
     private const val MENU_SEARCH = 0
     private const val MENU_LICENSE = 1
+  }
+
+  @Composable
+  fun EmbeddedAndroidViewDemo() {
+    Column {
+      val state = remember { mutableStateOf(0) }
+
+
+//      AndroidView(factory = { ctx ->
+//        android.widget.Button(ctx).apply {
+//          text = "MyAndroidButton"
+//          layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+//          setOnClickListener {
+//            state.value++
+//          }
+//        }
+//      }, modifier = Modifier.padding(8.dp))
+//
+//      AndroidView(factory = { ctx ->
+//        TextView(ctx).apply {
+//          layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+//        }
+//      }, update = {
+//        it.text = "You have clicked the buttons: " + state.value.toString() + " times"
+//      })
+
+      AndroidView(
+        factory = { context ->
+//          val view = LayoutInflater.from(context)
+//            .inflate(R.layout.activity_gif, null, false)
+
+          activityBinding.toolbar.setTitle(R.string.main_screen_title)
+          this@GifActivity.setSupportActionBar(activityBinding.toolbar)
+
+          activityBinding.root
+        },
+        update = {
+          // Update the view
+        }
+      )
+
+
+    }
   }
 }
