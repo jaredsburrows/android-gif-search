@@ -52,13 +52,13 @@ jobs:
           java-version: ${{ matrix.java-version }}
 
       - name: Build Debug APKs
-        run: ./gradlew clean assembleDebug assembleDebugAndroidTest -Pci -s
+        run: ./gradlew clean assembleDebug -s
 
       - name: Run Debug Checks
-        run: ./gradlew ktlintCheck lintDebug -Pci -s
+        run: ./gradlew ktlintCheck lintDebug -s
 
       - name: Run Debug Unit Tests
-        run: ./gradlew testDebug -Pci -s
+        run: ./gradlew testDebug -s
 
       - name: Run Debug Instrumentation Tests on Android API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2.25.0
@@ -71,13 +71,13 @@ jobs:
           API_LEVEL: ${{ matrix.api-level }}
 
       - name: Build Release APKs
-        run: ./gradlew assembleRelease assembleReleaseAndroidTest -Pci -Prelease -s
+        run: ./gradlew assembleRelease -Prelease -s
 
       - name: Run Release Checks
-        run: ./gradlew lintRelease -Pci -Prelease -s
+        run: ./gradlew lintRelease -Prelease -s
 
       - name: Run Release Unit Tests
-        run: ./gradlew testRelease -Pci -Prelease -s
+        run: ./gradlew testRelease -Prelease -s
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3.1.0
