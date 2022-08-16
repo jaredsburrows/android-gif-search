@@ -8,6 +8,7 @@ plugins {
 }
 
 android {
+  namespace = "com.burrowsapps.example.gif.test.shared"
   compileSdk = libs.versions.sdk.compile.get().toInt()
 
   defaultConfig {

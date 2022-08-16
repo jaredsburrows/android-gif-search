@@ -11,6 +11,8 @@ plugins {
 }
 
 android {
+  namespace = "com.burrowsapps.example.gif"
+  testNamespace = "com.burrowsapps.example.gif.test"
   compileSdk = libs.versions.sdk.compile.get().toInt()
 
   defaultConfig {
