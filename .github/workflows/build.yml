@@ -66,6 +66,8 @@ jobs:
         continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          target: google_apis
           script: ./gradlew connectedDebugAndroidTest -Pci -s || ./gradlew connectedDebugAndroidTest -Pci -s
         env:
           API_LEVEL: ${{ matrix.api-level }}
