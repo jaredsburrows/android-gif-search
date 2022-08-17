@@ -51,11 +51,8 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
 
-      - name: Build Debug APKs
-        run: ./gradlew assembleDebug -s
-
-      - name: Run Debug Checks
-        run: ./gradlew ktlintCheck lintDebug -s
+      - name: Build Debug APKs and Run lint checks
+        run: ./gradlew assembleDebug ktlintCheck lintDebug -s
 
       - name: Run Debug Unit Tests
         run: ./gradlew testDebug -Pci -s
@@ -72,14 +69,8 @@ jobs:
         env:
           API_LEVEL: ${{ matrix.api-level }}
 
-      - name: Build Release APKs
-        run: ./gradlew assembleRelease -Prelease -s
-
-      - name: Run Release Checks
-        run: ./gradlew lintRelease -Prelease -s
-
-      - name: Run Release Unit Tests
-        run: ./gradlew testRelease -Prelease -Pci -s
+      - name: Build Release APKs and Run lint checks
+        run: ./gradlew assembleRelease lintRelease -Prelease -s
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3.1.0
