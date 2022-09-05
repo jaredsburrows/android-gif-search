@@ -7,8 +7,13 @@ sealed class NetworkResult<T>(
   val data: T? = null,
   val message: String? = null,
 ) {
-  class Success<T>(data: T) : NetworkResult<T>(data)
-  class Error<T>(data: T? = null, message: String) : NetworkResult<T>(data, message)
+  class Loading<T> : NetworkResult<T>()
+  class Success<T>(data: T) : NetworkResult<T>(data = data)
+  class Empty<T> : NetworkResult<T>()
+  class Error<T>(data: T? = null, message: String? = null) : NetworkResult<T>(
+    data = data,
+    message = message,
+  )
 
   companion object {
     suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): NetworkResult<T> {
@@ -16,17 +21,17 @@ sealed class NetworkResult<T>(
         val response = apiCall()
         val body = response.body()
         if (response.isSuccessful && body != null) {
-          return Success(body)
+          return Success(data = body)
         }
-        Timber.e("request failed")
-        error("${response.code()} ${response.message()}")
+        Timber.e(message = "request failed")
+        error(errorMessage = "${response.code()} ${response.message()}")
       } catch (e: Exception) {
-        Timber.e(e, "request failed")
-        error(e.message ?: e.toString())
+        Timber.e(t = e, message = "request failed")
+        error(errorMessage = e.message ?: e.toString())
       }
     }
 
     private fun <T> error(errorMessage: String): NetworkResult<T> =
-      Error(null, "Api call failed $errorMessage")
+      Error(data = null, message = "Api call failed $errorMessage")
   }
 }

@@ -56,7 +56,6 @@ android {
   buildFeatures {
     buildConfig = true
     compose = true
-    viewBinding = true
   }
 
   composeOptions {
@@ -167,11 +166,10 @@ dependencies {
   implementation(libs.kotlinx.coroutinesjdk8)
   testImplementation(libs.kotlinx.coroutines.test)
   testImplementation(libs.kotlinx.coroutines.testjvm)
-  androidTestImplementation(libs.kotlinx.coroutines.test)
-  androidTestImplementation(libs.kotlinx.coroutines.testjvm)
 
   // Dagger / Dependency Injection
   implementation(libs.google.hilt.android)
+  implementation(libs.androidx.hilt.compose)
   kapt(libs.google.hilt.compiler)
   kaptTest(libs.google.hilt.compiler)
   kaptAndroidTest(libs.google.hilt.compiler)
@@ -196,32 +194,26 @@ dependencies {
   implementation(libs.androidx.lifecycle.extensions)
   implementation(libs.androidx.lifecycle.viewmodel)
   implementation(libs.androidx.lifecycle.viewmodelktx)
-  implementation(libs.androidx.lifecycle.livedata)
-  implementation(libs.androidx.lifecycle.livedatacore)
-  implementation(libs.androidx.lifecycle.livedatacorektx)
-  implementation(libs.androidx.lifecycle.livedataktx)
   kapt(libs.androidx.lifecycle.compiler)
 
   // AndroidX UI
-  implementation(libs.androidx.cardview)
-  implementation(libs.androidx.constraintlayout)
-  implementation(libs.androidx.recyclerview)
-  implementation(libs.androidx.swiperefreshlayout)
   implementation(libs.androidx.webkit)
   implementation(libs.google.material)
 
   // AndroidX Jetpack Compose
   debugImplementation(libs.androidx.compose.uitoolingpreview)
+  debugImplementation(libs.androidx.compose.uimanifest)
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.compose.compiler)
   implementation(libs.androidx.compose.runtime)
-  implementation(libs.androidx.compose.material) // TODO remove
+  implementation(libs.androidx.compose.material)
   implementation(libs.androidx.compose.material3)
   implementation(libs.androidx.compose.navigation)
   implementation(libs.androidx.compose.runtime)
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.uitooling)
   implementation(libs.google.accompanist.drawablepainter)
+  implementation(libs.google.accompanist.swiperefresh)
   implementation(libs.google.accompanist.webview)
   androidTestImplementation(libs.androidx.compose.junit)
 
@@ -258,13 +250,11 @@ dependencies {
   testImplementation(project(":test-shared"))
   testImplementation(libs.androidx.test.annotation)
   testImplementation(libs.androidx.test.core)
-  testImplementation(libs.androidx.core.testing)
   testImplementation(libs.androidx.test.junit)
   testImplementation(libs.google.truth)
   testImplementation(libs.junit)
   testImplementation(libs.mockito.inline)
   testImplementation(libs.mockito.kotlin)
-  testImplementation(libs.reflections)
   testImplementation(libs.robolectric)
 
   // Android Tests
@@ -273,7 +263,6 @@ dependencies {
   androidTestImplementation(project(":test-shared"))
   androidTestImplementation(libs.androidx.test.annotation)
   androidTestImplementation(libs.androidx.test.core)
-  androidTestImplementation(libs.androidx.core.testing)
   androidTestImplementation(libs.androidx.espresso.contrib) {
     exclude("org.checkerframework") // See https://github.com/android/android-test/issues/861#issuecomment-872582819
   }

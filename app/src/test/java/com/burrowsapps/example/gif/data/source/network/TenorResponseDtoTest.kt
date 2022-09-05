@@ -2,6 +2,7 @@ package com.burrowsapps.example.gif.data.source.network
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -10,7 +11,13 @@ class TenorResponseDtoTest {
   private val nextResponse = "1.0"
   private val results = listOf<ResultDto>()
   private var sutDefault = TenorResponseDto()
-  private var sut = TenorResponseDto(results, nextResponse)
+
+  private lateinit var sut: TenorResponseDto
+
+  @Before
+  fun setUp() {
+    sut = TenorResponseDto(results, nextResponse)
+  }
 
   @Test
   fun testGetResults() {
