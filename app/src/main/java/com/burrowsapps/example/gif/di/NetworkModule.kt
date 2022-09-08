@@ -37,7 +37,7 @@ internal object NetworkModule {
   @Singleton
   @Provides
   fun providesTenorService(
-    retrofit: Retrofit
+    retrofit: Retrofit,
   ): TenorService {
     return retrofit
       .create(TenorService::class.java)
@@ -47,7 +47,7 @@ internal object NetworkModule {
   @Provides
   fun providesRetrofit(
     converterFactory: MoshiConverterFactory,
-    client: OkHttpClient
+    client: OkHttpClient,
   ): Retrofit {
     return Retrofit.Builder()
       .addConverterFactory(converterFactory)
@@ -74,13 +74,13 @@ internal object NetworkModule {
   @Provides
   fun providesOkHttpClient(
     interceptor: HttpLoggingInterceptor,
-    cache: Cache
+    cache: Cache,
   ): OkHttpClient {
     return OkHttpClient.Builder()
       .addInterceptor(interceptor)
-      .connectTimeout(CLIENT_TIME_OUT, SECONDS)
-      .writeTimeout(CLIENT_TIME_OUT, SECONDS)
-      .readTimeout(CLIENT_TIME_OUT, SECONDS)
+      .connectTimeout(CLIENT_TIME_OUT, SECONDS) // TODO Duration
+      .writeTimeout(CLIENT_TIME_OUT, SECONDS) // TODO Duration
+      .readTimeout(CLIENT_TIME_OUT, SECONDS) // TODO Duration
       .followRedirects(true)
       .followSslRedirects(true)
       .retryOnConnectionFailure(true)
@@ -101,6 +101,9 @@ internal object NetworkModule {
   @Singleton
   @Provides
   fun providesCache(@ApplicationContext context: Context): Cache {
-    return Cache(File(context.cacheDir, CLIENT_CACHE_DIRECTORY), CLIENT_CACHE_SIZE)
+    return Cache(
+      directory = File(context.cacheDir, CLIENT_CACHE_DIRECTORY),
+      maxSize = CLIENT_CACHE_SIZE,
+    )
   }
 }

@@ -27,7 +27,7 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 class TenorServiceTest {
   @get:Rule(order = 0)
-  val hiltRule = HiltAndroidRule(this)
+  internal val hiltRule = HiltAndroidRule(this)
 
   @Inject internal lateinit var sut: TenorService
 
@@ -42,16 +42,16 @@ class TenorServiceTest {
         override fun dispatch(request: RecordedRequest): MockResponse {
           request.path.orEmpty().apply {
             return when {
-              contains("v1/trending") -> getMockResponse("/trending_results.json")
-              contains("v1/search") -> getMockResponse("/search_results.json")
-              contains("images") -> getMockFileResponse("/ic_launcher.webp")
-              else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
+              contains(other = "v1/trending") -> getMockResponse(fileName = "/trending_results.json")
+              contains(other = "v1/search") -> getMockResponse(fileName = "/search_results.json")
+              contains(other = "images") -> getMockFileResponse(fileName = "/ic_launcher.webp")
+              else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
             }
           }
         }
       }
 
-      start(MOCK_SERVER_PORT)
+      start(port = MOCK_SERVER_PORT)
     }
   }
 

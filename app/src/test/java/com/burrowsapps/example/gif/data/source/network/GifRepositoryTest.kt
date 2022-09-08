@@ -1,6 +1,5 @@
 package com.burrowsapps.example.gif.data.source.network
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.BuildConfig.BASE_URL
 import com.google.common.truth.Truth.assertThat
@@ -8,14 +7,11 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol.HTTP_1_1
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import retrofit2.Response
@@ -23,10 +19,6 @@ import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 
 @RunWith(AndroidJUnit4::class)
 class GifRepositoryTest {
-  @get:Rule(order = 0)
-  val instantTaskExecutorRule = InstantTaskExecutorRule()
-
-  private val testDispatcher = UnconfinedTestDispatcher()
   private val service = mock<TenorService>()
   private val next = "0.0"
   private val response = TenorResponseDto()
@@ -35,7 +27,7 @@ class GifRepositoryTest {
 
   @Before
   fun setUp() {
-    sut = GifRepository(service, testDispatcher)
+    sut = GifRepository(service)
   }
 
   @Test
@@ -43,7 +35,7 @@ class GifRepositoryTest {
     whenever(service.getTrendingResults(eq(next)))
       .thenReturn(Response.success(response))
 
-    val result = sut.getTrendingResults(next).first().data
+    val result = sut.getTrendingResults(next).data
 
     verify(service).getTrendingResults(eq(next))
     assertThat(result).isEqualTo(response)
@@ -62,7 +54,7 @@ class GifRepositoryTest {
     whenever(service.getTrendingResults(eq(next)))
       .thenReturn(Response.error(errorBody, errorResponse))
 
-    val result = sut.getTrendingResults(next).first().data
+    val result = sut.getTrendingResults(next).data
 
     verify(service).getTrendingResults(eq(next))
     assertThat(result).isNull()
@@ -74,7 +66,7 @@ class GifRepositoryTest {
     whenever(service.getSearchResults(eq(searchString), eq(next)))
       .thenReturn(Response.success(response))
 
-    val result = sut.getSearchResults(searchString, next).first().data
+    val result = sut.getSearchResults(searchString, next).data
 
     verify(service).getSearchResults(eq(searchString), eq(next))
     assertThat(result).isEqualTo(response)
@@ -94,7 +86,7 @@ class GifRepositoryTest {
     whenever(service.getSearchResults(eq(searchString), eq(next)))
       .thenReturn(Response.error(errorBody, errorResponse))
 
-    val result = sut.getSearchResults(searchString, next).first().data
+    val result = sut.getSearchResults(searchString, next).data
 
     verify(service).getSearchResults(eq(searchString), eq(next))
     assertThat(result).isNull()

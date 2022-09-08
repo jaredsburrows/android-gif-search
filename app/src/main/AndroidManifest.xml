@@ -15,7 +15,7 @@
   <uses-permission android:name="android.permission.INTERNET" />
 
   <application
-    android:name=".GifApplication"
+    android:name=".MainApplication"
     android:allowBackup="true"
     android:extractNativeLibs="false"
     android:fullBackupContent="false"
@@ -26,7 +26,7 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
     <activity
-      android:name=".ui.giflist.GifActivity"
+      android:name=".MainActivity"
       android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
       android:exported="true"
       android:windowSoftInputMode="adjustPan">
@@ -36,20 +36,6 @@
         <category android:name="android.intent.category.LAUNCHER" />
         <category android:name="android.intent.category.MONKEY" />
       </intent-filter>
-    </activity>
-    <activity
-      android:name=".ui.license.LicenseActivity"
-      android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-      android:exported="true"
-      android:parentActivityName=".ui.giflist.GifActivity"
-      android:windowSoftInputMode="adjustPan">
-      <intent-filter>
-        <category android:name="android.intent.category.MONKEY" />
-      </intent-filter>
-
-      <meta-data
-        android:name="android.support.PARENT_ACTIVITY"
-        android:value=".ui.giflist.GifActivity" />
     </activity>
 
     <meta-data

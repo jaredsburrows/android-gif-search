@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <!-- App Titles -->
   <string name="app_name">Gif Example App</string>
-  <string name="menu_search">Search</string>
-  <string name="menu_licenses">Open source licenses</string>
+  <string name="gif_screen_title">Top Trending Gifs</string>
+  <string name="license_screen_title">Open Source Licenses</string>
+
+  <!-- Content Descriptions -->
   <string name="menu_back">Back</string>
+  <string name="menu_close">Close</string>
+  <string name="menu_more">More</string>
+  <string name="menu_search">Search</string>
+  <string name="gif_image">Gif Image</string>
+  <!--  <string name="gif_list">Gif List</string>-->
   <string name="search_gifs">Search Gifs</string>
-  <string name="main_screen_title">Top Trending Gifs</string>
-  <string name="gif_image">Gif image</string>
+
+  <!-- Snackbar Messages -->
   <string name="copied_to_clipboard">Copied to clipboard</string>
   <string name="error_loading_list">Something went wrong</string>
 </resources>

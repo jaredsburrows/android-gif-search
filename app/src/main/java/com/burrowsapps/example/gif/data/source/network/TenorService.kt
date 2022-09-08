@@ -22,16 +22,16 @@ interface TenorService {
    * Query: pos OPTIONAL, get results starting at position "value".
    * eg. https://g.tenor.com/v1/search?key=LIVDSRZULELA&media_filter=minimal&q=hello&limit=48
    *
-   * @param q Search string to find gifs.
-   * @param pos Position of getResults.
+   * @param query Search string to find gifs.
+   * @param position Position of getResults.
    * @return Response of search getResults.
    */
   @GET("/v1/search?key=$API_KEY&media_filter=$MEDIA_FILTER&limit=$DEFAULT_LIMIT_COUNT")
   suspend fun getSearchResults(
     @Query("q")
-    q: String,
+    query: String,
     @Query("pos")
-    pos: String?,
+    position: String?,
   ): Response<TenorResponseDto>
 
   /**
@@ -45,13 +45,13 @@ interface TenorService {
    * Query: pos OPTIONAL, get results starting at position "value".
    * eg. https://g.tenor.com/v1/trending?key=LIVDSRZULELA&media_filter=minimal&limit=48
    *
-   * @param pos Position of getResults.
+   * @param position Position of getResults.
    * @return Response of trending getResults.
    */
   @GET("/v1/trending?key=$API_KEY&media_filter=$MEDIA_FILTER&limit=$DEFAULT_LIMIT_COUNT")
   suspend fun getTrendingResults(
     @Query("pos")
-    pos: String?,
+    position: String?,
   ): Response<TenorResponseDto>
 
   companion object {

@@ -1,11 +1,11 @@
-# Android RecyclerView Gif Example in Kotlin
+# Android Jetpack Compose Gif Example in Kotlin
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Build](https://github.com/jaredsburrows/android-gif-example/workflows/build/badge.svg)](https://github.com/jaredsburrows/android-gif-example/actions)
 [![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
 
-Gif RecyclerView MVVM Grid Example using Dagger 2 Hilt, Retrofit 2, Moshi, Kotlin Coroutines, Junit,
-Espresso and Robolectric tests!
+Gif LazyVerticalGrid MVVM Example using Dagger 2 + Hilt with Retrofit 2, Moshi, Kotlin Coroutines,
+JUnit, Espresso and Robolectric tests!
 
 <p align="center">
   <a href="https://i.imgur.com/BATyXSX_d.webp?maxwidth=760&fidelity=grand" target="_blank"><img src="https://i.imgur.com/BATyXSX_d.webp?maxwidth=760&fidelity=grand" width="250px" /></a>

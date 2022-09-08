@@ -11,27 +11,27 @@ object TestFileUtils {
 
   fun getMockResponse(fileName: String) = MockResponse().apply {
     status = HTTP_200_STATUS
-    setResponseCode(HTTP_OK)
-    setBody(readText(fileName))
-    addHeader("Content-type: application/json; charset=utf-8")
+    setResponseCode(code = HTTP_OK)
+    setBody(body = readText(fileName = fileName))
+    addHeader(header = "Content-type: application/json; charset=utf-8")
   }
 
   fun getMockFileResponse(fileName: String) = MockResponse().apply {
     status = HTTP_200_STATUS
-    setResponseCode(HTTP_OK)
-    setBody(readImage(fileName))
-    addHeader("Content-type: image/webp")
+    setResponseCode(code = HTTP_OK)
+    setBody(body = readImage(fileName = fileName))
+    addHeader(header = "Content-type: image/webp")
   }
 
   private fun readImage(fileName: String) = Buffer().apply {
-    openStream(fileName).source().use { source ->
-      writeAll(source)
+    openStream(fileName = fileName).source().use { source ->
+      writeAll(source = source)
     }
   }
 
-  private fun readText(fileName: String) = getResource(fileName).readText()
+  private fun readText(fileName: String) = getResource(fileName = fileName).readText()
 
-  private fun openStream(fileName: String) = getResource(fileName).openStream()
+  private fun openStream(fileName: String) = getResource(fileName = fileName).openStream()
 
   private fun getResource(fileName: String) = TestFileUtils::class.java.getResource(fileName)!!
 }

@@ -2,6 +2,7 @@ package com.burrowsapps.example.gif.data.source.network
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -9,7 +10,13 @@ import org.junit.runner.RunWith
 class MediaDtoTest {
   private val gifDto = GifDto()
   private var defaultSut = MediaDto()
-  private var sut = MediaDto(gifDto)
+
+  private lateinit var sut: MediaDto
+
+  @Before
+  fun setUp() {
+    sut = MediaDto(gifDto)
+  }
 
   @Test
   fun testTinyGetGif() {

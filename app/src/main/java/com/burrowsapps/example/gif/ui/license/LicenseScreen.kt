@@ -1,21 +1,19 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(
+  ExperimentalMaterial3Api::class,
+  ExperimentalMaterial3Api::class,
+)
 
 package com.burrowsapps.example.gif.ui.license
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
-import android.os.Bundle
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -27,8 +25,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -43,42 +41,22 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF
 import androidx.webkit.WebSettingsCompat.FORCE_DARK_ON
+import androidx.webkit.WebSettingsCompat.setAlgorithmicDarkeningAllowed
 import androidx.webkit.WebSettingsCompat.setForceDark
 import androidx.webkit.WebViewAssetLoader
+import androidx.webkit.WebViewFeature.ALGORITHMIC_DARKENING
 import androidx.webkit.WebViewFeature.FORCE_DARK
 import androidx.webkit.WebViewFeature.isFeatureSupported
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.ui.theme.GifTheme
 import com.google.accompanist.web.AccompanistWebViewClient
 import com.google.accompanist.web.rememberWebViewState
-import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import com.google.accompanist.web.WebView as AccompanistWebView
 
-/**
- * Open source license activity.
- */
-@AndroidEntryPoint
-class LicenseActivity : ComponentActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-    setContent {
-      GifTheme {
-        LicenseScreen()
-      }
-    }
-  }
-
-  companion object {
-    fun createIntent(context: Context): Intent {
-      return Intent().setClass(context, LicenseActivity::class.java)
-    }
-  }
-}
-
+/** Shows the license screen of the app. */
 @Preview(
-  name = "one",
+  name = "dark",
   showBackground = true,
   device = Devices.PIXEL,
   locale = "en",
@@ -86,7 +64,7 @@ class LicenseActivity : ComponentActivity() {
   uiMode = UI_MODE_NIGHT_YES,
 )
 @Preview(
-  name = "two",
+  name = "light",
   showBackground = true,
   device = Devices.PIXEL,
   locale = "en",
@@ -101,44 +79,43 @@ fun DefaultPreview() {
 }
 
 @Composable
-fun LicenseScreen() {
-  val navController = rememberNavController()
+fun LicenseScreen(navController: NavHostController = rememberNavController()) {
   val scrollBehavior = enterAlwaysScrollBehavior(rememberTopAppBarState())
 
   Scaffold(
     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    topBar = { TheToolbar(navController = navController, scrollBehavior = scrollBehavior) },
-    content = { paddingValues ->
-      TheContent(innerPadding = paddingValues)
-    }
-  )
+    topBar = { TheToolbar(navController, scrollBehavior) }
+  ) { paddingValues ->
+    TheContent(paddingValues)
+  }
 }
 
 @Composable
-fun TheToolbar(navController: NavHostController, scrollBehavior: TopAppBarScrollBehavior) {
-  val activity = (LocalContext.current as? Activity)
-
-  SmallTopAppBar(
+fun TheToolbar(
+  navController: NavHostController,
+  scrollBehavior: TopAppBarScrollBehavior,
+) {
+  TopAppBar(
     title = {
       Text(
-        text = stringResource(R.string.menu_licenses),
+        text = stringResource(R.string.license_screen_title),
       )
     },
     navigationIcon = {
-      IconButton(
-        onClick = {
-          activity?.finish()
-          // TODO implement using nav host controller
-          navController.popBackStack()
-        },
-      ) {
-        Icon(
-          imageVector = Icons.Filled.ArrowBack,
-          contentDescription = stringResource(R.string.menu_back),
-        )
+      if (navController.previousBackStackEntry != null) {
+        IconButton(
+          onClick = {
+            navController.navigateUp()
+          },
+        ) {
+          Icon(
+            imageVector = Icons.Filled.ArrowBack,
+            contentDescription = stringResource(R.string.menu_back),
+          )
+        }
       }
     },
-    scrollBehavior = scrollBehavior,
+    scrollBehavior = scrollBehavior
   )
 }
 
@@ -162,9 +139,7 @@ fun TheWebView() {
     rememberWebViewState("https://appassets.androidplatform.net/assets/open_source_licenses.html")
   val pathHandler = WebViewAssetLoader.AssetsPathHandler(context)
   // Instead of loading files using "files://" directly
-  val assetLoader = WebViewAssetLoader.Builder()
-    .addPathHandler("/assets/", pathHandler)
-    .build()
+  val assetLoader = WebViewAssetLoader.Builder().addPathHandler("/assets/", pathHandler).build()
 
   AccompanistWebView(
     state = state,
@@ -174,18 +149,24 @@ fun TheWebView() {
         allowFileAccess = false
         allowContentAccess = false
         setGeolocationEnabled(false)
-        @Suppress("DEPRECATION")
+        @Suppress(names = ["DEPRECATION"])
         if (SDK_INT < VERSION_CODES.R) {
           allowFileAccessFromFileURLs = false
           allowUniversalAccessFromFileURLs = false
         }
 
-        // Handle dark mode for webview
-        if (isFeatureSupported(FORCE_DARK)) {
+        // Handle dark mode for WebView
+        @Suppress(names = ["DEPRECATION"])
+        @SuppressLint("NewApi")
+        if (SDK_INT < VERSION_CODES.Q && isFeatureSupported(ALGORITHMIC_DARKENING)) {
+          setAlgorithmicDarkeningAllowed(this, true)
+        } else if (isFeatureSupported(FORCE_DARK)) {
           when (webView.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
             UI_MODE_NIGHT_YES -> setForceDark(this, FORCE_DARK_ON)
             else -> setForceDark(this, FORCE_DARK_OFF)
           }
+        } else {
+          Timber.w("Dark mode not set")
         }
       }
     },
