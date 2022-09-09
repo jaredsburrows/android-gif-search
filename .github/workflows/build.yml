@@ -50,6 +50,7 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
+          cache: gradle
 
       - name: Build Debug APKs and Run lint checks
         run: ./gradlew assembleDebug ktlintCheck lintDebug -s
