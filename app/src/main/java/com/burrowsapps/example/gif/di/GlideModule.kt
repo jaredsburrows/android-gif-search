@@ -23,7 +23,6 @@ import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 import com.burrowsapps.example.gif.BuildConfig.DEBUG
 import com.burrowsapps.example.gif.R
-import com.burrowsapps.example.gif.di.NetworkModule.CLIENT_CACHE_SIZE
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors.fromApplication
@@ -53,8 +52,8 @@ internal class GlideModule : AppGlideModule() {
         context.applicationContext, GLIDE_CACHE_DIRECTORY, DEFAULT_DISK_CACHE_SIZE.toLong()
       )
     )
-      .setBitmapPool(LruBitmapPool(CLIENT_CACHE_SIZE))
-      .setMemoryCache(LruResourceCache(CLIENT_CACHE_SIZE))
+      .setBitmapPool(LruBitmapPool(DEFAULT_DISK_CACHE_SIZE.toLong()))
+      .setMemoryCache(LruResourceCache(DEFAULT_DISK_CACHE_SIZE.toLong()))
       .setLogRequestOrigins(DEBUG)
       .setLogLevel(if (DEBUG) Log.DEBUG else Log.INFO)
   }

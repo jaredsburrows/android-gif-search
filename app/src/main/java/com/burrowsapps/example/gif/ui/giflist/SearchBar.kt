@@ -45,7 +45,7 @@ import com.burrowsapps.example.gif.R
 
 // Based off of https://github.com/vima9/compose-search-view-sample/blob/master/app/src/main/java/com/dbab/composesearchviewsample/components/SearchBarUI.kt
 @Composable
-fun SearchBar(
+internal fun SearchBar(
   scrollBehavior: TopAppBarScrollBehavior,
   searchText: String,
   placeholderText: String = "",

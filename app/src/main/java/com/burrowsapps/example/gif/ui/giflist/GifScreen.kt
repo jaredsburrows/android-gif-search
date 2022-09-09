@@ -46,6 +46,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -98,7 +99,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
   uiMode = UI_MODE_NIGHT_NO,
 )
 @Composable
-fun DefaultPreview(
+private fun DefaultPreview(
   navController: NavHostController = rememberNavController(),
   imageService: ImageService = ImageService(LocalContext.current)
 ) {
@@ -108,7 +109,7 @@ fun DefaultPreview(
 }
 
 @Composable
-fun GifScreen(
+internal fun GifScreen(
   navController: NavHostController,
   imageService: ImageService,
 ) {
@@ -134,86 +135,118 @@ fun GifScreen(
 }
 
 @Composable
-fun TheToolbar(
+private fun TheToolbar(
   navController: NavHostController,
   scrollBehavior: TopAppBarScrollBehavior,
   gifViewModel: GifViewModel,
 ) {
-  val showMenu = remember { mutableStateOf(false) }
   val openSearch = remember { mutableStateOf(true) }
+  val showMenu = remember { mutableStateOf(false) }
 
   if (openSearch.value) {
-    TopAppBar(
-      title = {
-        Text(
-          text = stringResource(R.string.gif_screen_title),
-        )
-      },
-      actions = {
-        IconButton(
-          onClick = { openSearch.value = false },
-        ) {
-          Icon(
-            imageVector = Icons.Filled.Search,
-            contentDescription = stringResource(R.string.menu_search),
-          )
-        }
-        IconButton(
-          onClick = { showMenu.value = !showMenu.value },
-        ) {
-          Icon(
-            imageVector = Icons.Filled.MoreVert,
-            contentDescription = stringResource(R.string.menu_more),
-          )
-        }
-        DropdownMenu(
-          expanded = showMenu.value,
-          onDismissRequest = { showMenu.value = false },
-        ) {
-          DropdownMenuItem(
-            onClick = {
-              navController.navigate(Screen.LicenseScreen.route)
-              showMenu.value = false
-            },
-            text = { Text(text = stringResource(R.string.license_screen_title)) },
-          )
-        }
-      },
+    TheToolBar(
+      navController = navController,
       scrollBehavior = scrollBehavior,
+      openSearch = openSearch,
+      showMenu = showMenu,
     )
   } else {
-    BackHandler(
-      onBack = {
-        openSearch.value = true
-        gifViewModel.onClearClick()
-      },
-    )
-
-    val searchText by gifViewModel.searchText.collectAsState(initial = "")
-
-    SearchBar(
+    TheSearchBar(
+      gifViewModel = gifViewModel,
+      openSearch = openSearch,
       scrollBehavior = scrollBehavior,
-      searchText = searchText,
-      placeholderText = stringResource(R.string.search_gifs),
-      onSearchTextChanged = {
-        gifViewModel.onSearchTextChanged(changedSearchText = it)
-        gifViewModel.loadSearchImages(searchString = it)
-      },
-      onClearClick = {
-        gifViewModel.onClearClick()
-        gifViewModel.loadTrendingImages()
-      },
-      onNavigateBack = {
-        openSearch.value = true
-        gifViewModel.onClearClick()
-        gifViewModel.loadTrendingImages()
-      },
     )
   }
 }
 
 @Composable
-fun TheContent(
+private fun TheToolBar(
+  navController: NavHostController,
+  scrollBehavior: TopAppBarScrollBehavior,
+  openSearch: MutableState<Boolean>,
+  showMenu: MutableState<Boolean>,
+) {
+  TopAppBar(
+    title = {
+      Text(
+        text = stringResource(R.string.gif_screen_title),
+      )
+    },
+    // Search for Gifs
+    actions = {
+      IconButton(
+        onClick = { openSearch.value = false },
+      ) {
+        Icon(
+          imageVector = Icons.Filled.Search,
+          contentDescription = stringResource(R.string.menu_search),
+        )
+      }
+      // Overflow menu item
+      IconButton(
+        onClick = { showMenu.value = !showMenu.value },
+      ) {
+        Icon(
+          imageVector = Icons.Filled.MoreVert,
+          contentDescription = stringResource(R.string.menu_more),
+        )
+      }
+      // Overflow menu
+      DropdownMenu(
+        expanded = showMenu.value,
+        onDismissRequest = { showMenu.value = false },
+      ) {
+        DropdownMenuItem(
+          onClick = {
+            navController.navigate(Screen.LicenseScreen.route)
+            showMenu.value = false
+          },
+          text = { Text(text = stringResource(R.string.license_screen_title)) },
+        )
+      }
+    },
+    scrollBehavior = scrollBehavior,
+  )
+}
+
+@Composable
+private fun TheSearchBar(
+  gifViewModel: GifViewModel,
+  openSearch: MutableState<Boolean>,
+  scrollBehavior: TopAppBarScrollBehavior,
+) {
+  BackHandler(
+    onBack = {
+      openSearch.value = true
+      gifViewModel.onClearClick()
+      gifViewModel.loadTrendingImages()
+    },
+  )
+
+  val searchText by gifViewModel.searchText.collectAsState(initial = "")
+
+  SearchBar(
+    scrollBehavior = scrollBehavior,
+    searchText = searchText,
+    placeholderText = stringResource(R.string.search_gifs),
+    onSearchTextChanged = {
+      gifViewModel.onSearchTextChanged(changedSearchText = it)
+      gifViewModel.loadSearchImages(searchString = it)
+    },
+    onClearClick = {
+      gifViewModel.onClearClick()
+      gifViewModel.loadTrendingImages()
+    },
+    onNavigateBack = {
+      openSearch.value = true
+      gifViewModel.onClearClick()
+      gifViewModel.loadTrendingImages()
+    },
+  )
+}
+
+@Composable
+private fun TheContent(
   innerPadding: PaddingValues,
   imageService: ImageService,
   gifViewModel: GifViewModel,
@@ -222,66 +255,24 @@ fun TheContent(
     modifier = Modifier
       .padding(innerPadding)
   ) {
-    val clipboardManager = LocalClipboardManager.current
     val gridState = rememberLazyGridState()
     val listItems by gifViewModel.gifListResponse.collectAsState()
     val isRefreshing by gifViewModel.isRefreshing.collectAsState()
     val openDialog = remember { mutableStateOf(false) }
+    val currentSelectedItem = remember { mutableStateOf(GifImageInfo()) }
     val showGridProgressBar = remember { mutableStateOf(true) }
     val showPreviewProgressBar = remember { mutableStateOf(true) }
-    val currentSelectedItem = remember { mutableStateOf("") }
     val imageState = remember { mutableStateOf<GifDrawable?>(null) }
     val imagePreviewState = remember { mutableStateOf<GifDrawable?>(null) }
 
     if (openDialog.value) {
-      Dialog(
-        onDismissRequest = {
-          openDialog.value = false
-        }
-      ) {
-        Column(
-          verticalArrangement = Arrangement.Center,
-          horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-          imageService.loadGif(
-            imageUrl = currentSelectedItem.value,
-            onResourceReady = { resource ->
-              showPreviewProgressBar.value = false
-              imagePreviewState.value = resource
-            },
-            onLoadFailed = {
-              showPreviewProgressBar.value = false
-              imagePreviewState.value = null
-            },
-          )
-
-          // Show loading indicator when image is not loaded
-          if (showPreviewProgressBar.value) {
-            CircularProgressIndicator(
-              modifier = Modifier
-                .height(75.dp)
-                .padding(24.dp),
-            )
-          } else {
-            Image(
-              painter = rememberDrawablePainter(imagePreviewState.value),
-              contentDescription = stringResource(R.string.gif_image),
-              contentScale = ContentScale.Crop,
-              modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp),
-            )
-            TextButton(
-              onClick = {
-                openDialog.value = false
-                clipboardManager.setText(AnnotatedString(currentSelectedItem.value))
-              }
-            ) {
-              Text(text = "Copy URL")
-            }
-          }
-        }
-      }
+      TheDialogPreview(
+        imageService = imageService,
+        currentSelectedItem = currentSelectedItem,
+        showPreviewProgressBar = showPreviewProgressBar,
+        imagePreviewState = imagePreviewState,
+        openDialog = openDialog,
+      )
     }
 
     SwipeRefresh(
@@ -357,7 +348,7 @@ fun TheContent(
                   .width(135.dp)
                   .height(135.dp)
                   .clickable {
-                    currentSelectedItem.value = item.tinyGifUrl
+                    currentSelectedItem.value = item
                     openDialog.value = true
                   },
               )
@@ -376,9 +367,69 @@ fun TheContent(
 }
 
 @Composable
-fun InfiniteGridHandler(
+private fun TheDialogPreview(
+  imageService: ImageService,
+  currentSelectedItem: MutableState<GifImageInfo>,
+  showPreviewProgressBar: MutableState<Boolean>,
+  imagePreviewState: MutableState<GifDrawable?>,
+  openDialog: MutableState<Boolean>,
+) {
+  val clipboardManager = LocalClipboardManager.current
+
+  Dialog(
+    onDismissRequest = {
+      openDialog.value = false
+    }
+  ) {
+    Column(
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+      imageService.loadGif(
+        imageUrl = currentSelectedItem.value.tinyGifUrl, // TODO Use gifUrl
+        onResourceReady = { resource ->
+          showPreviewProgressBar.value = false
+          imagePreviewState.value = resource
+        },
+        onLoadFailed = {
+          showPreviewProgressBar.value = false
+          imagePreviewState.value = null
+        },
+      )
+
+      // Show loading indicator when image is not loaded
+      if (showPreviewProgressBar.value) {
+        CircularProgressIndicator(
+          modifier = Modifier
+            .height(75.dp)
+            .padding(24.dp),
+        )
+      } else {
+        Image(
+          painter = rememberDrawablePainter(imagePreviewState.value),
+          contentDescription = stringResource(R.string.gif_image),
+          contentScale = ContentScale.Crop,
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp),
+        )
+        TextButton(
+          onClick = {
+            openDialog.value = false
+            clipboardManager.setText(AnnotatedString(currentSelectedItem.value.gifUrl))
+          }
+        ) {
+          Text(text = "Copy URL")
+        }
+      }
+    }
+  }
+}
+
+@Composable
+private fun InfiniteGridHandler(
   gridState: LazyGridState,
-  buffer: Int = 3,
+  buffer: Int = 15,
   onLoadMore: () -> Unit,
 ) {
   val loadMore = remember {

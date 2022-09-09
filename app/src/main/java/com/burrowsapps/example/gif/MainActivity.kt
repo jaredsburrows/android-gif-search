@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
   uiMode = UI_MODE_NIGHT_NO,
 )
 @Composable
-fun DefaultPreview() {
+private fun DefaultPreview() {
   GifTheme {
     MainScreen()
   }

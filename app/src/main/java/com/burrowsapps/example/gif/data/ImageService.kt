@@ -15,20 +15,26 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ImageService @Inject constructor(@ApplicationContext private val context: Context) {
+class ImageService @Inject internal constructor(@ApplicationContext private val context: Context) {
 
   fun loadGif(
     imageUrl: String,
     thumbnailUrl: String? = null,
     override: Int = SIZE_ORIGINAL,
-    onResourceReady: (GifDrawable?) -> Unit,
-    onLoadFailed: () -> Unit,
+    onLoadStarted: () -> Unit = {},
+    onResourceReady: (GifDrawable?) -> Unit = {},
+    onLoadFailed: () -> Unit = {},
   ) {
-    loadGif(imageUrl)
+    loadGifRequest(imageUrl)
+      .thumbnail(loadGifRequest(thumbnailUrl))
       .override(override)
       .signature(ObjectKey(imageUrl))
-      .thumbnail(loadGif(thumbnailUrl))
       .into(object : CustomTarget<GifDrawable>() {
+        override fun onLoadStarted(placeholder: Drawable?) {
+          super.onLoadStarted(placeholder)
+          onLoadStarted.invoke()
+        }
+
         override fun onLoadFailed(errorDrawable: Drawable?) {
           super.onLoadFailed(errorDrawable)
           onLoadFailed.invoke()
@@ -47,7 +53,7 @@ class ImageService @Inject constructor(@ApplicationContext private val context: 
       })
   }
 
-  private fun loadGif(imageUrl: String?): RequestBuilder<GifDrawable> {
+  private fun loadGifRequest(imageUrl: String?): RequestBuilder<GifDrawable> {
     return GlideApp.with(context)
       .asGif()
       .transition(withCrossFade())

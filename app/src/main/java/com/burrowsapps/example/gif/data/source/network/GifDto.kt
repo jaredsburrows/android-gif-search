@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GifDto(
+internal data class GifDto(
   @field:Json(name = "url")
   val url: String = "",
   @field:Json(name = "preview")

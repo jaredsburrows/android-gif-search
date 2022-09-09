@@ -15,7 +15,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class GifViewModel @Inject internal constructor(
+internal class GifViewModel @Inject internal constructor(
   private val repository: GifRepository,
   @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
@@ -56,27 +56,6 @@ class GifViewModel @Inject internal constructor(
     }
   }
 
-  fun loadTrendingImages(nextPosition: String? = null) {
-    // TODO update loading states
-//    _trendingResponse.value = NetworkResult.Loading()
-    viewModelScope.launch(dispatcher) {
-      when (val result = repository.getTrendingResults(nextPosition)) {
-        is NetworkResult.Empty -> _uiState.value = NetworkResult.Empty()
-        is NetworkResult.Error -> _uiState.value = NetworkResult.Error()
-        is NetworkResult.Loading -> _uiState.value = NetworkResult.Loading()
-        is NetworkResult.Success -> {
-          _nextPageResponse.value = result.data?.next.orEmpty()
-
-          if (nextPosition == null) {
-            _gifListResponse.value = buildGifList(result.data)
-          } else {
-            _gifListResponse.value += buildGifList(result.data)
-          }
-        }
-      }
-    }
-  }
-
   fun loadSearchImages(searchString: String, nextPosition: String? = null) {
     // TODO update loading states
 //    _gifListResponse.value = NetworkResult.Loading()
@@ -98,20 +77,40 @@ class GifViewModel @Inject internal constructor(
     }
   }
 
+  fun loadTrendingImages(nextPosition: String? = null) {
+    // TODO update loading states
+//    _trendingResponse.value = NetworkResult.Loading()
+    viewModelScope.launch(dispatcher) {
+      when (val result = repository.getTrendingResults(nextPosition)) {
+        is NetworkResult.Empty -> _uiState.value = NetworkResult.Empty()
+        is NetworkResult.Error -> _uiState.value = NetworkResult.Error()
+        is NetworkResult.Loading -> _uiState.value = NetworkResult.Loading()
+        is NetworkResult.Success -> {
+          _nextPageResponse.value = result.data?.next.orEmpty()
+
+          if (nextPosition == null) {
+            _gifListResponse.value = buildGifList(result.data)
+          } else {
+            _gifListResponse.value += buildGifList(result.data)
+          }
+        }
+      }
+    }
+  }
+
   private fun buildGifList(response: TenorResponseDto?): List<GifImageInfo> {
     return response?.results?.map { result ->
       val media = result.media.first()
-      val tinyGif = media.tinyGif
       val gif = media.gif
-      val gifUrl = gif.url
+      val tinyGif = media.tinyGif
 
-      Timber.i("gif url:\t$gifUrl")
+      Timber.i("New gif from url:\t${gif.url}")
 
       GifImageInfo(
+        gifUrl = gif.url,
+        gifPreviewUrl = gif.preview,
         tinyGifUrl = tinyGif.url,
         tinyGifPreviewUrl = tinyGif.preview,
-        gifUrl = gifUrl,
-        gifPreviewUrl = gif.preview,
       )
     }.orEmpty()
   }

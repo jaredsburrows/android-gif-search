@@ -9,7 +9,7 @@ import retrofit2.http.Query
  *
  * Custom Api interfaces for the Tenor Api.
  */
-interface TenorService {
+internal interface TenorService {
   /**
    * Get search gif results by a search string.
    *
@@ -20,7 +20,7 @@ interface TenorService {
    * Query: q REQUIRED, a search string
    * Query: limit OPTIONAL, fetch up to a specified number of results (max: 50).
    * Query: pos OPTIONAL, get results starting at position "value".
-   * eg. https://g.tenor.com/v1/search?key=LIVDSRZULELA&media_filter=minimal&q=hello&limit=48
+   * eg. https://g.tenor.com/v1/search?key=LIVDSRZULELA&media_filter=minimal&q=hello&limit=45
    *
    * @param query Search string to find gifs.
    * @param position Position of getResults.
@@ -43,7 +43,7 @@ interface TenorService {
    * Query: media_filter STRONGLY RECOMMENDED, minimal - tinygif, gif, and mp4.
    * Query: limit OPTIONAL, fetch up to a specified number of results (max: 50).
    * Query: pos OPTIONAL, get results starting at position "value".
-   * eg. https://g.tenor.com/v1/trending?key=LIVDSRZULELA&media_filter=minimal&limit=48
+   * eg. https://g.tenor.com/v1/trending?key=LIVDSRZULELA&media_filter=minimal&limit=45
    *
    * @param position Position of getResults.
    * @return Response of trending getResults.
@@ -55,7 +55,7 @@ interface TenorService {
   ): Response<TenorResponseDto>
 
   companion object {
-    const val DEFAULT_LIMIT_COUNT = 48 // multiple of 3 for gridlayout
+    private const val DEFAULT_LIMIT_COUNT = 15 * 3 // 3 for gridlayout, 15 per page, 50 max
     private const val API_KEY = "LIVDSRZULELA"
     private const val MEDIA_FILTER = "minimal"
   }

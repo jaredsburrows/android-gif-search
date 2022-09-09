@@ -6,7 +6,7 @@ import androidx.compose.runtime.Immutable
  * Model for the GifAdapter in order to display the gifs.
  */
 @Immutable
-data class GifImageInfo(
+internal data class GifImageInfo(
   var tinyGifUrl: String = "",
   var tinyGifPreviewUrl: String = "",
   var gifUrl: String = "",
