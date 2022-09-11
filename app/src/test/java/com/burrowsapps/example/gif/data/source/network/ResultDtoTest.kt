@@ -8,7 +8,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ResultDtoTest {
-  private val mediaTitle = "Good Luck"
   private val media = listOf<MediaDto>()
   private var sutDefault = ResultDto()
 
@@ -16,18 +15,12 @@ class ResultDtoTest {
 
   @Before
   fun setUp() {
-    sut = ResultDto(media, mediaTitle)
+    sut = ResultDto(media)
   }
 
   @Test
   fun testGetMedia() {
     assertThat(sutDefault.media).isEmpty()
     assertThat(sut.media).isEqualTo(media)
-  }
-
-  @Test
-  fun testGetTitle() {
-    assertThat(sutDefault.title).isEmpty()
-    assertThat(sut.title).isEqualTo(mediaTitle)
   }
 }

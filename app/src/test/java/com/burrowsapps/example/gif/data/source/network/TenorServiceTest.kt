@@ -44,7 +44,8 @@ class TenorServiceTest {
             return when {
               contains(other = "v1/trending") -> getMockResponse(fileName = "/trending_results.json")
               contains(other = "v1/search") -> getMockResponse(fileName = "/search_results.json")
-              contains(other = "images") -> getMockFileResponse(fileName = "/ic_launcher.webp")
+              contains(other = ".png") -> getMockFileResponse(fileName = "/ic_launcher.webp")
+              contains(other = ".gif") -> getMockFileResponse(fileName = "/ic_launcher.webp")
               else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
             }
           }
@@ -65,8 +66,7 @@ class TenorServiceTest {
     val response = sut.getTrendingResults(null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].tinyGif.url)
-      .contains("/images/7c05ba9bdad525e9b2ff5b45e276c7c6/tenor.gif")
+    assertThat(body.results[0].media[0].tinyGif.url).endsWith(".gif")
   }
 
   @Test
@@ -74,8 +74,7 @@ class TenorServiceTest {
     val response = sut.getTrendingResults(null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].tinyGif.preview)
-      .contains("/images/7b770b669d4b11c453256abefcd499f4/tenor.gif")
+    assertThat(body.results[0].media[0].tinyGif.preview).endsWith(".png")
   }
 
   @Test
@@ -83,8 +82,7 @@ class TenorServiceTest {
     val response = sut.getSearchResults("hello", null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].tinyGif.url)
-      .contains("/images/f1b1086cd3f8ca158b09fd3ef522bdea/tenor.gif")
+    assertThat(body.results[0].media[0].tinyGif.url).endsWith(".gif")
   }
 
   @Test
@@ -92,7 +90,6 @@ class TenorServiceTest {
     val response = sut.getSearchResults("hello", null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].tinyGif.preview)
-      .contains("/images/5fe0406aeeb8dbe28977f2336334b206/tenor.gif")
+    assertThat(body.results[0].media[0].tinyGif.preview).endsWith(".png")
   }
 }

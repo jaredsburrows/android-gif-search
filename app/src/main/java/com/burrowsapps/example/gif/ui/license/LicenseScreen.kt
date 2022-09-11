@@ -9,7 +9,7 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -72,14 +72,14 @@ import com.google.accompanist.web.WebView as AccompanistWebView
   uiMode = UI_MODE_NIGHT_NO,
 )
 @Composable
-fun DefaultPreview() {
+private fun DefaultPreview() {
   GifTheme {
     LicenseScreen()
   }
 }
 
 @Composable
-fun LicenseScreen(navController: NavHostController = rememberNavController()) {
+internal fun LicenseScreen(navController: NavHostController = rememberNavController()) {
   val scrollBehavior = enterAlwaysScrollBehavior(rememberTopAppBarState())
 
   Scaffold(
@@ -91,7 +91,7 @@ fun LicenseScreen(navController: NavHostController = rememberNavController()) {
 }
 
 @Composable
-fun TheToolbar(
+private fun TheToolbar(
   navController: NavHostController,
   scrollBehavior: TopAppBarScrollBehavior,
 ) {
@@ -120,7 +120,7 @@ fun TheToolbar(
 }
 
 @Composable
-fun TheContent(innerPadding: PaddingValues) {
+private fun TheContent(innerPadding: PaddingValues) {
   Column(
     modifier = Modifier
       .padding(innerPadding)
@@ -132,7 +132,7 @@ fun TheContent(innerPadding: PaddingValues) {
 }
 
 @Composable
-fun TheWebView() {
+private fun TheWebView() {
   val context = LocalContext.current
   // https://developer.android.com/reference/androidx/webkit/WebViewAssetLoader
   val state =
@@ -150,7 +150,7 @@ fun TheWebView() {
         allowContentAccess = false
         setGeolocationEnabled(false)
         @Suppress(names = ["DEPRECATION"])
-        if (SDK_INT < VERSION_CODES.R) {
+        if (VERSION.SDK_INT < VERSION_CODES.R) {
           allowFileAccessFromFileURLs = false
           allowUniversalAccessFromFileURLs = false
         }
@@ -158,7 +158,7 @@ fun TheWebView() {
         // Handle dark mode for WebView
         @Suppress(names = ["DEPRECATION"])
         @SuppressLint("NewApi")
-        if (SDK_INT < VERSION_CODES.Q && isFeatureSupported(ALGORITHMIC_DARKENING)) {
+        if (VERSION.SDK_INT < VERSION_CODES.Q && isFeatureSupported(ALGORITHMIC_DARKENING)) {
           setAlgorithmicDarkeningAllowed(this, true)
         } else if (isFeatureSupported(FORCE_DARK)) {
           when (webView.resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {

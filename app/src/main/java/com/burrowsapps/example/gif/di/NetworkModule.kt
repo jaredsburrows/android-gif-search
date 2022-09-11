@@ -21,7 +21,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 import java.io.File
 import java.util.Date
-import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Singleton
 
 /**
@@ -30,9 +29,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
-  const val CLIENT_CACHE_SIZE = 2 * 10 * 1024 * 1024L // 20 MiB
+  private const val CLIENT_CACHE_SIZE = 2 * 10 * 1024 * 1024L // 20 MiB
   private const val CLIENT_CACHE_DIRECTORY = "https-json-cache"
-  private const val CLIENT_TIME_OUT = 10_000L // milliseconds
 
   @Singleton
   @Provides
@@ -78,9 +76,6 @@ internal object NetworkModule {
   ): OkHttpClient {
     return OkHttpClient.Builder()
       .addInterceptor(interceptor)
-      .connectTimeout(CLIENT_TIME_OUT, SECONDS) // TODO Duration
-      .writeTimeout(CLIENT_TIME_OUT, SECONDS) // TODO Duration
-      .readTimeout(CLIENT_TIME_OUT, SECONDS) // TODO Duration
       .followRedirects(true)
       .followSslRedirects(true)
       .retryOnConnectionFailure(true)
