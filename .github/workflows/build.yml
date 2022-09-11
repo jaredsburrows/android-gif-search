@@ -83,3 +83,28 @@ jobs:
             app/build/reports
             app/build/test-results
           if-no-files-found: warn
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v3.1.0
+        if: always()
+        with:
+          name: android-gif-example-debug-apk-${{ github.workflow }}-${{ github.run_id }}
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v3.1.0
+        if: always()
+        with:
+          name: android-gif-example-release-apk-${{ github.workflow }}-${{ github.run_id }}
+          path: app/build/outputs/apk/debug/app-release.apk
+          
+      - name: Upload Reports
+        uses: actions/upload-artifact@v3.1.0
+        if: always()
+        with:
+          name: android-gif-example-reports-${{ github.workflow }}-${{ github.run_id }}
+          path: |
+            app/build/reports
+            app/build/test-results
+            !app/build/outputs/apk/debug/app-debug.apk
+            !app/build/outputs/apk/debug/app-release.apk
