@@ -67,8 +67,9 @@ tasks.register("updateTestFiles") {
             .readText()
             // Point our mock JSON to point to local OkHTTP Mock server
             .replace("media.tenor.com", "localhost:8080")
-            // Enforce HTTPS
-            .replace("http:", "https:")
+            .replace("tenor.com", "localhost:8080")
+            // Enforce HTTP for local MockWebServer
+            .replace("https:", "http:")
         )
     }
   }

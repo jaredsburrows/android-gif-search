@@ -23,9 +23,7 @@ import java.io.File
 import java.util.Date
 import javax.inject.Singleton
 
-/**
- * Injections for the network.
- */
+/** Injections for the network. */
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {

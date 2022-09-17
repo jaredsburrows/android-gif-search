@@ -70,8 +70,8 @@ class GifScreenTest {
             return when {
               contains(other = "v1/trending") -> getMockResponse(fileName = "/trending_results.json")
               contains(other = "v1/search") -> getMockResponse(fileName = "/search_results.json")
-              contains(other = ".png") -> getMockFileResponse(fileName = "/ic_launcher.webp")
-              contains(other = ".gif") -> getMockFileResponse(fileName = "/ic_launcher.webp")
+              endsWith(suffix = ".png") -> getMockFileResponse(fileName = "/ic_launcher.webp")
+              endsWith(suffix = ".gif") -> getMockFileResponse(fileName = "/ic_launcher.webp")
               else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
             }
           }
