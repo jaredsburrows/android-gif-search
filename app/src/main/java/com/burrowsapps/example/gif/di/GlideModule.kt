@@ -30,6 +30,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import java.io.InputStream
 
+/** Custom Glide module. */
 @GlideModule
 @Excludes(OkHttpLibraryGlideModule::class)
 internal class GlideModule : AppGlideModule() {

@@ -44,15 +44,15 @@ class TenorServiceTest {
             return when {
               contains(other = "v1/trending") -> getMockResponse(fileName = "/trending_results.json")
               contains(other = "v1/search") -> getMockResponse(fileName = "/search_results.json")
-              contains(other = ".png") -> getMockFileResponse(fileName = "/ic_launcher.webp")
-              contains(other = ".gif") -> getMockFileResponse(fileName = "/ic_launcher.webp")
+              endsWith(suffix = ".png") -> getMockFileResponse(fileName = "/ic_launcher.webp")
+              endsWith(suffix = ".gif") -> getMockFileResponse(fileName = "/ic_launcher.webp")
               else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
             }
           }
         }
       }
 
-      start(port = MOCK_SERVER_PORT)
+      start(MOCK_SERVER_PORT)
     }
   }
 
@@ -66,7 +66,7 @@ class TenorServiceTest {
     val response = sut.getTrendingResults(null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].tinyGif.url).endsWith(".gif")
+    assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
   }
 
   @Test
@@ -74,7 +74,7 @@ class TenorServiceTest {
     val response = sut.getTrendingResults(null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].tinyGif.preview).endsWith(".png")
+    assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")
   }
 
   @Test
@@ -82,7 +82,7 @@ class TenorServiceTest {
     val response = sut.getSearchResults("hello", null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].tinyGif.url).endsWith(".gif")
+    assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
   }
 
   @Test
@@ -90,6 +90,6 @@ class TenorServiceTest {
     val response = sut.getSearchResults("hello", null)
     val body = response.body()!!
 
-    assertThat(body.results[0].media[0].tinyGif.preview).endsWith(".png")
+    assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")
   }
 }
