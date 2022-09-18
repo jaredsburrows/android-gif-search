@@ -71,7 +71,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.burrowsapps.example.gif.BuildConfig
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.Screen
 import com.burrowsapps.example.gif.data.ImageService
@@ -126,10 +125,15 @@ internal fun GifScreen(
       )
     }
   ) { paddingValues ->
+    val listItems by gifViewModel.gifListResponse.collectAsState()
+    val isRefreshing by gifViewModel.isRefreshing.collectAsState()
+
     TheContent(
       innerPadding = paddingValues,
       imageService = imageService,
       gifViewModel = gifViewModel,
+      listItems = listItems,
+      isRefreshing = isRefreshing,
     )
   }
 }
@@ -250,14 +254,14 @@ private fun TheContent(
   innerPadding: PaddingValues,
   imageService: ImageService,
   gifViewModel: GifViewModel,
+  listItems: List<GifImageInfo>,
+  isRefreshing: Boolean,
 ) {
   Column(
     modifier = Modifier
       .padding(innerPadding)
   ) {
     val gridState = rememberLazyGridState()
-    val listItems by gifViewModel.gifListResponse.collectAsState()
-    val isRefreshing by gifViewModel.isRefreshing.collectAsState()
     val openDialog = remember { mutableStateOf(false) }
     val currentSelectedItem = remember { mutableStateOf(GifImageInfo()) }
     val showGridProgressBar = remember { mutableStateOf(true) }
@@ -305,12 +309,7 @@ private fun TheContent(
 
         items(
           items = listItems,
-          // TODO remove for testing
-          key = if (BuildConfig.BASE_URL.contains("tenor")) {
-            null
-          } else { item ->
-            item.tinyGifUrl
-          },
+          key = { item -> item.tinyGifUrl },
         ) { item ->
           BoxWithConstraints(
             modifier = Modifier
