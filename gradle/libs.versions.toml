@@ -1,24 +1,24 @@
 [versions]
 # plugins
-android = "7.3.0-rc01" # 7.2.2
-dagger = "2.43.2"
+android = "7.3.0"
+dagger = "2.44"
 # libraries
-accompanist = "0.26.2-beta"
-compose = "1.3.0-beta02" # 1.2.1
-compose-compiler = "1.3.1"
+accompanist = "0.26.2-beta" # updating makes gifs smaller
+compose = "1.3.0-rc01" # 1.2.1
+compose-compiler = "1.3.2"
 core = "1.9.0"
 espresso = "3.4.0"
-glide = "4.13.2"
+glide = "4.14.1"
 kotlinx = "1.6.4"
 leakcanary = "2.9.1"
 lifecycle = "2.5.1"
 moshi = "1.14.0"
 okhttp = "4.10.0"
 retrofit = "2.9.0"
-robolectric = "4.8.2"
+robolectric = "4.9"
 # language
 java = "11"
-kotlin = "1.7.10"
+kotlin = "1.7.20"
 # build
 sdk-compile = "33"
 sdk-min = "23"
@@ -37,15 +37,15 @@ versions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
 dexcount = { id = "com.getkeepsafe.dexcount", version = "3.1.0" }
 
 [libraries]
-android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "1.2.2" }
-androidx-activity = { module = "androidx.activity:activity", version = "1.5.1" }
-androidx-activityktx = { module = "androidx.activity:activity-ktx", version = "1.5.1" }
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.5.1" }
-androidx-annotation = { module = "androidx.annotation:annotation", version = "1.4.0" }
+android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "1.2.2" } # 2.0.0
+androidx-activity = { module = "androidx.activity:activity", version = "1.6.0" }
+androidx-activityktx = { module = "androidx.activity:activity-ktx", version = "1.6.0" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.6.0" }
+androidx-annotation = { module = "androidx.annotation:annotation", version = "1.5.0" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.5.1" }
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
-androidx-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.0.0-beta02" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.0.0-rc01" }
 androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.5.2" }
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
