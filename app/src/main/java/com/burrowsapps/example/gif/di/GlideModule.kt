@@ -57,6 +57,7 @@ internal class GlideModule : AppGlideModule() {
       .setMemoryCache(LruResourceCache(DEFAULT_DISK_CACHE_SIZE.toLong()))
       .setLogRequestOrigins(DEBUG)
       .setLogLevel(if (DEBUG) Log.DEBUG else Log.INFO)
+      .setIsActiveResourceRetentionAllowed(true)
   }
 
   override fun registerComponents(context: Context, glide: Glide, registry: Registry) {

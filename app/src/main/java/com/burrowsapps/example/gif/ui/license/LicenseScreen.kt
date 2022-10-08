@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -134,6 +135,8 @@ private fun TheContent(innerPadding: PaddingValues) {
 @Composable
 private fun TheWebView() {
   val context = LocalContext.current
+  val runningInPreview = LocalInspectionMode.current
+
   // https://developer.android.com/reference/androidx/webkit/WebViewAssetLoader
   val state =
     rememberWebViewState("https://appassets.androidplatform.net/assets/open_source_licenses.html")
@@ -144,6 +147,11 @@ private fun TheWebView() {
   AccompanistWebView(
     state = state,
     onCreated = { webView ->
+      if (runningInPreview) {
+        // webView.settings breaks the preview
+        return@AccompanistWebView
+      }
+
       webView.isVerticalScrollBarEnabled = false
       webView.settings.apply {
         allowFileAccess = false
