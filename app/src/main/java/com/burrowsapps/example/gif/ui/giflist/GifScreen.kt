@@ -11,9 +11,9 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,7 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -47,14 +47,15 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -70,14 +71,16 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.bumptech.glide.load.resource.gif.GifDrawable
+import androidx.palette.graphics.Palette
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.Screen
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.ui.theme.GifTheme
-import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.components.rememberImageComponent
+import com.skydoves.landscapist.palette.PalettePlugin
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 /** Shows the main screen of trending gifs. */
@@ -125,8 +128,8 @@ internal fun GifScreen(
       )
     }
   ) { paddingValues ->
-    val listItems by gifViewModel.gifListResponse.collectAsState()
-    val isRefreshing by gifViewModel.isRefreshing.collectAsState()
+    val listItems = gifViewModel.gifListResponse.collectAsState()
+    val isRefreshing = gifViewModel.isRefreshing.collectAsState()
 
     TheContent(
       innerPadding = paddingValues,
@@ -227,7 +230,7 @@ private fun TheSearchBar(
     },
   )
 
-  val searchText by gifViewModel.searchText.collectAsState(initial = "")
+  val searchText = gifViewModel.searchText.collectAsState(initial = "")
 
   SearchBar(
     scrollBehavior = scrollBehavior,
@@ -241,12 +244,11 @@ private fun TheSearchBar(
       gifViewModel.onClearClick()
       gifViewModel.loadTrendingImages()
     },
-    onNavigateBack = {
-      openSearch.value = true
-      gifViewModel.onClearClick()
-      gifViewModel.loadTrendingImages()
-    },
-  )
+  ) {
+    openSearch.value = true
+    gifViewModel.onClearClick()
+    gifViewModel.loadTrendingImages()
+  }
 }
 
 @Composable
@@ -254,8 +256,8 @@ private fun TheContent(
   innerPadding: PaddingValues,
   imageService: ImageService,
   gifViewModel: GifViewModel,
-  listItems: List<GifImageInfo>,
-  isRefreshing: Boolean,
+  listItems: State<List<GifImageInfo>>,
+  isRefreshing: State<Boolean>,
 ) {
   Column(
     modifier = Modifier
@@ -264,23 +266,17 @@ private fun TheContent(
     val gridState = rememberLazyGridState()
     val openDialog = remember { mutableStateOf(false) }
     val currentSelectedItem = remember { mutableStateOf(GifImageInfo()) }
-    val showGridProgressBar = remember { mutableStateOf(true) }
-    val showPreviewProgressBar = remember { mutableStateOf(true) }
-    val imageState = remember { mutableStateOf<GifDrawable?>(null) }
-    val imagePreviewState = remember { mutableStateOf<GifDrawable?>(null) }
 
     if (openDialog.value) {
       TheDialogPreview(
         imageService = imageService,
         currentSelectedItem = currentSelectedItem,
-        showPreviewProgressBar = showPreviewProgressBar,
-        imagePreviewState = imagePreviewState,
         openDialog = openDialog,
       )
     }
 
     SwipeRefresh(
-      state = rememberSwipeRefreshState(isRefreshing),
+      state = rememberSwipeRefreshState(isRefreshing.value),
       onRefresh = {
         // TODO handle trending vs search
         gifViewModel.loadTrendingImages()
@@ -295,7 +291,7 @@ private fun TheContent(
       ) {
 
         // TODO update default state
-        if (listItems.isEmpty()) {
+        if (listItems.value.isEmpty()) {
           item {
             Text(
               text = "No Gifs!",
@@ -308,7 +304,7 @@ private fun TheContent(
         }
 
         items(
-          items = listItems,
+          items = listItems.value,
           key = { item -> item.tinyGifUrl },
         ) { item ->
           BoxWithConstraints(
@@ -317,41 +313,30 @@ private fun TheContent(
                 animationSpec = tween(durationMillis = 350)
               )
           ) {
-            imageService.loadGif(
+            val requestBuilder = imageService.loadGif(
               imageUrl = item.tinyGifUrl,
               thumbnailUrl = item.tinyGifPreviewUrl,
-              onResourceReady = { resource ->
-                showGridProgressBar.value = false
-                imageState.value = resource
-              },
-              onLoadFailed = {
-                showGridProgressBar.value = false
-                imageState.value = null
-              },
             )
 
-            if (showGridProgressBar.value) {
-              CircularProgressIndicator(
-                modifier = Modifier
-                  .width(75.dp)
-                  .height(75.dp)
-                  .padding(24.dp),
-              )
-            } else {
-              Image(
-                painter = rememberDrawablePainter(imageState.value),
-                contentDescription = stringResource(R.string.gif_image),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                  .padding(1.dp)
-                  .width(135.dp)
-                  .height(135.dp)
-                  .clickable {
-                    currentSelectedItem.value = item
-                    openDialog.value = true
-                  },
-              )
-            }
+            GlideGifImage(
+              imageModel = item.tinyGifUrl,
+              requestBuilder = requestBuilder,
+              modifier = Modifier
+                .padding(1.dp)
+                .size(135.dp, 135.dp)
+                .clickable {
+                  currentSelectedItem.value = item
+                  openDialog.value = true
+                },
+              loading = {
+                Box(modifier = Modifier.matchParentSize()) {
+                  CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                  )
+                }
+              },
+              imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+            )
           }
         }
       }
@@ -369,8 +354,6 @@ private fun TheContent(
 private fun TheDialogPreview(
   imageService: ImageService,
   currentSelectedItem: MutableState<GifImageInfo>,
-  showPreviewProgressBar: MutableState<Boolean>,
-  imagePreviewState: MutableState<GifDrawable?>,
   openDialog: MutableState<Boolean>,
 ) {
   val clipboardManager = LocalClipboardManager.current
@@ -384,42 +367,43 @@ private fun TheDialogPreview(
       verticalArrangement = Arrangement.Center,
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-      imageService.loadGif(
-        imageUrl = currentSelectedItem.value.tinyGifUrl, // TODO Use gifUrl
-        onResourceReady = { resource ->
-          showPreviewProgressBar.value = false
-          imagePreviewState.value = resource
-        },
-        onLoadFailed = {
-          showPreviewProgressBar.value = false
-          imagePreviewState.value = null
-        },
+      val palette = remember { mutableStateOf<Palette?>(null) }
+      val requestBuilder = imageService.loadGif(
+        imageUrl = currentSelectedItem.value.gifUrl,
+        thumbnailUrl = currentSelectedItem.value.gifPreviewUrl,
       )
 
-      // Show loading indicator when image is not loaded
-      if (showPreviewProgressBar.value) {
-        CircularProgressIndicator(
-          modifier = Modifier
-            .height(75.dp)
-            .padding(24.dp),
-        )
-      } else {
-        Image(
-          painter = rememberDrawablePainter(imagePreviewState.value),
-          contentDescription = stringResource(R.string.gif_image),
-          contentScale = ContentScale.Crop,
-          modifier = Modifier
-            .fillMaxWidth()
-            .height(300.dp),
-        )
-        TextButton(
-          onClick = {
-            openDialog.value = false
-            clipboardManager.setText(AnnotatedString(currentSelectedItem.value.gifUrl))
+      GlideGifImage(
+        imageModel = currentSelectedItem.value.gifUrl,
+        requestBuilder = requestBuilder,
+        modifier = Modifier
+          .padding(1.dp)
+          .fillMaxWidth()
+          .height(350.dp),
+        loading = {
+          Box(modifier = Modifier.matchParentSize()) {
+            CircularProgressIndicator(
+              modifier = Modifier.align(Alignment.Center)
+            )
           }
-        ) {
-          Text(text = "Copy URL")
+        },
+        component = rememberImageComponent {
+          +PalettePlugin { palette.value = it }
+        },
+        imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+      )
+
+      TextButton(
+        onClick = {
+          openDialog.value = false
+          clipboardManager.setText(AnnotatedString(currentSelectedItem.value.gifUrl))
         }
+      ) {
+        Text(
+          text = "Copy URL",
+          color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.value.toInt()),
+          fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+        )
       }
     }
   }

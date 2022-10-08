@@ -3,13 +3,14 @@
 android = "7.3.0"
 dagger = "2.44"
 # libraries
-accompanist = "0.26.2-beta" # updating makes gifs smaller
+accompanist = "0.26.5-rc" # updating makes gifs smaller
 compose = "1.3.0-rc01" # 1.2.1
 compose-compiler = "1.3.2"
 core = "1.9.0"
 espresso = "3.4.0"
-glide = "4.14.1"
+glide = "4.14.2"
 kotlinx = "1.6.4"
+landscapist = "2.0.0"
 leakcanary = "2.9.1"
 lifecycle = "2.5.1"
 moshi = "1.14.0"
@@ -98,6 +99,9 @@ kotlinx-coroutines-corejvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx" }
 kotlinx-coroutines-testjvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm", version.ref = "kotlinx" }
 kotlinx-coroutinesjdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "kotlinx" }
+landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landscapist" }
+landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version.ref = "landscapist" }
+landscapist-palette = { module = "com.github.skydoves:landscapist-palette", version.ref = "landscapist" }
 mockito-inline = { module = "org.mockito:mockito-inline", version = "4.8.0" }
 mockito-kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version = "2.2.0" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }

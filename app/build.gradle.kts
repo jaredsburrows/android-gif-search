@@ -217,6 +217,9 @@ dependencies {
   androidTestImplementation(libs.androidx.compose.junit)
 
   // Glide
+  implementation(libs.landscapist.animation)
+  implementation(libs.landscapist.glide)
+  implementation(libs.landscapist.palette)
   implementation(libs.bumptech.glide)
   implementation(libs.bumptech.glide.okhttp)
   kapt(libs.bumptech.glide.compiler)
