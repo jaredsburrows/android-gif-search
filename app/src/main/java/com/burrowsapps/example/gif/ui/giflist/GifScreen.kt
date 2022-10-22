@@ -56,6 +56,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -82,6 +83,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.palette.PalettePlugin
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlin.math.roundToInt
 
 /** Shows the main screen of trending gifs. */
 @Preview(
@@ -316,6 +318,7 @@ private fun TheContent(
             val requestBuilder = imageService.loadGif(
               imageUrl = item.tinyGifUrl,
               thumbnailUrl = item.tinyGifPreviewUrl,
+              override = 135.dp.value.roundToInt(),
             )
 
             GlideGifImage(
@@ -323,7 +326,7 @@ private fun TheContent(
               requestBuilder = requestBuilder,
               modifier = Modifier
                 .padding(1.dp)
-                .size(135.dp, 135.dp)
+                .size(135.dp)
                 .clickable {
                   currentSelectedItem.value = item
                   openDialog.value = true
@@ -401,8 +404,8 @@ private fun TheDialogPreview(
       ) {
         Text(
           text = "Copy URL",
-          color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.value.toInt()),
-          fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+          color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
+          fontSize = MaterialTheme.typography.titleMedium.fontSize,
         )
       }
     }
