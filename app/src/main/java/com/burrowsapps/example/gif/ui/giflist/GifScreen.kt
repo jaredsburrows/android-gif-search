@@ -45,6 +45,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -81,6 +82,9 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
+import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.glide.GlideRequestType.GIF
+import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import com.skydoves.landscapist.palette.PalettePlugin
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlin.math.roundToInt
@@ -321,25 +325,27 @@ private fun TheContent(
               override = 135.dp.value.roundToInt(),
             )
 
-            GlideGifImage(
-              imageModel = item.tinyGifUrl,
-              requestBuilder = requestBuilder,
-              modifier = Modifier
-                .padding(1.dp)
-                .size(135.dp)
-                .clickable {
-                  currentSelectedItem.value = item
-                  openDialog.value = true
+            CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
+              GlideImage(
+                imageModel = { item.tinyGifUrl },
+                glideRequestType = GIF,
+                modifier = Modifier
+                  .padding(1.dp)
+                  .size(135.dp)
+                  .clickable {
+                    currentSelectedItem.value = item
+                    openDialog.value = true
+                  },
+                imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+                loading = {
+                  Box(modifier = Modifier.matchParentSize()) {
+                    CircularProgressIndicator(
+                      modifier = Modifier.align(Alignment.Center)
+                    )
+                  }
                 },
-              loading = {
-                Box(modifier = Modifier.matchParentSize()) {
-                  CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                  )
-                }
-              },
-              imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-            )
+              )
+            }
           }
         }
       }
@@ -376,25 +382,27 @@ private fun TheDialogPreview(
         thumbnailUrl = currentSelectedItem.value.gifPreviewUrl,
       )
 
-      GlideGifImage(
-        imageModel = currentSelectedItem.value.gifUrl,
-        requestBuilder = requestBuilder,
-        modifier = Modifier
-          .padding(1.dp)
-          .fillMaxWidth()
-          .height(350.dp),
-        loading = {
-          Box(modifier = Modifier.matchParentSize()) {
-            CircularProgressIndicator(
-              modifier = Modifier.align(Alignment.Center)
-            )
-          }
-        },
-        component = rememberImageComponent {
-          +PalettePlugin { palette.value = it }
-        },
-        imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-      )
+      CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
+        GlideImage(
+          imageModel = { currentSelectedItem.value.gifUrl },
+          glideRequestType = GIF,
+          modifier = Modifier
+            .padding(1.dp)
+            .fillMaxWidth()
+            .height(350.dp),
+          component = rememberImageComponent {
+            +PalettePlugin { palette.value = it }
+          },
+          imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+          loading = {
+            Box(modifier = Modifier.matchParentSize()) {
+              CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+              )
+            }
+          },
+        )
+      }
 
       TextButton(
         onClick = {
