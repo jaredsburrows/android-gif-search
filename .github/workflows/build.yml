@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v3.1.0
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1.0.4
+        uses: gradle/wrapper-validation-action@v1.0.5
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v3.0.11
@@ -59,7 +59,7 @@ jobs:
         run: ./gradlew testDebug -Pci -s
 
       - name: Run Debug Instrumentation Tests on Android API ${{ matrix.api-level }}
-        uses: reactivecircus/android-emulator-runner@v2.26.0
+        uses: reactivecircus/android-emulator-runner@v2.27.0
         if: matrix.api-level <= 30
         continue-on-error: true
         with:
@@ -74,7 +74,7 @@ jobs:
         run: ./gradlew assembleRelease lintRelease -Prelease -s
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v3.1.1
         if: always()
         with:
           name: android-gif-example-${{ github.workflow }}-${{ github.run_id }}
