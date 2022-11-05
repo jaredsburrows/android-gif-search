@@ -52,7 +52,7 @@ jobs:
           cache: gradle
 
       - name: Build Debug APKs and Run lint checks
-        run: ./gradlew assembleDebug ktlintCheck lintDebug -s
+        run: ./gradlew assembleDebug ktlintCheck lintDebug -Pci -s
 
       - name: Run Debug Unit Tests
         run: ./gradlew testDebug -Pci -s
