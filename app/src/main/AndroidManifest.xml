@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:installLocation="auto"
-  tools:ignore="UnusedAttribute,DataExtractionRules">
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
   <supports-screens
     android:anyDensity="true"
@@ -13,17 +10,14 @@
     android:xlargeScreens="true" />
 
   <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
   <application
     android:name=".MainApplication"
     android:allowBackup="true"
-    android:extractNativeLibs="false"
-    android:fullBackupContent="false"
-    android:hardwareAccelerated="true"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
     android:largeHeap="true"
-    android:supportsRtl="true"
     android:theme="@style/AppTheme">
     <activity
       android:name=".MainActivity"
