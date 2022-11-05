@@ -24,7 +24,7 @@ jobs:
           - 33
         java-version:
           - 11
-          - 18
+          - 19
 
     steps:
       - name: Checkout Project
