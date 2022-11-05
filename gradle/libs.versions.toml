@@ -1,6 +1,6 @@
 [versions]
 # plugins
-android = "7.4.0-beta03"
+android = "7.4.0-beta04"
 dagger = "2.44"
 # libraries
 accompanist = "0.26.5-rc"
