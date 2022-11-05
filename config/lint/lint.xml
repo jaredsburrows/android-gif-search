@@ -7,21 +7,9 @@
   <issue id="GradleDependency" severity="ignore" />
   <issue id="NewerVersionAvailable" severity="ignore" />
 
-  <!-- Kotlin android extension issues -->
-  <issue id="UnusedIds" severity="ignore" />
-
   <!-- AGP not seeing custom "Application" class -->
   <issue id="Registered" severity="ignore" />
 
-  <!-- AGP seeing custom "Application" class -->
-  <issue id="ScopedStorage" severity="ignore" />
-
-  <!-- AGP 7.2.0 - java.applet -->
+  <!-- AGP 7.2.0 - Error: Invalid package reference in org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm; -->
   <issue id="InvalidPackage" severity="ignore" />
-
-  <!-- Not using this -->
-  <issue id="GoogleAppIndexingWarning" severity="ignore" />
-
-  <!-- Not using this -->
-  <issue id="MediaCapabilities" severity="ignore" />
 </lint>
