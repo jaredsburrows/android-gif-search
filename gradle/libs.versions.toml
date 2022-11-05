@@ -23,7 +23,7 @@ java = "11"
 kotlin = "1.7.20"
 # build
 sdk-compile = "33"
-sdk-min = "23"
+sdk-min = "26"
 sdk-target = "33"
 # signing
 debug-alias = "androiddebugkey"
