@@ -27,13 +27,15 @@ android {
   }
 
   lint {
-    textReport = true
+    abortOnError = true
     checkAllWarnings = true
     warningsAsErrors = true
-    lintConfig = file("${project.rootDir}/config/lint/lint.xml")
-    checkReleaseBuilds = false
     checkTestSources = true
-    abortOnError = true
+    checkDependencies = true
+    checkReleaseBuilds = false
+    lintConfig = file("${project.rootDir}/config/lint/lint.xml")
+    textReport = true
+    sarifReport = true
   }
 
   packagingOptions {
