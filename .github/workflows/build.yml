@@ -69,7 +69,7 @@ jobs:
           API_LEVEL: ${{ matrix.api-level }}
 
       - name: Build Release APKs and Run lint checks
-        run: ./gradlew assembleRelease lintRelease -Prelease -s
+        run: ./gradlew assembleRelease lintRelease -Prelease -Pci -s
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3.1.1
