@@ -3,11 +3,11 @@ import org.gradle.api.JavaVersion.VERSION_11
 plugins {
   alias(libs.plugins.android.application)
   kotlin("android")
-  kotlin("kapt")
   alias(libs.plugins.dagger)
   alias(libs.plugins.ktlint)
   alias(libs.plugins.license)
   alias(libs.plugins.dexcount)
+  kotlin("kapt")
 }
 
 android {
@@ -130,6 +130,7 @@ android {
 kapt {
   correctErrorTypes = true
   mapDiagnosticLocations = true
+  strictMode = true
 
   arguments {
     arg("dagger.formatGeneratedSource", "disabled")
