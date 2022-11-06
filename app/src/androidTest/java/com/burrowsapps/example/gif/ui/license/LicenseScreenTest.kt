@@ -1,8 +1,5 @@
 package com.burrowsapps.example.gif.ui.license
 
-import android.Manifest.permission.INTERNET
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -13,7 +10,6 @@ import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.intent.Intents.init
 import androidx.test.espresso.intent.Intents.release
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
 import com.burrowsapps.example.gif.MainActivity
 import com.burrowsapps.example.gif.R
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -37,10 +33,6 @@ class LicenseScreenTest {
 
   @get:Rule(order = 1)
   internal var composeTestRule = createAndroidComposeRule<MainActivity>()
-
-  @get:Rule(order = 2)
-  internal val permissionRule: GrantPermissionRule = GrantPermissionRule
-    .grant(INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
 
   @Inject @ApplicationContext internal lateinit var context: Context
 
