@@ -9,6 +9,5 @@
   <application
     android:name=".DebugApplication"
     android:icon="@mipmap/ic_launcher"
-    android:usesCleartextTraffic="true"
     tools:replace="android:name" />
 </manifest>
