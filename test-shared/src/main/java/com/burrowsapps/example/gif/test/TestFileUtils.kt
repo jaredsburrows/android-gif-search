@@ -16,14 +16,21 @@ object TestFileUtils {
     addHeader(header = "Content-type: application/json; charset=utf-8")
   }
 
-  fun getMockFileResponse(fileName: String) = MockResponse().apply {
-    status = HTTP_200_STATUS
-    setResponseCode(code = HTTP_OK)
-    setBody(body = readImage(fileName = fileName))
+  fun getMockGifResponse(fileName: String) = getMockFileResponse(fileName).apply {
+    addHeader(header = "Content-type: image/gif")
+  }
+
+  fun getMockWebpResponse(fileName: String) = getMockFileResponse(fileName).apply {
     addHeader(header = "Content-type: image/webp")
   }
 
-  private fun readImage(fileName: String) = Buffer().apply {
+  private fun getMockFileResponse(fileName: String) = MockResponse().apply {
+    status = HTTP_200_STATUS
+    setResponseCode(code = HTTP_OK)
+    setBody(body = readFile(fileName = fileName))
+  }
+
+  private fun readFile(fileName: String) = Buffer().apply {
     openStream(fileName = fileName).source().use { source ->
       writeAll(source = source)
     }

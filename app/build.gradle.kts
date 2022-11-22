@@ -265,15 +265,9 @@ dependencies {
 
   // Android Tests
   androidTestUtil(libs.androidx.test.orchestrator)
-  debugImplementation(libs.androidx.test.core) // See https://stackoverflow.com/a/69476166/950427
   androidTestImplementation(project(":test-shared"))
   androidTestImplementation(libs.androidx.test.annotation)
   androidTestImplementation(libs.androidx.test.core)
-  androidTestImplementation(libs.androidx.espresso.contrib) {
-    exclude("org.checkerframework") // See https://github.com/android/android-test/issues/861#issuecomment-872582819
-  }
-  androidTestImplementation(libs.androidx.espresso.core)
-  androidTestImplementation(libs.androidx.espresso.intents)
   androidTestImplementation(libs.androidx.test.junit)
   androidTestImplementation(libs.androidx.test.runner)
   androidTestImplementation(libs.androidx.test.rules)

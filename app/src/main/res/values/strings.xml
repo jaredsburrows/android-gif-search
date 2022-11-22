@@ -11,8 +11,8 @@
   <string name="menu_more">More</string>
   <string name="menu_search">Search</string>
   <string name="gif_image">Gif Image</string>
-  <!--  <string name="gif_list">Gif List</string>-->
   <string name="search_gifs">Search Gifs</string>
+  <string name="copy_url">Copy URL</string>
 
   <!-- Snackbar Messages -->
   <string name="copied_to_clipboard">Copied to clipboard</string>

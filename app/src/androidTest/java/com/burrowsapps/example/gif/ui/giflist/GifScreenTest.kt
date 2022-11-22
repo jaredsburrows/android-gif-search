@@ -1,23 +1,21 @@
 package com.burrowsapps.example.gif.ui.giflist
 
-import android.app.Activity
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.test.espresso.Espresso.pressBackUnconditionally
-import androidx.test.espresso.intent.Intents.init
-import androidx.test.espresso.intent.Intents.release
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.MainActivity
 import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.test.TestFileUtils.MOCK_SERVER_PORT
-import com.burrowsapps.example.gif.test.TestFileUtils.getMockFileResponse
+import com.burrowsapps.example.gif.test.TestFileUtils.getMockGifResponse
 import com.burrowsapps.example.gif.test.TestFileUtils.getMockResponse
-import com.google.common.truth.Truth.assertThat
+import com.burrowsapps.example.gif.test.TestFileUtils.getMockWebpResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -53,8 +51,6 @@ class GifScreenTest {
   fun setUp() {
     hiltRule.inject()
 
-    init()
-
     server.apply {
       dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse {
@@ -62,8 +58,8 @@ class GifScreenTest {
             return when {
               contains(other = "v1/trending") -> getMockResponse(fileName = "/trending_results.json")
               contains(other = "v1/search") -> getMockResponse(fileName = "/search_results.json")
-              endsWith(suffix = ".png") -> getMockFileResponse(fileName = "/ic_launcher.webp")
-              endsWith(suffix = ".gif") -> getMockFileResponse(fileName = "/ic_launcher.webp")
+              endsWith(suffix = ".png") -> getMockWebpResponse(fileName = "/ic_launcher.webp")
+              endsWith(suffix = ".gif") -> getMockGifResponse(fileName = "/android.gif")
               else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
             }
           }
@@ -77,8 +73,6 @@ class GifScreenTest {
   @After
   fun tearDown() {
     server.shutdown()
-
-    release()
   }
 
   @Test
@@ -106,11 +100,12 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))
       .assertIsDisplayed()
 
-    pressBackUnconditionally()
+    composeTestRule.runOnUiThread {
+      composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
+    }
     composeTestRule.waitForIdle()
 
-    assertThat(composeTestRule.activityRule.scenario.result.resultCode)
-      .isEqualTo(Activity.RESULT_CANCELED)
+    // TODO: assert back
   }
 
   @Test
@@ -126,7 +121,9 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = context.getString(R.string.license_screen_title))
       .assertIsDisplayed()
 
-    pressBackUnconditionally()
+    composeTestRule.runOnUiThread {
+      composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
+    }
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))
@@ -135,14 +132,14 @@ class GifScreenTest {
 
   @Test
   fun testTrendingThenClickOpenDialog() {
-    composeTestRule.onNodeWithContentDescription(label = "Gif List").performClick()
+    composeTestRule.onAllNodesWithContentDescription(label = context.getString(R.string.gif_image))
+      .onFirst().performClick()
     composeTestRule.waitForIdle()
 
-//    composeTestRule.onNodeWithContentDescription(label = context.getString(R.string.gif_image)).performClick()
-    composeTestRule.waitForIdle()
-
-    // TODO assert dialog
+    // TODO
 //    composeTestRule.onNode(isDialog()).assertIsDisplayed()
+//    composeTestRule.onNodeWithText(text = context.getString(R.string.copy_url))
+//      .assertIsDisplayed()
   }
 
   @Test
@@ -158,8 +155,10 @@ class GifScreenTest {
       .performTextInput("hello")
     composeTestRule.waitForIdle()
 
-    pressBackUnconditionally()
-    pressBackUnconditionally()
+    composeTestRule.runOnUiThread {
+      composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
+      composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
+    }
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))

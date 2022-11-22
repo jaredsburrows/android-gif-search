@@ -6,9 +6,6 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.test.espresso.Espresso.pressBackUnconditionally
-import androidx.test.espresso.intent.Intents.init
-import androidx.test.espresso.intent.Intents.release
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.MainActivity
 import com.burrowsapps.example.gif.R
@@ -16,7 +13,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,8 +36,6 @@ class LicenseScreenTest {
   fun setUp() {
     hiltRule.inject()
 
-    init()
-
     composeTestRule.onNodeWithContentDescription(label = context.getString(R.string.menu_more))
       .performClick()
     composeTestRule.waitForIdle()
@@ -52,11 +46,6 @@ class LicenseScreenTest {
 
     composeTestRule.onNodeWithText(text = context.getString(R.string.license_screen_title))
       .assertIsDisplayed()
-  }
-
-  @After
-  fun tearDown() {
-    release()
   }
 
   @Test
@@ -70,7 +59,9 @@ class LicenseScreenTest {
     composeTestRule.onNodeWithText(text = context.getString(R.string.license_screen_title))
       .assertIsDisplayed()
 
-    pressBackUnconditionally()
+    composeTestRule.runOnUiThread {
+      composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
+    }
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))
