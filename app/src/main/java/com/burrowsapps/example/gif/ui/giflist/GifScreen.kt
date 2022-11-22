@@ -2,6 +2,7 @@
   ExperimentalMaterial3Api::class,
   ExperimentalFoundationApi::class,
   ExperimentalMaterial3Api::class,
+  ExperimentalMaterialApi::class,
 )
 
 package com.burrowsapps.example.gif.ui.giflist
@@ -27,9 +28,13 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -78,8 +83,6 @@ import com.burrowsapps.example.gif.R
 import com.burrowsapps.example.gif.Screen
 import com.burrowsapps.example.gif.data.ImageService
 import com.burrowsapps.example.gif.ui.theme.GifTheme
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
@@ -265,14 +268,22 @@ private fun TheContent(
   listItems: State<List<GifImageInfo>>,
   isRefreshing: State<Boolean>,
 ) {
-  Column(
+  val gridState = rememberLazyGridState()
+  val openDialog = remember { mutableStateOf(false) }
+  val currentSelectedItem = remember { mutableStateOf(GifImageInfo()) }
+  val pullRefreshState = rememberPullRefreshState(
+    refreshing = isRefreshing.value,
+    onRefresh = {
+      // TODO handle trending vs search
+      gifViewModel.loadTrendingImages()
+    },
+  )
+
+  Box(
     modifier = Modifier
       .padding(innerPadding)
+      .pullRefresh(pullRefreshState)
   ) {
-    val gridState = rememberLazyGridState()
-    val openDialog = remember { mutableStateOf(false) }
-    val currentSelectedItem = remember { mutableStateOf(GifImageInfo()) }
-
     if (openDialog.value) {
       TheDialogPreview(
         imageService = imageService,
@@ -281,81 +292,79 @@ private fun TheContent(
       )
     }
 
-    SwipeRefresh(
-      state = rememberSwipeRefreshState(isRefreshing.value),
-      onRefresh = {
-        // TODO handle trending vs search
-        gifViewModel.loadTrendingImages()
-      },
+    LazyVerticalGrid(
+      state = gridState,
+      columns = GridCells.Fixed(3),
+      modifier = Modifier
+        .fillMaxSize()
+        .semantics { contentDescription = "Gif List" },
     ) {
-      LazyVerticalGrid(
-        state = gridState,
-        columns = GridCells.Fixed(3),
-        modifier = Modifier
-          .fillMaxSize()
-          .semantics { contentDescription = "Gif List" },
-      ) {
 
-        // TODO update default state
-        if (listItems.value.isEmpty()) {
-          item {
-            Text(
-              text = "No Gifs!",
-              style = MaterialTheme.typography.bodyLarge,
-              modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-            )
-          }
-        }
-
-        items(
-          items = listItems.value,
-          key = { item -> item.tinyGifUrl },
-        ) { item ->
-          BoxWithConstraints(
+      // TODO update default state
+      if (listItems.value.isEmpty() || !isRefreshing.value) {
+        item {
+          Text(
+            text = "No Gifs!",
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
-              .animateItemPlacement(
-                animationSpec = tween(durationMillis = 350)
-              )
-          ) {
-            val requestBuilder = imageService.loadGif(
-              imageUrl = item.tinyGifUrl,
-              thumbnailUrl = item.tinyGifPreviewUrl,
-              override = 135.dp.value.roundToInt(),
-            )
-
-            CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
-              GlideImage(
-                imageModel = { item.tinyGifUrl },
-                glideRequestType = GIF,
-                modifier = Modifier
-                  .padding(1.dp)
-                  .size(135.dp)
-                  .clickable {
-                    currentSelectedItem.value = item
-                    openDialog.value = true
-                  },
-                imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-                loading = {
-                  Box(modifier = Modifier.matchParentSize()) {
-                    CircularProgressIndicator(
-                      modifier = Modifier.align(Alignment.Center)
-                    )
-                  }
-                },
-              )
-            }
-          }
+              .fillMaxWidth()
+              .padding(horizontal = 16.dp)
+          )
         }
       }
 
-      InfiniteGridHandler(
-        gridState = gridState,
-      ) {
-        gifViewModel.loadMore()
+      items(
+        items = listItems.value,
+        key = { item -> item.tinyGifUrl },
+      ) { item ->
+        BoxWithConstraints(
+          modifier = Modifier
+            .animateItemPlacement(
+              animationSpec = tween(durationMillis = 350)
+            )
+        ) {
+          val requestBuilder = imageService.loadGif(
+            imageUrl = item.tinyGifUrl,
+            thumbnailUrl = item.tinyGifPreviewUrl,
+            override = 135.dp.value.roundToInt(),
+          )
+
+          CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
+            GlideImage(
+              imageModel = { item.tinyGifUrl },
+              glideRequestType = GIF,
+              modifier = Modifier
+                .padding(1.dp)
+                .size(135.dp)
+                .clickable {
+                  currentSelectedItem.value = item
+                  openDialog.value = true
+                },
+              imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+              loading = {
+                Box(modifier = Modifier.matchParentSize()) {
+                  CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                  )
+                }
+              },
+            )
+          }
+        }
       }
     }
+
+    InfiniteGridHandler(
+      gridState = gridState,
+    ) {
+      gifViewModel.loadMore()
+    }
+
+    PullRefreshIndicator(
+      refreshing = isRefreshing.value,
+      state = pullRefreshState,
+      modifier = Modifier.align(Alignment.TopCenter),
+    )
   }
 }
 
