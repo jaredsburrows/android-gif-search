@@ -288,12 +288,13 @@ private fun TheContent(
         gifViewModel.loadTrendingImages()
       },
     ) {
+      val context = LocalContext.current
       LazyVerticalGrid(
         state = gridState,
         columns = GridCells.Fixed(3),
         modifier = Modifier
           .fillMaxSize()
-          .semantics { contentDescription = "Gif List" },
+          .semantics { contentDescription = context.getString(R.string.gif_image) },
       ) {
 
         // TODO update default state
@@ -404,6 +405,7 @@ private fun TheDialogPreview(
         )
       }
 
+      val context = LocalContext.current
       TextButton(
         onClick = {
           openDialog.value = false
@@ -411,7 +413,7 @@ private fun TheDialogPreview(
         }
       ) {
         Text(
-          text = "Copy URL",
+          text = context.getString(R.string.copy_url),
           color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
           fontSize = MaterialTheme.typography.titleMedium.fontSize,
         )

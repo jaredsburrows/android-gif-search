@@ -2,8 +2,9 @@ package com.burrowsapps.example.gif.data.source.network
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.example.gif.test.TestFileUtils.MOCK_SERVER_PORT
-import com.burrowsapps.example.gif.test.TestFileUtils.getMockFileResponse
+import com.burrowsapps.example.gif.test.TestFileUtils.getMockGifResponse
 import com.burrowsapps.example.gif.test.TestFileUtils.getMockResponse
+import com.burrowsapps.example.gif.test.TestFileUtils.getMockWebpResponse
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -44,8 +45,8 @@ class TenorServiceTest {
             return when {
               contains(other = "v1/trending") -> getMockResponse(fileName = "/trending_results.json")
               contains(other = "v1/search") -> getMockResponse(fileName = "/search_results.json")
-              endsWith(suffix = ".png") -> getMockFileResponse(fileName = "/ic_launcher.webp")
-              endsWith(suffix = ".gif") -> getMockFileResponse(fileName = "/ic_launcher.webp")
+              endsWith(suffix = ".png") -> getMockWebpResponse(fileName = "/ic_launcher.webp")
+              endsWith(suffix = ".gif") -> getMockGifResponse(fileName = "/android.gif")
               else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
             }
           }
