@@ -1,4 +1,6 @@
 import org.gradle.api.JavaVersion.VERSION_11
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
   alias(libs.plugins.android.application)
@@ -7,6 +9,7 @@ plugins {
   alias(libs.plugins.ktlint)
   alias(libs.plugins.license)
   alias(libs.plugins.dexcount)
+  alias(libs.plugins.publish)
   kotlin("kapt")
 }
 
@@ -73,6 +76,8 @@ android {
     sarifReport = true
   }
 
+  val keyPath = System.getenv("APP_KEYS_PATH")
+  val hasKeyPath = !keyPath.isNullOrEmpty()
   signingConfigs {
     getByName("debug") {
       storeFile = file("${project.rootDir}/config/signing/debug.keystore")
@@ -80,15 +85,30 @@ android {
       keyAlias = libs.versions.debug.alias.get()
       keyPassword = libs.versions.debug.password.get()
     }
-  }
 
-  // Allows "connectedDebugAndroidTest"
-  testBuildType = if (rootProject.extra["release"] as Boolean) "release" else "debug"
+    if (hasKeyPath) {
+      val keystorePropertiesFile = file("$keyPath/android-gif-search/keystore.properties")
+      val keystoreProperties = Properties()
+      keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
+      play {
+        serviceAccountCredentials.set(file(keystoreProperties["playKey"].toString()))
+      }
+
+      register("release") {
+        storeFile = file(keystoreProperties["storeFile"].toString())
+        storePassword = keystoreProperties["storePassword"].toString()
+        keyAlias = keystoreProperties["keyAlias"].toString()
+        keyPassword = keystoreProperties["keyPassword"].toString()
+      }
+    }
+  }
 
   buildTypes {
     getByName("debug") {
       applicationIdSuffix = ".debug"
       versionNameSuffix = "-dev"
+      signingConfig = signingConfigs.getByName("debug")
     }
 
     // Apply fake signing config to release to test "assembleRelease" locally
@@ -99,9 +119,12 @@ android {
         getDefaultProguardFile("proguard-android-optimize.txt"),
         file("${project.rootDir}/config/proguard/proguard-rules.txt")
       )
-      signingConfig = signingConfigs.getByName("debug")
+      signingConfig = signingConfigs.getByName(if (hasKeyPath) "release" else "debug")
     }
   }
+
+  // Allows "connectedDebugAndroidTest"
+  testBuildType = if (rootProject.extra["release"] as Boolean) "release" else "debug"
 
   testOptions {
     unitTests.apply {
@@ -129,6 +152,10 @@ android {
   }
 }
 
+licenseReport {
+  generateHtmlReport = true
+}
+
 kapt {
   correctErrorTypes = true
   mapDiagnosticLocations = true
@@ -140,10 +167,6 @@ kapt {
     arg("dagger.experimentalDaggerErrorMessages", "enabled")
     arg("moshi.generated", "javax.annotation.Generated")
   }
-}
-
-licenseReport {
-  generateHtmlReport = true
 }
 
 dependencies {
