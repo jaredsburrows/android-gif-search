@@ -28,7 +28,7 @@ gradleEnterprise {
   }
 }
 
-rootProject.name = "android-gif-example"
+rootProject.name = "android-gif-search"
 
 include(":app")
 include(":test-shared")

@@ -14,18 +14,18 @@ plugins {
 }
 
 android {
-  namespace = "com.burrowsapps.example.gif"
-  testNamespace = "com.burrowsapps.example.gif.test"
+  namespace = "com.burrowsapps.gif.search"
+  testNamespace = "com.burrowsapps.gif.search.test"
   compileSdk = libs.versions.sdk.compile.get().toInt()
 
   defaultConfig {
-    applicationId = "com.burrowsapps.example.gif"
+    applicationId = "com.burrowsapps.gif.search"
     versionCode = 1
     versionName = "1.0"
     minSdk = libs.versions.sdk.min.get().toInt()
     targetSdk = libs.versions.sdk.target.get().toInt()
 
-    testApplicationId = "com.burrowsapps.example.gif.test"
+    testApplicationId = "com.burrowsapps.gif.search.test"
     testInstrumentationRunner = "test.CustomTestRunner" // "androidx.test.runner.AndroidJUnitRunner"
     testInstrumentationRunnerArguments += mapOf(
       "clearPackageData" to "true",
