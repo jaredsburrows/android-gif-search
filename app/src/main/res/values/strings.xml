@@ -11,6 +11,7 @@
   <string name="menu_more">More</string>
   <string name="menu_search">Search</string>
   <string name="gif_image">Gif Image</string>
+  <string name="gif_image_dialog">Gif Image Dialog</string>
   <string name="search_gifs">Search Gifs</string>
   <string name="copy_url">Copy URL</string>
 

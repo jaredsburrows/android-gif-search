@@ -1,7 +1,6 @@
 @file:OptIn(
   ExperimentalMaterial3Api::class,
   ExperimentalFoundationApi::class,
-  ExperimentalMaterial3Api::class,
 )
 
 package com.burrowsapps.gif.search.ui.giflist
@@ -293,8 +292,7 @@ private fun TheContent(
         state = gridState,
         columns = GridCells.Fixed(3),
         modifier = Modifier
-          .fillMaxSize()
-          .semantics { contentDescription = context.getString(R.string.gif_image) },
+          .fillMaxSize(),
       ) {
 
         // TODO update default state
@@ -319,6 +317,7 @@ private fun TheContent(
               .animateItemPlacement(
                 animationSpec = tween(durationMillis = 350)
               )
+              .semantics { contentDescription = context.getString(R.string.gif_image) }
           ) {
             val requestBuilder = imageService.loadGif(
               imageUrl = item.tinyGifUrl,
@@ -367,6 +366,7 @@ private fun TheDialogPreview(
   openDialog: MutableState<Boolean>,
 ) {
   val clipboardManager = LocalClipboardManager.current
+  val context = LocalContext.current
 
   Dialog(
     onDismissRequest = {
@@ -374,6 +374,9 @@ private fun TheDialogPreview(
     }
   ) {
     Column(
+      modifier = Modifier.semantics {
+        contentDescription = context.getString(R.string.gif_image_dialog)
+      },
       verticalArrangement = Arrangement.Center,
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -405,7 +408,6 @@ private fun TheDialogPreview(
         )
       }
 
-      val context = LocalContext.current
       TextButton(
         onClick = {
           openDialog.value = false

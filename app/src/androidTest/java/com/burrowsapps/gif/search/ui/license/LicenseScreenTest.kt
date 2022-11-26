@@ -9,6 +9,8 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.MainActivity
 import com.burrowsapps.gif.search.R
+import com.burrowsapps.gif.search.test.DisableAnimationsRule
+import com.burrowsapps.gif.search.test.onBackPressed
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -25,10 +27,13 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 class LicenseScreenTest {
   @get:Rule(order = 0)
-  internal val hiltRule = HiltAndroidRule(this)
+  internal val disableAnimationsRule = DisableAnimationsRule()
 
   @get:Rule(order = 1)
-  internal var composeTestRule = createAndroidComposeRule<MainActivity>()
+  internal val hiltRule = HiltAndroidRule(this)
+
+  @get:Rule(order = 2)
+  internal val composeTestRule = createAndroidComposeRule<MainActivity>()
 
   @Inject @ApplicationContext internal lateinit var context: Context
 
@@ -46,6 +51,8 @@ class LicenseScreenTest {
 
     composeTestRule.onNodeWithText(text = context.getString(R.string.license_screen_title))
       .assertIsDisplayed()
+
+    composeTestRule.waitForIdle()
   }
 
   @Test
@@ -59,9 +66,7 @@ class LicenseScreenTest {
     composeTestRule.onNodeWithText(text = context.getString(R.string.license_screen_title))
       .assertIsDisplayed()
 
-    composeTestRule.runOnUiThread {
-      composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
-    }
+    composeTestRule.onBackPressed()
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))

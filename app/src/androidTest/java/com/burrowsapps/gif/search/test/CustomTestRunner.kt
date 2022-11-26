@@ -1,4 +1,4 @@
-package test
+package com.burrowsapps.gif.search.test
 
 import android.app.Application
 import android.content.Context

@@ -1,7 +1,10 @@
 package com.burrowsapps.gif.search.ui.giflist
 
+import android.content.ClipboardManager
 import android.content.Context
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onFirst
@@ -12,10 +15,13 @@ import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.MainActivity
 import com.burrowsapps.gif.search.R
+import com.burrowsapps.gif.search.test.DisableAnimationsRule
 import com.burrowsapps.gif.search.test.TestFileUtils.MOCK_SERVER_PORT
 import com.burrowsapps.gif.search.test.TestFileUtils.getMockGifResponse
 import com.burrowsapps.gif.search.test.TestFileUtils.getMockResponse
 import com.burrowsapps.gif.search.test.TestFileUtils.getMockWebpResponse
+import com.burrowsapps.gif.search.test.onBackPressed
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -38,10 +44,13 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 class GifScreenTest {
   @get:Rule(order = 0)
-  internal val hiltRule = HiltAndroidRule(this)
+  internal val disableAnimationsRule = DisableAnimationsRule()
 
   @get:Rule(order = 1)
-  internal var composeTestRule = createAndroidComposeRule<MainActivity>()
+  internal val hiltRule = HiltAndroidRule(this)
+
+  @get:Rule(order = 2)
+  internal val composeTestRule = createAndroidComposeRule<MainActivity>()
 
   @Inject @ApplicationContext internal lateinit var context: Context
 
@@ -68,6 +77,8 @@ class GifScreenTest {
 
       start(MOCK_SERVER_PORT)
     }
+
+    composeTestRule.waitForIdle()
   }
 
   @After
@@ -100,9 +111,7 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))
       .assertIsDisplayed()
 
-    composeTestRule.runOnUiThread {
-      composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
-    }
+    composeTestRule.onBackPressed()
     composeTestRule.waitForIdle()
 
     // TODO: assert back
@@ -121,9 +130,7 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = context.getString(R.string.license_screen_title))
       .assertIsDisplayed()
 
-    composeTestRule.runOnUiThread {
-      composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
-    }
+    composeTestRule.onBackPressed()
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))
@@ -132,14 +139,43 @@ class GifScreenTest {
 
   @Test
   fun testTrendingThenClickOpenDialog() {
-    composeTestRule.onAllNodesWithContentDescription(label = context.getString(R.string.gif_image))
-      .onFirst().performClick()
-    composeTestRule.waitForIdle()
+    composeTestRule.mainClock.autoAdvance = false
+    composeTestRule.mainClock.advanceTimeBy(milliseconds = 1_000L)
 
-    // TODO
-//    composeTestRule.onNode(isDialog()).assertIsDisplayed()
-//    composeTestRule.onNodeWithText(text = context.getString(R.string.copy_url))
-//      .assertIsDisplayed()
+    composeTestRule.onAllNodesWithContentDescription(label = context.getString(R.string.gif_image))
+      .onFirst()
+      .performClick()
+    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+
+    composeTestRule.onAllNodes(isDialog()).assertCountEquals(1)
+    composeTestRule.onNode(isDialog()).assertIsDisplayed()
+    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+
+    composeTestRule
+      .onAllNodesWithContentDescription(label = context.getString(R.string.gif_image_dialog))
+      .onFirst()
+      .assertIsDisplayed()
+    composeTestRule.onNodeWithText(text = context.getString(R.string.copy_url))
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun testTrendingThenClickOpenDialogAndCopyLink() {
+    composeTestRule.mainClock.autoAdvance = false
+    composeTestRule.mainClock.advanceTimeBy(milliseconds = 1_000L)
+
+    composeTestRule.onAllNodesWithContentDescription(label = context.getString(R.string.gif_image))
+      .onFirst()
+      .performClick()
+    composeTestRule.mainClock.advanceTimeBy(milliseconds = 1_000L)
+
+    composeTestRule.onNodeWithText(text = context.getString(R.string.copy_url))
+      .performClick()
+
+    val clipboardManager = context.getSystemService(ClipboardManager::class.java)
+    assertThat(
+      clipboardManager.primaryClip?.getItemAt(0)?.coerceToText(context).toString()
+    ).matches("http.*localhost.*gif")
   }
 
   @Test
@@ -155,10 +191,7 @@ class GifScreenTest {
       .performTextInput("hello")
     composeTestRule.waitForIdle()
 
-    composeTestRule.runOnUiThread {
-      composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
-      composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
-    }
+    composeTestRule.onBackPressed()
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))

@@ -26,7 +26,7 @@ android {
     targetSdk = libs.versions.sdk.target.get().toInt()
 
     testApplicationId = "com.burrowsapps.gif.search.test"
-    testInstrumentationRunner = "test.CustomTestRunner" // "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner" // "androidx.test.runner.AndroidJUnitRunner"
     testInstrumentationRunnerArguments += mapOf(
       "clearPackageData" to "true",
       "disableAnalytics" to "true",
@@ -294,6 +294,7 @@ dependencies {
   androidTestImplementation(libs.androidx.test.junit)
   androidTestImplementation(libs.androidx.test.runner)
   androidTestImplementation(libs.androidx.test.rules)
+  androidTestImplementation(libs.androidx.test.uiautomator)
   androidTestImplementation(libs.google.truth)
   androidTestImplementation(libs.junit)
   androidTestImplementation(libs.robolectric.annotations)
