@@ -30,24 +30,14 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1.0.5
 
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v3.0.11
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper/
-            ~/.android/build-cache
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
-
-      - name: Configure JDK ${{ matrix.java-version }}
+      - name: Setup Java ${{ matrix.java-version }}
         uses: actions/setup-java@v3.6.0
         with:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
-          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2.3.3
 
       - name: Build Debug APKs and Run lint checks
         run: ./gradlew assembleDebug ktlintCheck lintDebug -Pci -s

@@ -51,8 +51,6 @@ class LicenseScreenTest {
 
     composeTestRule.onNodeWithText(text = context.getString(R.string.license_screen_title))
       .assertIsDisplayed()
-
-    composeTestRule.waitForIdle()
   }
 
   @Test
