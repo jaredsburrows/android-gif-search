@@ -19,10 +19,8 @@ jobs:
       fail-fast: false
       matrix:
         api-level:
-          - 26
           - 33
         java-version:
-          - 11
           - 19
 
     steps:
