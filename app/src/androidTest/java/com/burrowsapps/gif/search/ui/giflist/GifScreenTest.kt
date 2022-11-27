@@ -77,8 +77,6 @@ class GifScreenTest {
 
       start(MOCK_SERVER_PORT)
     }
-
-    composeTestRule.waitForIdle()
   }
 
   @After
