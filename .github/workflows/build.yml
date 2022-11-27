@@ -19,10 +19,8 @@ jobs:
       fail-fast: false
       matrix:
         api-level:
-          - 26
           - 33
         java-version:
-          - 11
           - 19
 
     steps:
@@ -61,6 +59,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           api-level: ${{ matrix.api-level }}
+          arch: x86_64
           target: google_apis
           script: ./gradlew connectedDebugAndroidTest -Pci -s || ./gradlew connectedDebugAndroidTest -Pci -s
         env:
