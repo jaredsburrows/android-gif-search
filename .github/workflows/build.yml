@@ -59,11 +59,8 @@ jobs:
 
       - name: Run Debug Instrumentation Tests on Android API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2.27.0
-        continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          target: google_apis
           script: ./gradlew connectedDebugAndroidTest -Pci -s || ./gradlew connectedDebugAndroidTest -Pci -s
         env:
           API_LEVEL: ${{ matrix.api-level }}
