@@ -9,7 +9,6 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.MainActivity
 import com.burrowsapps.gif.search.R
-import com.burrowsapps.gif.search.test.DisableAnimationsRule
 import com.burrowsapps.gif.search.test.onBackPressed
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -27,12 +26,9 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 class LicenseScreenTest {
   @get:Rule(order = 0)
-  internal val disableAnimationsRule = DisableAnimationsRule()
-
-  @get:Rule(order = 1)
   internal val hiltRule = HiltAndroidRule(this)
 
-  @get:Rule(order = 2)
+  @get:Rule(order = 1)
   internal val composeTestRule = createAndroidComposeRule<MainActivity>()
 
   @Inject @ApplicationContext internal lateinit var context: Context

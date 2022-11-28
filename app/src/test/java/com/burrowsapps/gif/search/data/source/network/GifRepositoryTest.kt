@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol.HTTP_1_1
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -31,7 +31,7 @@ class GifRepositoryTest {
   }
 
   @Test
-  fun testLoadTrendingImagesSuccess() = runTest {
+  fun testLoadTrendingImagesSuccess() = runBlocking {
     whenever(service.getTrendingResults(eq(next)))
       .thenReturn(Response.success(response))
 
@@ -42,8 +42,8 @@ class GifRepositoryTest {
   }
 
   @Test
-  fun testLoadTrendingImagesError() = runTest {
-    val errorResponse: okhttp3.Response = okhttp3.Response.Builder()
+  fun testLoadTrendingImagesError() = runBlocking {
+    val errorResponse = okhttp3.Response.Builder()
       .code(HTTP_INTERNAL_ERROR)
       .message("Broken!")
       .protocol(HTTP_1_1)
@@ -61,7 +61,7 @@ class GifRepositoryTest {
   }
 
   @Test
-  fun testLoadSearchImagesSuccess() = runTest {
+  fun testLoadSearchImagesSuccess() = runBlocking {
     val searchString = "gifs"
     whenever(service.getSearchResults(eq(searchString), eq(next)))
       .thenReturn(Response.success(response))
@@ -73,9 +73,9 @@ class GifRepositoryTest {
   }
 
   @Test
-  fun testLoadSearchImagesError() = runTest {
+  fun testLoadSearchImagesError() = runBlocking {
     val searchString = "gifs"
-    val errorResponse: okhttp3.Response = okhttp3.Response.Builder()
+    val errorResponse = okhttp3.Response.Builder()
       .code(HTTP_INTERNAL_ERROR)
       .message("Broken!")
       .protocol(HTTP_1_1)

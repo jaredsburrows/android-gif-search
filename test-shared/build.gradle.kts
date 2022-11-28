@@ -17,7 +17,6 @@ android {
   }
 
   compileOptions {
-    isCoreLibraryDesugaringEnabled = true
     sourceCompatibility = VERSION_11
     targetCompatibility = VERSION_11
   }
@@ -78,21 +77,14 @@ tasks.register("updateTestFiles") {
 }
 
 dependencies {
-  // Java 8+
-  coreLibraryDesugaring(libs.android.desugar)
-
   // Kotlin
   implementation(platform(libs.kotlin.bom))
-  implementation(kotlin("stdlib"))
-  implementation(kotlin("stdlib-common"))
-  implementation(kotlin("stdlib-jdk7"))
-  implementation(kotlin("stdlib-jdk8"))
 
   // Kotlin X
   implementation(platform(libs.kotlinx.coroutines.bom))
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.coroutines.core)
-  implementation(libs.kotlinx.coroutines.corejvm)
 
+  // OkHTTP
   implementation(libs.squareup.okhttp.mockwebserver)
 }

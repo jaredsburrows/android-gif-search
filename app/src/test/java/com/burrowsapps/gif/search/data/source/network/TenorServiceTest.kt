@@ -9,7 +9,7 @@ import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -63,7 +63,7 @@ class TenorServiceTest {
   }
 
   @Test
-  fun testTrendingResultsURLShouldParseCorrectly() = runTest {
+  fun testTrendingResultsURLShouldParseCorrectly() = runBlocking {
     val response = sut.getTrendingResults(null)
     val body = response.body()!!
 
@@ -71,7 +71,7 @@ class TenorServiceTest {
   }
 
   @Test
-  fun testTrendingResultsURLPreviewShouldParseCorrectly() = runTest {
+  fun testTrendingResultsURLPreviewShouldParseCorrectly() = runBlocking {
     val response = sut.getTrendingResults(null)
     val body = response.body()!!
 
@@ -79,7 +79,7 @@ class TenorServiceTest {
   }
 
   @Test
-  fun testSearchResultsURLShouldParseCorrectly() = runTest {
+  fun testSearchResultsURLShouldParseCorrectly() = runBlocking {
     val response = sut.getSearchResults("hello", null)
     val body = response.body()!!
 
@@ -87,7 +87,7 @@ class TenorServiceTest {
   }
 
   @Test
-  fun testSearchResultsURLPreviewShouldParseCorrectly() = runTest {
+  fun testSearchResultsURLPreviewShouldParseCorrectly() = runBlocking {
     val response = sut.getSearchResults("hello", null)
     val body = response.body()!!
 

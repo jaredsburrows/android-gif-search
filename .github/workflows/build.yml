@@ -45,6 +45,27 @@ jobs:
       - name: Run Debug Unit Tests
         run: ./gradlew testDebug -Pci -s
 
+      - name: Cache AVD
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2.27.0
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          target: google_apis
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
       - name: Run Debug Instrumentation Tests on Android API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2.27.0
         continue-on-error: true
@@ -52,7 +73,10 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           target: google_apis
-          script: ./gradlew connectedDebugAndroidTest -Pci -s || ./gradlew connectedDebugAndroidTest -Pci -s
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
+          disable-animations: true
+          script: ./gradlew connectedDebugAndroidTest -Pci -s
         env:
           API_LEVEL: ${{ matrix.api-level }}
 
