@@ -13,8 +13,8 @@ rootProject.apply {
 plugins {
   alias(libs.plugins.android.application) apply false
   alias(libs.plugins.android.library) apply false
-  kotlin("android") version(libs.versions.kotlin.get()) apply false
-  kotlin("jvm") version(libs.versions.kotlin.get()) apply false
+  kotlin("android") version (libs.versions.kotlin.get()) apply false
+  kotlin("jvm") version (libs.versions.kotlin.get()) apply false
   alias(libs.plugins.dagger) apply false
   alias(libs.plugins.ktlint) apply false
   alias(libs.plugins.license) apply false
@@ -66,7 +66,6 @@ allprojects {
         // https://kotlinlang.org/docs/compiler-reference.html#progressive
         "-progressive",
         "-Xjsr305=strict",
-        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
         "-Xemit-jvm-type-annotations",
         // https://publicobject.com/2019/11/18/kotlins-assert-is-not-like-javas-assert/
         "-Xassertions=jvm",
@@ -88,13 +87,7 @@ allprojects {
       compilerArgs = compilerArgs + listOf(
         // Turn on all warnings
         "-Xlint:all",
-        // Allow deprecations from Dagger 2
-        "-Xlint:-deprecation",
-        // Ignore Java 8 method param meta data
-        "-Xlint:-classfile",
-        // Dagger 2 unchecked issues
-        "-Xlint:-unchecked",
-        // Ignore no process
+        // Ignore "warning: No processor claimed any of these annotations"
         "-Xlint:-processing",
       )
       compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "10000"))

@@ -26,9 +26,8 @@ android {
     targetSdk = libs.versions.sdk.target.get().toInt()
 
     testApplicationId = "com.burrowsapps.gif.search.test"
-    testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner" // "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner"
     testInstrumentationRunnerArguments += mapOf(
-      "clearPackageData" to "true",
       "disableAnalytics" to "true",
     )
 
@@ -47,7 +46,6 @@ android {
   }
 
   compileOptions {
-    isCoreLibraryDesugaringEnabled = true
     sourceCompatibility = VERSION_11
     targetCompatibility = VERSION_11
   }
@@ -170,27 +168,15 @@ kapt {
 }
 
 dependencies {
-  // Java 8+
-  coreLibraryDesugaring(libs.android.desugar)
-
   // Kotlin
   implementation(platform(libs.kotlin.bom))
-  implementation(kotlin("stdlib"))
-  implementation(kotlin("stdlib-common"))
-  implementation(kotlin("stdlib-jdk7"))
-  implementation(kotlin("stdlib-jdk8"))
-  testImplementation(kotlin("test"))
-  testImplementation(kotlin("test-junit"))
-  testImplementation(kotlin("test-common"))
 
   // KotlinX
   implementation(platform(libs.kotlinx.coroutines.bom))
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.coroutines.core)
-  implementation(libs.kotlinx.coroutines.corejvm)
   implementation(libs.kotlinx.coroutinesjdk8)
   testImplementation(libs.kotlinx.coroutines.test)
-  testImplementation(libs.kotlinx.coroutines.testjvm)
 
   // Dagger / Dependency Injection
   implementation(libs.google.hilt.android)
@@ -206,20 +192,13 @@ dependencies {
 
   // AndroidX
   implementation(libs.androidx.annotation)
-  implementation(libs.androidx.activity)
   implementation(libs.androidx.activityktx)
   implementation(libs.androidx.appcompat)
-  implementation(libs.androidx.core)
   implementation(libs.androidx.corektx)
   implementation(libs.androidx.startup)
 
   // AndroidX Lifecycle
-  implementation(libs.androidx.lifecycle.common)
-  implementation(libs.androidx.lifecycle.commonjdk8)
-  implementation(libs.androidx.lifecycle.extensions)
-  implementation(libs.androidx.lifecycle.viewmodel)
   implementation(libs.androidx.lifecycle.viewmodelktx)
-  kapt(libs.androidx.lifecycle.compiler)
 
   // AndroidX UI
   implementation(libs.androidx.webkit)
@@ -294,7 +273,6 @@ dependencies {
   androidTestImplementation(libs.androidx.test.junit)
   androidTestImplementation(libs.androidx.test.runner)
   androidTestImplementation(libs.androidx.test.rules)
-  androidTestImplementation(libs.androidx.test.uiautomator)
   androidTestImplementation(libs.google.truth)
   androidTestImplementation(libs.junit)
   androidTestImplementation(libs.robolectric.annotations)

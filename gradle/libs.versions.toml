@@ -40,7 +40,6 @@ publish = { id = "com.github.triplet.play", version = "3.7.0" }
 
 [libraries]
 android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "1.2.2" } # 2.0.0
-androidx-activity = { module = "androidx.activity:activity", version.ref = "activity" }
 androidx-activityktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.5.0" }
@@ -57,14 +56,8 @@ androidx-compose-uitooling = { module = "androidx.compose.ui:ui-tooling", versio
 androidx-compose-uitoolingpreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 androidx-compose-junit = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 androidx-compose-lifecycle = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.5.0" }
-androidx-core = { module = "androidx.core:core", version.ref = "core" }
 androidx-corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
 androidx-hilt-compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.0.0" }
-androidx-lifecycle-common = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
-androidx-lifecycle-commonjdk8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifecycle" }
-androidx-lifecycle-compiler = { module = "androidx.lifecycle:lifecycle-compiler", version.ref = "lifecycle" }
-androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version = "2.2.0" }
-androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodelktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.1.1" }
 androidx-test-annotation = { module = "androidx.test:annotation", version = "1.0.1" }
@@ -73,7 +66,6 @@ androidx-test-junit = { module = "androidx.test.ext:junit", version = "1.1.4" }
 androidx-test-orchestrator = { module = "androidx.test:orchestrator", version = "1.4.2" }
 androidx-test-rules = { module = "androidx.test:rules", version = "1.5.0" }
 androidx-test-runner = { module = "androidx.test:runner", version = "1.5.1" }
-androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version = "2.2.0" }
 androidx-webkit = { module = "androidx.webkit:webkit", version = "1.5.0" }
 bumptech-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 bumptech-glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
@@ -95,9 +87,7 @@ kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx" }
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx" }
-kotlinx-coroutines-corejvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinx" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx" }
-kotlinx-coroutines-testjvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm", version.ref = "kotlinx" }
 kotlinx-coroutinesjdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "kotlinx" }
 landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landscapist" }
 landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version.ref = "landscapist" }
