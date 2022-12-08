@@ -83,13 +83,26 @@ jobs:
       - name: Build Release APKs and Run lint checks
         run: ./gradlew assembleRelease lintRelease -Prelease -Pci -s
 
-      - name: Upload Artifacts
+      - name: Upload Reports
         uses: actions/upload-artifact@v3.1.1
-        if: always()
         with:
-          name: android-search-gif-${{ github.workflow }}-${{ github.run_id }}
+          name: android-search-gif-reports-${{ github.workflow }}-${{ github.run_id }}
           path: |
             app/build/outputs
             app/build/reports
             app/build/test-results
-          if-no-files-found: warn
+          if-no-files-found: error
+          
+      - name: Upload Debug .apk artifact
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: com.burrowsapps.gif.search.debug-${{ github.workflow }}-${{ github.run_id }}.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+      - name: Upload Release .apk artifact
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: com.burrowsapps.gif.search-${{ github.workflow }}-${{ github.run_id }}.apk
+          path: app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
