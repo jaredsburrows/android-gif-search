@@ -97,15 +97,12 @@ jobs:
         uses: actions/upload-artifact@v3.1.1
         with:
           name: com.burrowsapps.gif.search.debug-${{ github.workflow }}-${{ github.run_id }}.apk
-          path: ./app/build//outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
 
       - name: Upload Release .apk artifact
         uses: actions/upload-artifact@v3.1.1
         with:
           name: com.burrowsapps.gif.search-${{ github.workflow }}-${{ github.run_id }}.apk
-          path: ./app/build//outputs/apk/release/app-release.apk
+          path: app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
-          
-          
-          
