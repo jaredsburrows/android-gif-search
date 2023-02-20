@@ -84,7 +84,7 @@ jobs:
         run: ./gradlew assembleRelease lintRelease -Prelease -Pci -s
 
       - name: Upload Reports
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: com.burrowsapps.gif.search-reports-${{ github.workflow }}-${{ github.run_id }}
           path: |
@@ -93,14 +93,14 @@ jobs:
           if-no-files-found: error
           
       - name: Upload Debug .apk artifact
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: com.burrowsapps.gif.search.debug-debug-${{ github.workflow }}-${{ github.run_id }}.apk
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
 
       - name: Upload Release .apk artifact
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: com.burrowsapps.gif.search-release-${{ github.workflow }}-${{ github.run_id }}.apk
           path: app/build/outputs/apk/release/app-release.apk
