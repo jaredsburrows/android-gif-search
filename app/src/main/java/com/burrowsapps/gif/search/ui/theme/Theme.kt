@@ -27,6 +27,7 @@ fun GifTheme(
       val context = LocalContext.current
       if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     }
+
     darkTheme -> darkColorScheme() // default
     else -> lightColorScheme() // default
   }

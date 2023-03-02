@@ -13,7 +13,6 @@ android {
 
   defaultConfig {
     minSdk = libs.versions.sdk.min.get().toInt()
-    targetSdk = libs.versions.sdk.target.get().toInt()
   }
 
   compileOptions {
@@ -37,7 +36,7 @@ android {
     sarifReport = true
   }
 
-  packagingOptions {
+  packaging {
     resources.excludes += listOf(
       "**/*.kotlin_module",
       "**/*.version",
@@ -70,7 +69,7 @@ tasks.register("updateTestFiles") {
             .replace("media.tenor.com", "localhost:8080")
             .replace("tenor.com", "localhost:8080")
             // Enforce HTTP for local MockWebServer
-            .replace("https:", "http:")
+            .replace("https:", "http:"),
         )
     }
   }

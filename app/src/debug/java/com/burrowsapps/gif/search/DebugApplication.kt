@@ -16,13 +16,13 @@ class DebugApplication : MainApplication() {
       ThreadPolicy.Builder()
         .detectAll()
         .penaltyLog()
-        .build()
+        .build(),
     )
     StrictMode.setVmPolicy(
       VmPolicy.Builder()
         .detectAll()
         .penaltyLog()
-        .build()
+        .build(),
     )
   }
 }

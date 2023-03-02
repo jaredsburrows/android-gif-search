@@ -31,7 +31,9 @@ class LicenseScreenTest {
   @get:Rule(order = 1)
   internal val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-  @Inject @ApplicationContext internal lateinit var context: Context
+  @Inject
+  @ApplicationContext
+  internal lateinit var context: Context
 
   @Before
   fun setUp() {

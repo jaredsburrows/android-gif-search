@@ -60,8 +60,8 @@ allprojects {
   tasks.withType(KotlinCompile::class.java).configureEach {
     kotlinOptions {
       jvmTarget = VERSION_11.toString()
-      languageVersion = "1.7"
-      apiVersion = "1.7"
+      languageVersion = "1.8"
+      apiVersion = "1.8"
       freeCompilerArgs = freeCompilerArgs + listOf(
         // https://kotlinlang.org/docs/compiler-reference.html#progressive
         "-progressive",
@@ -72,8 +72,8 @@ allprojects {
         "-Xproper-ieee754-comparisons",
         // https://blog.jetbrains.com/kotlin/2020/07/kotlin-1-4-m3-generating-default-methods-in-interfaces/
         "-Xjvm-default=all",
-        "-P",
-        "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=${libs.versions.kotlin.get()}",
+//        "-P",
+//        "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=${libs.versions.kotlin.get()}",
       )
     }
   }
