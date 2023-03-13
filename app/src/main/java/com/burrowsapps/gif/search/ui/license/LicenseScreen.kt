@@ -84,7 +84,7 @@ internal fun LicenseScreen(navController: NavHostController = rememberNavControl
 
   Scaffold(
     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    topBar = { TheToolbar(navController, scrollBehavior) }
+    topBar = { TheToolbar(navController, scrollBehavior) },
   ) { paddingValues ->
     TheContent(paddingValues)
   }
@@ -115,7 +115,7 @@ private fun TheToolbar(
         }
       }
     },
-    scrollBehavior = scrollBehavior
+    scrollBehavior = scrollBehavior,
   )
 }
 
@@ -184,7 +184,8 @@ private fun TheWebView() {
       ): WebResourceResponse? {
         // Override URLs for AssetsPathHandler
         return assetLoader.shouldInterceptRequest(request.url) ?: super.shouldInterceptRequest(
-          view, request
+          view,
+          request,
         )
       }
 

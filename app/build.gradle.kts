@@ -41,7 +41,7 @@ android {
         "\"http://localhost:8080\"" // Enforce HTTP for local MockWebServer
       } else {
         "\"https://g.tenor.com\""
-      }
+      },
     )
   }
 
@@ -55,6 +55,7 @@ android {
   }
 
   buildFeatures {
+    buildConfig = true
     compose = true
   }
 
@@ -115,7 +116,7 @@ android {
       isShrinkResources = true
       proguardFiles += listOf(
         getDefaultProguardFile("proguard-android-optimize.txt"),
-        file("${project.rootDir}/config/proguard/proguard-rules.txt")
+        file("${project.rootDir}/config/proguard/proguard-rules.txt"),
       )
       signingConfig = signingConfigs.getByName(if (hasKeyPath) "release" else "debug")
     }
@@ -133,7 +134,7 @@ android {
     execution = "ANDROIDX_TEST_ORCHESTRATOR"
   }
 
-  packagingOptions {
+  packaging {
     resources.excludes += listOf(
       "**/*.kotlin_module",
       "**/*.version",

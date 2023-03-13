@@ -48,7 +48,9 @@ class GifScreenTest {
   @get:Rule(order = 1)
   internal val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-  @Inject @ApplicationContext internal lateinit var context: Context
+  @Inject
+  @ApplicationContext
+  internal lateinit var context: Context
 
   private val server = MockWebServer()
 
@@ -168,7 +170,7 @@ class GifScreenTest {
 
     val clipboardManager = context.getSystemService(ClipboardManager::class.java)
     assertThat(
-      clipboardManager.primaryClip?.getItemAt(0)?.coerceToText(context).toString()
+      clipboardManager.primaryClip?.getItemAt(0)?.coerceToText(context).toString(),
     ).matches("http.*localhost.*gif")
   }
 

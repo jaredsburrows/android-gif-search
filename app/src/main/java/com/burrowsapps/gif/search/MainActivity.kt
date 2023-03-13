@@ -30,7 +30,8 @@ import javax.inject.Inject
 /** Single `Activity` that is the entry point of the app. */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-  @Inject internal lateinit var imageService: ImageService
+  @Inject
+  internal lateinit var imageService: ImageService
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

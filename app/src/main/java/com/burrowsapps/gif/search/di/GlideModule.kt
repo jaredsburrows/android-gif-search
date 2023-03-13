@@ -47,11 +47,13 @@ internal class GlideModule : AppGlideModule() {
         .encodeQuality(ENCODE_QUALITY)
         .diskCacheStrategy(ALL)
         .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher)
+        .fallback(R.mipmap.ic_launcher),
     ).setDiskCache(
       InternalCacheDiskCacheFactory(
-        context.applicationContext, GLIDE_CACHE_DIRECTORY, DEFAULT_DISK_CACHE_SIZE.toLong()
-      )
+        context.applicationContext,
+        GLIDE_CACHE_DIRECTORY,
+        DEFAULT_DISK_CACHE_SIZE.toLong(),
+      ),
     )
       .setBitmapPool(LruBitmapPool(DEFAULT_DISK_CACHE_SIZE.toLong()))
       .setMemoryCache(LruResourceCache(DEFAULT_DISK_CACHE_SIZE.toLong()))
@@ -63,11 +65,13 @@ internal class GlideModule : AppGlideModule() {
   override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
     val okHttpClient = fromApplication(
       context.applicationContext,
-      GlideModuleEntryPoint::class.java
+      GlideModuleEntryPoint::class.java,
     ).defaultOkHttpClient()
 
     registry.replace(
-      GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(okHttpClient)
+      GlideUrl::class.java,
+      InputStream::class.java,
+      OkHttpUrlLoader.Factory(okHttpClient),
     )
   }
 

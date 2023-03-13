@@ -30,7 +30,8 @@ class TenorServiceTest {
   @get:Rule(order = 0)
   internal val hiltRule = HiltAndroidRule(this)
 
-  @Inject internal lateinit var sut: TenorService
+  @Inject
+  internal lateinit var sut: TenorService
 
   private val server = MockWebServer()
 

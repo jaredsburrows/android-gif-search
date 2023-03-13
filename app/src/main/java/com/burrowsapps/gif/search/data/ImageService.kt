@@ -27,7 +27,7 @@ class ImageService @Inject internal constructor(@ApplicationContext private val 
           .transition(withCrossFade())
           .load(thumbnailUrl)
           .override(override)
-          .signature(ObjectKey(thumbnailUrl))
+          .signature(ObjectKey(thumbnailUrl)),
       )
       .override(override)
       .signature(ObjectKey(imageUrl))

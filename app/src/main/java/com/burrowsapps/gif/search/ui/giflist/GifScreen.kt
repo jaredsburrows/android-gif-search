@@ -108,7 +108,7 @@ import kotlin.math.roundToInt
 @Composable
 private fun DefaultPreview(
   navController: NavHostController = rememberNavController(),
-  imageService: ImageService = ImageService(LocalContext.current)
+  imageService: ImageService = ImageService(LocalContext.current),
 ) {
   GifTheme {
     GifScreen(navController, imageService)
@@ -131,7 +131,7 @@ internal fun GifScreen(
         scrollBehavior = scrollBehavior,
         gifViewModel = gifViewModel,
       )
-    }
+    },
   ) { paddingValues ->
     val listItems = gifViewModel.gifListResponse.collectAsState()
     val isRefreshing = gifViewModel.isRefreshing.collectAsState()
@@ -266,7 +266,7 @@ private fun TheContent(
 ) {
   Column(
     modifier = Modifier
-      .padding(innerPadding)
+      .padding(innerPadding),
   ) {
     val gridState = rememberLazyGridState()
     val openDialog = remember { mutableStateOf(false) }
@@ -294,7 +294,6 @@ private fun TheContent(
         modifier = Modifier
           .fillMaxSize(),
       ) {
-
         // TODO update default state
         if (listItems.value.isEmpty()) {
           item {
@@ -303,7 +302,7 @@ private fun TheContent(
               style = MaterialTheme.typography.bodyLarge,
               modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
             )
           }
         }
@@ -315,9 +314,9 @@ private fun TheContent(
           BoxWithConstraints(
             modifier = Modifier
               .animateItemPlacement(
-                animationSpec = tween(durationMillis = 350)
+                animationSpec = tween(durationMillis = 350),
               )
-              .semantics { contentDescription = context.getString(R.string.gif_image) }
+              .semantics { contentDescription = context.getString(R.string.gif_image) },
           ) {
             val requestBuilder = imageService.loadGif(
               imageUrl = item.tinyGifUrl,
@@ -340,7 +339,7 @@ private fun TheContent(
                 loading = {
                   Box(modifier = Modifier.matchParentSize()) {
                     CircularProgressIndicator(
-                      modifier = Modifier.align(Alignment.Center)
+                      modifier = Modifier.align(Alignment.Center),
                     )
                   }
                 },
@@ -371,7 +370,7 @@ private fun TheDialogPreview(
   Dialog(
     onDismissRequest = {
       openDialog.value = false
-    }
+    },
   ) {
     Column(
       modifier = Modifier.semantics {
@@ -401,7 +400,7 @@ private fun TheDialogPreview(
           loading = {
             Box(modifier = Modifier.matchParentSize()) {
               CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center),
               )
             }
           },
@@ -412,7 +411,7 @@ private fun TheDialogPreview(
         onClick = {
           openDialog.value = false
           clipboardManager.setText(AnnotatedString(currentSelectedItem.value.gifUrl))
-        }
+        },
       ) {
         Text(
           text = context.getString(R.string.copy_url),
