@@ -35,6 +35,7 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
+          cache: gradle
 
       - name: Build Debug APKs and Run lint checks
         uses: gradle/gradle-build-action@v2.4.0
