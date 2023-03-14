@@ -36,14 +36,15 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2.4.0
-
       - name: Build Debug APKs and Run lint checks
-        run: ./gradlew assembleDebug ktlintCheck lintDebug -Pci -s
+        uses: gradle/gradle-build-action@v2.4.0
+        with:
+          arguments: assembleDebug ktlintCheck lintDebug -Pci -s
 
       - name: Run Debug Unit Tests
-        run: ./gradlew testDebug -Pci -s
+        uses: gradle/gradle-build-action@v2.4.0
+        with:
+          arguments: testDebug -Pci -s
 
       - name: Cache AVD
         uses: actions/cache@v3
@@ -81,9 +82,12 @@ jobs:
           API_LEVEL: ${{ matrix.api-level }}
 
       - name: Build Release APKs and Run lint checks
-        run: ./gradlew assembleRelease lintRelease -Prelease -Pci -s
+        uses: gradle/gradle-build-action@v2.4.0
+        with:
+          arguments: assembleRelease lintRelease -Prelease -Pci -s
 
       - name: Upload Reports
+        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3.1.2
         with:
           name: com.burrowsapps.gif.search-reports-${{ github.workflow }}-${{ github.run_id }}
@@ -93,6 +97,7 @@ jobs:
           if-no-files-found: error
           
       - name: Upload Debug .apk artifact
+        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3.1.2
         with:
           name: com.burrowsapps.gif.search.debug-debug-${{ github.workflow }}-${{ github.run_id }}.apk
@@ -100,6 +105,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload Release .apk artifact
+        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3.1.2
         with:
           name: com.burrowsapps.gif.search-release-${{ github.workflow }}-${{ github.run_id }}.apk
