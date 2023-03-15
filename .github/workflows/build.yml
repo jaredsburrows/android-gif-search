@@ -50,7 +50,7 @@ jobs:
         with:
           arguments: testDebug -Pci -s
 
-      - name: AVD cache
+      - name: Cache AVD
         uses: actions/cache@v3
         id: avd-cache
         with:
@@ -64,6 +64,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           api-level: ${{ matrix.api-level }}
+          arch: x86_64
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
@@ -74,6 +75,7 @@ jobs:
         continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
+          arch: x86_64
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
