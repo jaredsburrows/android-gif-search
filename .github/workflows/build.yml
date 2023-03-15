@@ -37,6 +37,9 @@ jobs:
           java-version: ${{ matrix.java-version }}
           cache: gradle
 
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2.4.0
+
       - name: Build Debug APKs and Run lint checks
         uses: gradle/gradle-build-action@v2.4.0
         with:
@@ -47,7 +50,7 @@ jobs:
         with:
           arguments: testDebug -Pci -s
 
-      - name: Cache AVD
+      - name: AVD cache
         uses: actions/cache@v3
         id: avd-cache
         with:
@@ -61,8 +64,6 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          target: google_apis
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
@@ -73,14 +74,10 @@ jobs:
         continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          target: google_apis
           force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: ./gradlew connectedDebugAndroidTest -Pci -s
-        env:
-          API_LEVEL: ${{ matrix.api-level }}
 
       - name: Build Release APKs and Run lint checks
         uses: gradle/gradle-build-action@v2.4.0
