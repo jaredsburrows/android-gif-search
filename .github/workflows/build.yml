@@ -13,7 +13,7 @@ env:
 jobs:
   android:
     name: Android API ${{ matrix.api-level }} / JDK ${{ matrix.java-version }}
-    runs-on: macos-latest
+    runs-on: ubtuntu-latest
 
     strategy:
       fail-fast: false
