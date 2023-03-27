@@ -70,7 +70,6 @@ jobs:
 
       - name: Run Debug Instrumentation Tests on Android API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2.28.0
-        continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
@@ -78,7 +77,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
           disable-animations: true
-          script: ./gradlew connectedDebugAndroidTest -Pci -s
+          script: ./gradlew connectedDebugAndroidTest -Pci -s || ./gradlew connectedDebugAndroidTest -Pci -s
 
       - name: Build Release APKs and Run lint checks
         uses: gradle/gradle-build-action@v2.4.0
