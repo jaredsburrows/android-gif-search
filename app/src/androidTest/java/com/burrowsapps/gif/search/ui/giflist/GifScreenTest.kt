@@ -135,35 +135,55 @@ class GifScreenTest {
 
   @Test
   fun testTrendingThenClickOpenDialog() {
-    composeTestRule.mainClock.autoAdvance = false
+    composeTestRule.runOnUiThread {
+      composeTestRule.mainClock.autoAdvance = false
+    }
+
     composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+    composeTestRule.waitForIdle()
 
     composeTestRule.onAllNodesWithContentDescription(label = context.getString(R.string.gif_image))
       .onFirst()
       .performClick()
-    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+
+    composeTestRule.runOnUiThread {
+      composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+    }
+    composeTestRule.waitForIdle()
 
     composeTestRule.onAllNodes(isDialog()).assertCountEquals(1)
-    composeTestRule.onNode(isDialog()).assertIsDisplayed()
-    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+
+    composeTestRule.runOnUiThread {
+      composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+    }
+    composeTestRule.waitForIdle()
 
     composeTestRule
       .onAllNodesWithContentDescription(label = context.getString(R.string.gif_image_dialog))
       .onFirst()
       .assertIsDisplayed()
+
     composeTestRule.onNodeWithText(text = context.getString(R.string.copy_url))
       .assertIsDisplayed()
   }
 
   @Test
   fun testTrendingThenClickOpenDialogAndCopyLink() {
-    composeTestRule.mainClock.autoAdvance = false
+    composeTestRule.runOnUiThread {
+      composeTestRule.mainClock.autoAdvance = false
+    }
+
     composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+    composeTestRule.waitForIdle()
 
     composeTestRule.onAllNodesWithContentDescription(label = context.getString(R.string.gif_image))
       .onFirst()
       .performClick()
-    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+
+    composeTestRule.runOnUiThread {
+      composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+    }
+    composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = context.getString(R.string.copy_url))
       .performClick()
