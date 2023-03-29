@@ -82,7 +82,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action/composite@v2.6.1
         if: success() || failure()
         with:
-          files: '**/build/test-results/test/TEST-*.xml'
+          files: '**/build/test-results/**/TEST-*.xml'
 
       - name: Build Release APKs and Run lint checks
         uses: gradle/gradle-build-action@v2.4.0
