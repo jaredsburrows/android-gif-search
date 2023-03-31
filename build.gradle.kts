@@ -4,6 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.Locale
 
 rootProject.apply {
   extra["ci"] = hasProperty("ci")
@@ -22,7 +23,7 @@ plugins {
 }
 
 allprojects {
-  configurations.all {
+  configurations.configureEach {
     resolutionStrategy {
       preferProjectModules()
 
@@ -40,7 +41,7 @@ allprojects {
   tasks.withType(DependencyUpdatesTask::class.java).configureEach {
     fun isNonStable(version: String): Boolean {
       val stableKeyword =
-        listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
+        listOf("RELEASE", "FINAL", "GA").any { version.uppercase(Locale.getDefault()).contains(it) }
       val regex = "^[0-9,.v-]+(-r)?$".toRegex()
       val isStable = stableKeyword || regex.matches(version)
       return isStable.not()
