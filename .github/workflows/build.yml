@@ -78,6 +78,9 @@ jobs:
           disable-animations: true
           script: ./gradlew connectedDebugAndroidTest -Pci -s || ./gradlew connectedDebugAndroidTest -Pci -s
 
+      - name: Build Android
+        run: find app/build/
+
       - name: Publish Test Report
         uses: EnricoMi/publish-unit-test-result-action/composite@v2.6.1
         if: success() || failure()
