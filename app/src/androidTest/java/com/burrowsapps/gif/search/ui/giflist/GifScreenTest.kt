@@ -134,7 +134,7 @@ class GifScreenTest {
       .assertIsDisplayed()
   }
 
-  @Ignore
+  @Ignore("temporarily ignored due to flakiness")
   @Test
   fun testTrendingThenClickOpenDialog() {
     composeTestRule.mainClock.autoAdvance = false
@@ -157,7 +157,7 @@ class GifScreenTest {
       .assertIsDisplayed()
   }
 
-  @Ignore
+  @Ignore("temporarily ignored due to flakiness")
   @Test
   fun testTrendingThenClickOpenDialogAndCopyLink() {
     composeTestRule.mainClock.autoAdvance = false
