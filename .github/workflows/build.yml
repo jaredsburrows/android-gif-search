@@ -84,7 +84,7 @@ jobs:
         with:
           files: |
             '**/build/test-results/**/TEST-*.xml'
-            '**/build/outputs/androidTest-results/connected/TEST-*.xml'
+            '**/build/outputs/androidTest-results/**/TEST-*.xml'
 
       - name: Build Release APKs and Run lint checks
         uses: gradle/gradle-build-action@v2.4.0
