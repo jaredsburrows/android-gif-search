@@ -9,19 +9,16 @@ on:
 
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
+  JAVA_VERSION: 19
+  ANDROID_API_LEVEL: 33
 
 jobs:
-  android:
-    name: Android API ${{ matrix.api-level }} / JDK ${{ matrix.java-version }}
+  build:
+    name: Build
     runs-on: macos-latest
 
     strategy:
       fail-fast: false
-      matrix:
-        api-level:
-          - 33
-        java-version:
-          - 19
 
     steps:
       - name: Checkout Project
@@ -30,22 +27,29 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1.0.6
 
-      - name: Setup Java ${{ matrix.java-version }}
-        uses: actions/setup-java@v3.10.0
+      - name: Configure JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v3.11.0
         with:
           distribution: temurin
-          java-version: ${{ matrix.java-version }}
+          java-version: ${{ env.JAVA_VERSION }}
           cache: gradle
 
-      - name: Build Debug APKs and Run lint checks
+      - name: Setup Gradle
         uses: gradle/gradle-build-action@v2.4.0
-        with:
-          arguments: assembleDebug ktlintCheck lintDebug -Pci -s
+
+      - name: Build Debug APKs and Run lint checks
+        run: ./gradlew assembleDebug assembleDebugAndroidTest ktlintCheck lintDebug -Pci -s
 
       - name: Run Debug Unit Tests
-        uses: gradle/gradle-build-action@v2.4.0
+        run: ./gradlew testDebug -Pci -s
+
+      - name: Publish Unit Test Report
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.6.1
+        if: always()
         with:
-          arguments: testDebug -Pci -s
+          check_name: "Unit Test Results"
+          files: |
+            app/build/test-results/**/TEST-*.xml
 
       - name: Cache AVD
         uses: actions/cache@v3
@@ -54,13 +58,13 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ env.ANDROID_API_LEVEL }}
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2.28.0
         with:
-          api-level: ${{ matrix.api-level }}
+          api-level: ${{ env.ANDROID_API_LEVEL }}
           arch: x86_64
           target: google_apis
           force-avd-creation: false
@@ -71,18 +75,24 @@ jobs:
       - name: Run Debug Instrumentation Tests on Android API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2.28.0
         with:
-          api-level: ${{ matrix.api-level }}
+          api-level: ${{ env.ANDROID_API_LEVEL }}
           arch: x86_64
           target: google_apis
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
           disable-animations: true
-          script: ./gradlew connectedDebugAndroidTest -Pci -s || ./gradlew connectedDebugAndroidTest -Pci -s
+          script: ./gradlew connectedDebugAndroidTest -Pci -s
+
+      - name: Publish Integration Test Report
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.6.1
+        if: always()
+        with:
+          check_name: "Integration Test Results"
+          files: |
+            app/build/outputs/androidTest-results/**/TEST-*.xml
 
       - name: Build Release APKs and Run lint checks
-        uses: gradle/gradle-build-action@v2.4.0
-        with:
-          arguments: assembleRelease lintRelease -Prelease -Pci -s
+        run: ./gradlew assembleRelease lintRelease -Prelease -Pci -s
 
       - name: Upload Reports
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
@@ -92,12 +102,13 @@ jobs:
           path: |
             app/build/reports
             app/build/test-results
+            app/build/outputs/androidTest-results
           
       - name: Upload Debug .apk artifact
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: com.burrowsapps.gif.search.debug-debug-${{ github.workflow }}-${{ github.run_id }}.apk
+          name: com.burrowsapps.gif.search-debug-${{ github.workflow }}-${{ github.run_id }}.apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload Release .apk artifact
