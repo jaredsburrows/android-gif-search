@@ -49,7 +49,7 @@ jobs:
         with:
           check_name: "Unit Test Results"
           files: |
-            '**/build/test-results/**/TEST-*.xml'
+            app/build/test-results/**/TEST-*.xml
 
       - name: Cache AVD
         uses: actions/cache@v3
@@ -89,7 +89,7 @@ jobs:
         with:
           check_name: "Integration Test Results"
           files: |
-            '**/build/outputs/androidTest-results/**/TEST-*.xml'
+            app/build/outputs/androidTest-results/**/TEST-*.xml
 
       - name: Build Release APKs and Run lint checks
         run: ./gradlew assembleRelease lintRelease -Prelease -Pci -s
@@ -102,6 +102,7 @@ jobs:
           path: |
             app/build/reports
             app/build/test-results
+            app/build/outputs/androidTest-results
           
       - name: Upload Debug .apk artifact
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
