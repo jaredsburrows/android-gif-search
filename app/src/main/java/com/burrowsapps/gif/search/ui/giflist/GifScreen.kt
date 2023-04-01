@@ -36,6 +36,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltipBox
+import androidx.compose.material3.PlainTooltipState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -178,6 +180,9 @@ private fun TheToolBar(
   openSearch: MutableState<Boolean>,
   showMenu: MutableState<Boolean>,
 ) {
+  val searchTooltipState = remember { PlainTooltipState() }
+  val moreTooltipState = remember { PlainTooltipState() }
+
   TopAppBar(
     title = {
       Text(
@@ -186,22 +191,35 @@ private fun TheToolBar(
     },
     // Search for Gifs
     actions = {
-      IconButton(
-        onClick = { openSearch.value = false },
+      // Search for Gifs
+      PlainTooltipBox(
+        tooltip = { Text("Search gifs") },
+        tooltipState = searchTooltipState,
       ) {
-        Icon(
-          imageVector = Icons.Filled.Search,
-          contentDescription = stringResource(R.string.menu_search),
-        )
+        IconButton(
+          onClick = { openSearch.value = false },
+          modifier = Modifier.tooltipAnchor(),
+        ) {
+          Icon(
+            imageVector = Icons.Filled.Search,
+            contentDescription = stringResource(R.string.menu_search),
+          )
+        }
       }
       // Overflow menu item
-      IconButton(
-        onClick = { showMenu.value = !showMenu.value },
+      PlainTooltipBox(
+        tooltip = { Text("Show menu") },
+        tooltipState = moreTooltipState,
       ) {
-        Icon(
-          imageVector = Icons.Filled.MoreVert,
-          contentDescription = stringResource(R.string.menu_more),
-        )
+        IconButton(
+          onClick = { showMenu.value = !showMenu.value },
+          modifier = Modifier.tooltipAnchor(),
+        ) {
+          Icon(
+            imageVector = Icons.Filled.MoreVert,
+            contentDescription = stringResource(R.string.menu_more),
+          )
+        }
       }
       // Overflow menu
       DropdownMenu(
