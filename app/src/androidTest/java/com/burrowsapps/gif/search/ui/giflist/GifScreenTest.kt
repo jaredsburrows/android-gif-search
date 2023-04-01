@@ -31,7 +31,6 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -134,7 +133,6 @@ class GifScreenTest {
       .assertIsDisplayed()
   }
 
-  @Ignore
   @Test
   fun testTrendingThenClickOpenDialog() {
     composeTestRule.mainClock.autoAdvance = false
@@ -157,7 +155,6 @@ class GifScreenTest {
       .assertIsDisplayed()
   }
 
-  @Ignore
   @Test
   fun testTrendingThenClickOpenDialogAndCopyLink() {
     composeTestRule.mainClock.autoAdvance = false
