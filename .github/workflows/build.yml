@@ -43,6 +43,14 @@ jobs:
       - name: Run Debug Unit Tests
         run: ./gradlew testDebug -Pci -s
 
+      - name: Publish Unit Test Report
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.6.1
+        if: always()
+        with:
+          check_name: "Unit Test Results"
+          files: |
+            app/build/test-results/**/TEST-*.xml
+
       - name: Cache AVD
         uses: actions/cache@v3
         id: avd-cache
@@ -75,6 +83,14 @@ jobs:
           disable-animations: true
           script: ./gradlew connectedDebugAndroidTest -Pci -s
 
+      - name: Publish Integration Test Report
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.6.1
+        if: always()
+        with:
+          check_name: "Integration Test Results"
+          files: |
+            app/build/outputs/androidTest-results/**/TEST-*.xml
+
       - name: Build Release APKs and Run lint checks
         run: ./gradlew assembleRelease lintRelease -Prelease -Pci -s
 
@@ -86,6 +102,7 @@ jobs:
           path: |
             app/build/reports
             app/build/test-results
+            app/build/outputs/androidTest-results
           
       - name: Upload Debug .apk artifact
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
