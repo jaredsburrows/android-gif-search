@@ -1,7 +1,3 @@
-@file:OptIn(
-  ExperimentalMaterial3Api::class,
-)
-
 package com.burrowsapps.gif.search
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
@@ -10,35 +6,35 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices.PIXEL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.burrowsapps.gif.search.data.ImageService
 import com.burrowsapps.gif.search.ui.giflist.GifScreen
 import com.burrowsapps.gif.search.ui.license.LicenseScreen
 import com.burrowsapps.gif.search.ui.theme.GifTheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
-/** Single `Activity` that is the entry point of the app. */
+/**
+ * The main activity for this app.
+ *
+ * This class is annotated with @AndroidEntryPoint, which enables the Hilt dependency injection
+ * framework for this activity. It extends the ComponentActivity class and overrides its onCreate()
+ * method to set the content view using Compose.
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-  @Inject
-  internal lateinit var imageService: ImageService
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
     setContent {
       GifTheme {
-        MainScreen(imageService)
+        MainScreen()
       }
     }
   }
@@ -67,26 +63,33 @@ private fun DefaultPreview() {
   }
 }
 
+/**
+ * The main screen for this app.
+ *
+ * This composable function represents the main screen of the app. It uses the Jetpack Compose UI
+ * toolkit to create a navigation graph with two destinations: GifScreen and LicenseScreen. The
+ * function also sets up a scaffold with a top app bar and a bottom navigation bar, and uses the
+ * rememberNavController function to manage the navigation between the two destinations.
+ */
 @Composable
-fun MainScreen(imageService: ImageService = ImageService(LocalContext.current)) {
+fun MainScreen() {
   val navController = rememberNavController()
 
   Scaffold { innerPadding ->
     NavHost(
       modifier = Modifier.padding(innerPadding),
       navController = navController,
-      startDestination = Screen.HomeScreen.route,
+      startDestination = Screen.Gif.route,
     ) {
       composable(
-        route = Screen.HomeScreen.route,
+        route = Screen.Gif.route,
       ) {
         GifScreen(
           navController = navController,
-          imageService = imageService,
         )
       }
       composable(
-        route = Screen.LicenseScreen.route,
+        route = Screen.License.route,
       ) {
         LicenseScreen(navController)
       }
@@ -94,7 +97,13 @@ fun MainScreen(imageService: ImageService = ImageService(LocalContext.current)) 
   }
 }
 
+/**
+ * A sealed class that represents the different screens in the app.
+ *
+ * This sealed class has two subclasses: Gif and License. Each subclass represents a screen in the
+ * app, and has a route property that corresponds to the screen's route in the navigation graph.
+ */
 sealed class Screen(val route: String) {
-  object HomeScreen : Screen("home")
-  object LicenseScreen : Screen("license")
+  object Gif : Screen("gif")
+  object License : Screen("license")
 }
