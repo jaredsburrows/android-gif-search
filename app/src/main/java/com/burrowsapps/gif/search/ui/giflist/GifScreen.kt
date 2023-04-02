@@ -5,6 +5,7 @@
 
 package com.burrowsapps.gif.search.ui.giflist
 
+import android.content.Context
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.activity.compose.BackHandler
@@ -75,9 +76,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.palette.graphics.Palette
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.ObjectKey
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.Screen
-import com.burrowsapps.gif.search.data.ImageService
 import com.burrowsapps.gif.search.ui.theme.GifTheme
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -110,17 +116,15 @@ import kotlin.math.roundToInt
 @Composable
 private fun DefaultPreview(
   navController: NavHostController = rememberNavController(),
-  imageService: ImageService = ImageService(LocalContext.current),
 ) {
   GifTheme {
-    GifScreen(navController, imageService)
+    GifScreen(navController)
   }
 }
 
 @Composable
 internal fun GifScreen(
   navController: NavHostController,
-  imageService: ImageService,
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
   val gifViewModel = hiltViewModel<GifViewModel>()
@@ -140,7 +144,6 @@ internal fun GifScreen(
 
     TheContent(
       innerPadding = paddingValues,
-      imageService = imageService,
       gifViewModel = gifViewModel,
       listItems = listItems,
       isRefreshing = isRefreshing,
@@ -228,7 +231,7 @@ private fun TheToolBar(
       ) {
         DropdownMenuItem(
           onClick = {
-            navController.navigate(Screen.LicenseScreen.route)
+            navController.navigate(Screen.License.route)
             showMenu.value = false
           },
           text = { Text(text = stringResource(R.string.license_screen_title)) },
@@ -277,14 +280,12 @@ private fun TheSearchBar(
 @Composable
 private fun TheContent(
   innerPadding: PaddingValues,
-  imageService: ImageService,
   gifViewModel: GifViewModel,
   listItems: State<List<GifImageInfo>>,
   isRefreshing: State<Boolean>,
 ) {
   Column(
-    modifier = Modifier
-      .padding(innerPadding),
+    modifier = Modifier.padding(innerPadding),
   ) {
     val gridState = rememberLazyGridState()
     val openDialog = remember { mutableStateOf(false) }
@@ -292,7 +293,6 @@ private fun TheContent(
 
     if (openDialog.value) {
       TheDialogPreview(
-        imageService = imageService,
         currentSelectedItem = currentSelectedItem,
         openDialog = openDialog,
       )
@@ -309,8 +309,7 @@ private fun TheContent(
       LazyVerticalGrid(
         state = gridState,
         columns = GridCells.Fixed(3),
-        modifier = Modifier
-          .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
       ) {
         // TODO update default state
         if (listItems.value.isEmpty()) {
@@ -336,7 +335,8 @@ private fun TheContent(
               )
               .semantics { contentDescription = context.getString(R.string.gif_image) },
           ) {
-            val requestBuilder = imageService.loadGif(
+            val requestBuilder = loadGif(
+              context = context,
               imageUrl = item.tinyGifUrl,
               thumbnailUrl = item.tinyGifPreviewUrl,
               override = 135.dp.value.roundToInt(),
@@ -378,7 +378,6 @@ private fun TheContent(
 
 @Composable
 private fun TheDialogPreview(
-  imageService: ImageService,
   currentSelectedItem: MutableState<GifImageInfo>,
   openDialog: MutableState<Boolean>,
 ) {
@@ -398,7 +397,8 @@ private fun TheDialogPreview(
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       val palette = remember { mutableStateOf<Palette?>(null) }
-      val requestBuilder = imageService.loadGif(
+      val requestBuilder = loadGif(
+        context = context,
         imageUrl = currentSelectedItem.value.gifUrl,
         thumbnailUrl = currentSelectedItem.value.gifPreviewUrl,
       )
@@ -458,10 +458,21 @@ private fun InfiniteGridHandler(
   }
 
   LaunchedEffect(loadMore) {
-    snapshotFlow { loadMore.value }
-      .distinctUntilChanged()
-      .collect {
-        onLoadMore()
-      }
+    snapshotFlow { loadMore.value }.distinctUntilChanged().collect {
+      onLoadMore()
+    }
   }
+}
+
+private fun loadGif(
+  context: Context,
+  imageUrl: String,
+  thumbnailUrl: String,
+  override: Int = Target.SIZE_ORIGINAL,
+): RequestBuilder<GifDrawable> {
+  val request = Glide.with(context).asGif()
+  return request.transition(DrawableTransitionOptions.withCrossFade()).thumbnail(
+    request.transition(DrawableTransitionOptions.withCrossFade()).load(thumbnailUrl)
+      .override(override).signature(ObjectKey(thumbnailUrl)),
+  ).override(override).signature(ObjectKey(imageUrl))
 }
