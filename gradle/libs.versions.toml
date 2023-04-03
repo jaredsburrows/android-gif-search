@@ -5,8 +5,9 @@ dagger = "2.45"
 # libraries
 accompanist = "0.30.0"
 activity = "1.7.0"
+# See https://androidx.dev/storage/compose-compiler/repository
 compose = "1.4.0"
-compose-compiler = "1.4.4"
+compose-compiler = "1.4.4-dev-k1.8.20-RC2-c004ecb8ba1"
 core = "1.9.0"
 glide = "4.15.1"
 kotlinx = "1.6.4"
@@ -19,7 +20,7 @@ retrofit = "2.9.0"
 robolectric = "4.9.2"
 # language
 java = "11"
-kotlin = "1.8.10"
+kotlin = "1.8.20"
 # build
 sdk-compile = "33"
 sdk-min = "26"
@@ -39,12 +40,12 @@ dexcount = { id = "com.getkeepsafe.dexcount", version = "4.0.0" }
 publish = { id = "com.github.triplet.play", version = "3.8.1" }
 
 [libraries]
-android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "1.2.2" } # 2.0.0
+android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "2.0.3" }
 androidx-activityktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.6.0" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.6.1" }
-androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2022.11.00" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2023.03.00" }
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 androidx-compose-material = { module = "androidx.compose.material:material", version = "1.4.0" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.1.0-beta01" }
