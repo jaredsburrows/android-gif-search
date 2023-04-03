@@ -1,8 +1,15 @@
 pluginManagement {
   repositories {
-    google()
-    gradlePluginPortal()
     mavenCentral()
+    google()
+    maven("https://androidx.dev/storage/compose-compiler/repository/") {
+      name = "compose-compiler"
+      content {
+        // this repository *only* contains compose-compiler artifacts
+        includeGroup("androidx.compose.compiler")
+      }
+    }
+    gradlePluginPortal()
   }
 }
 
@@ -10,9 +17,16 @@ dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
   repositories {
-    google()
-    gradlePluginPortal()
     mavenCentral()
+    google()
+    maven("https://androidx.dev/storage/compose-compiler/repository/") {
+      name = "compose-compiler"
+      content {
+        // this repository *only* contains compose-compiler artifacts
+        includeGroup("androidx.compose.compiler")
+      }
+    }
+    gradlePluginPortal()
   }
 }
 

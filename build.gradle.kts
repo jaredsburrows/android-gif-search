@@ -50,8 +50,13 @@ allprojects {
     resolutionStrategy {
       componentSelection {
         all {
-          if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
-            reject("Release candidate")
+          when (candidate.group) {
+            "androidx.compose.compiler", "com.android.application", "org.jetbrains.kotlin" -> {}
+            else -> {
+              if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
+                reject("Release candidate")
+              }
+            }
           }
         }
       }
@@ -73,8 +78,8 @@ allprojects {
         "-Xproper-ieee754-comparisons",
         // https://blog.jetbrains.com/kotlin/2020/07/kotlin-1-4-m3-generating-default-methods-in-interfaces/
         "-Xjvm-default=all",
-//        "-P",
-//        "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=${libs.versions.kotlin.get()}",
+        "-P",
+        "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=${libs.versions.kotlin.get()}",
       )
     }
   }

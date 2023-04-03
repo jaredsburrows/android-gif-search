@@ -46,6 +46,7 @@ android {
   }
 
   compileOptions {
+    isCoreLibraryDesugaringEnabled = true
     sourceCompatibility = VERSION_11
     targetCompatibility = VERSION_11
   }
@@ -169,6 +170,9 @@ kapt {
 }
 
 dependencies {
+  // JDK 11 libs
+  coreLibraryDesugaring(libs.android.desugar)
+
   // Kotlin
   implementation(platform(libs.kotlin.bom))
 
