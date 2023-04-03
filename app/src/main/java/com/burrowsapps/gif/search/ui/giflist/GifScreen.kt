@@ -329,11 +329,9 @@ private fun TheContent(
           key = { item -> item.tinyGifUrl },
         ) { item ->
           BoxWithConstraints(
-            modifier = Modifier
-              .animateItemPlacement(
-                animationSpec = tween(durationMillis = 350),
-              )
-              .semantics { contentDescription = context.getString(R.string.gif_image) },
+            modifier = Modifier.animateItemPlacement(
+              animationSpec = tween(durationMillis = 350),
+            ),
           ) {
             val requestBuilder = loadGif(
               context = context,
@@ -352,7 +350,8 @@ private fun TheContent(
                   .clickable {
                     currentSelectedItem.value = item
                     openDialog.value = true
-                  },
+                  }
+                  .semantics { contentDescription = context.getString(R.string.gif_image) },
                 imageOptions = ImageOptions(contentScale = ContentScale.Crop),
                 loading = {
                   Box(modifier = Modifier.matchParentSize()) {
