@@ -20,10 +20,6 @@ object TestFileUtils {
     addHeader(header = "Content-type: image/gif")
   }
 
-  fun getMockWebpResponse(fileName: String) = getMockFileResponse(fileName).apply {
-    addHeader(header = "Content-type: image/webp")
-  }
-
   private fun getMockFileResponse(fileName: String) = MockResponse().apply {
     status = HTTP_200_STATUS
     setResponseCode(code = HTTP_OK)

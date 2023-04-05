@@ -18,7 +18,6 @@ import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.test.TestFileUtils.MOCK_SERVER_PORT
 import com.burrowsapps.gif.search.test.TestFileUtils.getMockGifResponse
 import com.burrowsapps.gif.search.test.TestFileUtils.getMockResponse
-import com.burrowsapps.gif.search.test.TestFileUtils.getMockWebpResponse
 import com.burrowsapps.gif.search.test.onBackPressed
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -54,6 +53,16 @@ class GifScreenTest {
   internal lateinit var context: Context
 
   private val server = MockWebServer()
+  private val gifScreenTitle by lazy { context.getString(R.string.gif_screen_title) }
+  private val licenseScreenTitle by lazy { context.getString(R.string.license_screen_title) }
+  private val searchGifs by lazy { context.getString(R.string.search_gifs) }
+  private val menuMore by lazy { context.getString(R.string.menu_more) }
+  private val menuSearch by lazy { context.getString(R.string.menu_search) }
+  private val menuClose by lazy { context.getString(R.string.menu_close) }
+  private val menuBack by lazy { context.getString(R.string.menu_back) }
+  private val copyUrl by lazy { context.getString(R.string.copy_url) }
+  private val gifImage by lazy { context.getString(R.string.gif_image) }
+  private val gifImageDialog by lazy { context.getString(R.string.gif_image_dialog) }
 
   @Before
   fun setUp() {
@@ -66,8 +75,7 @@ class GifScreenTest {
             return when {
               contains(other = "v1/trending") -> getMockResponse(fileName = "/trending_results.json")
               contains(other = "v1/search") -> getMockResponse(fileName = "/search_results.json")
-              endsWith(suffix = ".png") -> getMockWebpResponse(fileName = "/ic_launcher.webp")
-              endsWith(suffix = ".gif") -> getMockGifResponse(fileName = "/android.gif")
+              endsWith(suffix = ".png") || endsWith(suffix = ".gif") -> getMockGifResponse(fileName = "/ic_launcher.webp")
               else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
             }
           }
@@ -85,91 +93,57 @@ class GifScreenTest {
 
   @Test
   fun testGifActivityTitleIsShowing() {
-    composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))
-      .assertIsDisplayed()
+    composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
   }
 
   @Test
   fun testLicenseMenuOpensLicenseScreen() {
-    composeTestRule.onNodeWithContentDescription(label = context.getString(R.string.menu_more))
-      .performClick()
-    composeTestRule.waitForIdle()
+    openLicenseScreen()
 
-    composeTestRule.onNodeWithText(text = context.getString(R.string.license_screen_title))
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    composeTestRule.onNodeWithText(text = context.getString(R.string.license_screen_title))
-      .assertIsDisplayed()
-  }
-
-  @Test
-  fun testGoBackViaHardwareBackButton() {
-    composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))
-      .assertIsDisplayed()
-
-    composeTestRule.onBackPressed()
-    composeTestRule.waitForIdle()
-
-    // TODO: assert back
+    composeTestRule.onNodeWithText(text = licenseScreenTitle).assertIsDisplayed()
   }
 
   @Test
   fun testOpensLicenseScreenAndGoBack() {
-    composeTestRule.onNodeWithContentDescription(label = context.getString(R.string.menu_more))
-      .performClick()
-    composeTestRule.waitForIdle()
+    openLicenseScreen()
 
-    composeTestRule.onNodeWithText(text = context.getString(R.string.license_screen_title))
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    composeTestRule.onNodeWithText(text = context.getString(R.string.license_screen_title))
-      .assertIsDisplayed()
+    composeTestRule.onNodeWithText(text = licenseScreenTitle).assertIsDisplayed()
 
     composeTestRule.onBackPressed()
     composeTestRule.waitForIdle()
 
-    composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))
-      .assertIsDisplayed()
+    composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
   }
 
-  @Ignore("temporarily ignored due to flakiness")
+  @Ignore("dialog causes flakiness")
   @Test
   fun testTrendingThenClickOpenDialog() {
     composeTestRule.mainClock.autoAdvance = false
     composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
 
-    composeTestRule.onAllNodesWithContentDescription(label = context.getString(R.string.gif_image))
-      .onFirst()
-      .performClick()
+    composeTestRule.onAllNodesWithContentDescription(label = gifImage).onFirst().performClick()
     composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
 
     composeTestRule.onAllNodes(isDialog()).assertCountEquals(1)
     composeTestRule.onNode(isDialog()).assertIsDisplayed()
     composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
 
-    composeTestRule
-      .onAllNodesWithContentDescription(label = context.getString(R.string.gif_image_dialog))
-      .onFirst()
+    composeTestRule.onAllNodesWithContentDescription(label = gifImageDialog).onFirst()
       .assertIsDisplayed()
-    composeTestRule.onNodeWithText(text = context.getString(R.string.copy_url))
-      .assertIsDisplayed()
+    composeTestRule.onNodeWithText(text = copyUrl).assertIsDisplayed()
   }
 
-  @Ignore("temporarily ignored due to flakiness")
+  @Ignore("dialog causes flakiness")
   @Test
   fun testTrendingThenClickOpenDialogAndCopyLink() {
     composeTestRule.mainClock.autoAdvance = false
     composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
 
-    composeTestRule.onAllNodesWithContentDescription(label = context.getString(R.string.gif_image))
-      .onFirst()
-      .performClick()
+    composeTestRule.onAllNodesWithContentDescription(label = gifImage).onFirst().performClick()
     composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
 
-    composeTestRule.onNodeWithText(text = context.getString(R.string.copy_url))
-      .performClick()
+    composeTestRule.onNodeWithText(text = copyUrl).performClick()
+    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
 
     val clipboardManager = context.getSystemService(ClipboardManager::class.java)
     assertThat(
@@ -178,67 +152,62 @@ class GifScreenTest {
   }
 
   @Test
-  fun testSearchAndGoBackViaHardwareBackButton() {
-    composeTestRule.onNodeWithContentDescription(label = context.getString(R.string.menu_search))
-      .performClick()
-    composeTestRule.waitForIdle()
+  fun testSearchAndCancelViaHardwareBackButton() {
+    enterSearchMode()
 
-    composeTestRule.onNodeWithText(text = context.getString(R.string.search_gifs)).performClick()
-    composeTestRule.waitForIdle()
-
-    composeTestRule.onNodeWithText(text = context.getString(R.string.search_gifs))
-      .performTextInput("hello")
-    composeTestRule.waitForIdle()
+    performSearchInput("hello")
 
     composeTestRule.onBackPressed()
     composeTestRule.waitForIdle()
 
-    composeTestRule.onNodeWithText(text = context.getString(R.string.gif_screen_title))
-      .assertIsDisplayed()
+    composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
   }
 
-  @Ignore("temporarily ignored due to flakiness")
   @Test
-  fun testSearchAndClickClear() {
-    composeTestRule.onNodeWithContentDescription(label = context.getString(R.string.menu_search))
-      .performClick()
-    composeTestRule.waitForIdle()
+  fun testSearchAndCancelByClickingClear() {
+    enterSearchMode()
 
-    composeTestRule.onNodeWithText(text = context.getString(R.string.search_gifs)).performClick()
-    composeTestRule.waitForIdle()
-
-    composeTestRule.onNodeWithText(text = context.getString(R.string.search_gifs))
-      .performTextInput("hello")
-    composeTestRule.waitForIdle()
+    performSearchInput("hello")
 
     composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
-
-    composeTestRule.onNodeWithContentDescription(label = context.getString(R.string.menu_close))
-      .performClick()
+    composeTestRule.onNodeWithContentDescription(label = menuClose).performClick()
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = "hello").assertDoesNotExist()
   }
 
   @Test
-  fun testSearchAndClickBackButtonClear() {
-    composeTestRule.onNodeWithContentDescription(label = context.getString(R.string.menu_search))
-      .performClick()
-    composeTestRule.waitForIdle()
+  fun testSearchAndClickMenuBackButtonClear() {
+    enterSearchMode()
 
-    composeTestRule.onNodeWithText(text = context.getString(R.string.search_gifs)).performClick()
-    composeTestRule.waitForIdle()
-
-    composeTestRule.onNodeWithText(text = context.getString(R.string.search_gifs))
-      .performTextInput("hello")
-    composeTestRule.waitForIdle()
+    performSearchInput("hello")
 
     composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
 
-    composeTestRule.onNodeWithContentDescription(label = context.getString(R.string.menu_back))
-      .performClick()
+    composeTestRule.onNodeWithContentDescription(label = menuBack).performClick()
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = "hello").assertDoesNotExist()
+  }
+
+  private fun openLicenseScreen() {
+    composeTestRule.onNodeWithContentDescription(label = menuMore).performClick()
+    composeTestRule.waitForIdle()
+
+    composeTestRule.onNodeWithText(text = licenseScreenTitle).performClick()
+    composeTestRule.waitForIdle()
+  }
+
+  private fun enterSearchMode() {
+    composeTestRule.onNodeWithContentDescription(label = menuSearch).performClick()
+    composeTestRule.waitForIdle()
+  }
+
+  private fun performSearchInput(searchText: String) {
+    composeTestRule.onNodeWithText(text = searchGifs).performClick()
+    composeTestRule.waitForIdle()
+
+    composeTestRule.onNodeWithText(text = searchGifs).performTextInput(searchText)
+    composeTestRule.waitForIdle()
   }
 }
