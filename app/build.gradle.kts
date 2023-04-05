@@ -156,6 +156,10 @@ licenseReport {
   generateHtmlReport = true
 }
 
+hilt {
+  enableAggregatingTask = true
+}
+
 kapt {
   correctErrorTypes = true
   mapDiagnosticLocations = true
