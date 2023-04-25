@@ -15,7 +15,7 @@ landscapist = "2.1.11"
 leakcanary = "2.10"
 lifecycle = "2.6.1"
 moshi = "1.14.0"
-okhttp = "4.10.0"
+okhttp = "4.11.0"
 retrofit = "2.9.0"
 robolectric = "4.10"
 # language
