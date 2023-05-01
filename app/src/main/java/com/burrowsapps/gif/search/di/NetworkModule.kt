@@ -1,7 +1,6 @@
 package com.burrowsapps.gif.search.di
 
 import android.content.Context
-import com.burrowsapps.gif.search.BuildConfig
 import com.burrowsapps.gif.search.BuildConfig.DEBUG
 import com.burrowsapps.gif.search.data.source.network.TenorService
 import com.squareup.moshi.Moshi
@@ -42,11 +41,12 @@ internal class NetworkModule {
   fun providesRetrofit(
     converterFactory: MoshiConverterFactory,
     client: OkHttpClient,
+    baseUrl: String,
   ): Retrofit {
     return Retrofit.Builder()
       .addConverterFactory(converterFactory)
       .client(client)
-      .baseUrl(BuildConfig.BASE_URL)
+      .baseUrl(baseUrl)
       .build()
   }
 
