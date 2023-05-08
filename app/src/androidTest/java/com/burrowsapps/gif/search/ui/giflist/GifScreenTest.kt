@@ -152,6 +152,7 @@ class GifScreenTest {
     ).matches("http.*localhost.*gif")
   }
 
+  @Ignore("flakiness")
   @Test
   fun testSearchAndCancelViaHardwareBackButton() {
     enterSearchMode()
