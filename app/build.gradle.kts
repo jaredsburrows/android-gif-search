@@ -33,16 +33,6 @@ android {
 
     resourceConfigurations += setOf("en")
     vectorDrawables.useSupportLibrary = true
-
-    buildConfigField(
-      "String",
-      "BASE_URL",
-      if (rootProject.extra["ci"] as Boolean) {
-        "\"http://localhost:8080\"" // Enforce HTTP for local MockWebServer
-      } else {
-        "\"https://g.tenor.com\""
-      },
-    )
   }
 
   compileOptions {
