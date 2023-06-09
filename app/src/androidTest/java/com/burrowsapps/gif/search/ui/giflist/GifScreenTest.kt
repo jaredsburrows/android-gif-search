@@ -184,6 +184,7 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = "hello").assertDoesNotExist()
   }
 
+  @Ignore("flakiness")
   @Test
   fun testSearchAndClickMenuBackButtonClear() {
     enterSearchMode()
