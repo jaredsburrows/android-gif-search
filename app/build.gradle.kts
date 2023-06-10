@@ -204,7 +204,7 @@ dependencies {
   implementation(libs.google.material)
 
   // AndroidX Jetpack Compose
-  implementation(libs.androidx.compose.bom)
+  implementation(platform(libs.androidx.compose.bom))
   debugImplementation(libs.androidx.compose.uitoolingpreview)
   debugImplementation(libs.androidx.compose.uimanifest)
   implementation(libs.androidx.activity.compose)
