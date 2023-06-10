@@ -14,7 +14,7 @@ concurrency:
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
   JAVA_VERSION: 19
-  ANDROID_API_LEVEL: 33
+  ANDROID_API_LEVEL: 34
 
 jobs:
   build:
@@ -111,7 +111,7 @@ jobs:
             app/build/reports
             app/build/test-results
             app/build/outputs/androidTest-results
-          
+
       - name: Upload Debug .apk artifact
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3.1.2
