@@ -4,11 +4,10 @@ android = "8.0.0-rc01"
 dagger = "2.46.1"
 # libraries
 accompanist = "0.30.1"
-activity = "1.7.0"
+activity = "1.7.2"
 # See https://androidx.dev/storage/compose-compiler/repository
-compose = "1.4.0"
-compose-compiler = "1.4.4-dev-k1.8.20-RC2-c004ecb8ba1"
-core = "1.9.0"
+compose = "1.4.3"
+compose-compiler = "1.4.7"
 glide = "4.15.1"
 kotlinx = "1.7.1"
 landscapist = "2.2.1"
@@ -45,19 +44,19 @@ androidx-activityktx = { module = "androidx.activity:activity-ktx", version.ref 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.6.0" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.6.1" }
-androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2023.03.00" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2023.06.00" }
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
-androidx-compose-material = { module = "androidx.compose.material:material", version = "1.4.0" }
-androidx-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.1.0-beta01" }
-androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.5.3" }
+androidx-compose-material = { module = "androidx.compose.material:material", version = "1.4.3" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.1.0" }
+androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.6.0" }
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 androidx-compose-uimanifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 androidx-compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 androidx-compose-uitoolingpreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 androidx-compose-junit = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
-androidx-compose-lifecycle = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.5.0" }
-androidx-corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
+androidx-compose-lifecycle = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.6.1" }
+androidx-corektx = { module = "androidx.core:core-ktx", version = "1.10.1" }
 androidx-hilt-compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.0.0" }
 androidx-lifecycle-viewmodelktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.1.1" }
@@ -67,7 +66,7 @@ androidx-test-junit = { module = "androidx.test.ext:junit", version = "1.1.5" }
 androidx-test-orchestrator = { module = "androidx.test:orchestrator", version = "1.4.2" }
 androidx-test-rules = { module = "androidx.test:rules", version = "1.5.0" }
 androidx-test-runner = { module = "androidx.test:runner", version = "1.5.2" }
-androidx-webkit = { module = "androidx.webkit:webkit", version = "1.6.1" }
+androidx-webkit = { module = "androidx.webkit:webkit", version = "1.7.0" }
 bumptech-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 bumptech-glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 bumptech-glide-okhttp = { module = "com.github.bumptech.glide:okhttp3-integration", version.ref = "glide" }
@@ -79,9 +78,10 @@ google-findbugs-jsr305 = { module = "com.google.code.findbugs:jsr305", version =
 google-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 google-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger" }
 google-hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger" }
-google-material = { module = "com.google.android.material:material", version = "1.8.0" }
+google-material = { module = "com.google.android.material:material", version = "1.9.0" }
 google-truth = { module = "com.google.truth:truth", version = "1.1.4" }
 jakewharton-timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
+#noinspection GradleDependency
 javax-annotation-jsr250 = { module = "javax.annotation:jsr250-api", version = "1.0" }
 junit = { module = "junit:junit", version = "4.13.2" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
