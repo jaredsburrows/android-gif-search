@@ -5,6 +5,7 @@ import java.util.Properties
 plugins {
   alias(libs.plugins.android.application)
   kotlin("android")
+  alias(libs.plugins.ksp)
   alias(libs.plugins.dagger)
   alias(libs.plugins.ktlint)
   alias(libs.plugins.license)
@@ -159,7 +160,6 @@ kapt {
     arg("dagger.formatGeneratedSource", "disabled")
     arg("dagger.fastInit", "enabled")
     arg("dagger.experimentalDaggerErrorMessages", "enabled")
-    arg("moshi.generated", "javax.annotation.Generated")
   }
 }
 
@@ -227,7 +227,7 @@ dependencies {
   implementation(libs.landscapist.palette)
   implementation(libs.bumptech.glide)
   implementation(libs.bumptech.glide.okhttp)
-  kapt(libs.bumptech.glide.compiler)
+  ksp(libs.bumptech.glide.ksp)
 
   // OkIO
   implementation(libs.squareup.okio)
@@ -242,7 +242,7 @@ dependencies {
   // Retrofit
   implementation(libs.squareup.moshi)
   implementation(libs.squareup.moshi.adapters)
-  kapt(libs.squareup.moshi.kotlin)
+  ksp(libs.squareup.moshi.kotlin)
   implementation(libs.squareup.retrofit)
   implementation(libs.squareup.retrofit.moshi)
 
