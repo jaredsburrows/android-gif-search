@@ -56,6 +56,7 @@ jobs:
         if: always()
         with:
           check_name: "Unit Test Results"
+          comment_mode: false
           files: |
             app/build/test-results/**/TEST-*.xml
 
@@ -96,6 +97,7 @@ jobs:
         if: always()
         with:
           check_name: "Integration Test Results"
+          comment_mode: false
           files: |
             app/build/outputs/androidTest-results/**/TEST-*.xml
 
