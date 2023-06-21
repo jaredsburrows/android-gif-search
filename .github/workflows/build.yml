@@ -52,7 +52,7 @@ jobs:
         run: ./gradlew testDebug -Pci -s
 
       - name: Publish Unit Test Report
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2.7.0
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.8.0
         if: always()
         with:
           check_name: "Unit Test Results"
@@ -93,7 +93,7 @@ jobs:
           script: ./gradlew connectedDebugAndroidTest -Pci -s
 
       - name: Publish Integration Test Report
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2.7.0
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.8.0
         if: always()
         with:
           check_name: "Integration Test Results"
