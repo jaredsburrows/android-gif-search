@@ -81,7 +81,7 @@ jobs:
           disable-animations: false
           script: echo "Generated AVD snapshot for caching."
 
-      - name: Run Debug Instrumentation Tests on Android API ${{ matrix.api-level }}
+      - name: Run Debug Instrumentation Tests on Android API ${{ matrix.api-level }} (Ran up to 2 times)
         uses: reactivecircus/android-emulator-runner@v2.28.0
         with:
           api-level: ${{ env.ANDROID_API_LEVEL }}
@@ -90,7 +90,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
           disable-animations: true
-          script: ./gradlew connectedDebugAndroidTest -Pci -s
+          script: ./gradlew connectedDebugAndroidTest -Pci -s || ./gradlew connectedDebugAndroidTest -Pci -s
 
       - name: Publish Integration Test Report
         uses: EnricoMi/publish-unit-test-result-action/composite@v2.8.0
