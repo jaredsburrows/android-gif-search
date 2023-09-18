@@ -1,7 +1,7 @@
 [versions]
 # plugins
 android = "8.0.0-rc01" # "8.1.0-beta05" # "8.2.0-alpha07"
-dagger = "2.46.1"
+dagger = "2.48"
 # libraries
 accompanist = "0.32.0"
 activity = "1.7.2"
