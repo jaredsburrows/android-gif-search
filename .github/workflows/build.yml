@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: Checkout Project
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.1.0
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1.1.0
@@ -43,7 +43,7 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2.7.1
+        uses: gradle/gradle-build-action@v2.9.0
 
       - name: Build Debug APKs and Run lint checks
         run: ./gradlew assembleDebug assembleDebugAndroidTest ktlintCheck lintDebug -Pci -s
@@ -52,7 +52,7 @@ jobs:
         run: ./gradlew testDebug -Pci -s
 
       - name: Publish Unit Test Report
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2.9.0
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.10.0
         if: always()
         with:
           check_name: "Unit Test Results"
@@ -93,7 +93,7 @@ jobs:
           script: ./gradlew connectedDebugAndroidTest -Pci -s || ./gradlew connectedDebugAndroidTest -Pci -s
 
       - name: Publish Integration Test Report
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2.9.0
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.10.0
         if: always()
         with:
           check_name: "Integration Test Results"
@@ -106,7 +106,7 @@ jobs:
 
       - name: Upload Reports
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: com.burrowsapps.gif.search-reports-${{ github.workflow }}-${{ github.run_id }}
           path: |
@@ -116,14 +116,14 @@ jobs:
 
       - name: Upload Debug .apk artifact
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: com.burrowsapps.gif.search-debug-${{ github.workflow }}-${{ github.run_id }}.apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload Release .apk artifact
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: com.burrowsapps.gif.search-release-${{ github.workflow }}-${{ github.run_id }}.apk
           path: app/build/outputs/apk/release/app-release.apk
