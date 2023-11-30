@@ -37,7 +37,7 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.6.1" }
 license = { id = "com.jaredsburrows.license", version = "0.9.3" }
 versions = { id = "com.github.ben-manes.versions", version = "0.49.0" }
 dexcount = { id = "com.getkeepsafe.dexcount", version = "4.0.0" }
-publish = { id = "com.github.triplet.play", version = "3.8.4" }
+publish = { id = "com.github.triplet.play", version = "3.8.6" }
 
 [libraries]
 android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "2.0.3" }
