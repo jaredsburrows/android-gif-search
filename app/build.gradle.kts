@@ -11,7 +11,6 @@ plugins {
   alias(libs.plugins.license)
   alias(libs.plugins.dexcount)
   alias(libs.plugins.publish)
-  kotlin("kapt")
 }
 
 android {
@@ -151,16 +150,10 @@ hilt {
   enableAggregatingTask = true
 }
 
-kapt {
-  correctErrorTypes = true
-  mapDiagnosticLocations = true
-  strictMode = true
-
-  arguments {
-    arg("dagger.formatGeneratedSource", "disabled")
-    arg("dagger.fastInit", "enabled")
-    arg("dagger.experimentalDaggerErrorMessages", "enabled")
-  }
+ksp {
+  arg("dagger.formatGeneratedSource", "disabled")
+  arg("dagger.fastInit", "enabled")
+  arg("dagger.experimentalDaggerErrorMessages", "enabled")
 }
 
 dependencies {
@@ -180,9 +173,9 @@ dependencies {
   // Dagger / Dependency Injection
   implementation(libs.google.hilt.android)
   implementation(libs.androidx.hilt.compose)
-  kapt(libs.google.hilt.compiler)
-  kaptTest(libs.google.hilt.compiler)
-  kaptAndroidTest(libs.google.hilt.compiler)
+  ksp(libs.google.hilt.compiler)
+  kspTest(libs.google.hilt.compiler)
+  kspAndroidTest(libs.google.hilt.compiler)
   compileOnly(libs.glassfish.javax.annotation)
   compileOnly(libs.javax.annotation.jsr250)
   compileOnly(libs.google.findbugs.jsr305)

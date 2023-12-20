@@ -68,6 +68,24 @@ gradlew licenseDebugReport
 gradlew lintDebug
 ```
 
+## Local Debug Run
+
+```shell
+gradlew dependencyUpdates
+```
+
+```shell
+osv-scanner -r . && \
+
+gradlew ktlintCheck && \
+gradlew ktlintFormat && \
+
+gradlew lintDebug && \
+gradlew lintFixDebug  && \
+
+gradlew testDebug
+```
+
 ## License
 
 ```
