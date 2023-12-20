@@ -16,6 +16,7 @@ plugins {
   alias(libs.plugins.android.library) apply false
   kotlin("android") version (libs.versions.kotlin.get()) apply false
   kotlin("jvm") version (libs.versions.kotlin.get()) apply false
+  alias(libs.plugins.ksp) apply false
   alias(libs.plugins.dagger) apply false
   alias(libs.plugins.ktlint) apply false
   alias(libs.plugins.license) apply false
@@ -66,8 +67,8 @@ allprojects {
   tasks.withType(KotlinCompile::class.java).configureEach {
     kotlinOptions {
       jvmTarget = VERSION_11.toString()
-      languageVersion = "1.8"
-      apiVersion = "1.8"
+      languageVersion = "1.9"
+      apiVersion = "1.9"
       freeCompilerArgs = freeCompilerArgs + listOf(
         // https://kotlinlang.org/docs/compiler-reference.html#progressive
         "-progressive",
@@ -125,5 +126,9 @@ allprojects {
         jvmArgs("-Dapple.awt.UIElement=true")
       }
     }
+  }
+
+  tasks.withType(Wrapper::class.java).configureEach {
+    distributionType = Wrapper.DistributionType.ALL
   }
 }

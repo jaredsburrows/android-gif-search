@@ -44,9 +44,16 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2.10.0
+      - run: ./gradlew --version
 
-      - name: Build Debug APKs and Run lint checks
-        run: ./gradlew assembleDebug assembleDebugAndroidTest ktlintCheck lintDebug -Pci -s
+      - name: Run Ktlint Check On All Sources
+        run: ./gradlew ktlintCheck -Pci -s
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug -Pci -s
+
+      - name: Run Debug Lint Checks
+        run: ./gradlew lintDebug -Pci -s
 
       - name: Run Debug Unit Tests
         run: ./gradlew testDebug -Pci -s
@@ -101,8 +108,20 @@ jobs:
           files: |
             app/build/outputs/androidTest-results/**/TEST-*.xml
 
-      - name: Build Release APKs and Run lint checks
-        run: ./gradlew assembleRelease lintRelease -Prelease -Pci -s
+      - name: Build Release APK
+        run: ./gradlew assembleRelease -Pci -Prelease -s
+
+      - name: Run Release Lint Checks
+        run: ./gradlew lintRelease -Pci -Prelease -s
+
+      - name: Run Release Unit Tests
+        run: ./gradlew testRelease -Pci -Prelease -s
+
+      - name: Build Debug APK artifact for upload
+        run: ./gradlew assembleDebug -s
+
+      - name: Build Release APK artifact for upload
+        run: ./gradlew assembleRelease -s
 
       - name: Upload Reports
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
@@ -114,14 +133,14 @@ jobs:
             app/build/test-results
             app/build/outputs/androidTest-results
 
-      - name: Upload Debug .apk artifact
+      - name: Upload Debug APK artifact
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3.1.3
         with:
           name: com.burrowsapps.gif.search-debug-${{ github.workflow }}-${{ github.run_id }}.apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Upload Release .apk artifact
+      - name: Upload Release APK artifact
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3.1.3
         with:

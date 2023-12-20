@@ -213,7 +213,7 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
   }
 
-  private fun performSearchInput(searchText: String) {
+  private fun performSearchInput(@Suppress("SameParameterValue") searchText: String) {
     composeTestRule.onNodeWithText(text = searchGifs).performClick()
     composeTestRule.waitForIdle()
 
