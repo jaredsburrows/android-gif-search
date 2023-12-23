@@ -20,7 +20,7 @@ retrofit = "2.9.0"
 robolectric = "4.11.1"
 # language
 java = "11"
-kotlin = "1.9.21"
+kotlin = "1.9.22"
 # build
 sdk-compile = "34"
 sdk-min = "26"
