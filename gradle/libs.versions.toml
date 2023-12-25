@@ -32,7 +32,7 @@ debug-password = "android"
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
 android-library = { id = "com.android.library", version.ref = "android" }
-ksp = { id = "com.google.devtools.ksp", version = "1.9.21-1.0.16" }
+ksp = { id = "com.google.devtools.ksp", version = "1.9.22-1.0.16" }
 dagger = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.6.1" } # 12.0.3 changes a lot of rules
 license = { id = "com.jaredsburrows.license", version = "0.9.3" }
