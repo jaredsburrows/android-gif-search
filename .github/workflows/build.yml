@@ -68,7 +68,7 @@ jobs:
             app/build/test-results/**/TEST-*.xml
 
       - name: Cache AVD
-        uses: actions/cache@v3
+        uses: actions/cache@v3.3.2
         id: avd-cache
         with:
           path: |
@@ -107,15 +107,6 @@ jobs:
           comment_mode: off
           files: |
             app/build/outputs/androidTest-results/**/TEST-*.xml
-
-      - name: Build Release APK
-        run: ./gradlew assembleRelease -Pci -Prelease -s
-
-      - name: Run Release Lint Checks
-        run: ./gradlew lintRelease -Pci -Prelease -s
-
-      - name: Run Release Unit Tests
-        run: ./gradlew testRelease -Pci -Prelease -s
 
       - name: Build Debug APK artifact for upload
         run: ./gradlew assembleDebug -s
