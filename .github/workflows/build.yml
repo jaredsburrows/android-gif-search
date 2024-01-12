@@ -59,7 +59,7 @@ jobs:
         run: ./gradlew testDebug -Pci -s
 
       - name: Publish Unit Test Report
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2.11.0
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.12.0
         if: always()
         with:
           check_name: "Unit Test Results"
@@ -68,7 +68,7 @@ jobs:
             app/build/test-results/**/TEST-*.xml
 
       - name: Cache AVD
-        uses: actions/cache@v3.3.2
+        uses: actions/cache@v3.3.3
         id: avd-cache
         with:
           path: |
@@ -100,7 +100,7 @@ jobs:
           script: ./gradlew connectedDebugAndroidTest -Pci -s || ./gradlew connectedDebugAndroidTest -Pci -s
 
       - name: Publish Integration Test Report
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2.11.0
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.12.0
         if: always()
         with:
           check_name: "Integration Test Results"
