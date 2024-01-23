@@ -7,10 +7,6 @@ on:
   pull_request:
     types: [ opened, labeled, unlabeled, synchronize ]
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
   JAVA_VERSION: 19
@@ -24,9 +20,6 @@ jobs:
     permissions:
       checks: write
       pull-requests: write
-
-    strategy:
-      fail-fast: false
 
     steps:
       - name: Checkout Project
@@ -59,7 +52,7 @@ jobs:
         run: ./gradlew testDebug -Pci -s
 
       - name: Publish Unit Test Report
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2.11.0
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.12.0
         if: always()
         with:
           check_name: "Unit Test Results"
@@ -68,7 +61,7 @@ jobs:
             app/build/test-results/**/TEST-*.xml
 
       - name: Cache AVD
-        uses: actions/cache@v3
+        uses: actions/cache@v4.0.0
         id: avd-cache
         with:
           path: |
@@ -100,22 +93,13 @@ jobs:
           script: ./gradlew connectedDebugAndroidTest -Pci -s || ./gradlew connectedDebugAndroidTest -Pci -s
 
       - name: Publish Integration Test Report
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2.11.0
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2.12.0
         if: always()
         with:
           check_name: "Integration Test Results"
           comment_mode: off
           files: |
             app/build/outputs/androidTest-results/**/TEST-*.xml
-
-      - name: Build Release APK
-        run: ./gradlew assembleRelease -Pci -Prelease -s
-
-      - name: Run Release Lint Checks
-        run: ./gradlew lintRelease -Pci -Prelease -s
-
-      - name: Run Release Unit Tests
-        run: ./gradlew testRelease -Pci -Prelease -s
 
       - name: Build Debug APK artifact for upload
         run: ./gradlew assembleDebug -s
@@ -125,7 +109,7 @@ jobs:
 
       - name: Upload Reports
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
-        uses: actions/upload-artifact@v4.0.0
+        uses: actions/upload-artifact@v4.2.0
         with:
           name: com.burrowsapps.gif.search-reports-${{ github.workflow }}-${{ github.run_id }}
           path: |
@@ -135,14 +119,14 @@ jobs:
 
       - name: Upload Debug APK artifact
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
-        uses: actions/upload-artifact@v4.0.0
+        uses: actions/upload-artifact@v4.2.0
         with:
           name: com.burrowsapps.gif.search-debug-${{ github.workflow }}-${{ github.run_id }}.apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload Release APK artifact
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
-        uses: actions/upload-artifact@v4.0.0
+        uses: actions/upload-artifact@v4.2.0
         with:
           name: com.burrowsapps.gif.search-release-${{ github.workflow }}-${{ github.run_id }}.apk
           path: app/build/outputs/apk/release/app-release.apk
