@@ -36,7 +36,7 @@ ksp = { id = "com.google.devtools.ksp", version = "1.9.21-1.0.16" }
 dagger = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.6.1" } # 12.0.3 changes a lot of rules
 license = { id = "com.jaredsburrows.license", version = "0.9.3" }
-versions = { id = "com.github.ben-manes.versions", version = "0.50.0" }
+versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 dexcount = { id = "com.getkeepsafe.dexcount", version = "4.0.0" }
 publish = { id = "com.github.triplet.play", version = "3.8.6" }
 
