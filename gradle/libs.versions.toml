@@ -4,7 +4,7 @@
 android = "8.2.0"
 dagger = "2.50"
 # libraries
-accompanist = "0.32.0"
+accompanist = "0.34.0"
 activity = "1.8.2"
 # See https://androidx.dev/storage/compose-compiler/repository
 compose = "1.5.4"
