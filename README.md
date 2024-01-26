@@ -33,8 +33,6 @@ gradlew installDebug
 
 ## Test
 
-Use `-Pci` to run tests against http://localhost:8080 instead of https://g.tenor.com.
-
 **Run [Junit](https://junit.org/junit4/) Unit Tests:**
 
 ```shell

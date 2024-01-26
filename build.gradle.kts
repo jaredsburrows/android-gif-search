@@ -7,7 +7,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Locale
 
 rootProject.apply {
-  extra["ci"] = hasProperty("ci")
   extra["release"] = hasProperty("release")
 }
 
