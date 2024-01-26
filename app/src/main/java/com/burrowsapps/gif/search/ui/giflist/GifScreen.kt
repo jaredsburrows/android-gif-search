@@ -1,6 +1,7 @@
 @file:OptIn(
   ExperimentalMaterial3Api::class,
   ExperimentalFoundationApi::class,
+  ExperimentalMaterialApi::class,
 )
 
 package com.burrowsapps.gif.search.ui.giflist
@@ -26,9 +27,13 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -85,8 +90,6 @@ import com.bumptech.glide.signature.ObjectKey
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.Screen
 import com.burrowsapps.gif.search.ui.theme.GifTheme
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
@@ -297,13 +300,17 @@ private fun TheContent(
         openDialog = openDialog,
       )
     }
-
-    SwipeRefresh(
-      state = rememberSwipeRefreshState(isRefreshing.value),
+    val pullRefreshState = rememberPullRefreshState(
+      refreshing = isRefreshing.value,
       onRefresh = {
-        // TODO handle trending vs search
         gifViewModel.loadTrendingImages()
       },
+    )
+
+    Box(
+      modifier = Modifier
+        .pullRefresh(pullRefreshState),
+      contentAlignment = Alignment.Center,
     ) {
       val context = LocalContext.current
       LazyVerticalGrid(
@@ -365,6 +372,12 @@ private fun TheContent(
           }
         }
       }
+
+      PullRefreshIndicator(
+        isRefreshing.value,
+        pullRefreshState,
+        modifier = Modifier.align(Alignment.TopCenter),
+      )
 
       InfiniteGridHandler(
         gridState = gridState,

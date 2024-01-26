@@ -104,6 +104,6 @@ fun MainScreen() {
  * app, and has a route property that corresponds to the screen's route in the navigation graph.
  */
 sealed class Screen(val route: String) {
-  object Gif : Screen("gif")
-  object License : Screen("license")
+  data object Gif : Screen("gif")
+  data object License : Screen("license")
 }
