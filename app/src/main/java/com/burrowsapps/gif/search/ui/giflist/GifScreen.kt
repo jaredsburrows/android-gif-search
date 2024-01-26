@@ -14,7 +14,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,11 +36,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PlainTooltipBox
-import androidx.compose.material3.PlainTooltipState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TooltipState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -183,8 +183,8 @@ private fun TheToolBar(
   openSearch: MutableState<Boolean>,
   showMenu: MutableState<Boolean>,
 ) {
-  val searchTooltipState = remember { PlainTooltipState() }
-  val moreTooltipState = remember { PlainTooltipState() }
+  val searchTooltipState = remember { TooltipState() }
+  val moreTooltipState = remember { TooltipState() }
 
   TopAppBar(
     title = {
@@ -195,13 +195,13 @@ private fun TheToolBar(
     // Search for Gifs
     actions = {
       // Search for Gifs
-      PlainTooltipBox(
+      TooltipBox(
+        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
         tooltip = { Text("Search gifs") },
-        tooltipState = searchTooltipState,
+        state = searchTooltipState,
       ) {
         IconButton(
           onClick = { openSearch.value = false },
-          modifier = Modifier.tooltipAnchor(),
         ) {
           Icon(
             imageVector = Icons.Filled.Search,
@@ -210,13 +210,13 @@ private fun TheToolBar(
         }
       }
       // Overflow menu item
-      PlainTooltipBox(
+      TooltipBox(
+        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
         tooltip = { Text("Show menu") },
-        tooltipState = moreTooltipState,
+        state = moreTooltipState,
       ) {
         IconButton(
           onClick = { showMenu.value = !showMenu.value },
-          modifier = Modifier.tooltipAnchor(),
         ) {
           Icon(
             imageVector = Icons.Filled.MoreVert,
@@ -328,7 +328,7 @@ private fun TheContent(
           items = listItems.value,
           key = { item -> item.tinyGifUrl },
         ) { item ->
-          BoxWithConstraints(
+          Box(
             modifier = Modifier.animateItemPlacement(
               animationSpec = tween(durationMillis = 350),
             ),

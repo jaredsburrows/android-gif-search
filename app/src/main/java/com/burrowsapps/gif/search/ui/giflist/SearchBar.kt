@@ -1,7 +1,6 @@
 @file:OptIn(
   ExperimentalMaterial3Api::class,
   ExperimentalAnimationApi::class,
-  ExperimentalComposeUiApi::class,
 )
 
 package com.burrowsapps.gif.search.ui.giflist
@@ -14,17 +13,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -32,7 +29,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -63,7 +59,7 @@ internal fun SearchBar(
     navigationIcon = {
       IconButton(onClick = { onNavigateBack() }) {
         Icon(
-          imageVector = Icons.Filled.ArrowBack,
+          imageVector = Icons.AutoMirrored.Filled.ArrowBack,
           contentDescription = stringResource(id = R.string.menu_back),
         )
       }
@@ -82,11 +78,10 @@ internal fun SearchBar(
         placeholder = {
           Text(text = placeholderText)
         },
-        colors = TextFieldDefaults.textFieldColors(
-          focusedIndicatorColor = Color.Transparent,
-          unfocusedIndicatorColor = Color.Transparent,
-          containerColor = Color.Transparent,
-          cursorColor = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
+        colors = OutlinedTextFieldDefaults.colors(
+          focusedBorderColor = Color.Transparent,
+          unfocusedBorderColor = Color.Transparent,
+          focusedContainerColor = Color.Transparent,
         ),
         trailingIcon = {
           AnimatedVisibility(
