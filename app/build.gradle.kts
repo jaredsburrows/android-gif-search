@@ -269,3 +269,24 @@ dependencies {
   androidTestImplementation(libs.junit)
   androidTestImplementation(libs.robolectric.annotations)
 }
+
+
+configure<com.jaredsburrows.license.LicenseReportExtension> {
+  generateHtmlReport = false
+  generateJsonReport = true
+  copyHtmlReportToAssets = false
+  copyJsonReportToAssets = false
+}
+
+tasks.register("generateLicenses") {
+  dependsOn("licenseDebugReport")
+}
+
+tasks.register("createEmptyLicenseReportIssue") {
+  dependsOn("processDebugManifest", "generateLicenses")
+}
+
+tasks.named("generateLicenses").configure {
+  mustRunAfter("processDebugManifest")
+}
+
