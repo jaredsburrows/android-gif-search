@@ -3,8 +3,10 @@ import org.gradle.api.JavaVersion.VERSION_11
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Locale
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 rootProject.apply {
   extra["release"] = hasProperty("release")
@@ -63,12 +65,12 @@ allprojects {
     }
   }
 
-  tasks.withType(KotlinCompile::class.java).configureEach {
-    kotlinOptions {
-      jvmTarget = VERSION_11.toString()
-      languageVersion = "1.9"
-      apiVersion = "1.9"
-      freeCompilerArgs = freeCompilerArgs + listOf(
+  tasks.withType(KotlinJvmCompile::class.java).configureEach {
+    compilerOptions {
+      jvmTarget.set(JvmTarget.JVM_11)
+      languageVersion.set(KotlinVersion.KOTLIN_1_9)
+      apiVersion.set(KotlinVersion.KOTLIN_1_9)
+      freeCompilerArgs.addAll(
         // https://kotlinlang.org/docs/compiler-reference.html#progressive
         "-progressive",
         "-Xjsr305=strict",
