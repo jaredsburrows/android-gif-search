@@ -33,60 +33,64 @@ class GifViewModelTest {
   }
 
   @Test
-  fun testLoadTrendingImagesSuccess() = runTest {
-    whenever(repository.getTrendingResults(eq(next)))
-      .thenReturn(NetworkResult.Success(response))
+  fun testLoadTrendingImagesSuccess() =
+    runTest {
+      whenever(repository.getTrendingResults(eq(next)))
+        .thenReturn(NetworkResult.Success(response))
 
-    sut.loadTrendingImages(next)
-    val nextResult = sut.nextPageResponse.value
-    val gifListResult = sut.gifListResponse.value
+      sut.loadTrendingImages(next)
+      val nextResult = sut.nextPageResponse.value
+      val gifListResult = sut.gifListResponse.value
 
-    verify(repository).getTrendingResults(eq(next))
-    assertThat(nextResult).isEqualTo("0.0")
-    assertThat(gifListResult).isEqualTo(listOf<TenorResponseDto>())
-  }
-
-  @Test
-  fun testLoadTrendingImagesError() = runTest {
-    whenever(repository.getTrendingResults(eq(next)))
-      .thenReturn(NetworkResult.Error(message = "Broken!"))
-
-    sut.loadTrendingImages(next)
-    val nextResult = sut.nextPageResponse.value
-    val gifListResult = sut.gifListResponse.value
-
-    verify(repository).getTrendingResults(eq(next))
-    assertThat(nextResult).isEmpty()
-    assertThat(gifListResult).isEmpty()
-  }
+      verify(repository).getTrendingResults(eq(next))
+      assertThat(nextResult).isEqualTo("0.0")
+      assertThat(gifListResult).isEqualTo(listOf<TenorResponseDto>())
+    }
 
   @Test
-  fun testLoadSearchImagesSuccess() = runTest {
-    val searchString = "gifs"
-    whenever(repository.getSearchResults(eq(searchString), eq(next)))
-      .thenReturn(NetworkResult.Success(response))
+  fun testLoadTrendingImagesError() =
+    runTest {
+      whenever(repository.getTrendingResults(eq(next)))
+        .thenReturn(NetworkResult.Error(message = "Broken!"))
 
-    sut.loadSearchImages(searchString, next)
-    val nextResult = sut.nextPageResponse.value
-    val gifListResult = sut.gifListResponse.value
+      sut.loadTrendingImages(next)
+      val nextResult = sut.nextPageResponse.value
+      val gifListResult = sut.gifListResponse.value
 
-    verify(repository).getSearchResults(eq(searchString), eq(next))
-    assertThat(nextResult).isEqualTo("0.0")
-    assertThat(gifListResult).isEqualTo(listOf<TenorResponseDto>())
-  }
+      verify(repository).getTrendingResults(eq(next))
+      assertThat(nextResult).isEmpty()
+      assertThat(gifListResult).isEmpty()
+    }
 
   @Test
-  fun testLoadSearchImagesError() = runTest {
-    val searchString = "gifs"
-    whenever(repository.getSearchResults(eq(searchString), eq(next)))
-      .thenReturn(NetworkResult.Error(message = "Broken!"))
+  fun testLoadSearchImagesSuccess() =
+    runTest {
+      val searchString = "gifs"
+      whenever(repository.getSearchResults(eq(searchString), eq(next)))
+        .thenReturn(NetworkResult.Success(response))
 
-    sut.loadSearchImages(searchString, next)
-    val nextResult = sut.nextPageResponse.value
-    val gifListResult = sut.gifListResponse.value
+      sut.loadSearchImages(searchString, next)
+      val nextResult = sut.nextPageResponse.value
+      val gifListResult = sut.gifListResponse.value
 
-    verify(repository).getSearchResults(eq(searchString), eq(next))
-    assertThat(nextResult).isEmpty()
-    assertThat(gifListResult).isEmpty()
-  }
+      verify(repository).getSearchResults(eq(searchString), eq(next))
+      assertThat(nextResult).isEqualTo("0.0")
+      assertThat(gifListResult).isEqualTo(listOf<TenorResponseDto>())
+    }
+
+  @Test
+  fun testLoadSearchImagesError() =
+    runTest {
+      val searchString = "gifs"
+      whenever(repository.getSearchResults(eq(searchString), eq(next)))
+        .thenReturn(NetworkResult.Error(message = "Broken!"))
+
+      sut.loadSearchImages(searchString, next)
+      val nextResult = sut.nextPageResponse.value
+      val gifListResult = sut.gifListResponse.value
+
+      verify(repository).getSearchResults(eq(searchString), eq(next))
+      assertThat(nextResult).isEmpty()
+      assertThat(gifListResult).isEmpty()
+    }
 }

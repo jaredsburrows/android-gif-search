@@ -20,8 +20,11 @@ internal sealed class NetworkResult<T>(
   val message: String? = null,
 ) {
   class Loading<T> : NetworkResult<T>()
+
   class Success<T>(data: T) : NetworkResult<T>(data = data)
+
   class Empty<T> : NetworkResult<T>()
+
   class Error<T>(data: T? = null, message: String? = null) : NetworkResult<T>(
     data = data,
     message = message,
@@ -58,7 +61,6 @@ internal sealed class NetworkResult<T>(
       }
     }
 
-    private fun <T> error(errorMessage: String): NetworkResult<T> =
-      Error(data = null, message = "$ERROR_MESSAGE_PREFIX $errorMessage")
+    private fun <T> error(errorMessage: String): NetworkResult<T> = Error(data = null, message = "$ERROR_MESSAGE_PREFIX $errorMessage")
   }
 }

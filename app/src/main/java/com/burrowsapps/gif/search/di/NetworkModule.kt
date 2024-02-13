@@ -26,12 +26,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal class NetworkModule {
-
   @Singleton
   @Provides
-  fun providesTenorService(
-    retrofit: Retrofit,
-  ): TenorService {
+  fun providesTenorService(retrofit: Retrofit): TenorService {
     return retrofit
       .create(TenorService::class.java)
   }
@@ -91,7 +88,9 @@ internal class NetworkModule {
 
   @Singleton
   @Provides
-  fun providesCache(@ApplicationContext context: Context): Cache {
+  fun providesCache(
+    @ApplicationContext context: Context,
+  ): Cache {
     return Cache(
       directory = File(context.cacheDir, CLIENT_CACHE_DIRECTORY),
       maxSize = CLIENT_CACHE_SIZE,

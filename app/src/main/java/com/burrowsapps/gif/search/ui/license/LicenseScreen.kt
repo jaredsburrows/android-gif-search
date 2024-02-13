@@ -121,9 +121,10 @@ private fun TheToolbar(
 @Composable
 private fun TheContent(innerPadding: PaddingValues) {
   Column(
-    modifier = Modifier
-      .padding(innerPadding)
-      .verticalScroll(rememberScrollState()),
+    modifier =
+      Modifier
+        .padding(innerPadding)
+        .verticalScroll(rememberScrollState()),
   ) {
     // TODO Nested WebView prevent anchor clicks
     TheWebView()
@@ -144,27 +145,28 @@ private fun TheWebView() {
     factory = { _ ->
       WebView(context).apply {
         isVerticalScrollBarEnabled = false
-        webViewClient = object : WebViewClient() {
-          override fun shouldInterceptRequest(
-            view: WebView,
-            request: WebResourceRequest,
-          ): WebResourceResponse? {
-            // Override URLs for AssetsPathHandler
-            return assetLoader.shouldInterceptRequest(request.url)
-              ?: super.shouldInterceptRequest(
-                view,
-                request,
-              )
-          }
+        webViewClient =
+          object : WebViewClient() {
+            override fun shouldInterceptRequest(
+              view: WebView,
+              request: WebResourceRequest,
+            ): WebResourceResponse? {
+              // Override URLs for AssetsPathHandler
+              return assetLoader.shouldInterceptRequest(request.url)
+                ?: super.shouldInterceptRequest(
+                  view,
+                  request,
+                )
+            }
 
-          override fun onReceivedHttpError(
-            view: WebView,
-            request: WebResourceRequest,
-            errorResponse: WebResourceResponse,
-          ) {
-            Timber.e("onReceivedHttpError:\t${errorResponse.statusCode}\t${errorResponse.reasonPhrase}")
+            override fun onReceivedHttpError(
+              view: WebView,
+              request: WebResourceRequest,
+              errorResponse: WebResourceResponse,
+            ) {
+              Timber.e("onReceivedHttpError:\t${errorResponse.statusCode}\t${errorResponse.reasonPhrase}")
+            }
           }
-        }
 
         if (runningInPreview) {
           return@apply
