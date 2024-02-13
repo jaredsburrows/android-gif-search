@@ -74,7 +74,6 @@ bumptech-glide-okhttp = { module = "com.github.bumptech.glide:okhttp3-integratio
 glassfish-javax-annotation = { module = "org.glassfish:javax.annotation", version = "10.0-b28" }
 google-accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "accompanist" }
 google-accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
-google-accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
 google-findbugs-jsr305 = { module = "com.google.code.findbugs:jsr305", version = "3.0.2" }
 google-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 google-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger" }

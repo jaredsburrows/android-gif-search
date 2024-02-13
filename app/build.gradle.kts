@@ -211,7 +211,6 @@ dependencies {
   implementation(libs.androidx.compose.uitooling)
   implementation(libs.google.accompanist.drawablepainter)
   implementation(libs.google.accompanist.swiperefresh)
-  implementation(libs.google.accompanist.webview)
   androidTestImplementation(libs.androidx.compose.junit)
 
   // Glide
