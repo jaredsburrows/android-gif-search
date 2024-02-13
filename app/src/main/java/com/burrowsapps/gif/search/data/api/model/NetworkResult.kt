@@ -1,4 +1,4 @@
-package com.burrowsapps.gif.search.data.source.network
+package com.burrowsapps.gif.search.data.api.model
 
 import retrofit2.Response
 import timber.log.Timber

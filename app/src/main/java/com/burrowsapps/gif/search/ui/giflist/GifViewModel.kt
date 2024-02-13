@@ -2,9 +2,9 @@ package com.burrowsapps.gif.search.ui.giflist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.burrowsapps.gif.search.data.source.network.GifRepository
-import com.burrowsapps.gif.search.data.source.network.NetworkResult
-import com.burrowsapps.gif.search.data.source.network.TenorResponseDto
+import com.burrowsapps.gif.search.data.api.model.NetworkResult
+import com.burrowsapps.gif.search.data.api.model.TenorResponseDto
+import com.burrowsapps.gif.search.data.repository.GifRepository
 import com.burrowsapps.gif.search.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

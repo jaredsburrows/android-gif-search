@@ -2,7 +2,7 @@ package com.burrowsapps.gif.search.di
 
 import android.content.Context
 import com.burrowsapps.gif.search.BuildConfig.DEBUG
-import com.burrowsapps.gif.search.data.source.network.TenorService
+import com.burrowsapps.gif.search.data.api.TenorService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import dagger.Module

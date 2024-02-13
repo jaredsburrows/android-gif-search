@@ -3,9 +3,9 @@
 package com.burrowsapps.gif.search.ui.giflist
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.burrowsapps.gif.search.data.source.network.GifRepository
-import com.burrowsapps.gif.search.data.source.network.NetworkResult
-import com.burrowsapps.gif.search.data.source.network.TenorResponseDto
+import com.burrowsapps.gif.search.data.api.model.NetworkResult
+import com.burrowsapps.gif.search.data.api.model.TenorResponseDto
+import com.burrowsapps.gif.search.data.repository.GifRepository
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock

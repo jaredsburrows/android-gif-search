@@ -1,4 +1,4 @@
-package com.burrowsapps.gif.search.data.source.network
+package com.burrowsapps.gif.search.data.api.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

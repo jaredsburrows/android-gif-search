@@ -1,6 +1,8 @@
-package com.burrowsapps.gif.search.data.source.network
+package com.burrowsapps.gif.search.data.repository
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.burrowsapps.gif.search.data.api.TenorService
+import com.burrowsapps.gif.search.data.api.model.TenorResponseDto
 import com.burrowsapps.gif.search.di.TestApiConfigModule
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.eq
@@ -32,12 +34,12 @@ class GifRepositoryTest {
 
   @Test
   fun testLoadTrendingImagesSuccess() = runBlocking {
-    whenever(service.getTrendingResults(eq(next)))
+    whenever(service.fetchTrendingResults(eq(next)))
       .thenReturn(Response.success(response))
 
     val result = sut.getTrendingResults(next).data
 
-    verify(service).getTrendingResults(eq(next))
+    verify(service).fetchTrendingResults(eq(next))
     assertThat(result).isEqualTo(response)
   }
 
@@ -51,24 +53,24 @@ class GifRepositoryTest {
       .build()
     val plainText = "text/plain; charset=utf-8".toMediaType()
     val errorBody = "Broken!".toResponseBody(plainText)
-    whenever(service.getTrendingResults(eq(next)))
+    whenever(service.fetchTrendingResults(eq(next)))
       .thenReturn(Response.error(errorBody, errorResponse))
 
     val result = sut.getTrendingResults(next).data
 
-    verify(service).getTrendingResults(eq(next))
+    verify(service).fetchTrendingResults(eq(next))
     assertThat(result).isNull()
   }
 
   @Test
   fun testLoadSearchImagesSuccess() = runBlocking {
     val searchString = "gifs"
-    whenever(service.getSearchResults(eq(searchString), eq(next)))
+    whenever(service.fetchSearchResults(eq(searchString), eq(next)))
       .thenReturn(Response.success(response))
 
     val result = sut.getSearchResults(searchString, next).data
 
-    verify(service).getSearchResults(eq(searchString), eq(next))
+    verify(service).fetchSearchResults(eq(searchString), eq(next))
     assertThat(result).isEqualTo(response)
   }
 
@@ -83,12 +85,12 @@ class GifRepositoryTest {
       .build()
     val plainText = "text/plain; charset=utf-8".toMediaType()
     val errorBody = "Broken!".toResponseBody(plainText)
-    whenever(service.getSearchResults(eq(searchString), eq(next)))
+    whenever(service.fetchSearchResults(eq(searchString), eq(next)))
       .thenReturn(Response.error(errorBody, errorResponse))
 
     val result = sut.getSearchResults(searchString, next).data
 
-    verify(service).getSearchResults(eq(searchString), eq(next))
+    verify(service).fetchSearchResults(eq(searchString), eq(next))
     assertThat(result).isNull()
   }
 }
