@@ -1,4 +1,4 @@
-package com.burrowsapps.gif.search.data.source.network
+package com.burrowsapps.gif.search.data.api
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.di.ApiConfigModule
@@ -66,7 +66,7 @@ class TenorServiceTest {
 
   @Test
   fun testTrendingResultsURLShouldParseCorrectly() = runBlocking {
-    val response = sut.getTrendingResults(null)
+    val response = sut.fetchTrendingResults(null)
     val body = response.body()!!
 
     assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
@@ -74,7 +74,7 @@ class TenorServiceTest {
 
   @Test
   fun testTrendingResultsURLPreviewShouldParseCorrectly() = runBlocking {
-    val response = sut.getTrendingResults(null)
+    val response = sut.fetchTrendingResults(null)
     val body = response.body()!!
 
     assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")
@@ -82,7 +82,7 @@ class TenorServiceTest {
 
   @Test
   fun testSearchResultsURLShouldParseCorrectly() = runBlocking {
-    val response = sut.getSearchResults("hello", null)
+    val response = sut.fetchSearchResults("hello", null)
     val body = response.body()!!
 
     assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
@@ -90,7 +90,7 @@ class TenorServiceTest {
 
   @Test
   fun testSearchResultsURLPreviewShouldParseCorrectly() = runBlocking {
-    val response = sut.getSearchResults("hello", null)
+    val response = sut.fetchSearchResults("hello", null)
     val body = response.body()!!
 
     assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")

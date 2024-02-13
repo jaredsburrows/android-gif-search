@@ -1,5 +1,6 @@
-package com.burrowsapps.gif.search.data.source.network
+package com.burrowsapps.gif.search.data.api
 
+import com.burrowsapps.gif.search.data.api.model.TenorResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -27,7 +28,7 @@ internal interface TenorService {
    * @return Response of search getResults.
    */
   @GET("/v1/search?key=$API_KEY&media_filter=$MEDIA_FILTER&limit=$DEFAULT_LIMIT_COUNT")
-  suspend fun getSearchResults(
+  suspend fun fetchSearchResults(
     @Query("q")
     query: String,
     @Query("pos")
@@ -49,7 +50,7 @@ internal interface TenorService {
    * @return Response of trending getResults.
    */
   @GET("/v1/trending?key=$API_KEY&media_filter=$MEDIA_FILTER&limit=$DEFAULT_LIMIT_COUNT")
-  suspend fun getTrendingResults(
+  suspend fun fetchTrendingResults(
     @Query("pos")
     position: String?,
   ): Response<TenorResponseDto>
