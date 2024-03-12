@@ -14,7 +14,11 @@ import dagger.hilt.android.testing.HiltTestApplication
  */
 @Suppress("unused") // This is used in app/build.gradle.kts
 class CustomTestRunner : AndroidJUnitRunner() {
-  override fun newApplication(cl: ClassLoader?, name: String?, context: Context?): Application {
+  override fun newApplication(
+    cl: ClassLoader?,
+    name: String?,
+    context: Context?,
+  ): Application {
     return super.newApplication(cl, HiltTestApplication::class.java.name, context)
   }
 }

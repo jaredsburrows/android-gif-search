@@ -33,64 +33,70 @@ class GifRepositoryTest {
   }
 
   @Test
-  fun testLoadTrendingImagesSuccess() = runBlocking {
-    whenever(service.fetchTrendingResults(eq(next)))
-      .thenReturn(Response.success(response))
+  fun testLoadTrendingImagesSuccess() =
+    runBlocking {
+      whenever(service.fetchTrendingResults(eq(next)))
+        .thenReturn(Response.success(response))
 
-    val result = sut.getTrendingResults(next).data
+      val result = sut.getTrendingResults(next).data
 
-    verify(service).fetchTrendingResults(eq(next))
-    assertThat(result).isEqualTo(response)
-  }
-
-  @Test
-  fun testLoadTrendingImagesError() = runBlocking {
-    val errorResponse = okhttp3.Response.Builder()
-      .code(HTTP_INTERNAL_ERROR)
-      .message("Broken!")
-      .protocol(HTTP_1_1)
-      .request(okhttp3.Request.Builder().url(TestApiConfigModule().provideBaseUrl()).build())
-      .build()
-    val plainText = "text/plain; charset=utf-8".toMediaType()
-    val errorBody = "Broken!".toResponseBody(plainText)
-    whenever(service.fetchTrendingResults(eq(next)))
-      .thenReturn(Response.error(errorBody, errorResponse))
-
-    val result = sut.getTrendingResults(next).data
-
-    verify(service).fetchTrendingResults(eq(next))
-    assertThat(result).isNull()
-  }
+      verify(service).fetchTrendingResults(eq(next))
+      assertThat(result).isEqualTo(response)
+    }
 
   @Test
-  fun testLoadSearchImagesSuccess() = runBlocking {
-    val searchString = "gifs"
-    whenever(service.fetchSearchResults(eq(searchString), eq(next)))
-      .thenReturn(Response.success(response))
+  fun testLoadTrendingImagesError() =
+    runBlocking {
+      val errorResponse =
+        okhttp3.Response.Builder()
+          .code(HTTP_INTERNAL_ERROR)
+          .message("Broken!")
+          .protocol(HTTP_1_1)
+          .request(okhttp3.Request.Builder().url(TestApiConfigModule().provideBaseUrl()).build())
+          .build()
+      val plainText = "text/plain; charset=utf-8".toMediaType()
+      val errorBody = "Broken!".toResponseBody(plainText)
+      whenever(service.fetchTrendingResults(eq(next)))
+        .thenReturn(Response.error(errorBody, errorResponse))
 
-    val result = sut.getSearchResults(searchString, next).data
+      val result = sut.getTrendingResults(next).data
 
-    verify(service).fetchSearchResults(eq(searchString), eq(next))
-    assertThat(result).isEqualTo(response)
-  }
+      verify(service).fetchTrendingResults(eq(next))
+      assertThat(result).isNull()
+    }
 
   @Test
-  fun testLoadSearchImagesError() = runBlocking {
-    val searchString = "gifs"
-    val errorResponse = okhttp3.Response.Builder()
-      .code(HTTP_INTERNAL_ERROR)
-      .message("Broken!")
-      .protocol(HTTP_1_1)
-      .request(okhttp3.Request.Builder().url(TestApiConfigModule().provideBaseUrl()).build())
-      .build()
-    val plainText = "text/plain; charset=utf-8".toMediaType()
-    val errorBody = "Broken!".toResponseBody(plainText)
-    whenever(service.fetchSearchResults(eq(searchString), eq(next)))
-      .thenReturn(Response.error(errorBody, errorResponse))
+  fun testLoadSearchImagesSuccess() =
+    runBlocking {
+      val searchString = "gifs"
+      whenever(service.fetchSearchResults(eq(searchString), eq(next)))
+        .thenReturn(Response.success(response))
 
-    val result = sut.getSearchResults(searchString, next).data
+      val result = sut.getSearchResults(searchString, next).data
 
-    verify(service).fetchSearchResults(eq(searchString), eq(next))
-    assertThat(result).isNull()
-  }
+      verify(service).fetchSearchResults(eq(searchString), eq(next))
+      assertThat(result).isEqualTo(response)
+    }
+
+  @Test
+  fun testLoadSearchImagesError() =
+    runBlocking {
+      val searchString = "gifs"
+      val errorResponse =
+        okhttp3.Response.Builder()
+          .code(HTTP_INTERNAL_ERROR)
+          .message("Broken!")
+          .protocol(HTTP_1_1)
+          .request(okhttp3.Request.Builder().url(TestApiConfigModule().provideBaseUrl()).build())
+          .build()
+      val plainText = "text/plain; charset=utf-8".toMediaType()
+      val errorBody = "Broken!".toResponseBody(plainText)
+      whenever(service.fetchSearchResults(eq(searchString), eq(next)))
+        .thenReturn(Response.error(errorBody, errorResponse))
+
+      val result = sut.getSearchResults(searchString, next).data
+
+      verify(service).fetchSearchResults(eq(searchString), eq(next))
+      assertThat(result).isNull()
+    }
 }

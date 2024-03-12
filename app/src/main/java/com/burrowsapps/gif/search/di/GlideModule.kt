@@ -40,7 +40,10 @@ internal class GlideModule : AppGlideModule() {
     fun defaultOkHttpClient(): OkHttpClient
   }
 
-  override fun applyOptions(context: Context, builder: GlideBuilder) {
+  override fun applyOptions(
+    context: Context,
+    builder: GlideBuilder,
+  ) {
     builder.setDefaultRequestOptions(
       RequestOptions()
         .encodeFormat(if (VERSION.SDK_INT >= VERSION_CODES.R) WEBP_LOSSLESS else PNG)
@@ -62,11 +65,16 @@ internal class GlideModule : AppGlideModule() {
       .setIsActiveResourceRetentionAllowed(true)
   }
 
-  override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-    val okHttpClient = fromApplication(
-      context.applicationContext,
-      GlideModuleEntryPoint::class.java,
-    ).defaultOkHttpClient()
+  override fun registerComponents(
+    context: Context,
+    glide: Glide,
+    registry: Registry,
+  ) {
+    val okHttpClient =
+      fromApplication(
+        context.applicationContext,
+        GlideModuleEntryPoint::class.java,
+      ).defaultOkHttpClient()
 
     registry.replace(
       GlideUrl::class.java,
