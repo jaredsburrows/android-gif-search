@@ -6,6 +6,7 @@
   <!-- Manual upgrades -->
   <issue id="GradleDependency" severity="ignore" />
   <issue id="NewerVersionAvailable" severity="ignore" />
+  <issue id="AndroidGradlePluginVersion" severity="ignore" />
 
   <!-- AGP not seeing custom "Application" class -->
   <issue id="Registered" severity="ignore" />
