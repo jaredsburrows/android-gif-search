@@ -2,7 +2,7 @@
 # plugins
 # See https://developer.android.com/build/releases/gradle-plugin
 android = "8.3.0"
-dagger = "2.50"
+dagger = "2.51.1"
 # libraries
 accompanist = "0.34.0"
 activity = "1.8.2"
