@@ -1,13 +1,13 @@
 [versions]
 # plugins
 # See https://developer.android.com/build/releases/gradle-plugin
-android = "8.2.2"
-dagger = "2.50"
+android = "8.3.0"
+dagger = "2.51.1"
 # libraries
 accompanist = "0.34.0"
 activity = "1.8.2"
 # See https://androidx.dev/storage/compose-compiler/repository
-compose = "1.6.2"
+compose = "1.6.3"
 compose-compiler = "1.5.9"
 glide = "4.16.0"
 kotlinx = "1.8.0"
