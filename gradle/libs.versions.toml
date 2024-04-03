@@ -7,7 +7,7 @@ dagger = "2.51.1"
 accompanist = "0.34.0"
 activity = "1.8.2"
 # See https://androidx.dev/storage/compose-compiler/repository
-compose = "1.6.2"
+compose = "1.6.3"
 compose-compiler = "1.5.9"
 glide = "4.16.0"
 kotlinx = "1.8.0"
