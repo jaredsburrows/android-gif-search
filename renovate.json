@@ -1,6 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:base"
+  ],
+  "schedule": ["every weekend"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "schedule": ["every weekend"]
+    }
   ]
 }
