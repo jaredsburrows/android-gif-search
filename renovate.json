@@ -9,5 +9,6 @@
       "matchPackagePatterns": ["*"],
       "schedule": ["every weekend"]
     }
-  ]
+  ],
+  "semanticCommits": "disabled"
 }
