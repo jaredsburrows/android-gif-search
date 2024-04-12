@@ -3,12 +3,5 @@
   "extends": [
     "config:base"
   ],
-  "schedule": ["every weekend"],
-  "packageRules": [
-    {
-      "matchPackagePatterns": ["*"],
-      "schedule": ["every weekend"]
-    }
-  ],
   "semanticCommits": "disabled"
 }
