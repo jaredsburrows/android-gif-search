@@ -1,7 +1,7 @@
 [versions]
 # plugins
 # See https://developer.android.com/build/releases/gradle-plugin
-android = "8.3.0"
+android = "8.3.2"
 dagger = "2.51.1"
 # libraries
 accompanist = "0.34.0"
@@ -20,7 +20,7 @@ retrofit = "2.9.0"
 robolectric = "4.12.1"
 # language
 java = "11"
-kotlin = "1.9.22"
+kotlin = "1.9.23"
 # build
 sdk-compile = "34"
 sdk-min = "26"
@@ -48,8 +48,8 @@ androidx-annotation = { module = "androidx.annotation:annotation", version = "1.
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.6.1" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2024.02.01" }
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
-androidx-compose-material = { module = "androidx.compose.material:material", version = "1.6.2" }
-androidx-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.2.0-rc01" }
+androidx-compose-material = { module = "androidx.compose.material:material", version = "1.6.5" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.2.1" }
 androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.7.7" }
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
@@ -79,7 +79,7 @@ google-hilt-android = { module = "com.google.dagger:hilt-android", version.ref =
 google-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger" }
 google-hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger" }
 google-material = { module = "com.google.android.material:material", version = "1.11.0" }
-google-truth = { module = "com.google.truth:truth", version = "1.4.0" }
+google-truth = { module = "com.google.truth:truth", version = "1.4.2" }
 jakewharton-timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 #noinspection GradleDependency
 javax-annotation-jsr250 = { module = "javax.annotation:jsr250-api", version = "1.0" }

@@ -1,17 +1,17 @@
 package com.burrowsapps.gif.search.data.repository
 
-import com.burrowsapps.gif.search.data.api.TenorService
+import com.burrowsapps.gif.search.data.api.GifService
+import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.data.api.model.NetworkResult
 import com.burrowsapps.gif.search.data.api.model.NetworkResult.Companion.safeApiCall
-import com.burrowsapps.gif.search.data.api.model.TenorResponseDto
 import javax.inject.Inject
 
 internal class GifRepository @Inject internal constructor(
-  private val service: TenorService,
+  private val service: GifService,
 ) {
-  suspend fun getSearchResults(query: String, position: String?): NetworkResult<TenorResponseDto> =
+  suspend fun getSearchResults(query: String, position: String?): NetworkResult<GifResponseDto> =
     safeApiCall { service.fetchSearchResults(query, position) }
 
-  suspend fun getTrendingResults(position: String?): NetworkResult<TenorResponseDto> =
+  suspend fun getTrendingResults(position: String?): NetworkResult<GifResponseDto> =
     safeApiCall { service.fetchTrendingResults(position) }
 }

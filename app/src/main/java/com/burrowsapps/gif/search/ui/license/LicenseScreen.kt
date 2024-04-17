@@ -36,7 +36,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Devices.PIXEL_7_PRO
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
@@ -57,7 +57,7 @@ import timber.log.Timber
 @Preview(
   name = "dark",
   showBackground = true,
-  device = Devices.PIXEL,
+  device = PIXEL_7_PRO,
   locale = "en",
   showSystemUi = true,
   uiMode = UI_MODE_NIGHT_YES,
@@ -65,7 +65,7 @@ import timber.log.Timber
 @Preview(
   name = "light",
   showBackground = true,
-  device = Devices.PIXEL,
+  device = PIXEL_7_PRO,
   locale = "en",
   showSystemUi = true,
   uiMode = UI_MODE_NIGHT_NO,

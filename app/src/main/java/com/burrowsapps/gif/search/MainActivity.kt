@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Devices.PIXEL
+import androidx.compose.ui.tooling.preview.Devices.PIXEL_7_PRO
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 @Preview(
   name = "dark",
   showBackground = true,
-  device = PIXEL,
+  device = PIXEL_7_PRO,
   locale = "en",
   showSystemUi = true,
   uiMode = UI_MODE_NIGHT_YES,
@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
 @Preview(
   name = "light",
   showBackground = true,
-  device = PIXEL,
+  device = PIXEL_7_PRO,
   locale = "en",
   showSystemUi = true,
   uiMode = UI_MODE_NIGHT_NO,

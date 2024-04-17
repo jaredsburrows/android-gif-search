@@ -2,8 +2,8 @@ package com.burrowsapps.gif.search.ui.giflist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.data.api.model.NetworkResult
-import com.burrowsapps.gif.search.data.api.model.TenorResponseDto
 import com.burrowsapps.gif.search.data.repository.GifRepository
 import com.burrowsapps.gif.search.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,8 +30,8 @@ internal class GifViewModel @Inject internal constructor(
   private val _uiState = MutableStateFlow<NetworkResult<List<GifImageInfo>>>(NetworkResult.Empty())
   val uiState: StateFlow<NetworkResult<List<GifImageInfo>>> = _uiState
 
-  private val _nextPageResponse = MutableStateFlow<String?>("")
-  val nextPageResponse: StateFlow<String?> = _nextPageResponse
+  private val _nextPageResponse = MutableStateFlow("")
+  val nextPageResponse: StateFlow<String> = _nextPageResponse
 
   private val _gifListResponse = MutableStateFlow(emptyList<GifImageInfo>())
   val gifListResponse: StateFlow<List<GifImageInfo>> = _gifListResponse
@@ -98,7 +98,7 @@ internal class GifViewModel @Inject internal constructor(
     }
   }
 
-  private fun buildGifList(response: TenorResponseDto?): List<GifImageInfo> {
+  private fun buildGifList(response: GifResponseDto?): List<GifImageInfo> {
     return response?.results?.map { result ->
       val media = result.media.first()
       val gif = media.gif

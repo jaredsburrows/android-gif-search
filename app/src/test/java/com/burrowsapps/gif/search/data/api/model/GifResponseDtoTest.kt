@@ -7,16 +7,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class TenorResponseDtoTest {
+class GifResponseDtoTest {
   private val nextResponse = "1.0"
   private val results = listOf<ResultDto>()
-  private var sutDefault = TenorResponseDto()
+  private var sutDefault = GifResponseDto()
 
-  private lateinit var sut: TenorResponseDto
+  private lateinit var sut: GifResponseDto
 
   @Before
   fun setUp() {
-    sut = TenorResponseDto(results, nextResponse)
+    sut = GifResponseDto(results, nextResponse)
   }
 
   @Test
