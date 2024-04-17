@@ -18,7 +18,6 @@ import dagger.hilt.android.HiltAndroidApp
  */
 @HiltAndroidApp
 open class MainApplication : Application() {
-
   /**
    * Called when the application is first created.
    *

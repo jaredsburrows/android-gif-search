@@ -62,23 +62,25 @@ internal fun SearchBar(
     },
     actions = {
       OutlinedTextField(
-        modifier = Modifier
-          .fillMaxWidth(0.90F)
-          .padding(2.dp)
-          .onFocusChanged { focusState ->
-            showClearButton.value = focusState.isFocused
-          }
-          .focusRequester(focusRequester),
+        modifier =
+          Modifier
+            .fillMaxWidth(0.90F)
+            .padding(2.dp)
+            .onFocusChanged { focusState ->
+              showClearButton.value = focusState.isFocused
+            }
+            .focusRequester(focusRequester),
         value = searchText.value,
         onValueChange = onSearchTextChanged,
         placeholder = {
           Text(text = placeholderText)
         },
-        colors = OutlinedTextFieldDefaults.colors(
-          focusedBorderColor = Color.Transparent,
-          unfocusedBorderColor = Color.Transparent,
-          focusedContainerColor = Color.Transparent,
-        ),
+        colors =
+          OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            focusedContainerColor = Color.Transparent,
+          ),
         trailingIcon = {
           AnimatedVisibility(
             visible = showClearButton.value,
@@ -96,11 +98,12 @@ internal fun SearchBar(
         maxLines = 1,
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(
-          onDone = {
-            keyboardController?.hide()
-          },
-        ),
+        keyboardActions =
+          KeyboardActions(
+            onDone = {
+              keyboardController?.hide()
+            },
+          ),
       )
     },
     scrollBehavior = scrollBehavior,
