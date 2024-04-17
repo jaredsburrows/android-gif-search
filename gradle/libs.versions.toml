@@ -8,7 +8,7 @@ accompanist = "0.34.0"
 activity = "1.8.2"
 # See https://androidx.dev/storage/compose-compiler/repository
 compose = "1.6.5"
-compose-compiler = "1.5.9"
+compose-compiler = "1.5.11"
 glide = "4.16.0"
 kotlinx = "1.8.0"
 landscapist = "2.3.0"
