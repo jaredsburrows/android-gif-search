@@ -42,24 +42,25 @@ class GifServiceTest {
     hiltRule.inject()
 
     server.apply {
-      dispatcher = object : Dispatcher() {
-        override fun dispatch(request: RecordedRequest): MockResponse {
-          request.path.orEmpty().apply {
-            return when {
-              // Matches URL pattern for trending on Tenor with parameters
-              matches(Regex("^/v1/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
+      dispatcher =
+        object : Dispatcher() {
+          override fun dispatch(request: RecordedRequest): MockResponse {
+            request.path.orEmpty().apply {
+              return when {
+                // Matches URL pattern for trending on Tenor with parameters
+                matches(Regex("^/v1/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
 
-              // Matches URL pattern for search on Tenor with parameters
-              matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
+                // Matches URL pattern for search on Tenor with parameters
+                matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
 
-              // Handling image files with specific response
-              matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/ic_launcher.webp")
+                // Handling image files with specific response
+                matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/ic_launcher.webp")
 
-              else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
+                else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
+              }
             }
           }
         }
-      }
 
       start(MOCK_SERVER_PORT)
     }
@@ -71,34 +72,38 @@ class GifServiceTest {
   }
 
   @Test
-  fun testTrendingResultsURLShouldParseCorrectly() = runTest {
-    val response = sut.fetchTrendingResults(null)
-    val body = response.body()!!
+  fun testTrendingResultsURLShouldParseCorrectly() =
+    runTest {
+      val response = sut.fetchTrendingResults(null)
+      val body = response.body()!!
 
-    assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
-  }
-
-  @Test
-  fun testTrendingResultsURLPreviewShouldParseCorrectly() = runTest {
-    val response = sut.fetchTrendingResults(null)
-    val body = response.body()!!
-
-    assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")
-  }
+      assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
+    }
 
   @Test
-  fun testSearchResultsURLShouldParseCorrectly() = runTest {
-    val response = sut.fetchSearchResults("hello", null)
-    val body = response.body()!!
+  fun testTrendingResultsURLPreviewShouldParseCorrectly() =
+    runTest {
+      val response = sut.fetchTrendingResults(null)
+      val body = response.body()!!
 
-    assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
-  }
+      assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")
+    }
 
   @Test
-  fun testSearchResultsURLPreviewShouldParseCorrectly() = runTest {
-    val response = sut.fetchSearchResults("hello", null)
-    val body = response.body()!!
+  fun testSearchResultsURLShouldParseCorrectly() =
+    runTest {
+      val response = sut.fetchSearchResults("hello", null)
+      val body = response.body()!!
 
-    assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")
-  }
+      assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
+    }
+
+  @Test
+  fun testSearchResultsURLPreviewShouldParseCorrectly() =
+    runTest {
+      val response = sut.fetchSearchResults("hello", null)
+      val body = response.body()!!
+
+      assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")
+    }
 }

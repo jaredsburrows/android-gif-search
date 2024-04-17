@@ -72,24 +72,25 @@ class GifScreenTest {
     hiltRule.inject()
 
     server.apply {
-      dispatcher = object : Dispatcher() {
-        override fun dispatch(request: RecordedRequest): MockResponse {
-          request.path.orEmpty().apply {
-            return when {
-              // Matches URL pattern for trending on Tenor with parameters
-              matches(Regex("^/v1/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
+      dispatcher =
+        object : Dispatcher() {
+          override fun dispatch(request: RecordedRequest): MockResponse {
+            request.path.orEmpty().apply {
+              return when {
+                // Matches URL pattern for trending on Tenor with parameters
+                matches(Regex("^/v1/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
 
-              // Matches URL pattern for search on Tenor with parameters
-              matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
+                // Matches URL pattern for search on Tenor with parameters
+                matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
 
-              // Handling image files with specific response
-              matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/ic_launcher.webp")
+                // Handling image files with specific response
+                matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/ic_launcher.webp")
 
-              else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
+                else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
+              }
             }
           }
         }
-      }
 
       start(MOCK_SERVER_PORT)
     }
@@ -219,7 +220,9 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
   }
 
-  private fun performSearchInput(@Suppress("SameParameterValue") searchText: String) {
+  private fun performSearchInput(
+    @Suppress("SameParameterValue") searchText: String,
+  ) {
     composeTestRule.onNodeWithText(text = searchGifs).performClick()
     composeTestRule.waitForIdle()
 

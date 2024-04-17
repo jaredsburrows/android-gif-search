@@ -22,15 +22,16 @@ fun GifTheme(
   dynamicColor: Boolean = false,
   content: @Composable () -> Unit,
 ) {
-  val colorScheme = when {
-    dynamicColor && VERSION.SDK_INT >= VERSION_CODES.S -> {
-      val context = LocalContext.current
-      if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-    }
+  val colorScheme =
+    when {
+      dynamicColor && VERSION.SDK_INT >= VERSION_CODES.S -> {
+        val context = LocalContext.current
+        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+      }
 
-    darkTheme -> darkColorScheme() // default
-    else -> lightColorScheme() // default
-  }
+      darkTheme -> darkColorScheme() // default
+      else -> lightColorScheme() // default
+    }
   val view = LocalView.current
   if (!view.isInEditMode) {
     SideEffect {

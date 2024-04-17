@@ -80,7 +80,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -90,6 +89,7 @@ import com.bumptech.glide.signature.ObjectKey
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.Screen
 import com.burrowsapps.gif.search.ui.theme.GifTheme
+import com.kmpalette.palette.graphics.Palette
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
@@ -117,18 +117,14 @@ import kotlin.math.roundToInt
   uiMode = UI_MODE_NIGHT_NO,
 )
 @Composable
-private fun DefaultPreview(
-  navController: NavHostController = rememberNavController(),
-) {
+private fun DefaultPreview(navController: NavHostController = rememberNavController()) {
   GifTheme {
     GifScreen(navController)
   }
 }
 
 @Composable
-internal fun GifScreen(
-  navController: NavHostController,
-) {
+internal fun GifScreen(navController: NavHostController) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
   val gifViewModel = hiltViewModel<GifViewModel>()
 
@@ -300,16 +296,18 @@ private fun TheContent(
         openDialog = openDialog,
       )
     }
-    val pullRefreshState = rememberPullRefreshState(
-      refreshing = isRefreshing.value,
-      onRefresh = {
-        gifViewModel.loadTrendingImages()
-      },
-    )
+    val pullRefreshState =
+      rememberPullRefreshState(
+        refreshing = isRefreshing.value,
+        onRefresh = {
+          gifViewModel.loadTrendingImages()
+        },
+      )
 
     Box(
-      modifier = Modifier
-        .pullRefresh(pullRefreshState),
+      modifier =
+        Modifier
+          .pullRefresh(pullRefreshState),
       contentAlignment = Alignment.Center,
     ) {
       val context = LocalContext.current
@@ -324,9 +322,10 @@ private fun TheContent(
             Text(
               text = "No Gifs!",
               style = MaterialTheme.typography.bodyLarge,
-              modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+              modifier =
+                Modifier
+                  .fillMaxWidth()
+                  .padding(horizontal = 16.dp),
             )
           }
         }
@@ -336,29 +335,32 @@ private fun TheContent(
           key = { item -> item.tinyGifUrl },
         ) { item ->
           Box(
-            modifier = Modifier.animateItemPlacement(
-              animationSpec = tween(durationMillis = 350),
-            ),
+            modifier =
+              Modifier.animateItemPlacement(
+                animationSpec = tween(durationMillis = 350),
+              ),
           ) {
-            val requestBuilder = loadGif(
-              context = context,
-              imageUrl = item.tinyGifUrl,
-              thumbnailUrl = item.tinyGifPreviewUrl,
-              override = 135.dp.value.roundToInt(),
-            )
+            val requestBuilder =
+              loadGif(
+                context = context,
+                imageUrl = item.tinyGifUrl,
+                thumbnailUrl = item.tinyGifPreviewUrl,
+                override = 135.dp.value.roundToInt(),
+              )
 
             CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
               GlideImage(
                 imageModel = { item.tinyGifUrl },
                 glideRequestType = GIF,
-                modifier = Modifier
-                  .padding(1.dp)
-                  .size(135.dp)
-                  .clickable {
-                    currentSelectedItem.value = item
-                    openDialog.value = true
-                  }
-                  .semantics { contentDescription = context.getString(R.string.gif_image) },
+                modifier =
+                  Modifier
+                    .padding(1.dp)
+                    .size(135.dp)
+                    .clickable {
+                      currentSelectedItem.value = item
+                      openDialog.value = true
+                    }
+                    .semantics { contentDescription = context.getString(R.string.gif_image) },
                 imageOptions = ImageOptions(contentScale = ContentScale.Crop),
                 loading = {
                   Box(modifier = Modifier.matchParentSize()) {
@@ -402,30 +404,34 @@ private fun TheDialogPreview(
     },
   ) {
     Column(
-      modifier = Modifier.semantics {
-        contentDescription = context.getString(R.string.gif_image_dialog)
-      },
+      modifier =
+        Modifier.semantics {
+          contentDescription = context.getString(R.string.gif_image_dialog)
+        },
       verticalArrangement = Arrangement.Center,
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       val palette = remember { mutableStateOf<Palette?>(null) }
-      val requestBuilder = loadGif(
-        context = context,
-        imageUrl = currentSelectedItem.value.gifUrl,
-        thumbnailUrl = currentSelectedItem.value.gifPreviewUrl,
-      )
+      val requestBuilder =
+        loadGif(
+          context = context,
+          imageUrl = currentSelectedItem.value.gifUrl,
+          thumbnailUrl = currentSelectedItem.value.gifPreviewUrl,
+        )
 
       CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
         GlideImage(
           imageModel = { currentSelectedItem.value.gifUrl },
           glideRequestType = GIF,
-          modifier = Modifier
-            .padding(1.dp)
-            .fillMaxWidth()
-            .height(350.dp),
-          component = rememberImageComponent {
-            +PalettePlugin { palette.value = it }
-          },
+          modifier =
+            Modifier
+              .padding(1.dp)
+              .fillMaxWidth()
+              .height(350.dp),
+          component =
+            rememberImageComponent {
+              +PalettePlugin { palette.value = it }
+            },
           imageOptions = ImageOptions(contentScale = ContentScale.Crop),
           loading = {
             Box(modifier = Modifier.matchParentSize()) {
@@ -459,15 +465,16 @@ private fun InfiniteGridHandler(
   buffer: Int = 15,
   onLoadMore: () -> Unit,
 ) {
-  val loadMore = remember {
-    derivedStateOf {
-      val layoutInfo = gridState.layoutInfo
-      val totalItemsNumber = layoutInfo.totalItemsCount
-      val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
+  val loadMore =
+    remember {
+      derivedStateOf {
+        val layoutInfo = gridState.layoutInfo
+        val totalItemsNumber = layoutInfo.totalItemsCount
+        val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
 
-      lastVisibleItemIndex > (totalItemsNumber - buffer)
+        lastVisibleItemIndex > (totalItemsNumber - buffer)
+      }
     }
-  }
 
   LaunchedEffect(loadMore) {
     snapshotFlow { loadMore.value }.distinctUntilChanged().collect {
