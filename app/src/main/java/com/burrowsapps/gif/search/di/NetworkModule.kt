@@ -2,7 +2,7 @@ package com.burrowsapps.gif.search.di
 
 import android.content.Context
 import com.burrowsapps.gif.search.BuildConfig.DEBUG
-import com.burrowsapps.gif.search.data.api.TenorService
+import com.burrowsapps.gif.search.data.api.GifService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import dagger.Module
@@ -29,11 +29,11 @@ internal class NetworkModule {
 
   @Singleton
   @Provides
-  fun providesTenorService(
+  fun providesGifService(
     retrofit: Retrofit,
-  ): TenorService {
+  ): GifService {
     return retrofit
-      .create(TenorService::class.java)
+      .create(GifService::class.java)
   }
 
   @Singleton

@@ -1,6 +1,6 @@
 package com.burrowsapps.gif.search.data.api
 
-import com.burrowsapps.gif.search.data.api.model.TenorResponseDto
+import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -10,7 +10,7 @@ import retrofit2.http.Query
  *
  * Custom Api interfaces for the Tenor Api.
  */
-internal interface TenorService {
+internal interface GifService {
   /**
    * Get search gif results by a search string.
    *
@@ -33,7 +33,7 @@ internal interface TenorService {
     query: String,
     @Query("pos")
     position: String?,
-  ): Response<TenorResponseDto>
+  ): Response<GifResponseDto>
 
   /**
    * Get trending gif results.
@@ -53,7 +53,7 @@ internal interface TenorService {
   suspend fun fetchTrendingResults(
     @Query("pos")
     position: String?,
-  ): Response<TenorResponseDto>
+  ): Response<GifResponseDto>
 
   companion object {
     private const val DEFAULT_LIMIT_COUNT = 15 * 3 // 3 for gridlayout, 15 per page, 50 max
