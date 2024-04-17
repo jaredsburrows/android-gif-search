@@ -10,7 +10,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.android.testing.UninstallModules
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -28,12 +28,12 @@ import javax.inject.Inject
 @UninstallModules(ApiConfigModule::class)
 @Config(application = HiltTestApplication::class)
 @RunWith(AndroidJUnit4::class)
-class TenorServiceTest {
+class GifServiceTest {
   @get:Rule(order = 0)
   internal val hiltRule = HiltAndroidRule(this)
 
   @Inject
-  internal lateinit var sut: TenorService
+  internal lateinit var sut: GifService
 
   private val server = MockWebServer()
 
@@ -46,9 +46,15 @@ class TenorServiceTest {
         override fun dispatch(request: RecordedRequest): MockResponse {
           request.path.orEmpty().apply {
             return when {
-              contains(other = "v1/trending") -> getMockResponse(fileName = "/trending_results.json")
-              contains(other = "v1/search") -> getMockResponse(fileName = "/search_results.json")
-              endsWith(suffix = ".png") || endsWith(suffix = ".gif") -> getMockGifResponse(fileName = "/ic_launcher.webp")
+              // Matches URL pattern for trending on Tenor with parameters
+              matches(Regex("^/v1/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
+
+              // Matches URL pattern for search on Tenor with parameters
+              matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
+
+              // Handling image files with specific response
+              matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/ic_launcher.webp")
+
               else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
             }
           }
@@ -65,7 +71,7 @@ class TenorServiceTest {
   }
 
   @Test
-  fun testTrendingResultsURLShouldParseCorrectly() = runBlocking {
+  fun testTrendingResultsURLShouldParseCorrectly() = runTest {
     val response = sut.fetchTrendingResults(null)
     val body = response.body()!!
 
@@ -73,7 +79,7 @@ class TenorServiceTest {
   }
 
   @Test
-  fun testTrendingResultsURLPreviewShouldParseCorrectly() = runBlocking {
+  fun testTrendingResultsURLPreviewShouldParseCorrectly() = runTest {
     val response = sut.fetchTrendingResults(null)
     val body = response.body()!!
 
@@ -81,7 +87,7 @@ class TenorServiceTest {
   }
 
   @Test
-  fun testSearchResultsURLShouldParseCorrectly() = runBlocking {
+  fun testSearchResultsURLShouldParseCorrectly() = runTest {
     val response = sut.fetchSearchResults("hello", null)
     val body = response.body()!!
 
@@ -89,7 +95,7 @@ class TenorServiceTest {
   }
 
   @Test
-  fun testSearchResultsURLPreviewShouldParseCorrectly() = runBlocking {
+  fun testSearchResultsURLPreviewShouldParseCorrectly() = runTest {
     val response = sut.fetchSearchResults("hello", null)
     val body = response.body()!!
 

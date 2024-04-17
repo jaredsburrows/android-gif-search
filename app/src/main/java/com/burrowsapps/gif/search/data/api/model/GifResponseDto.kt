@@ -9,7 +9,7 @@ import com.squareup.moshi.JsonClass
  * eg. https://g.tenor.com/v1/search?key=LIVDSRZULELA&tag=goodluck&limit=10
  */
 @JsonClass(generateAdapter = true)
-internal data class TenorResponseDto(
+internal data class GifResponseDto(
   @field:Json(name = "results")
   val results: List<ResultDto> = emptyList(),
   @field:Json(name = "next")

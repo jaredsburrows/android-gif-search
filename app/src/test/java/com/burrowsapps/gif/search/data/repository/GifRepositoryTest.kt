@@ -1,8 +1,8 @@
 package com.burrowsapps.gif.search.data.repository
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.burrowsapps.gif.search.data.api.TenorService
-import com.burrowsapps.gif.search.data.api.model.TenorResponseDto
+import com.burrowsapps.gif.search.data.api.GifService
+import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.di.TestApiConfigModule
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.eq
@@ -21,9 +21,9 @@ import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 
 @RunWith(AndroidJUnit4::class)
 class GifRepositoryTest {
-  private val service = mock<TenorService>()
+  private val service = mock<GifService>()
   private val next = "0.0"
-  private val response = TenorResponseDto()
+  private val response = GifResponseDto()
 
   private lateinit var sut: GifRepository
 
