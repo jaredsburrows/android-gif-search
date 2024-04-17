@@ -37,14 +37,15 @@ android {
   }
 
   packaging {
-    resources.excludes += listOf(
-      "**/*.kotlin_module",
-      "**/*.version",
-      "**/kotlin/**",
-      "**/*.txt",
-      "**/*.xml",
-      "**/*.properties",
-    )
+    resources.excludes +=
+      listOf(
+        "**/*.kotlin_module",
+        "**/*.version",
+        "**/kotlin/**",
+        "**/*.txt",
+        "**/*.xml",
+        "**/*.properties",
+      )
   }
 }
 

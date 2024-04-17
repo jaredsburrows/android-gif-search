@@ -27,9 +27,10 @@ android {
 
     testApplicationId = "com.burrowsapps.gif.search.test"
     testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner"
-    testInstrumentationRunnerArguments += mapOf(
-      "disableAnalytics" to "true",
-    )
+    testInstrumentationRunnerArguments +=
+      mapOf(
+        "disableAnalytics" to "true",
+      )
 
     resourceConfigurations += setOf("en")
     vectorDrawables.useSupportLibrary = true
@@ -105,10 +106,11 @@ android {
     getByName("release") {
       isMinifyEnabled = true
       isShrinkResources = true
-      proguardFiles += listOf(
-        getDefaultProguardFile("proguard-android-optimize.txt"),
-        file("${project.rootDir}/config/proguard/proguard-rules.txt"),
-      )
+      proguardFiles +=
+        listOf(
+          getDefaultProguardFile("proguard-android-optimize.txt"),
+          file("${project.rootDir}/config/proguard/proguard-rules.txt"),
+        )
       signingConfig = signingConfigs.getByName(if (hasKeyPath) "release" else "debug")
     }
   }
@@ -126,14 +128,15 @@ android {
   }
 
   packaging {
-    resources.excludes += listOf(
-      "**/*.kotlin_module",
-      "**/*.version",
-      "**/kotlin/**",
-      "**/*.txt",
-      "**/*.xml",
-      "**/*.properties",
-    )
+    resources.excludes +=
+      listOf(
+        "**/*.kotlin_module",
+        "**/*.version",
+        "**/kotlin/**",
+        "**/*.txt",
+        "**/*.xml",
+        "**/*.properties",
+      )
   }
 
   dependenciesInfo {
@@ -187,6 +190,7 @@ dependencies {
   implementation(libs.androidx.activityktx)
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.corektx)
+  implementation(libs.androidx.palette)
   implementation(libs.androidx.startup)
 
   // AndroidX Lifecycle
