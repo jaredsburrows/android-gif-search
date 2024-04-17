@@ -3,8 +3,8 @@
 package com.burrowsapps.gif.search.ui.giflist
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.data.api.model.NetworkResult
-import com.burrowsapps.gif.search.data.api.model.TenorResponseDto
 import com.burrowsapps.gif.search.data.repository.GifRepository
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.eq
@@ -23,7 +23,7 @@ class GifViewModelTest {
   private val testDispatcher = UnconfinedTestDispatcher()
   private val repository = mock<GifRepository>()
   private val next = "0.0"
-  private val response = TenorResponseDto()
+  private val response = GifResponseDto()
 
   private lateinit var sut: GifViewModel
 
@@ -43,7 +43,7 @@ class GifViewModelTest {
 
     verify(repository).getTrendingResults(eq(next))
     assertThat(nextResult).isEqualTo("0.0")
-    assertThat(gifListResult).isEqualTo(listOf<TenorResponseDto>())
+    assertThat(gifListResult).isEqualTo(listOf<GifResponseDto>())
   }
 
   @Test
@@ -72,7 +72,7 @@ class GifViewModelTest {
 
     verify(repository).getSearchResults(eq(searchString), eq(next))
     assertThat(nextResult).isEqualTo("0.0")
-    assertThat(gifListResult).isEqualTo(listOf<TenorResponseDto>())
+    assertThat(gifListResult).isEqualTo(listOf<GifResponseDto>())
   }
 
   @Test

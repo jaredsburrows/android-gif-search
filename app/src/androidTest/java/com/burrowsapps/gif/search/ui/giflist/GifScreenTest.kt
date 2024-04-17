@@ -76,9 +76,15 @@ class GifScreenTest {
         override fun dispatch(request: RecordedRequest): MockResponse {
           request.path.orEmpty().apply {
             return when {
-              contains(other = "v1/trending") -> getMockResponse(fileName = "/trending_results.json")
-              contains(other = "v1/search") -> getMockResponse(fileName = "/search_results.json")
-              endsWith(suffix = ".png") || endsWith(suffix = ".gif") -> getMockGifResponse(fileName = "/ic_launcher.webp")
+              // Matches URL pattern for trending on Tenor with parameters
+              matches(Regex("^/v1/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
+
+              // Matches URL pattern for search on Tenor with parameters
+              matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
+
+              // Handling image files with specific response
+              matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/ic_launcher.webp")
+
               else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
             }
           }
