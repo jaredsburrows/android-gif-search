@@ -5,7 +5,7 @@ android = "8.3.2"
 dagger = "2.51.1"
 # libraries
 accompanist = "0.34.0"
-activity = "1.8.2"
+activity = "1.9.0"
 # See https://androidx.dev/storage/compose-compiler/repository
 compose = "1.6.5"
 compose-compiler = "1.5.11"
