@@ -31,8 +31,6 @@ internal sealed class NetworkResult<T>(
   )
 
   companion object {
-    private const val ERROR_MESSAGE_PREFIX = "Api call failed"
-
     /**
      * Executes a suspend function that performs a network request, and returns a NetworkResult
      * object representing the result of the request.
@@ -54,13 +52,13 @@ internal sealed class NetworkResult<T>(
           return Success(data = body)
         }
         Timber.e("request failed")
-        error(errorMessage = "$ERROR_MESSAGE_PREFIX ${response.code()} ${response.message()}")
+        error(errorMessage = response.message())
       } catch (e: Exception) {
         Timber.e(t = e, message = "request failed")
         error(errorMessage = e.message ?: e.toString())
       }
     }
 
-    private fun <T> error(errorMessage: String): NetworkResult<T> = Error(data = null, message = "$ERROR_MESSAGE_PREFIX $errorMessage")
+    private fun <T> error(errorMessage: String): NetworkResult<T> = Error(data = null, message = errorMessage)
   }
 }

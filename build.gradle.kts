@@ -40,7 +40,7 @@ allprojects {
     }
   }
 
-  tasks.withType(DependencyUpdatesTask::class.java).configureEach {
+  tasks.withType<DependencyUpdatesTask>().configureEach {
     fun isNonStable(version: String): Boolean {
       val stableKeyword =
         listOf("RELEASE", "FINAL", "GA").any { version.uppercase(Locale.getDefault()).contains(it) }
@@ -65,7 +65,7 @@ allprojects {
     }
   }
 
-  tasks.withType(KotlinJvmCompile::class.java).configureEach {
+  tasks.withType<KotlinJvmCompile>().configureEach {
     compilerOptions {
       jvmTarget.set(JvmTarget.JVM_11)
       languageVersion.set(KotlinVersion.KOTLIN_1_9)
@@ -86,7 +86,7 @@ allprojects {
     }
   }
 
-  tasks.withType(JavaCompile::class.java).configureEach {
+  tasks.withType<JavaCompile>().configureEach {
     sourceCompatibility = VERSION_11.toString()
     targetCompatibility = VERSION_11.toString()
 
@@ -104,7 +104,7 @@ allprojects {
     }
   }
 
-  tasks.withType(Test::class.java).configureEach {
+  tasks.withType<Test>().configureEach {
     testLogging {
       exceptionFormat = FULL
       showCauses = true

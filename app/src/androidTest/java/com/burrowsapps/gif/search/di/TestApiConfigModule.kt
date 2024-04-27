@@ -1,5 +1,6 @@
 package com.burrowsapps.gif.search.di
 
+import com.burrowsapps.gif.search.test.TestFileUtils.MOCK_SERVER_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -13,6 +14,6 @@ internal class TestApiConfigModule {
   @Provides
   @Singleton
   fun provideBaseUrl(): String {
-    return "http://localhost:8080"
+    return MOCK_SERVER_URL
   }
 }

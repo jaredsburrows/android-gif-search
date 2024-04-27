@@ -3,7 +3,7 @@ package com.burrowsapps.gif.search.data.repository
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.data.api.GifService
 import com.burrowsapps.gif.search.data.api.model.GifResponseDto
-import com.burrowsapps.gif.search.di.TestApiConfigModule
+import com.burrowsapps.gif.search.test.TestFileUtils.MOCK_SERVER_URL
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
@@ -52,7 +52,7 @@ class GifRepositoryTest {
           .code(HTTP_INTERNAL_ERROR)
           .message("Broken!")
           .protocol(HTTP_1_1)
-          .request(okhttp3.Request.Builder().url(TestApiConfigModule().provideBaseUrl()).build())
+          .request(okhttp3.Request.Builder().url(MOCK_SERVER_URL).build())
           .build()
       val plainText = "text/plain; charset=utf-8".toMediaType()
       val errorBody = "Broken!".toResponseBody(plainText)
@@ -87,7 +87,7 @@ class GifRepositoryTest {
           .code(HTTP_INTERNAL_ERROR)
           .message("Broken!")
           .protocol(HTTP_1_1)
-          .request(okhttp3.Request.Builder().url(TestApiConfigModule().provideBaseUrl()).build())
+          .request(okhttp3.Request.Builder().url(MOCK_SERVER_URL).build())
           .build()
       val plainText = "text/plain; charset=utf-8".toMediaType()
       val errorBody = "Broken!".toResponseBody(plainText)

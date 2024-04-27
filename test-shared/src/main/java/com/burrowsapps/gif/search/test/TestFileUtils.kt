@@ -7,6 +7,7 @@ import java.net.HttpURLConnection.HTTP_OK
 
 object TestFileUtils {
   const val MOCK_SERVER_PORT = 8_080
+  const val MOCK_SERVER_URL = "http://localhost:$MOCK_SERVER_PORT"
   private const val HTTP_200_STATUS = "HTTP/1.1 200 OK"
 
   fun getMockResponse(fileName: String) =
