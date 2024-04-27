@@ -11,7 +11,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -107,8 +106,6 @@ internal class GifViewModel
         val media = result.media.first()
         val gif = media.gif
         val tinyGif = media.tinyGif
-
-        Timber.i("New gif from url:\t${gif.url}")
 
         GifImageInfo(
           gifUrl = gif.url,

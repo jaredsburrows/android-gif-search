@@ -60,8 +60,7 @@ internal class GlideModule : AppGlideModule() {
     )
       .setBitmapPool(LruBitmapPool(DEFAULT_DISK_CACHE_SIZE.toLong()))
       .setMemoryCache(LruResourceCache(DEFAULT_DISK_CACHE_SIZE.toLong()))
-      .setLogRequestOrigins(DEBUG)
-      .setLogLevel(if (DEBUG) Log.DEBUG else Log.INFO)
+      .setLogLevel(if (DEBUG) Log.WARN else Log.ERROR)
       .setIsActiveResourceRetentionAllowed(true)
   }
 
