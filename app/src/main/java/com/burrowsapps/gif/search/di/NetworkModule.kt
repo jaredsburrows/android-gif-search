@@ -13,7 +13,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
+import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -82,7 +82,7 @@ internal class NetworkModule {
     return HttpLoggingInterceptor { message ->
       Timber.i(message)
     }.apply {
-      level = if (DEBUG) BODY else NONE
+      level = if (DEBUG) BASIC else NONE
     }
   }
 

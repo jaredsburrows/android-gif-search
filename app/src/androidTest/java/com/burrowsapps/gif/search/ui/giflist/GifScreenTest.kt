@@ -30,8 +30,9 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import org.junit.After
+import org.junit.AfterClass
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
@@ -55,7 +56,6 @@ class GifScreenTest {
   @ApplicationContext
   internal lateinit var context: Context
 
-  private val server = MockWebServer()
   private val gifScreenTitle by lazy { context.getString(R.string.gif_screen_title) }
   private val licenseScreenTitle by lazy { context.getString(R.string.license_screen_title) }
   private val searchGifs by lazy { context.getString(R.string.search_gifs) }
@@ -70,35 +70,45 @@ class GifScreenTest {
   @Before
   fun setUp() {
     hiltRule.inject()
-
-    server.apply {
-      dispatcher =
-        object : Dispatcher() {
-          override fun dispatch(request: RecordedRequest): MockResponse {
-            request.path.orEmpty().apply {
-              return when {
-                // Matches URL pattern for trending on Tenor with parameters
-                matches(Regex("^/v1/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
-
-                // Matches URL pattern for search on Tenor with parameters
-                matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
-
-                // Handling image files with specific response
-                matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/ic_launcher.webp")
-
-                else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
-              }
-            }
-          }
-        }
-
-      start(MOCK_SERVER_PORT)
-    }
   }
 
-  @After
-  fun tearDown() {
-    server.shutdown()
+  companion object {
+    private lateinit var webServer: MockWebServer
+
+    @BeforeClass
+    @JvmStatic
+    fun startMockServer() {
+      webServer =
+        MockWebServer().apply {
+          dispatcher =
+            object : Dispatcher() {
+              override fun dispatch(request: RecordedRequest): MockResponse {
+                request.path.orEmpty().apply {
+                  return when {
+                    // Matches URL pattern for trending on Tenor with parameters
+                    matches(Regex("^/v1/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
+
+                    // Matches URL pattern for search on Tenor with parameters
+                    matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
+
+                    // Handling image files with specific response
+                    matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/android.gif")
+
+                    else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
+                  }
+                }
+              }
+            }
+
+          start(MOCK_SERVER_PORT)
+        }
+    }
+
+    @AfterClass
+    @JvmStatic
+    fun shutDownServer() {
+      webServer.shutdown()
+    }
   }
 
   @Test
@@ -126,7 +136,6 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
   }
 
-  @Ignore("dialog causes flakiness")
   @Test
   fun testTrendingThenClickOpenDialog() {
     composeTestRule.mainClock.autoAdvance = false
