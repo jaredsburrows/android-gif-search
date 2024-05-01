@@ -38,6 +38,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import timber.log.Timber
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import javax.inject.Inject
 
@@ -83,7 +84,10 @@ class GifScreenTest {
           dispatcher =
             object : Dispatcher() {
               override fun dispatch(request: RecordedRequest): MockResponse {
-                request.path.orEmpty().apply {
+                val path = request.path.orEmpty()
+                Timber.i("Request path: $path")
+
+                path.apply {
                   return when {
                     // Matches URL pattern for trending on Tenor with parameters
                     matches(Regex("^/v1/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
