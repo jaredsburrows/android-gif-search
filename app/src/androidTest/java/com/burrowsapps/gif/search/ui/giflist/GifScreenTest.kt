@@ -153,7 +153,6 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = copyUrl).assertIsDisplayed()
   }
 
-  @Ignore("dialog causes flakiness")
   @Test
   fun testTrendingThenClickOpenDialogAndCopyLink() {
     composeTestRule.mainClock.autoAdvance = false
