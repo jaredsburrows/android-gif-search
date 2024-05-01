@@ -8,8 +8,10 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.graphics.Bitmap
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
@@ -147,16 +149,46 @@ private fun TheWebView() {
         isVerticalScrollBarEnabled = false
         webViewClient =
           object : WebViewClient() {
+            override fun onPageStarted(
+              view: WebView?,
+              url: String?,
+              favicon: Bitmap?,
+            ) {
+              super.onPageStarted(view, url, favicon)
+
+              Timber.i("onPageStarted:\t$url")
+            }
+
+            override fun onPageFinished(
+              view: WebView,
+              url: String,
+            ) {
+              super.onPageFinished(view, url)
+
+              Timber.i("onPageFinished:\t$url")
+            }
+
+            override fun onLoadResource(
+              view: WebView?,
+              url: String?,
+            ) {
+              super.onLoadResource(view, url)
+
+              Timber.i("onLoadResource:\t$url")
+            }
+
             override fun shouldInterceptRequest(
               view: WebView,
               request: WebResourceRequest,
             ): WebResourceResponse? {
+              super.shouldInterceptRequest(view, request)
+
               // Override URLs for AssetsPathHandler
-              return assetLoader.shouldInterceptRequest(request.url)
-                ?: super.shouldInterceptRequest(
-                  view,
-                  request,
-                )
+              val override = assetLoader.shouldInterceptRequest(request.url)
+              val default = super.shouldInterceptRequest(view, request)
+              val newRequest = override ?: default
+              Timber.i("shouldInterceptRequest:\t${request.url}\t${override?.statusCode}")
+              return newRequest
             }
 
             override fun onReceivedHttpError(
@@ -164,41 +196,54 @@ private fun TheWebView() {
               request: WebResourceRequest,
               errorResponse: WebResourceResponse,
             ) {
-              Timber.e("onReceivedHttpError:\t${errorResponse.statusCode}\t${errorResponse.reasonPhrase}")
+              Timber.e("onReceivedHttpError:\t${request.url}\t${errorResponse.statusCode}")
+            }
+          }
+
+        webChromeClient =
+          object : WebChromeClient() {
+            override fun onProgressChanged(
+              view: WebView?,
+              newProgress: Int,
+            ) {
+              super.onProgressChanged(view, newProgress)
+
+              Timber.i("onProgressChanged:\t$newProgress")
             }
           }
 
         if (runningInPreview) {
           return@apply
-        } else {
-          settings.apply {
-            allowFileAccess = false
-            allowContentAccess = false
-            setGeolocationEnabled(false)
-            @Suppress(names = ["DEPRECATION"])
-            if (VERSION.SDK_INT < VERSION_CODES.R) {
-              allowFileAccessFromFileURLs = false
-              allowUniversalAccessFromFileURLs = false
-            }
+        }
 
-            // Handle dark mode for WebView
-            @SuppressLint("NewApi")
-            if (isFeatureSupported(ALGORITHMIC_DARKENING)) {
-              setAlgorithmicDarkeningAllowed(this, true)
-            } else if (isFeatureSupported(FORCE_DARK)) {
-              @Suppress(names = ["DEPRECATION"])
-              when (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
-                UI_MODE_NIGHT_YES -> setForceDark(this, FORCE_DARK_ON)
-                else -> setForceDark(this, FORCE_DARK_OFF)
-              }
-            } else {
-              Timber.w("Dark mode not set")
+        settings.apply {
+          allowFileAccess = false
+          allowContentAccess = false
+          setGeolocationEnabled(false)
+          @Suppress(names = ["DEPRECATION"])
+          if (VERSION.SDK_INT < VERSION_CODES.R) {
+            allowFileAccessFromFileURLs = false
+            allowUniversalAccessFromFileURLs = false
+          }
+
+          // Handle dark mode for WebView
+          @SuppressLint("NewApi")
+          if (isFeatureSupported(ALGORITHMIC_DARKENING)) {
+            setAlgorithmicDarkeningAllowed(this, true)
+          } else if (isFeatureSupported(FORCE_DARK)) {
+            @Suppress(names = ["DEPRECATION"])
+            when (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
+              UI_MODE_NIGHT_YES -> setForceDark(this, FORCE_DARK_ON)
+              else -> setForceDark(this, FORCE_DARK_OFF)
             }
+          } else {
+            Timber.w("Dark mode not set")
           }
         }
       }
     },
     update = { webView ->
+      // from "main/assets/index.html" -> "file:///android_asset/index.html"
       webView.loadUrl("https://appassets.androidplatform.net/assets/open_source_licenses.html")
     },
   )

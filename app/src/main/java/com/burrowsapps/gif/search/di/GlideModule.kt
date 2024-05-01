@@ -23,6 +23,7 @@ import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 import com.burrowsapps.gif.search.BuildConfig.DEBUG
 import com.burrowsapps.gif.search.R
+import com.burrowsapps.gif.search.di.ApplicationMode.TESTING
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors.fromApplication
@@ -37,13 +38,25 @@ internal class GlideModule : AppGlideModule() {
   @EntryPoint
   @InstallIn(SingletonComponent::class)
   internal interface GlideModuleEntryPoint {
-    fun defaultOkHttpClient(): OkHttpClient
+    fun getOkHttpClient(): OkHttpClient
+  }
+
+  @EntryPoint
+  @InstallIn(SingletonComponent::class)
+  internal interface ApplicationModeEntryPoint {
+    fun getApplicationMode(): ApplicationMode
   }
 
   override fun applyOptions(
     context: Context,
     builder: GlideBuilder,
   ) {
+    val applicationMode =
+      fromApplication(
+        context.applicationContext,
+        ApplicationModeEntryPoint::class.java,
+      ).getApplicationMode()
+
     builder.setDefaultRequestOptions(
       RequestOptions()
         .encodeFormat(if (VERSION.SDK_INT >= VERSION_CODES.R) WEBP_LOSSLESS else PNG)
@@ -60,7 +73,7 @@ internal class GlideModule : AppGlideModule() {
     )
       .setBitmapPool(LruBitmapPool(DEFAULT_DISK_CACHE_SIZE.toLong()))
       .setMemoryCache(LruResourceCache(DEFAULT_DISK_CACHE_SIZE.toLong()))
-      .setLogLevel(if (DEBUG) Log.WARN else Log.ERROR)
+      .setLogLevel(if (applicationMode == TESTING || DEBUG) Log.WARN else Log.ERROR)
       .setIsActiveResourceRetentionAllowed(true)
   }
 
@@ -73,7 +86,7 @@ internal class GlideModule : AppGlideModule() {
       fromApplication(
         context.applicationContext,
         GlideModuleEntryPoint::class.java,
-      ).defaultOkHttpClient()
+      ).getOkHttpClient()
 
     registry.replace(
       GlideUrl::class.java,
