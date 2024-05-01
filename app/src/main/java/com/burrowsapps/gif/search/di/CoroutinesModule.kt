@@ -31,17 +31,17 @@ internal annotation class MainImmediateDispatcher
 internal class CoroutinesModule {
   @DefaultDispatcher
   @Provides
-  fun providesDefaultDispatcher(): CoroutineDispatcher = Default
+  fun provideDefaultDispatcher(): CoroutineDispatcher = Default
 
   @IoDispatcher
   @Provides
-  fun providesIoDispatcher(): CoroutineDispatcher = IO
+  fun provideIoDispatcher(): CoroutineDispatcher = IO
 
   @MainDispatcher
   @Provides
-  fun providesMainDispatcher(): CoroutineDispatcher = Main
+  fun provideMainDispatcher(): CoroutineDispatcher = Main
 
   @MainImmediateDispatcher
   @Provides
-  fun providesMainImmediateDispatcher(): CoroutineDispatcher = Main.immediate
+  fun provideMainImmediateDispatcher(): CoroutineDispatcher = Main.immediate
 }
