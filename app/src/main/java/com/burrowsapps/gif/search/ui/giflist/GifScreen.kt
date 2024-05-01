@@ -82,12 +82,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.Screen
+import com.burrowsapps.gif.search.di.ApplicationMode.TESTING
 import com.burrowsapps.gif.search.ui.theme.GifTheme
 import com.kmpalette.palette.graphics.Palette
 import com.skydoves.landscapist.ImageOptions
@@ -97,6 +101,7 @@ import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import com.skydoves.landscapist.palette.PalettePlugin
 import kotlinx.coroutines.flow.distinctUntilChanged
+import timber.log.Timber
 import kotlin.math.roundToInt
 
 /** Shows the main screen of trending gifs. */
@@ -345,12 +350,38 @@ private fun TheContent(
                 context = context,
                 imageUrl = item.tinyGifUrl,
                 thumbnailUrl = item.tinyGifPreviewUrl,
-                override = 135.dp.value.roundToInt(),
+                size = 135.dp.value.roundToInt(),
               )
 
             CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
               GlideImage(
                 imageModel = { item.tinyGifUrl },
+                requestListener = {
+                  object : RequestListener<Any> {
+                    override fun onLoadFailed(
+                      e: GlideException?,
+                      model: Any?,
+                      target: Target<Any>,
+                      isFirstResource: Boolean,
+                    ): Boolean {
+                      Timber.e("Glide onLoadFailed:", e)
+                      return false
+                    }
+
+                    override fun onResourceReady(
+                      resource: Any,
+                      model: Any,
+                      target: Target<Any>?,
+                      dataSource: DataSource,
+                      isFirstResource: Boolean,
+                    ): Boolean {
+                      if (resource is GifDrawable && gifViewModel.applicationMode() == TESTING) {
+                        resource.setLoopCount(1)
+                      }
+                      return false
+                    }
+                  }
+                },
                 glideRequestType = GIF,
                 modifier =
                   Modifier
@@ -487,11 +518,15 @@ private fun loadGif(
   context: Context,
   imageUrl: String,
   thumbnailUrl: String,
-  override: Int = Target.SIZE_ORIGINAL,
+  size: Int = Target.SIZE_ORIGINAL,
 ): RequestBuilder<GifDrawable> {
   val request = Glide.with(context).asGif()
-  return request.transition(DrawableTransitionOptions.withCrossFade()).thumbnail(
+  val thumbnailRequest =
     request.transition(DrawableTransitionOptions.withCrossFade()).load(thumbnailUrl)
-      .override(override).signature(ObjectKey(thumbnailUrl)),
-  ).override(override).signature(ObjectKey(imageUrl))
+      .override(size).signature(ObjectKey(thumbnailUrl))
+  val imageRequest =
+    request.transition(DrawableTransitionOptions.withCrossFade()).load(imageUrl)
+      .thumbnail(thumbnailRequest)
+      .override(size).signature(ObjectKey(imageUrl))
+  return imageRequest
 }

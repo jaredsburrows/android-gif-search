@@ -17,9 +17,5 @@ internal class GifRepository
     ): NetworkResult<GifResponseDto> = safeApiCall { service.fetchSearchResults(query, position) }
 
     suspend fun getTrendingResults(position: String?): NetworkResult<GifResponseDto> =
-      safeApiCall {
-        service.fetchTrendingResults(
-          position,
-        )
-      }
+      safeApiCall { service.fetchTrendingResults(position) }
   }

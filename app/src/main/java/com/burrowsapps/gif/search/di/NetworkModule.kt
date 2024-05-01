@@ -3,6 +3,7 @@ package com.burrowsapps.gif.search.di
 import android.content.Context
 import com.burrowsapps.gif.search.BuildConfig.DEBUG
 import com.burrowsapps.gif.search.data.api.GifService
+import com.burrowsapps.gif.search.di.ApplicationMode.TESTING
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import dagger.Module
@@ -28,14 +29,14 @@ import javax.inject.Singleton
 internal class NetworkModule {
   @Singleton
   @Provides
-  fun providesGifService(retrofit: Retrofit): GifService {
+  fun provideGifService(retrofit: Retrofit): GifService {
     return retrofit
       .create(GifService::class.java)
   }
 
   @Singleton
   @Provides
-  fun providesRetrofit(
+  fun provideRetrofit(
     converterFactory: MoshiConverterFactory,
     client: OkHttpClient,
     baseUrl: String,
@@ -49,13 +50,13 @@ internal class NetworkModule {
 
   @Singleton
   @Provides
-  fun providesMoshiConverterFactory(moshi: Moshi): MoshiConverterFactory {
+  fun provideMoshiConverterFactory(moshi: Moshi): MoshiConverterFactory {
     return MoshiConverterFactory.create(moshi)
   }
 
   @Singleton
   @Provides
-  fun providesMoshi(): Moshi {
+  fun provideMoshi(): Moshi {
     return Moshi.Builder()
       .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
       .build()
@@ -63,7 +64,7 @@ internal class NetworkModule {
 
   @Singleton
   @Provides
-  fun providesOkHttpClient(
+  fun provideOkHttpClient(
     interceptor: HttpLoggingInterceptor,
     cache: Cache,
   ): OkHttpClient {
@@ -78,17 +79,17 @@ internal class NetworkModule {
 
   @Singleton
   @Provides
-  fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor {
+  fun provideHttpLoggingInterceptor(applicationMode: ApplicationMode): HttpLoggingInterceptor {
     return HttpLoggingInterceptor { message ->
       Timber.i(message)
     }.apply {
-      level = if (DEBUG) BASIC else NONE
+      level = if (applicationMode == TESTING || DEBUG) BASIC else NONE
     }
   }
 
   @Singleton
   @Provides
-  fun providesCache(
+  fun provideCache(
     @ApplicationContext context: Context,
   ): Cache {
     return Cache(
