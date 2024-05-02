@@ -9,20 +9,21 @@ import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import javax.inject.Qualifier
+import kotlin.annotation.AnnotationRetention.BINARY
 
-@Retention(AnnotationRetention.BINARY)
+@Retention(BINARY)
 @Qualifier
 internal annotation class DefaultDispatcher
 
-@Retention(AnnotationRetention.BINARY)
+@Retention(BINARY)
 @Qualifier
 internal annotation class IoDispatcher
 
-@Retention(AnnotationRetention.BINARY)
+@Retention(BINARY)
 @Qualifier
 internal annotation class MainDispatcher
 
-@Retention(AnnotationRetention.BINARY)
+@Retention(BINARY)
 @Qualifier
 internal annotation class MainImmediateDispatcher
 
