@@ -16,12 +16,14 @@ class DebugApplication : MainApplication() {
       ThreadPolicy.Builder()
         .detectAll()
         .penaltyLog()
+//        .penaltyDeath()
         .build(),
     )
     StrictMode.setVmPolicy(
       VmPolicy.Builder()
         .detectAll()
         .penaltyLog()
+        .penaltyDeath()
         .build(),
     )
   }

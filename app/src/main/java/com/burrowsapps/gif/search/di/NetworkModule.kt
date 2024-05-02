@@ -1,27 +1,35 @@
 package com.burrowsapps.gif.search.di
 
 import android.content.Context
+import android.net.TrafficStats
+import android.util.Log
+import androidx.core.net.TrafficStatsCompat
 import com.burrowsapps.gif.search.BuildConfig.DEBUG
 import com.burrowsapps.gif.search.data.api.GifService
 import com.burrowsapps.gif.search.di.ApplicationMode.TESTING
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Cache
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
-import java.io.File
+import java.io.IOException
 import java.util.Date
+import javax.inject.Named
 import javax.inject.Singleton
+
 
 /** Injections for the network. */
 @Module
@@ -29,21 +37,20 @@ import javax.inject.Singleton
 internal class NetworkModule {
   @Singleton
   @Provides
-  fun provideGifService(retrofit: Retrofit): GifService {
-    return retrofit
-      .create(GifService::class.java)
+  fun provideGifService(retrofit: Lazy<Retrofit>): GifService {
+    return retrofit.get().create(GifService::class.java)
   }
 
   @Singleton
   @Provides
   fun provideRetrofit(
     converterFactory: MoshiConverterFactory,
-    client: OkHttpClient,
+    client: Lazy<OkHttpClient>,
     baseUrl: String,
   ): Retrofit {
     return Retrofit.Builder()
       .addConverterFactory(converterFactory)
-      .client(client)
+      .client(client.get())
       .baseUrl(baseUrl)
       .build()
   }
@@ -65,21 +72,40 @@ internal class NetworkModule {
   @Singleton
   @Provides
   fun provideOkHttpClient(
-    interceptor: HttpLoggingInterceptor,
+    @Named("HttpLoggingInterceptor") httpLoggingInterceptor: Interceptor,
+    @Named("TrafficStatsInterceptor") trafficStatsInterceptor: Interceptor,
     cache: Cache,
+    applicationMode: ApplicationMode,
   ): OkHttpClient {
     return OkHttpClient.Builder()
-      .addInterceptor(interceptor)
-      .followRedirects(true)
-      .followSslRedirects(true)
-      .retryOnConnectionFailure(true)
+      .addInterceptor(httpLoggingInterceptor)
+      .addInterceptor(trafficStatsInterceptor)
       .cache(cache)
       .build()
   }
 
+  // Resolve StrictMode UntaggedSocket violation
+  @Named("TrafficStatsInterceptor")
   @Singleton
   @Provides
-  fun provideHttpLoggingInterceptor(applicationMode: ApplicationMode): HttpLoggingInterceptor {
+  fun provideTrafficStatsInterceptor(): Interceptor {
+    return object : Interceptor {
+      override fun intercept(chain: Interceptor.Chain): Response {
+        val trafficStatsTag = 0xF00D
+        try {
+          TrafficStats.setThreadStatsTag(trafficStatsTag)
+          return chain.proceed(chain.request())
+        } finally {
+          TrafficStats.clearThreadStatsTag()
+        }
+      }
+    }
+  }
+
+  @Named("HttpLoggingInterceptor")
+  @Singleton
+  @Provides
+  fun provideHttpLoggingInterceptor(applicationMode: ApplicationMode): Interceptor {
     return HttpLoggingInterceptor { message ->
       Timber.i(message)
     }.apply {
@@ -93,13 +119,12 @@ internal class NetworkModule {
     @ApplicationContext context: Context,
   ): Cache {
     return Cache(
-      directory = File(context.cacheDir, CLIENT_CACHE_DIRECTORY),
-      maxSize = CLIENT_CACHE_SIZE,
+      context.cacheDir, // Use the default cache directory
+      CLIENT_CACHE_SIZE,
     )
   }
 
   private companion object {
     private const val CLIENT_CACHE_SIZE = 2 * 10 * 1024 * 1024L // 20 MiB
-    private const val CLIENT_CACHE_DIRECTORY = "https-json-cache"
   }
 }

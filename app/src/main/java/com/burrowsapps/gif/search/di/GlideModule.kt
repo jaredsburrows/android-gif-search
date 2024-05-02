@@ -64,11 +64,13 @@ internal class GlideModule : AppGlideModule() {
         .diskCacheStrategy(ALL)
         .error(R.mipmap.ic_launcher)
         .fallback(R.mipmap.ic_launcher),
-    ).setDiskCache(
+    )
+      .setDiskCache(
       InternalCacheDiskCacheFactory(
-        context.applicationContext,
-        GLIDE_CACHE_DIRECTORY,
-        DEFAULT_DISK_CACHE_SIZE.toLong(),
+        context
+//        context.applicationContext,
+//        GLIDE_CACHE_DIRECTORY,
+//        DEFAULT_DISK_CACHE_SIZE.toLong(),
       ),
     )
       .setBitmapPool(LruBitmapPool(DEFAULT_DISK_CACHE_SIZE.toLong()))
