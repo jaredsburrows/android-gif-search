@@ -22,6 +22,7 @@ class DebugApplication : MainApplication() {
       VmPolicy.Builder()
         .detectAll()
         .penaltyLog()
+        .penaltyDeath()
         .build(),
     )
   }
