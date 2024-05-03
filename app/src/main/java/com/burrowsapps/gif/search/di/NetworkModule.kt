@@ -2,6 +2,7 @@ package com.burrowsapps.gif.search.di
 
 import android.content.Context
 import android.net.TrafficStats
+import android.os.Looper
 import com.burrowsapps.gif.search.BuildConfig.DEBUG
 import com.burrowsapps.gif.search.data.api.GifService
 import com.burrowsapps.gif.search.di.ApplicationMode.TESTING
@@ -47,7 +48,7 @@ internal class NetworkModule {
   ): Retrofit {
     return Retrofit.Builder()
       .addConverterFactory(converterFactory)
-      .callFactory { client.get().newCall(it) }
+      .callFactory { client.get().newCall(it) } // Resolve StrictMode DiskReadViolation
       .baseUrl(baseUrl)
       .build()
   }
@@ -73,12 +74,13 @@ internal class NetworkModule {
     @Named("TrafficStatsInterceptor") trafficStatsInterceptor: Interceptor,
     cache: Cache,
   ): OkHttpClient {
+    if (Looper.myLooper() == Looper.getMainLooper()) {
+      throw IllegalStateException("HTTP client initialized on main thread.")
+    }
+
     return OkHttpClient.Builder()
       .addInterceptor(httpLoggingInterceptor)
       .addInterceptor(trafficStatsInterceptor)
-      .followRedirects(true)
-      .followSslRedirects(true)
-      .retryOnConnectionFailure(true)
       .cache(cache)
       .build()
   }
@@ -117,6 +119,10 @@ internal class NetworkModule {
   fun provideCache(
     @ApplicationContext context: Context,
   ): Cache {
+    if (Looper.myLooper() == Looper.getMainLooper()) {
+      throw IllegalStateException("Cache initialized on main thread.")
+    }
+
     return Cache(context.cacheDir, CLIENT_CACHE_SIZE)
   }
 
