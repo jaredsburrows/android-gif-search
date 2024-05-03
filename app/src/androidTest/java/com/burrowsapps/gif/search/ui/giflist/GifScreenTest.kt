@@ -16,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.MainActivity
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.di.ApiConfigModule
+import com.burrowsapps.gif.search.di.AppConfigModule
 import com.burrowsapps.gif.search.test.TestFileUtils.MOCK_SERVER_PORT
 import com.burrowsapps.gif.search.test.TestFileUtils.getMockGifResponse
 import com.burrowsapps.gif.search.test.TestFileUtils.getMockResponse
@@ -43,7 +44,7 @@ import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import javax.inject.Inject
 
 @HiltAndroidTest
-@UninstallModules(ApiConfigModule::class)
+@UninstallModules(ApiConfigModule::class, AppConfigModule::class)
 @Config(application = HiltTestApplication::class)
 @RunWith(AndroidJUnit4::class)
 class GifScreenTest {

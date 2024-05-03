@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.data.api.model.NetworkResult
 import com.burrowsapps.gif.search.data.repository.GifRepository
+import com.burrowsapps.gif.search.di.ApplicationMode.TESTING
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
@@ -29,7 +30,7 @@ class GifViewModelTest {
 
   @Before
   fun setUp() {
-    sut = GifViewModel(repository, testDispatcher)
+    sut = GifViewModel(repository, testDispatcher, TESTING)
   }
 
   @Test

@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 enum class ApplicationMode {
   NORMAL,
@@ -16,6 +17,7 @@ enum class ApplicationMode {
 @InstallIn(SingletonComponent::class)
 internal class AppConfigModule {
   @Provides
+  @Singleton
   fun provideApplicationMode(): ApplicationMode {
     return NORMAL
   }
