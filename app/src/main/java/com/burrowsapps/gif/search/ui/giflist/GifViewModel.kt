@@ -6,11 +6,9 @@ import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.data.api.model.NetworkResult
 import com.burrowsapps.gif.search.data.repository.GifRepository
 import com.burrowsapps.gif.search.di.ApplicationMode
-import com.burrowsapps.gif.search.di.ApplicationMode.NORMAL
 import com.burrowsapps.gif.search.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -21,8 +19,8 @@ internal class GifViewModel
   @Inject
   internal constructor(
     private val repository: GifRepository,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher = IO,
-    private val applicationMode: ApplicationMode = NORMAL,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
+    private val applicationMode: ApplicationMode,
   ) : ViewModel() {
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: MutableStateFlow<Boolean> = _isRefreshing
