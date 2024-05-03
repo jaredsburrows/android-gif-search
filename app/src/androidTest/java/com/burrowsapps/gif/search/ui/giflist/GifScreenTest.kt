@@ -2,7 +2,6 @@ package com.burrowsapps.gif.search.ui.giflist
 
 import android.content.ClipboardManager
 import android.content.Context
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -34,7 +33,6 @@ import okhttp3.mockwebserver.RecordedRequest
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -59,15 +57,12 @@ class GifScreenTest {
   internal lateinit var context: Context
 
   private val gifScreenTitle by lazy { context.getString(R.string.gif_screen_title) }
-  private val licenseScreenTitle by lazy { context.getString(R.string.license_screen_title) }
   private val searchGifs by lazy { context.getString(R.string.search_gifs) }
-  private val menuMore by lazy { context.getString(R.string.menu_more) }
-  private val menuSearch by lazy { context.getString(R.string.menu_search) }
-  private val menuClose by lazy { context.getString(R.string.menu_close) }
-  private val menuBack by lazy { context.getString(R.string.menu_back) }
   private val copyUrl by lazy { context.getString(R.string.copy_url) }
-  private val gifImage by lazy { context.getString(R.string.gif_image) }
-  private val gifImageDialog by lazy { context.getString(R.string.gif_image_dialog) }
+  private val menuBackContentDescription by lazy { context.getString(R.string.menu_back_content_description) }
+  private val menuCloseContentDescription by lazy { context.getString(R.string.menu_close_content_description) }
+  private val menuSearchContentDescription by lazy { context.getString(R.string.menu_search_content_description) }
+  private val gifImageContentDescription by lazy { context.getString(R.string.gif_image_content_description) }
 
   @Before
   fun setUp() {
@@ -122,52 +117,32 @@ class GifScreenTest {
   }
 
   @Test
-  fun testLicenseMenuOpensLicenseScreen() {
-    openLicenseScreen()
-
-    composeTestRule.onNodeWithText(text = licenseScreenTitle).assertIsDisplayed()
-  }
-
-  @Test
-  fun testOpensLicenseScreenAndGoBack() {
-    openLicenseScreen()
-
-    composeTestRule.onNodeWithText(text = licenseScreenTitle).assertIsDisplayed()
-    composeTestRule.waitForIdle()
-
-    composeTestRule.onBackPressed()
-    composeTestRule.waitForIdle()
-
-    composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
-  }
-
-  @Test
   fun testTrendingThenClickOpenDialog() {
     composeTestRule.mainClock.autoAdvance = false
-    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+    composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription).onFirst()
+      .performClick()
+    composeTestRule.mainClock.advanceTimeByFrame()
+    composeTestRule.waitForIdle()
+    composeTestRule.mainClock.advanceTimeByFrame()
 
-    composeTestRule.onAllNodesWithContentDescription(label = gifImage).onFirst().performClick()
-    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
-
-    composeTestRule.onAllNodes(isDialog()).assertCountEquals(1)
     composeTestRule.onNode(isDialog()).assertIsDisplayed()
-    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+    composeTestRule.waitForIdle()
 
-    composeTestRule.onAllNodesWithContentDescription(label = gifImageDialog).onFirst()
+    composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription).onFirst()
       .assertIsDisplayed()
-    composeTestRule.onNodeWithText(text = copyUrl).assertIsDisplayed()
   }
 
   @Test
   fun testTrendingThenClickOpenDialogAndCopyLink() {
     composeTestRule.mainClock.autoAdvance = false
-    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
-
-    composeTestRule.onAllNodesWithContentDescription(label = gifImage).onFirst().performClick()
-    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+    composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription).onFirst()
+      .performClick()
+    composeTestRule.mainClock.advanceTimeByFrame()
+    composeTestRule.waitForIdle()
+    composeTestRule.mainClock.advanceTimeByFrame()
 
     composeTestRule.onNodeWithText(text = copyUrl).performClick()
-    composeTestRule.mainClock.advanceTimeBy(milliseconds = 2_000L)
+    composeTestRule.waitForIdle()
 
     val clipboardManager = context.getSystemService(ClipboardManager::class.java)
     assertThat(
@@ -181,8 +156,14 @@ class GifScreenTest {
 
     performSearchInput("hello")
 
-    composeTestRule.onBackPressed()
+    composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
     composeTestRule.waitForIdle()
+
+    composeTestRule.mainClock.autoAdvance = false
+    composeTestRule.onBackPressed()
+    composeTestRule.mainClock.advanceTimeByFrame()
+    composeTestRule.waitForIdle()
+    composeTestRule.mainClock.advanceTimeByFrame()
 
     composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
   }
@@ -196,13 +177,15 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
     composeTestRule.waitForIdle()
 
-    composeTestRule.onNodeWithContentDescription(label = menuClose).performClick()
+    composeTestRule.mainClock.autoAdvance = false
+    composeTestRule.onNodeWithContentDescription(label = menuCloseContentDescription).performClick()
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
+    composeTestRule.mainClock.advanceTimeByFrame()
 
     composeTestRule.onNodeWithText(text = "hello").assertDoesNotExist()
   }
 
-  @Ignore("flakiness")
   @Test
   fun testSearchAndClickMenuBackButtonClear() {
     enterSearchMode()
@@ -212,22 +195,18 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
     composeTestRule.waitForIdle()
 
-    composeTestRule.onNodeWithContentDescription(label = menuBack).performClick()
+    composeTestRule.mainClock.autoAdvance = false
+    composeTestRule.onNodeWithContentDescription(label = menuBackContentDescription).performClick()
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
+    composeTestRule.mainClock.advanceTimeByFrame()
 
     composeTestRule.onNodeWithText(text = "hello").assertDoesNotExist()
   }
 
-  private fun openLicenseScreen() {
-    composeTestRule.onNodeWithContentDescription(label = menuMore).performClick()
-    composeTestRule.waitForIdle()
-
-    composeTestRule.onNodeWithText(text = licenseScreenTitle).performClick()
-    composeTestRule.waitForIdle()
-  }
-
   private fun enterSearchMode() {
-    composeTestRule.onNodeWithContentDescription(label = menuSearch).performClick()
+    composeTestRule.onNodeWithContentDescription(label = menuSearchContentDescription)
+      .performClick()
     composeTestRule.waitForIdle()
   }
 

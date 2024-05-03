@@ -4,16 +4,17 @@
   <string name="app_name">Gif Search</string>
   <string name="gif_screen_title">Top Trending Gifs</string>
   <string name="license_screen_title">Open Source Licenses</string>
-
-  <!-- Content Descriptions -->
-  <string name="menu_back">Back</string>
-  <string name="menu_close">Close</string>
-  <string name="menu_more">More</string>
-  <string name="menu_search">Search</string>
-  <string name="gif_image">Gif Image</string>
-  <string name="gif_image_dialog">Gif Image Dialog</string>
+  <string name="license_screen_content_description">Open Source Licenses Menu Button</string>
   <string name="search_gifs">Search Gifs</string>
   <string name="copy_url">Copy URL</string>
+
+  <!-- Content Descriptions -->
+  <string name="menu_back_content_description">Back Button</string>
+  <string name="menu_close_content_description">Close Button</string>
+  <string name="menu_more_content_description">More Button</string>
+  <string name="menu_search_content_description">Search Button</string>
+  <string name="gif_image_content_description">Gif Image</string>
+  <string name="gif_image_dialog_content_description">Gif Image Dialog</string>
 
   <!-- Snackbar Messages -->
   <string name="copied_to_clipboard">Copied to clipboard</string>
