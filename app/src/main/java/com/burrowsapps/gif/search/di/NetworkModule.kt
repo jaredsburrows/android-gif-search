@@ -7,6 +7,7 @@ import com.burrowsapps.gif.search.data.api.GifService
 import com.burrowsapps.gif.search.di.ApplicationMode.TESTING
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +23,6 @@ import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
-import java.io.File
 import java.util.Date
 import javax.inject.Named
 import javax.inject.Singleton
@@ -42,12 +42,12 @@ internal class NetworkModule {
   @Provides
   fun provideRetrofit(
     converterFactory: MoshiConverterFactory,
-    client: OkHttpClient,
+    client: Lazy<OkHttpClient>,
     baseUrl: String,
   ): Retrofit {
     return Retrofit.Builder()
       .addConverterFactory(converterFactory)
-      .client(client)
+      .callFactory { client.get().newCall(it) }
       .baseUrl(baseUrl)
       .build()
   }
@@ -117,14 +117,10 @@ internal class NetworkModule {
   fun provideCache(
     @ApplicationContext context: Context,
   ): Cache {
-    return Cache(
-      directory = File(context.cacheDir, CLIENT_CACHE_DIRECTORY),
-      maxSize = CLIENT_CACHE_SIZE,
-    )
+    return Cache(context.cacheDir, CLIENT_CACHE_SIZE)
   }
 
   private companion object {
     private const val CLIENT_CACHE_SIZE = 2 * 10 * 1024 * 1024L // 20 MiB
-    private const val CLIENT_CACHE_DIRECTORY = "https-json-cache"
   }
 }

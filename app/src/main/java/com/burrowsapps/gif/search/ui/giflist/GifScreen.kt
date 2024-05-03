@@ -337,7 +337,8 @@ private fun TheContent(
 
         items(
           items = listItems.value,
-          key = { item -> item.tinyGifUrl },
+          // TODO update key
+//          key = { item -> item.gifUrl },
         ) { item ->
           Box(
             modifier =

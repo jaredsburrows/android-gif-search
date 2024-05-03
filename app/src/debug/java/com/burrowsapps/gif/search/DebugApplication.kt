@@ -14,13 +14,14 @@ class DebugApplication : MainApplication() {
       StrictMode.ThreadPolicy.Builder()
         .detectAll()
         .penaltyLog()
+        // TODO: .penaltyDeath(), okhttp Cache
         .build(),
     )
     StrictMode.setVmPolicy(
       StrictMode.VmPolicy.Builder()
         .detectAll()
         .penaltyLog()
-        .penaltyDeath()
+        // TODO: .penaltyDeath(), search bar
         .build(),
     )
   }

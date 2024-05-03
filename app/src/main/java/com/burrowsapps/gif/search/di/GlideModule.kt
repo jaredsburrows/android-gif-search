@@ -14,10 +14,6 @@ import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.integration.okhttp3.OkHttpLibraryGlideModule
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.engine.DiskCacheStrategy.ALL
-import com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool
-import com.bumptech.glide.load.engine.cache.DiskCache.Factory.DEFAULT_DISK_CACHE_SIZE
-import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
-import com.bumptech.glide.load.engine.cache.LruResourceCache
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
@@ -64,15 +60,7 @@ internal class GlideModule : AppGlideModule() {
         .diskCacheStrategy(ALL)
         .error(R.mipmap.ic_launcher)
         .fallback(R.mipmap.ic_launcher),
-    ).setDiskCache(
-      InternalCacheDiskCacheFactory(
-        context.applicationContext,
-        GLIDE_CACHE_DIRECTORY,
-        DEFAULT_DISK_CACHE_SIZE.toLong(),
-      ),
     )
-      .setBitmapPool(LruBitmapPool(DEFAULT_DISK_CACHE_SIZE.toLong()))
-      .setMemoryCache(LruResourceCache(DEFAULT_DISK_CACHE_SIZE.toLong()))
       .setLogLevel(if (applicationMode == TESTING || DEBUG) Log.WARN else Log.ERROR)
       .setIsActiveResourceRetentionAllowed(true)
   }
@@ -96,7 +84,6 @@ internal class GlideModule : AppGlideModule() {
   }
 
   private companion object {
-    private const val GLIDE_CACHE_DIRECTORY = "https-image-cache"
     private const val ENCODE_QUALITY = 100
   }
 }
