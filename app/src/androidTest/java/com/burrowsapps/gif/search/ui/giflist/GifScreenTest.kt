@@ -187,7 +187,6 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
   }
 
-  @Ignore("flakiness")
   @Test
   fun testSearchAndCancelByClickingClear() {
     enterSearchMode()
