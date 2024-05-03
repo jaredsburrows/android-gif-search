@@ -22,7 +22,6 @@ import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
-import java.io.File
 import java.util.Date
 import javax.inject.Named
 import javax.inject.Singleton
@@ -117,14 +116,10 @@ internal class NetworkModule {
   fun provideCache(
     @ApplicationContext context: Context,
   ): Cache {
-    return Cache(
-      directory = File(context.cacheDir, CLIENT_CACHE_DIRECTORY),
-      maxSize = CLIENT_CACHE_SIZE,
-    )
+    return Cache(context.cacheDir, CLIENT_CACHE_SIZE)
   }
 
   private companion object {
     private const val CLIENT_CACHE_SIZE = 2 * 10 * 1024 * 1024L // 20 MiB
-    private const val CLIENT_CACHE_DIRECTORY = "https-json-cache"
   }
 }
