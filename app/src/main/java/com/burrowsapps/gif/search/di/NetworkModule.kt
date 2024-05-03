@@ -7,6 +7,7 @@ import com.burrowsapps.gif.search.data.api.GifService
 import com.burrowsapps.gif.search.di.ApplicationMode.TESTING
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,12 +42,12 @@ internal class NetworkModule {
   @Provides
   fun provideRetrofit(
     converterFactory: MoshiConverterFactory,
-    client: OkHttpClient,
+    client: Lazy<OkHttpClient>,
     baseUrl: String,
   ): Retrofit {
     return Retrofit.Builder()
       .addConverterFactory(converterFactory)
-      .client(client)
+      .callFactory { client.get().newCall(it) }
       .baseUrl(baseUrl)
       .build()
   }
