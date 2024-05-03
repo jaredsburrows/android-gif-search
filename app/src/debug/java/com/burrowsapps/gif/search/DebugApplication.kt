@@ -1,8 +1,6 @@
 package com.burrowsapps.gif.search
 
 import android.os.StrictMode
-import android.os.StrictMode.ThreadPolicy
-import android.os.StrictMode.VmPolicy
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -13,13 +11,13 @@ class DebugApplication : MainApplication() {
     Timber.plant(DebugTree())
 
     StrictMode.setThreadPolicy(
-      ThreadPolicy.Builder()
+      StrictMode.ThreadPolicy.Builder()
         .detectAll()
         .penaltyLog()
         .build(),
     )
     StrictMode.setVmPolicy(
-      VmPolicy.Builder()
+      StrictMode.VmPolicy.Builder()
         .detectAll()
         .penaltyLog()
         .penaltyDeath()

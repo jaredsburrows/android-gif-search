@@ -54,7 +54,7 @@ class GifServiceTest {
                 matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
 
                 // Handling image files with specific response
-                matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/ic_launcher.webp")
+                matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/android-single-frame.gif")
 
                 else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
               }

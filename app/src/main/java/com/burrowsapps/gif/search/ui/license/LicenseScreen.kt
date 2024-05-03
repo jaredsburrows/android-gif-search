@@ -1,6 +1,4 @@
-@file:OptIn(
-  ExperimentalMaterial3Api::class,
-)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.burrowsapps.gif.search.ui.license
 

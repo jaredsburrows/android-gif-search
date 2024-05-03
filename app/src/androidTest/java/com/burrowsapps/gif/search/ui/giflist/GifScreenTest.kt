@@ -16,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.MainActivity
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.di.ApiConfigModule
+import com.burrowsapps.gif.search.di.AppConfigModule
 import com.burrowsapps.gif.search.test.TestFileUtils.MOCK_SERVER_PORT
 import com.burrowsapps.gif.search.test.TestFileUtils.getMockGifResponse
 import com.burrowsapps.gif.search.test.TestFileUtils.getMockResponse
@@ -43,7 +44,7 @@ import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import javax.inject.Inject
 
 @HiltAndroidTest
-@UninstallModules(ApiConfigModule::class)
+@UninstallModules(ApiConfigModule::class, AppConfigModule::class)
 @Config(application = HiltTestApplication::class)
 @RunWith(AndroidJUnit4::class)
 class GifScreenTest {
@@ -96,7 +97,7 @@ class GifScreenTest {
                     matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
 
                     // Handling image files with specific response
-                    matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/android.gif")
+                    matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/android-single-frame.gif")
 
                     else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
                   }
@@ -118,6 +119,7 @@ class GifScreenTest {
   @Test
   fun testGifActivityTitleIsShowing() {
     composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
+    composeTestRule.waitForIdle()
   }
 
   @Test
@@ -125,6 +127,7 @@ class GifScreenTest {
     openLicenseScreen()
 
     composeTestRule.onNodeWithText(text = licenseScreenTitle).assertIsDisplayed()
+    composeTestRule.waitForIdle()
   }
 
   @Test
@@ -138,6 +141,7 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
+    composeTestRule.waitForIdle()
   }
 
   @Test
@@ -155,6 +159,7 @@ class GifScreenTest {
     composeTestRule.onAllNodesWithContentDescription(label = gifImageDialog).onFirst()
       .assertIsDisplayed()
     composeTestRule.onNodeWithText(text = copyUrl).assertIsDisplayed()
+    composeTestRule.waitForIdle()
   }
 
   @Test
@@ -172,6 +177,7 @@ class GifScreenTest {
     assertThat(
       clipboardManager.primaryClip?.getItemAt(0)?.coerceToText(context).toString(),
     ).matches("http.*localhost.*gif")
+    composeTestRule.waitForIdle()
   }
 
   @Test
@@ -184,6 +190,7 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
+    composeTestRule.waitForIdle()
   }
 
   @Ignore("flakiness")
@@ -200,6 +207,7 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = "hello").assertDoesNotExist()
+    composeTestRule.waitForIdle()
   }
 
   @Ignore("flakiness")
@@ -216,6 +224,7 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithText(text = "hello").assertDoesNotExist()
+    composeTestRule.waitForIdle()
   }
 
   private fun openLicenseScreen() {
