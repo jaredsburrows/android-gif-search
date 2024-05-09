@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +50,13 @@ internal fun SearchBar(
   val keyboardController = LocalSoftwareKeyboardController.current
   val showClearButton = remember { mutableStateOf(false) }
   val focusRequester = remember { FocusRequester() }
+
+  // Ensure cleanup
+  DisposableEffect(Unit) {
+    onDispose {
+      showClearButton.value = false // Ensure dropdown is collapsed
+    }
+  }
 
   TopAppBar(
     title = { Text(text = "") },

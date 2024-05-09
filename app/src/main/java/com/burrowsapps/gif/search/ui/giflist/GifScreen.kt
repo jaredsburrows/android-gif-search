@@ -53,6 +53,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -159,6 +160,14 @@ private fun TheToolbar(
   val openSearch = remember { mutableStateOf(true) }
   val showMenu = remember { mutableStateOf(false) }
 
+  // Ensure cleanup
+  DisposableEffect(Unit) {
+    onDispose {
+      openSearch.value = false // Ensure dropdown is collapsed
+      showMenu.value = false // Ensure dropdown is collapsed
+    }
+  }
+
   if (openSearch.value) {
     TheToolBar(
       navController = navController,
@@ -186,22 +195,30 @@ private fun TheToolBar(
   val moreTooltipState = remember { TooltipState() }
   val context = LocalContext.current
 
+  // Ensure cleanup
+  DisposableEffect(Unit) {
+    onDispose {
+      searchTooltipState.dismiss()
+      moreTooltipState.dismiss()
+      showMenu.value = false // Ensure dropdown is collapsed
+    }
+  }
+
   TopAppBar(
-    title = {
-      Text(
-        text = stringResource(R.string.gif_screen_title),
-      )
-    },
-    // Search for Gifs
+    title = { Text(text = stringResource(R.string.gif_screen_title)) },
     actions = {
-      // Search for Gifs
+      // Search Tooltip Box
       TooltipBox(
         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
         tooltip = { Text("Search gifs") },
         state = searchTooltipState,
       ) {
         IconButton(
-          onClick = { openSearch.value = false },
+          onClick = {
+            openSearch.value = false
+            // Close any tooltips before search
+            searchTooltipState.dismiss()
+          }
         ) {
           Icon(
             imageVector = Icons.Filled.Search,
@@ -209,14 +226,18 @@ private fun TheToolBar(
           )
         }
       }
-      // Overflow menu item
+
+      // More Tooltip Box
       TooltipBox(
         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
         tooltip = { Text("Show menu") },
         state = moreTooltipState,
       ) {
         IconButton(
-          onClick = { showMenu.value = !showMenu.value },
+          onClick = {
+            showMenu.value = !showMenu.value
+            moreTooltipState.dismiss()
+          }
         ) {
           Icon(
             imageVector = Icons.Filled.MoreVert,
@@ -224,19 +245,19 @@ private fun TheToolBar(
           )
         }
       }
-      // Overflow menu
+
+      // Dropdown Menu
       DropdownMenu(
         expanded = showMenu.value,
         onDismissRequest = { showMenu.value = false },
       ) {
         DropdownMenuItem(
-          modifier =
-            Modifier.semantics {
-              contentDescription = context.getString(R.string.license_screen_content_description)
-            },
+          modifier = Modifier.semantics {
+            contentDescription = context.getString(R.string.license_screen_content_description)
+          },
           onClick = {
-            navController.navigate(Screen.License.route)
             showMenu.value = false
+            navController.navigate(Screen.License.route)
           },
           text = { Text(text = stringResource(R.string.license_screen_title)) },
         )
@@ -367,8 +388,8 @@ private fun TheContent(
                     .padding(1.dp)
                     .size(135.dp)
                     .clickable {
-                      currentSelectedItem.value = item
                       openDialog.value = true
+                      currentSelectedItem.value = item
                     },
                 imageOptions = ImageOptions(contentScale = ContentScale.Crop),
                 loading = {

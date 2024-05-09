@@ -20,7 +20,7 @@ retrofit = "2.11.0"
 robolectric = "4.12.1"
 # language
 java = "11"
-kotlin = "1.9.23"
+kotlin = "1.9.24"
 # build
 sdk-compile = "34"
 sdk-min = "26"
@@ -32,9 +32,9 @@ debug-password = "android"
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
 android-library = { id = "com.android.library", version.ref = "android" }
-ksp = { id = "com.google.devtools.ksp", version = "1.9.23-1.0.20" }
+ksp = { id = "com.google.devtools.ksp", version = "1.9.24-1.0.20" }
 dagger = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.1.0" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.1.1" }
 license = { id = "com.jaredsburrows.license", version = "0.9.7" }
 versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 dexcount = { id = "com.getkeepsafe.dexcount", version = "4.0.0" }
@@ -99,7 +99,7 @@ mockito-inline = { module = "org.mockito:mockito-inline", version = "5.2.0" }
 mockito-kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version = "2.2.0" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 robolectric-annotations = { module = "org.robolectric:annotations", version.ref = "robolectric" }
-squareup-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android-startup", version.ref = "leakcanary" }
+squareup-leakcanary-startup = { module = "com.squareup.leakcanary:leakcanary-android-startup", version.ref = "leakcanary" }
 squareup-leakcanary-instrumentation = { module = "com.squareup.leakcanary:leakcanary-android-instrumentation", version.ref = "leakcanary" }
 squareup-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 squareup-moshi-adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }

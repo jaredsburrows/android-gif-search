@@ -243,7 +243,7 @@ dependencies {
   implementation(libs.squareup.retrofit.moshi)
 
   // Leakcanary
-  debugImplementation(libs.squareup.leakcanary)
+  debugImplementation(libs.squareup.leakcanary.startup)
   androidTestImplementation(libs.squareup.leakcanary.instrumentation)
 
   // Other

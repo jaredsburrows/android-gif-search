@@ -31,6 +31,8 @@ import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -101,7 +103,9 @@ private fun TheToolbar(
   TopAppBar(
     title = {
       Text(
-        modifier = Modifier.semantics { contentDescription = context.getString(R.string.license_screen_content_description) },
+        modifier = Modifier.semantics {
+          contentDescription = context.getString(R.string.license_screen_content_description)
+        },
         text = stringResource(R.string.license_screen_title),
       )
     },
@@ -127,7 +131,7 @@ private fun TheToolbar(
 private fun TheContent(innerPadding: PaddingValues) {
   Column(
     modifier =
-      Modifier
+    Modifier
         .padding(innerPadding)
         .verticalScroll(rememberScrollState()),
   ) {
@@ -146,108 +150,121 @@ private fun TheWebView() {
   // Instead of loading files using "files://" directly
   val assetLoader = WebViewAssetLoader.Builder().addPathHandler("/assets/", pathHandler).build()
 
-  AndroidView(
-    factory = { _ ->
-      WebView(context).apply {
-        isVerticalScrollBarEnabled = false
-        webViewClient =
-          object : WebViewClient() {
-            override fun onPageStarted(
-              view: WebView?,
-              url: String?,
-              favicon: Bitmap?,
-            ) {
-              super.onPageStarted(view, url, favicon)
+  val webView = remember {
+    WebView(context).apply {
+      isVerticalScrollBarEnabled = false
+      webViewClient =
+        object : WebViewClient() {
+          override fun onPageStarted(
+            view: WebView?,
+            url: String?,
+            favicon: Bitmap?,
+          ) {
+            super.onPageStarted(view, url, favicon)
 
-              Timber.i("onPageStarted:\t$url")
-            }
-
-            override fun onPageFinished(
-              view: WebView,
-              url: String,
-            ) {
-              super.onPageFinished(view, url)
-
-              Timber.i("onPageFinished:\t$url")
-            }
-
-            override fun onLoadResource(
-              view: WebView?,
-              url: String?,
-            ) {
-              super.onLoadResource(view, url)
-
-              Timber.i("onLoadResource:\t$url")
-            }
-
-            override fun shouldInterceptRequest(
-              view: WebView,
-              request: WebResourceRequest,
-            ): WebResourceResponse? {
-              super.shouldInterceptRequest(view, request)
-
-              // Override URLs for AssetsPathHandler
-              val override = assetLoader.shouldInterceptRequest(request.url)
-              val default = super.shouldInterceptRequest(view, request)
-              val newRequest = override ?: default
-              Timber.i("shouldInterceptRequest:\t${request.url}\t${override?.statusCode}")
-              return newRequest
-            }
-
-            override fun onReceivedHttpError(
-              view: WebView,
-              request: WebResourceRequest,
-              errorResponse: WebResourceResponse,
-            ) {
-              Timber.e("onReceivedHttpError:\t${request.url}\t${errorResponse.statusCode}")
-            }
+            Timber.i("onPageStarted:\t$url")
           }
 
-        webChromeClient =
-          object : WebChromeClient() {
-            override fun onProgressChanged(
-              view: WebView?,
-              newProgress: Int,
-            ) {
-              super.onProgressChanged(view, newProgress)
+          override fun onPageFinished(
+            view: WebView,
+            url: String,
+          ) {
+            super.onPageFinished(view, url)
 
-              Timber.i("onProgressChanged:\t$newProgress")
-            }
+            Timber.i("onPageFinished:\t$url")
           }
 
-        if (runningInPreview) {
-          return@apply
+          override fun onLoadResource(
+            view: WebView?,
+            url: String?,
+          ) {
+            super.onLoadResource(view, url)
+
+            Timber.i("onLoadResource:\t$url")
+          }
+
+          override fun shouldInterceptRequest(
+            view: WebView,
+            request: WebResourceRequest,
+          ): WebResourceResponse? {
+            super.shouldInterceptRequest(view, request)
+
+            // Override URLs for AssetsPathHandler
+            val override = assetLoader.shouldInterceptRequest(request.url)
+            val default = super.shouldInterceptRequest(view, request)
+            val newRequest = override ?: default
+            Timber.i("shouldInterceptRequest:\t${request.url}\t${override?.statusCode}")
+            return newRequest
+          }
+
+          override fun onReceivedHttpError(
+            view: WebView,
+            request: WebResourceRequest,
+            errorResponse: WebResourceResponse,
+          ) {
+            Timber.e("onReceivedHttpError:\t${request.url}\t${errorResponse.statusCode}")
+          }
         }
 
-        settings.apply {
-          allowFileAccess = false
-          allowContentAccess = false
-          setGeolocationEnabled(false)
-          @Suppress(names = ["DEPRECATION"])
-          if (VERSION.SDK_INT < VERSION_CODES.R) {
-            allowFileAccessFromFileURLs = false
-            allowUniversalAccessFromFileURLs = false
-          }
+      webChromeClient =
+        object : WebChromeClient() {
+          override fun onProgressChanged(
+            view: WebView?,
+            newProgress: Int,
+          ) {
+            super.onProgressChanged(view, newProgress)
 
-          // Handle dark mode for WebView
-          @SuppressLint("NewApi")
-          if (isFeatureSupported(ALGORITHMIC_DARKENING)) {
-            setAlgorithmicDarkeningAllowed(this, true)
-          } else if (isFeatureSupported(FORCE_DARK)) {
-            @Suppress(names = ["DEPRECATION"])
-            when (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
-              UI_MODE_NIGHT_YES -> setForceDark(this, FORCE_DARK_ON)
-              else -> setForceDark(this, FORCE_DARK_OFF)
-            }
-          } else {
-            Timber.w("Dark mode not set")
+            Timber.i("onProgressChanged:\t$newProgress")
           }
+        }
+
+      if (runningInPreview) {
+        return@apply
+      }
+
+      settings.apply {
+        allowFileAccess = false
+        allowContentAccess = false
+        setGeolocationEnabled(false)
+        @Suppress(names = ["DEPRECATION"])
+        if (VERSION.SDK_INT < VERSION_CODES.R) {
+          allowFileAccessFromFileURLs = false
+          allowUniversalAccessFromFileURLs = false
+        }
+
+        // Handle dark mode for WebView
+        @SuppressLint("NewApi")
+        if (isFeatureSupported(ALGORITHMIC_DARKENING)) {
+          setAlgorithmicDarkeningAllowed(this, true)
+        } else if (isFeatureSupported(FORCE_DARK)) {
+          @Suppress(names = ["DEPRECATION"])
+          when (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
+            UI_MODE_NIGHT_YES -> setForceDark(this, FORCE_DARK_ON)
+            else -> setForceDark(this, FORCE_DARK_OFF)
+          }
+        } else {
+          Timber.w("Dark mode not set")
         }
       }
-    },
-    update = { webView ->
+    }
+  }
+
+  DisposableEffect(webView) {
+    onDispose {
+      // Cleanup WebView resources properly
+      webView.apply {
+        clearHistory()
+        removeAllViews()
+        destroy()
+      }
+    }
+  }
+
+  AndroidView(
+    factory = { webView },
+    update = {
       // from "main/assets/index.html" -> "file:///android_asset/index.html"
-      webView.loadUrl("https://appassets.androidplatform.net/assets/open_source_licenses.html")
+      it.loadUrl("https://appassets.androidplatform.net/assets/open_source_licenses.html")
     },
   )
 }
