@@ -82,16 +82,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.Screen
-import com.burrowsapps.gif.search.di.ApplicationMode.TESTING
 import com.burrowsapps.gif.search.ui.theme.GifTheme
 import com.kmpalette.palette.graphics.Palette
 import com.skydoves.landscapist.ImageOptions
@@ -101,7 +97,6 @@ import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import com.skydoves.landscapist.palette.PalettePlugin
 import kotlinx.coroutines.flow.distinctUntilChanged
-import timber.log.Timber
 import kotlin.math.roundToInt
 
 /** Shows the main screen of trending gifs. */
@@ -189,6 +184,7 @@ private fun TheToolBar(
 ) {
   val searchTooltipState = remember { TooltipState() }
   val moreTooltipState = remember { TooltipState() }
+  val context = LocalContext.current
 
   TopAppBar(
     title = {
@@ -209,7 +205,7 @@ private fun TheToolBar(
         ) {
           Icon(
             imageVector = Icons.Filled.Search,
-            contentDescription = stringResource(R.string.menu_search),
+            contentDescription = stringResource(R.string.menu_search_content_description),
           )
         }
       }
@@ -224,7 +220,7 @@ private fun TheToolBar(
         ) {
           Icon(
             imageVector = Icons.Filled.MoreVert,
-            contentDescription = stringResource(R.string.menu_more),
+            contentDescription = stringResource(R.string.menu_more_content_description),
           )
         }
       }
@@ -234,6 +230,10 @@ private fun TheToolBar(
         onDismissRequest = { showMenu.value = false },
       ) {
         DropdownMenuItem(
+          modifier =
+            Modifier.semantics {
+              contentDescription = context.getString(R.string.license_screen_content_description)
+            },
           onClick = {
             navController.navigate(Screen.License.route)
             showMenu.value = false
@@ -342,9 +342,13 @@ private fun TheContent(
         ) { item ->
           Box(
             modifier =
-              Modifier.animateItemPlacement(
-                animationSpec = tween(durationMillis = 350),
-              ),
+              Modifier
+                .animateItemPlacement(
+                  animationSpec = tween(durationMillis = 350),
+                )
+                .semantics {
+                  contentDescription = context.getString(R.string.gif_image_content_description)
+                },
           ) {
             val requestBuilder =
               loadGif(
@@ -357,32 +361,6 @@ private fun TheContent(
             CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
               GlideImage(
                 imageModel = { item.tinyGifUrl },
-                requestListener = {
-                  object : RequestListener<Any> {
-                    override fun onLoadFailed(
-                      e: GlideException?,
-                      model: Any?,
-                      target: Target<Any>,
-                      isFirstResource: Boolean,
-                    ): Boolean {
-                      Timber.e("Glide onLoadFailed:", e)
-                      return false
-                    }
-
-                    override fun onResourceReady(
-                      resource: Any,
-                      model: Any,
-                      target: Target<Any>?,
-                      dataSource: DataSource,
-                      isFirstResource: Boolean,
-                    ): Boolean {
-                      if (resource is GifDrawable && gifViewModel.applicationMode() == TESTING) {
-                        resource.setLoopCount(1)
-                      }
-                      return false
-                    }
-                  }
-                },
                 glideRequestType = GIF,
                 modifier =
                   Modifier
@@ -391,8 +369,7 @@ private fun TheContent(
                     .clickable {
                       currentSelectedItem.value = item
                       openDialog.value = true
-                    }
-                    .semantics { contentDescription = context.getString(R.string.gif_image) },
+                    },
                 imageOptions = ImageOptions(contentScale = ContentScale.Crop),
                 loading = {
                   Box(modifier = Modifier.matchParentSize()) {
@@ -438,7 +415,7 @@ private fun TheDialogPreview(
     Column(
       modifier =
         Modifier.semantics {
-          contentDescription = context.getString(R.string.gif_image_dialog)
+          contentDescription = context.getString(R.string.gif_image_dialog_content_description)
         },
       verticalArrangement = Arrangement.Center,
       horizontalAlignment = Alignment.CenterHorizontally,
