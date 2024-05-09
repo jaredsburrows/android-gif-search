@@ -50,10 +50,11 @@ class LicenseScreenTest {
   @ApplicationContext
   internal lateinit var context: Context
 
-  private val menuMore by lazy { context.getString(R.string.menu_more) }
-  private val licenseScreenTitle by lazy { context.getString(R.string.license_screen_title) }
   private val gifScreenTitle by lazy { context.getString(R.string.gif_screen_title) }
-  private val menuBack by lazy { context.getString(R.string.menu_back) }
+  private val licenseScreenTitle by lazy { context.getString(R.string.license_screen_title) }
+  private val licenseScreenContentDescription by lazy { context.getString(R.string.license_screen_content_description) }
+  private val menuBackContentDescription by lazy { context.getString(R.string.menu_back_content_description) }
+  private val menuMoreContentDescription by lazy { context.getString(R.string.menu_more_content_description) }
 
   @Before
   fun setUp() {
@@ -113,8 +114,11 @@ class LicenseScreenTest {
   fun testGoBackViaHardwareBackButton() {
     openLicenseScreen()
 
+    composeTestRule.mainClock.autoAdvance = false
     composeTestRule.onBackPressed()
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
+    composeTestRule.mainClock.advanceTimeByFrame()
 
     composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
   }
@@ -123,17 +127,27 @@ class LicenseScreenTest {
   fun testGoBackViaClickMenuBackButton() {
     openLicenseScreen()
 
-    composeTestRule.onNodeWithContentDescription(label = menuBack).performClick()
+    composeTestRule.mainClock.autoAdvance = false
+    composeTestRule.onNodeWithContentDescription(label = menuBackContentDescription).performClick()
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
+    composeTestRule.mainClock.advanceTimeByFrame()
 
     composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
   }
 
   private fun openLicenseScreen() {
-    composeTestRule.onNodeWithContentDescription(label = menuMore).performClick()
+    composeTestRule.onNodeWithContentDescription(label = menuMoreContentDescription).performClick()
     composeTestRule.waitForIdle()
 
-    composeTestRule.onNodeWithText(text = licenseScreenTitle).performClick()
+    composeTestRule.mainClock.autoAdvance = false
+    composeTestRule.onNodeWithContentDescription(label = licenseScreenContentDescription)
+      .performClick()
+    composeTestRule.mainClock.advanceTimeByFrame()
+    composeTestRule.waitForIdle()
+    composeTestRule.mainClock.advanceTimeByFrame()
+
+    composeTestRule.mainClock.autoAdvance = true
     composeTestRule.waitForIdle()
   }
 }

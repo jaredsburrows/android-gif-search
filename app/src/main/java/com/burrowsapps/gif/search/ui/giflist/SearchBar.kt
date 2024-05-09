@@ -56,7 +56,7 @@ internal fun SearchBar(
       IconButton(onClick = { onNavigateBack() }) {
         Icon(
           imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-          contentDescription = stringResource(id = R.string.menu_back),
+          contentDescription = stringResource(id = R.string.menu_back_content_description),
         )
       }
     },
@@ -90,7 +90,7 @@ internal fun SearchBar(
             IconButton(onClick = { onClearClick() }) {
               Icon(
                 imageVector = Icons.Filled.Close,
-                contentDescription = stringResource(R.string.menu_close),
+                contentDescription = stringResource(R.string.menu_close_content_description),
               )
             }
           }
