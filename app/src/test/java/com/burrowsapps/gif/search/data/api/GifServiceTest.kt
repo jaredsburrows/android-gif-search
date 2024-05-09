@@ -10,6 +10,8 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.android.testing.UninstallModules
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -74,7 +76,7 @@ class GifServiceTest {
   @Test
   fun testTrendingResultsURLShouldParseCorrectly() =
     runTest {
-      val response = sut.fetchTrendingResults(null)
+      val response = runBlocking(IO) { sut.fetchTrendingResults(null) }
       val body = response.body()!!
 
       assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
@@ -83,7 +85,7 @@ class GifServiceTest {
   @Test
   fun testTrendingResultsURLPreviewShouldParseCorrectly() =
     runTest {
-      val response = sut.fetchTrendingResults(null)
+      val response = runBlocking(IO) { sut.fetchTrendingResults(null) }
       val body = response.body()!!
 
       assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")
@@ -92,7 +94,7 @@ class GifServiceTest {
   @Test
   fun testSearchResultsURLShouldParseCorrectly() =
     runTest {
-      val response = sut.fetchSearchResults("hello", null)
+      val response = runBlocking(IO) { sut.fetchSearchResults("hello", null) }
       val body = response.body()!!
 
       assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
@@ -101,7 +103,7 @@ class GifServiceTest {
   @Test
   fun testSearchResultsURLPreviewShouldParseCorrectly() =
     runTest {
-      val response = sut.fetchSearchResults("hello", null)
+      val response = runBlocking(IO) { sut.fetchSearchResults("hello", null) }
       val body = response.body()!!
 
       assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")
