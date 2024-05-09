@@ -20,6 +20,8 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.android.testing.UninstallModules
+import leakcanary.DetectLeaksAfterTestSuccess
+import leakcanary.SkipLeakDetection
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -45,6 +47,9 @@ class LicenseScreenTest {
 
   @get:Rule(order = 1)
   internal val composeTestRule = createAndroidComposeRule<MainActivity>()
+
+  @get:Rule(order = 2)
+  internal val rule = DetectLeaksAfterTestSuccess()
 
   @Inject
   @ApplicationContext
@@ -103,6 +108,7 @@ class LicenseScreenTest {
     }
   }
 
+  @SkipLeakDetection("https://issuetracker.google.com/issues/296928070")
   @Test
   fun testLicenseScreenTitleIsShowing() {
     openLicenseScreen()

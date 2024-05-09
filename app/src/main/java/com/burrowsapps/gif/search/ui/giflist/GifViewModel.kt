@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.data.api.model.NetworkResult
 import com.burrowsapps.gif.search.data.repository.GifRepository
-import com.burrowsapps.gif.search.di.ApplicationMode
 import com.burrowsapps.gif.search.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,7 +19,6 @@ internal class GifViewModel
   internal constructor(
     private val repository: GifRepository,
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
-    private val applicationMode: ApplicationMode,
   ) : ViewModel() {
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: MutableStateFlow<Boolean> = _isRefreshing
@@ -40,10 +38,6 @@ internal class GifViewModel
 
     init {
       loadTrendingImages()
-    }
-
-    fun applicationMode(): ApplicationMode {
-      return applicationMode
     }
 
     fun onSearchTextChanged(changedSearchText: String) {

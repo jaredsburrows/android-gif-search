@@ -235,8 +235,8 @@ private fun TheToolBar(
               contentDescription = context.getString(R.string.license_screen_content_description)
             },
           onClick = {
-            navController.navigate(Screen.License.route)
             showMenu.value = false
+            navController.navigate(Screen.License.route)
           },
           text = { Text(text = stringResource(R.string.license_screen_title)) },
         )
@@ -367,8 +367,8 @@ private fun TheContent(
                     .padding(1.dp)
                     .size(135.dp)
                     .clickable {
-                      currentSelectedItem.value = item
                       openDialog.value = true
+                      currentSelectedItem.value = item
                     },
                 imageOptions = ImageOptions(contentScale = ContentScale.Crop),
                 loading = {
