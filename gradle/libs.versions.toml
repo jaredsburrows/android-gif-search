@@ -8,12 +8,12 @@ accompanist = "0.34.0"
 activity = "1.9.0"
 # See https://androidx.dev/storage/compose-compiler/repository
 compose = "1.6.7"
-compose-compiler = "1.5.13"
+compose-compiler = "1.5.14"
 glide = "4.16.0"
-kotlinx = "1.8.0"
+kotlinx = "1.8.1"
 landscapist = "2.3.3"
 leakcanary = "2.14"
-lifecycle = "2.7.0"
+lifecycle = "2.8.0"
 moshi = "1.15.1"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
@@ -44,7 +44,7 @@ publish = { id = "com.github.triplet.play", version = "3.9.1" }
 android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "2.0.4" }
 androidx-activityktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
-androidx-annotation = { module = "androidx.annotation:annotation", version = "1.7.1" }
+androidx-annotation = { module = "androidx.annotation:annotation", version = "1.8.0" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.6.1" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2024.05.00" }
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
