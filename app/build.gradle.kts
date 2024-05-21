@@ -5,6 +5,7 @@ import java.util.Properties
 plugins {
   alias(libs.plugins.android.application)
   kotlin("android")
+  kotlin("plugin.compose")
   alias(libs.plugins.ksp)
   alias(libs.plugins.dagger)
   alias(libs.plugins.ktlint)
@@ -42,17 +43,9 @@ android {
     targetCompatibility = VERSION_11
   }
 
-  kotlinOptions {
-    jvmTarget = VERSION_11.toString()
-  }
-
   buildFeatures {
     buildConfig = true
     compose = true
-  }
-
-  composeOptions {
-    kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
   }
 
   lint {
@@ -205,7 +198,6 @@ dependencies {
   debugImplementation(libs.androidx.compose.uitoolingpreview)
   debugImplementation(libs.androidx.compose.uimanifest)
   implementation(libs.androidx.activity.compose)
-  implementation(libs.androidx.compose.compiler)
   implementation(libs.androidx.compose.runtime)
   implementation(libs.androidx.compose.material)
   implementation(libs.androidx.compose.material3)

@@ -16,7 +16,7 @@ plugins {
   alias(libs.plugins.android.application) apply false
   alias(libs.plugins.android.library) apply false
   kotlin("android") version (libs.versions.kotlin.get()) apply false
-  kotlin("jvm") version (libs.versions.kotlin.get()) apply false
+  kotlin("plugin.compose") version (libs.versions.kotlin.get()) apply false
   alias(libs.plugins.ksp) apply false
   alias(libs.plugins.dagger) apply false
   alias(libs.plugins.ktlint) apply false
@@ -68,8 +68,6 @@ allprojects {
   tasks.withType<KotlinJvmCompile>().configureEach {
     compilerOptions {
       jvmTarget.set(JvmTarget.JVM_11)
-      languageVersion.set(KotlinVersion.KOTLIN_1_9)
-      apiVersion.set(KotlinVersion.KOTLIN_1_9)
       freeCompilerArgs.addAll(
         // https://kotlinlang.org/docs/compiler-reference.html#progressive
         "-progressive",
@@ -77,11 +75,8 @@ allprojects {
         "-Xemit-jvm-type-annotations",
         // https://publicobject.com/2019/11/18/kotlins-assert-is-not-like-javas-assert/
         "-Xassertions=jvm",
-        "-Xproper-ieee754-comparisons",
         // https://blog.jetbrains.com/kotlin/2020/07/kotlin-1-4-m3-generating-default-methods-in-interfaces/
         "-Xjvm-default=all",
-        "-P",
-        "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=${libs.versions.kotlin.get()}",
       )
     }
   }
