@@ -8,7 +8,6 @@ accompanist = "0.34.0"
 activity = "1.9.0"
 # See https://androidx.dev/storage/compose-compiler/repository
 compose = "1.6.7"
-compose-compiler = "1.5.14"
 glide = "4.16.0"
 kotlinx = "1.8.1"
 landscapist = "2.3.3"
@@ -20,7 +19,7 @@ retrofit = "2.11.0"
 robolectric = "4.12.2"
 # language
 java = "11"
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 # build
 sdk-compile = "34"
 sdk-min = "26"
@@ -32,13 +31,13 @@ debug-password = "android"
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
 android-library = { id = "com.android.library", version.ref = "android" }
-ksp = { id = "com.google.devtools.ksp", version = "1.9.24-1.0.20" }
 dagger = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
+dexcount = { id = "com.getkeepsafe.dexcount", version = "4.0.0" }
+ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.21" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.1.1" }
 license = { id = "com.jaredsburrows.license", version = "0.9.7" }
-versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
-dexcount = { id = "com.getkeepsafe.dexcount", version = "4.0.0" }
 publish = { id = "com.github.triplet.play", version = "3.9.1" }
+versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 
 [libraries]
 android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "2.0.4" }
@@ -47,7 +46,6 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.8.0" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.6.1" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2024.05.00" }
-androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 androidx-compose-material = { module = "androidx.compose.material:material", version = "1.6.7" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.2.1" }
 androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.7.7" }

@@ -8,9 +8,11 @@ import com.burrowsapps.gif.search.data.repository.GifRepository
 import com.burrowsapps.gif.search.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +28,6 @@ internal class GifViewModel
     private val _searchText = MutableStateFlow("")
     val searchText: MutableStateFlow<String> = _searchText
 
-    // TODO use states
     private val _uiState = MutableStateFlow<NetworkResult<List<GifImageInfo>>>(NetworkResult.Empty())
     val uiState: StateFlow<NetworkResult<List<GifImageInfo>>> = _uiState
 
@@ -36,8 +37,13 @@ internal class GifViewModel
     private val _gifListResponse = MutableStateFlow(emptyList<GifImageInfo>())
     val gifListResponse: StateFlow<List<GifImageInfo>> = _gifListResponse
 
-    init {
-      loadTrendingImages()
+    override fun onCleared() {
+      super.onCleared()
+      _searchText.value = ""
+      _gifListResponse.value = emptyList()
+      _nextPageResponse.value = ""
+      _uiState.value = NetworkResult.Empty()
+      viewModelScope.cancel()
     }
 
     fun onSearchTextChanged(changedSearchText: String) {
@@ -60,43 +66,75 @@ internal class GifViewModel
       searchString: String,
       nextPosition: String? = null,
     ) {
-      // TODO update loading states
-//    _gifListResponse.value = NetworkResult.Loading()
       viewModelScope.launch(dispatcher) {
-        when (val result = repository.getSearchResults(searchString, nextPosition)) {
-          is NetworkResult.Empty -> _uiState.value = NetworkResult.Empty()
-          is NetworkResult.Error -> _uiState.value = NetworkResult.Error()
-          is NetworkResult.Loading -> _uiState.value = NetworkResult.Loading()
-          is NetworkResult.Success -> {
-            _nextPageResponse.value = result.data?.next.orEmpty()
+        val result = repository.getSearchResults(searchString, nextPosition)
+        if (result != null) {
+          when (result) {
+            is NetworkResult.Loading -> {
+              Timber.d("Search Images: Loading")
+              _uiState.value = NetworkResult.Loading()
+            }
+            is NetworkResult.Success -> {
+              Timber.d("Search Images: Success")
+              _nextPageResponse.value = result.data?.next.orEmpty()
 
-            if (nextPosition == null) {
-              _gifListResponse.value = buildGifList(result.data)
-            } else {
-              _gifListResponse.value += buildGifList(result.data)
+              if (nextPosition == null) {
+                _gifListResponse.value = buildGifList(result.data)
+              } else {
+                _gifListResponse.value += buildGifList(result.data)
+              }
+              _uiState.value = NetworkResult.Success(_gifListResponse.value)
+            }
+            is NetworkResult.Empty -> {
+              Timber.d("Search Images: Empty")
+              _uiState.value = NetworkResult.Empty()
+              _gifListResponse.value = emptyList()
+            }
+            is NetworkResult.Error -> {
+              Timber.d("Search Images: Error")
+              _uiState.value = NetworkResult.Error()
             }
           }
+        } else {
+          Timber.e("Search Images: Result is null")
+          _uiState.value = NetworkResult.Error()
         }
       }
     }
 
     fun loadTrendingImages(nextPosition: String? = null) {
-      // TODO update loading states
-//    _trendingResponse.value = NetworkResult.Loading()
       viewModelScope.launch(dispatcher) {
-        when (val result = repository.getTrendingResults(nextPosition)) {
-          is NetworkResult.Empty -> _uiState.value = NetworkResult.Empty()
-          is NetworkResult.Error -> _uiState.value = NetworkResult.Error()
-          is NetworkResult.Loading -> _uiState.value = NetworkResult.Loading()
-          is NetworkResult.Success -> {
-            _nextPageResponse.value = result.data?.next.orEmpty()
+        val result = repository.getTrendingResults(nextPosition)
+        if (result != null) {
+          when (result) {
+            is NetworkResult.Loading -> {
+              Timber.d("Trending Images: Loading")
+              _uiState.value = NetworkResult.Loading()
+            }
+            is NetworkResult.Success -> {
+              Timber.d("Trending Images: Success")
+              _nextPageResponse.value = result.data?.next.orEmpty()
 
-            if (nextPosition == null) {
-              _gifListResponse.value = buildGifList(result.data)
-            } else {
-              _gifListResponse.value += buildGifList(result.data)
+              if (nextPosition == null) {
+                _gifListResponse.value = buildGifList(result.data)
+              } else {
+                _gifListResponse.value += buildGifList(result.data)
+              }
+              _uiState.value = NetworkResult.Success(_gifListResponse.value)
+            }
+            is NetworkResult.Empty -> {
+              Timber.d("Trending Images: Empty")
+              _uiState.value = NetworkResult.Empty()
+              _gifListResponse.value = emptyList()
+            }
+            is NetworkResult.Error -> {
+              Timber.d("Trending Images: Error")
+              _uiState.value = NetworkResult.Error()
             }
           }
+        } else {
+          Timber.e("Trending Images: Result is null")
+          _uiState.value = NetworkResult.Error()
         }
       }
     }
