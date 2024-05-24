@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -97,7 +96,6 @@ import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import com.skydoves.landscapist.palette.PalettePlugin
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlin.math.roundToInt
 
 /** Shows the main screen of trending gifs. */
 @Preview(
@@ -355,7 +353,6 @@ private fun TheContent(
                 context = context,
                 imageUrl = item.tinyGifUrl,
                 thumbnailUrl = item.tinyGifPreviewUrl,
-                size = 135.dp.value.roundToInt(),
               )
 
             CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
@@ -365,6 +362,7 @@ private fun TheContent(
                 modifier =
                   Modifier
                     .padding(1.dp)
+                    .fillMaxWidth()
                     .size(135.dp)
                     .clickable {
                       openDialog.value = true
@@ -436,7 +434,7 @@ private fun TheDialogPreview(
             Modifier
               .padding(1.dp)
               .fillMaxWidth()
-              .height(350.dp),
+              .size(350.dp),
           component =
             rememberImageComponent {
               +PalettePlugin { palette.value = it }
