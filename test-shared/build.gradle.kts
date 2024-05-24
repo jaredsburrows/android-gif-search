@@ -57,10 +57,10 @@ tasks.register("updateTestFiles") {
     mapOf(
       // Show enough to emulate a filtered "search" for testing
       "search_results.json" to
-        "https://g.tenor.com/v1/search?key=LIVDSRZULELA&media_filter=minimal&q=hello&limit=50",
+        "https://g.tenor.com/v1/search?key=LIVDSRZULELA&media_filter=minimal&q=hello&limit=1",
       // Show just enough to fill the screen for testing
       "trending_results.json" to
-        "https://g.tenor.com/v1/trending?key=LIVDSRZULELA&media_filter=minimal&limit=50",
+        "https://g.tenor.com/v1/trending?key=LIVDSRZULELA&media_filter=minimal&limit=3",
     ).forEach { (file, url) ->
       File(resourcesFolder, file)
         .writeText(
