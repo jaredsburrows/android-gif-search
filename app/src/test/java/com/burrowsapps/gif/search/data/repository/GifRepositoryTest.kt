@@ -45,6 +45,18 @@ class GifRepositoryTest {
     }
 
   @Test
+  fun testLoadTrendingImagesEmpty() =
+    runTest {
+      whenever(service.fetchTrendingResults(eq(next)))
+        .thenReturn(Response.success(null))
+
+      val result = sut.getTrendingResults(next).data
+
+      verify(service).fetchTrendingResults(eq(next))
+      assertThat(result).isNull()
+    }
+
+  @Test
   fun testLoadTrendingImagesError() =
     runTest {
       val errorResponse =
@@ -76,6 +88,19 @@ class GifRepositoryTest {
 
       verify(service).fetchSearchResults(eq(searchString), eq(next))
       assertThat(result).isEqualTo(response)
+    }
+
+  @Test
+  fun testLoadSearchImagesEmpty() =
+    runTest {
+      val searchString = "gifs"
+      whenever(service.fetchSearchResults(eq(searchString), eq(next)))
+        .thenReturn(Response.success(null))
+
+      val result = sut.getSearchResults(searchString, next).data
+
+      verify(service).fetchSearchResults(eq(searchString), eq(next))
+      assertThat(result).isNull()
     }
 
   @Test

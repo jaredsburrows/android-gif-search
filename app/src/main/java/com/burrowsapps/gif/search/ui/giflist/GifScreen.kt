@@ -192,7 +192,7 @@ private fun TheToolBar(
         text = stringResource(R.string.gif_screen_title),
       )
     },
-    // Search for Gifs
+    // Search Tooltip Box
     actions = {
       // Search for Gifs
       TooltipBox(
@@ -209,7 +209,7 @@ private fun TheToolBar(
           )
         }
       }
-      // Overflow menu item
+      // More Tooltip Box
       TooltipBox(
         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
         tooltip = { Text("Show menu") },

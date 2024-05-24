@@ -67,74 +67,62 @@ internal class GifViewModel
       nextPosition: String? = null,
     ) {
       viewModelScope.launch(dispatcher) {
-        val result = repository.getSearchResults(searchString, nextPosition)
-        if (result != null) {
-          when (result) {
-            is NetworkResult.Loading -> {
-              Timber.d("Search Images: Loading")
-              _uiState.value = NetworkResult.Loading()
-            }
-            is NetworkResult.Success -> {
-              Timber.d("Search Images: Success")
-              _nextPageResponse.value = result.data?.next.orEmpty()
-
-              if (nextPosition == null) {
-                _gifListResponse.value = buildGifList(result.data)
-              } else {
-                _gifListResponse.value += buildGifList(result.data)
-              }
-              _uiState.value = NetworkResult.Success(_gifListResponse.value)
-            }
-            is NetworkResult.Empty -> {
-              Timber.d("Search Images: Empty")
-              _uiState.value = NetworkResult.Empty()
-              _gifListResponse.value = emptyList()
-            }
-            is NetworkResult.Error -> {
-              Timber.d("Search Images: Error")
-              _uiState.value = NetworkResult.Error()
-            }
+        when (val result = repository.getSearchResults(searchString, nextPosition)) {
+          is NetworkResult.Loading -> {
+            Timber.d("Search Images: Loading")
+            _uiState.value = NetworkResult.Loading()
           }
-        } else {
-          Timber.e("Search Images: Result is null")
-          _uiState.value = NetworkResult.Error()
+          is NetworkResult.Success -> {
+            Timber.d("Search Images: Success")
+            _nextPageResponse.value = result.data?.next.orEmpty()
+
+            if (nextPosition == null) {
+              _gifListResponse.value = buildGifList(result.data)
+            } else {
+              _gifListResponse.value += buildGifList(result.data)
+            }
+            _uiState.value = NetworkResult.Success(_gifListResponse.value)
+          }
+          is NetworkResult.Empty -> {
+            Timber.d("Search Images: Empty")
+            _uiState.value = NetworkResult.Empty()
+            _gifListResponse.value = emptyList()
+          }
+          is NetworkResult.Error -> {
+            Timber.d("Search Images: Error")
+            _uiState.value = NetworkResult.Error()
+          }
         }
       }
     }
 
     fun loadTrendingImages(nextPosition: String? = null) {
       viewModelScope.launch(dispatcher) {
-        val result = repository.getTrendingResults(nextPosition)
-        if (result != null) {
-          when (result) {
-            is NetworkResult.Loading -> {
-              Timber.d("Trending Images: Loading")
-              _uiState.value = NetworkResult.Loading()
-            }
-            is NetworkResult.Success -> {
-              Timber.d("Trending Images: Success")
-              _nextPageResponse.value = result.data?.next.orEmpty()
-
-              if (nextPosition == null) {
-                _gifListResponse.value = buildGifList(result.data)
-              } else {
-                _gifListResponse.value += buildGifList(result.data)
-              }
-              _uiState.value = NetworkResult.Success(_gifListResponse.value)
-            }
-            is NetworkResult.Empty -> {
-              Timber.d("Trending Images: Empty")
-              _uiState.value = NetworkResult.Empty()
-              _gifListResponse.value = emptyList()
-            }
-            is NetworkResult.Error -> {
-              Timber.d("Trending Images: Error")
-              _uiState.value = NetworkResult.Error()
-            }
+        when (val result = repository.getTrendingResults(nextPosition)) {
+          is NetworkResult.Loading -> {
+            Timber.d("Trending Images: Loading")
+            _uiState.value = NetworkResult.Loading()
           }
-        } else {
-          Timber.e("Trending Images: Result is null")
-          _uiState.value = NetworkResult.Error()
+          is NetworkResult.Success -> {
+            Timber.d("Trending Images: Success")
+            _nextPageResponse.value = result.data?.next.orEmpty()
+
+            if (nextPosition == null) {
+              _gifListResponse.value = buildGifList(result.data)
+            } else {
+              _gifListResponse.value += buildGifList(result.data)
+            }
+            _uiState.value = NetworkResult.Success(_gifListResponse.value)
+          }
+          is NetworkResult.Empty -> {
+            Timber.d("Trending Images: Empty")
+            _uiState.value = NetworkResult.Empty()
+            _gifListResponse.value = emptyList()
+          }
+          is NetworkResult.Error -> {
+            Timber.d("Trending Images: Error")
+            _uiState.value = NetworkResult.Error()
+          }
         }
       }
     }
