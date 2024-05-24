@@ -7,6 +7,7 @@ import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.data.api.model.NetworkResult
 import com.burrowsapps.gif.search.data.repository.GifRepository
 import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -33,6 +34,21 @@ class GifViewModelTest {
   }
 
   @Test
+  fun testLoadTrendingImagesLoading() =
+    runTest {
+      whenever(repository.getTrendingResults(anyOrNull()))
+        .thenReturn(NetworkResult.Loading())
+
+      sut.loadTrendingImages(next)
+      val nextResult = sut.nextPageResponse.value
+      val gifListResult = sut.gifListResponse.value
+
+      verify(repository).getTrendingResults(anyOrNull())
+      assertThat(nextResult).isEmpty()
+      assertThat(gifListResult).isEqualTo(listOf<GifResponseDto>())
+    }
+
+  @Test
   fun testLoadTrendingImagesSuccess() =
     runTest {
       whenever(repository.getTrendingResults(eq(next)))
@@ -44,6 +60,21 @@ class GifViewModelTest {
 
       verify(repository).getTrendingResults(eq(next))
       assertThat(nextResult).isEqualTo("0.0")
+      assertThat(gifListResult).isEqualTo(listOf<GifResponseDto>())
+    }
+
+  @Test
+  fun testLoadTrendingImagesEmpty() =
+    runTest {
+      whenever(repository.getTrendingResults(eq(next)))
+        .thenReturn(NetworkResult.Empty())
+
+      sut.loadTrendingImages(next)
+      val nextResult = sut.nextPageResponse.value
+      val gifListResult = sut.gifListResponse.value
+
+      verify(repository).getTrendingResults(eq(next))
+      assertThat(nextResult).isEmpty()
       assertThat(gifListResult).isEqualTo(listOf<GifResponseDto>())
     }
 
@@ -63,6 +94,22 @@ class GifViewModelTest {
     }
 
   @Test
+  fun testLoadSearchImagesLoading() =
+    runTest {
+      val searchString = "gifs"
+      whenever(repository.getSearchResults(eq(searchString), anyOrNull()))
+        .thenReturn(NetworkResult.Loading())
+
+      sut.loadSearchImages(searchString, next)
+      val nextResult = sut.nextPageResponse.value
+      val gifListResult = sut.gifListResponse.value
+
+      verify(repository).getSearchResults(eq(searchString), anyOrNull())
+      assertThat(nextResult).isEmpty()
+      assertThat(gifListResult).isEqualTo(listOf<GifResponseDto>())
+    }
+
+  @Test
   fun testLoadSearchImagesSuccess() =
     runTest {
       val searchString = "gifs"
@@ -75,6 +122,22 @@ class GifViewModelTest {
 
       verify(repository).getSearchResults(eq(searchString), eq(next))
       assertThat(nextResult).isEqualTo("0.0")
+      assertThat(gifListResult).isEqualTo(listOf<GifResponseDto>())
+    }
+
+  @Test
+  fun testLoadSearchImagesEmpty() =
+    runTest {
+      val searchString = "gifs"
+      whenever(repository.getSearchResults(eq(searchString), eq(next)))
+        .thenReturn(NetworkResult.Empty())
+
+      sut.loadSearchImages(searchString, next)
+      val nextResult = sut.nextPageResponse.value
+      val gifListResult = sut.gifListResponse.value
+
+      verify(repository).getSearchResults(eq(searchString), eq(next))
+      assertThat(nextResult).isEmpty()
       assertThat(gifListResult).isEqualTo(listOf<GifResponseDto>())
     }
 

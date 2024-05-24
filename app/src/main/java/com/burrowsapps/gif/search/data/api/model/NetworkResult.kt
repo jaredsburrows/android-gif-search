@@ -48,12 +48,24 @@ internal sealed class NetworkResult<T>(
       return try {
         val response = apiCall()
         val body = response.body()
+
+        // Success response with empty body
+        if (response.isSuccessful && body == null) {
+          Timber.e("request was successful with an empty body")
+          return Empty()
+        }
+
+        // Success response with body
         if (response.isSuccessful && body != null) {
+          Timber.e("request was successful with a body")
           return Success(data = body)
         }
+
+        // Error response
         Timber.e("request failed")
         error(errorMessage = response.message())
       } catch (e: Exception) {
+        // Error response because of exception
         Timber.e(t = e, message = "request failed")
         error(errorMessage = e.message ?: e.toString())
       }
