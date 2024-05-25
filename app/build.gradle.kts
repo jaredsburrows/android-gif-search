@@ -242,7 +242,7 @@ dependencies {
   implementation(libs.jakewharton.timber)
 
   // Unit Tests
-  testImplementation(project(":test-shared"))
+  testImplementation(project(":test-resources"))
   testImplementation(libs.androidx.test.annotation)
   testImplementation(libs.androidx.test.core)
   testImplementation(libs.androidx.test.junit)
@@ -254,7 +254,7 @@ dependencies {
 
   // Android Tests
   androidTestUtil(libs.androidx.test.orchestrator)
-  androidTestImplementation(project(":test-shared"))
+  androidTestImplementation(project(":test-resources"))
   androidTestImplementation(libs.androidx.test.annotation)
   androidTestImplementation(libs.androidx.test.core)
   androidTestImplementation(libs.androidx.test.junit)
