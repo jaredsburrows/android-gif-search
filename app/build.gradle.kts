@@ -158,6 +158,8 @@ dependencies {
 
   // Kotlin
   implementation(platform(libs.kotlin.bom))
+  implementation(libs.kotlin.stdlib)
+  ktlintRuleset(libs.ktlint.compose.ruleset)
 
   // KotlinX
   implementation(platform(libs.kotlinx.coroutines.bom))

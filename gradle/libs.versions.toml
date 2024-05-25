@@ -10,6 +10,7 @@ activity = "1.9.0"
 compose = "1.6.7"
 glide = "4.16.0"
 kotlinx = "1.8.1"
+ktlint = "0.4.1"
 landscapist = "2.3.3"
 leakcanary = "2.14"
 lifecycle = "2.8.0"
@@ -85,11 +86,13 @@ jakewharton-timber = { module = "com.jakewharton.timber:timber", version = "5.0.
 javax-annotation-jsr250 = { module = "javax.annotation:jsr250-api", version = "1.0" }
 junit = { module = "junit:junit", version = "4.13.2" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx" }
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx" }
 kotlinx-coroutinesjdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "kotlinx" }
+ktlint-compose-ruleset = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlint" }
 landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landscapist" }
 landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version.ref = "landscapist" }
 landscapist-palette = { module = "com.github.skydoves:landscapist-palette", version.ref = "landscapist" }

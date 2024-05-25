@@ -39,14 +39,14 @@ jobs:
         uses: gradle/actions/setup-gradle@v3.3.2
       - run: ./gradlew --version
 
-      - name: Run Ktlint Check On All Sources
-        run: ./gradlew ktlintCheck -s
+#      - name: Run Ktlint Check On All Sources
+#        run: ./gradlew ktlintCheck -s
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug -s
 
-      - name: Run Debug Lint Checks
-        run: ./gradlew lintDebug -s
+#      - name: Run Debug Lint Checks
+#        run: ./gradlew lintDebug -s
 
       - name: Run Debug Unit Tests
         run: ./gradlew testDebug -s

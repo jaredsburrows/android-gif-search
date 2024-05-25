@@ -1,6 +1,6 @@
 @file:OptIn(
-  ExperimentalMaterial3Api::class,
   ExperimentalFoundationApi::class,
+  ExperimentalMaterial3Api::class,
   ExperimentalMaterialApi::class,
 )
 
@@ -53,12 +53,12 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -117,33 +117,49 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 private fun DefaultPreview(navController: NavHostController = rememberNavController()) {
   GifTheme {
-    GifScreen(navController)
+    GifScreen(navController = navController)
   }
 }
 
 @Composable
-internal fun GifScreen(navController: NavHostController) {
+internal fun GifScreen(
+  navController: NavHostController,
+  modifier: Modifier = Modifier,
+  gifViewModel: GifViewModel = hiltViewModel(),
+) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-  val gifViewModel = hiltViewModel<GifViewModel>()
+  val listItems by gifViewModel.gifListResponse.collectAsState()
+  val isRefreshing by gifViewModel.isRefreshing.collectAsState()
+
+  val (openDialog, setOpenDialog) = remember { mutableStateOf(false) }
+  val (currentSelectedItem, setCurrentSelectedItem) = remember { mutableStateOf(GifImageInfo()) }
+  val (openSearch, setOpenSearch) = remember { mutableStateOf(true) }
+
+  LaunchedEffect(Unit) {
+    gifViewModel.loadTrendingImages()
+  }
 
   Scaffold(
-    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
       TheToolbar(
         navController = navController,
         scrollBehavior = scrollBehavior,
-        gifViewModel = gifViewModel,
+        openSearch = openSearch,
+        setOpenSearch = setOpenSearch,
       )
     },
   ) { paddingValues ->
-    val listItems = gifViewModel.gifListResponse.collectAsState()
-    val isRefreshing = gifViewModel.isRefreshing.collectAsState()
-
     TheContent(
       innerPadding = paddingValues,
-      gifViewModel = gifViewModel,
       listItems = listItems,
       isRefreshing = isRefreshing,
+      openDialog = openDialog,
+      setOpenDialog = setOpenDialog,
+      currentSelectedItem = currentSelectedItem,
+      setCurrentSelectedItem = setCurrentSelectedItem,
+      onRefresh = { gifViewModel.loadTrendingImages() },
+      onLoadMore = { gifViewModel.loadMore() },
     )
   }
 }
@@ -152,22 +168,18 @@ internal fun GifScreen(navController: NavHostController) {
 private fun TheToolbar(
   navController: NavHostController,
   scrollBehavior: TopAppBarScrollBehavior,
-  gifViewModel: GifViewModel,
+  openSearch: Boolean,
+  setOpenSearch: (Boolean) -> Unit,
 ) {
-  val openSearch = remember { mutableStateOf(true) }
-  val showMenu = remember { mutableStateOf(false) }
-
-  if (openSearch.value) {
+  if (openSearch) {
     TheToolBar(
       navController = navController,
       scrollBehavior = scrollBehavior,
-      openSearch = openSearch,
-      showMenu = showMenu,
+      onSearchClicked = { setOpenSearch(false) },
     )
   } else {
     TheSearchBar(
-      gifViewModel = gifViewModel,
-      openSearch = openSearch,
+      onSearchClosed = { setOpenSearch(true) },
       scrollBehavior = scrollBehavior,
     )
   }
@@ -177,20 +189,17 @@ private fun TheToolbar(
 private fun TheToolBar(
   navController: NavHostController,
   scrollBehavior: TopAppBarScrollBehavior,
-  openSearch: MutableState<Boolean>,
-  showMenu: MutableState<Boolean>,
+  onSearchClicked: () -> Unit,
 ) {
+  val showMenu = remember { mutableStateOf(false) }
   val searchTooltipState = remember { TooltipState() }
   val moreTooltipState = remember { TooltipState() }
   val context = LocalContext.current
 
   TopAppBar(
     title = {
-      Text(
-        text = stringResource(R.string.gif_screen_title),
-      )
+      Text(text = stringResource(R.string.gif_screen_title))
     },
-    // Search Tooltip Box
     actions = {
       // Search for Gifs
       TooltipBox(
@@ -198,9 +207,7 @@ private fun TheToolBar(
         tooltip = { Text("Search gifs") },
         state = searchTooltipState,
       ) {
-        IconButton(
-          onClick = { openSearch.value = false },
-        ) {
+        IconButton(onClick = onSearchClicked) {
           Icon(
             imageVector = Icons.Filled.Search,
             contentDescription = stringResource(R.string.menu_search_content_description),
@@ -213,9 +220,7 @@ private fun TheToolBar(
         tooltip = { Text("Show menu") },
         state = moreTooltipState,
       ) {
-        IconButton(
-          onClick = { showMenu.value = !showMenu.value },
-        ) {
+        IconButton(onClick = { showMenu.value = !showMenu.value }) {
           Icon(
             imageVector = Icons.Filled.MoreVert,
             contentDescription = stringResource(R.string.menu_more_content_description),
@@ -246,34 +251,39 @@ private fun TheToolBar(
 
 @Composable
 private fun TheSearchBar(
-  gifViewModel: GifViewModel,
-  openSearch: MutableState<Boolean>,
+  onSearchClosed: () -> Unit,
   scrollBehavior: TopAppBarScrollBehavior,
+  gifViewModel: GifViewModel = hiltViewModel(),
 ) {
-  BackHandler(
-    onBack = {
-      openSearch.value = true
-      gifViewModel.onClearClick()
-      gifViewModel.loadTrendingImages()
-    },
-  )
+  val searchText by gifViewModel.searchText.collectAsState(initial = "")
 
-  val searchText = gifViewModel.searchText.collectAsState(initial = "")
+  val currentOnSearchClosed by rememberUpdatedState(onSearchClosed)
+
+  val onBack =
+    remember {
+      {
+        currentOnSearchClosed()
+        gifViewModel.onClearClick()
+        gifViewModel.loadTrendingImages()
+      }
+    }
+
+  BackHandler(onBack = onBack)
 
   SearchBar(
     scrollBehavior = scrollBehavior,
     searchText = searchText,
     placeholderText = stringResource(R.string.search_gifs),
-    onSearchTextChanged = {
-      gifViewModel.onSearchTextChanged(changedSearchText = it)
-      gifViewModel.loadSearchImages(searchString = it)
+    onSearchTextChanged = { newText ->
+      gifViewModel.onSearchTextChanged(newText)
+      gifViewModel.loadSearchImages(newText)
     },
     onClearClick = {
       gifViewModel.onClearClick()
       gifViewModel.loadTrendingImages()
     },
   ) {
-    openSearch.value = true
+    currentOnSearchClosed()
     gifViewModel.onClearClick()
     gifViewModel.loadTrendingImages()
   }
@@ -282,35 +292,37 @@ private fun TheSearchBar(
 @Composable
 private fun TheContent(
   innerPadding: PaddingValues,
-  gifViewModel: GifViewModel,
-  listItems: State<List<GifImageInfo>>,
-  isRefreshing: State<Boolean>,
+  listItems: List<GifImageInfo>,
+  isRefreshing: Boolean,
+  openDialog: Boolean,
+  setOpenDialog: (Boolean) -> Unit,
+  currentSelectedItem: GifImageInfo,
+  setCurrentSelectedItem: (GifImageInfo) -> Unit,
+  onRefresh: () -> Unit,
+  onLoadMore: () -> Unit,
 ) {
+  val gridState = rememberLazyGridState()
+  val currentSetOpenDialog by rememberUpdatedState(setOpenDialog)
+  val currentSetCurrentSelectedItem by rememberUpdatedState(setCurrentSelectedItem)
+
   Column(
     modifier = Modifier.padding(innerPadding),
   ) {
-    val gridState = rememberLazyGridState()
-    val openDialog = remember { mutableStateOf(false) }
-    val currentSelectedItem = remember { mutableStateOf(GifImageInfo()) }
-
-    if (openDialog.value) {
+    if (openDialog) {
       TheDialogPreview(
         currentSelectedItem = currentSelectedItem,
-        openDialog = openDialog,
+        onDismiss = { currentSetOpenDialog(false) },
       )
     }
+
     val pullRefreshState =
       rememberPullRefreshState(
-        refreshing = isRefreshing.value,
-        onRefresh = {
-          gifViewModel.loadTrendingImages()
-        },
+        refreshing = isRefreshing,
+        onRefresh = onRefresh,
       )
 
     Box(
-      modifier =
-        Modifier
-          .pullRefresh(pullRefreshState),
+      modifier = Modifier.pullRefresh(pullRefreshState),
       contentAlignment = Alignment.Center,
     ) {
       val context = LocalContext.current
@@ -319,8 +331,7 @@ private fun TheContent(
         columns = GridCells.Fixed(3),
         modifier = Modifier.fillMaxSize(),
       ) {
-        // TODO update default state
-        if (listItems.value.isEmpty()) {
+        if (listItems.isEmpty()) {
           item {
             Text(
               text = "No Gifs!",
@@ -333,17 +344,11 @@ private fun TheContent(
           }
         }
 
-        items(
-          items = listItems.value,
-          // TODO update key
-//          key = { item -> item.gifUrl },
-        ) { item ->
+        items(listItems) { item ->
           Box(
             modifier =
               Modifier
-                .animateItemPlacement(
-                  animationSpec = tween(durationMillis = 350),
-                )
+                .animateItemPlacement(animationSpec = tween(durationMillis = 350))
                 .semantics {
                   contentDescription = context.getString(R.string.gif_image_content_description)
                 },
@@ -365,15 +370,13 @@ private fun TheContent(
                     .fillMaxWidth()
                     .size(135.dp)
                     .clickable {
-                      openDialog.value = true
-                      currentSelectedItem.value = item
+                      currentSetOpenDialog(true)
+                      currentSetCurrentSelectedItem(item)
                     },
                 imageOptions = ImageOptions(contentScale = ContentScale.Crop),
                 loading = {
                   Box(modifier = Modifier.matchParentSize()) {
-                    CircularProgressIndicator(
-                      modifier = Modifier.align(Alignment.Center),
-                    )
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                   }
                 },
               )
@@ -383,33 +386,25 @@ private fun TheContent(
       }
 
       PullRefreshIndicator(
-        isRefreshing.value,
+        isRefreshing,
         pullRefreshState,
         modifier = Modifier.align(Alignment.TopCenter),
       )
 
-      InfiniteGridHandler(
-        gridState = gridState,
-      ) {
-        gifViewModel.loadMore()
-      }
+      InfiniteGridHandler(gridState, onLoadMore = onLoadMore)
     }
   }
 }
 
 @Composable
 private fun TheDialogPreview(
-  currentSelectedItem: MutableState<GifImageInfo>,
-  openDialog: MutableState<Boolean>,
+  currentSelectedItem: GifImageInfo,
+  onDismiss: () -> Unit,
 ) {
   val clipboardManager = LocalClipboardManager.current
   val context = LocalContext.current
 
-  Dialog(
-    onDismissRequest = {
-      openDialog.value = false
-    },
-  ) {
+  Dialog(onDismissRequest = onDismiss) {
     Column(
       modifier =
         Modifier.semantics {
@@ -422,13 +417,13 @@ private fun TheDialogPreview(
       val requestBuilder =
         loadGif(
           context = context,
-          imageUrl = currentSelectedItem.value.gifUrl,
-          thumbnailUrl = currentSelectedItem.value.gifPreviewUrl,
+          imageUrl = currentSelectedItem.gifUrl,
+          thumbnailUrl = currentSelectedItem.gifPreviewUrl,
         )
 
       CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
         GlideImage(
-          imageModel = { currentSelectedItem.value.gifUrl },
+          imageModel = { currentSelectedItem.gifUrl },
           glideRequestType = GIF,
           modifier =
             Modifier
@@ -442,9 +437,7 @@ private fun TheDialogPreview(
           imageOptions = ImageOptions(contentScale = ContentScale.Crop),
           loading = {
             Box(modifier = Modifier.matchParentSize()) {
-              CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-              )
+              CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
           },
         )
@@ -452,8 +445,8 @@ private fun TheDialogPreview(
 
       TextButton(
         onClick = {
-          openDialog.value = false
-          clipboardManager.setText(AnnotatedString(currentSelectedItem.value.gifUrl))
+          onDismiss()
+          clipboardManager.setText(AnnotatedString(currentSelectedItem.gifUrl))
         },
       ) {
         Text(
@@ -472,6 +465,8 @@ private fun InfiniteGridHandler(
   buffer: Int = 15,
   onLoadMore: () -> Unit,
 ) {
+  val currentOnLoadMore by rememberUpdatedState(onLoadMore)
+
   val loadMore =
     remember {
       derivedStateOf {
@@ -485,7 +480,7 @@ private fun InfiniteGridHandler(
 
   LaunchedEffect(loadMore) {
     snapshotFlow { loadMore.value }.distinctUntilChanged().collect {
-      onLoadMore()
+      if (it) currentOnLoadMore()
     }
   }
 }

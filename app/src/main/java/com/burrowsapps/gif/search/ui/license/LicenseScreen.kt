@@ -80,11 +80,14 @@ private fun DefaultPreview() {
 }
 
 @Composable
-internal fun LicenseScreen(navController: NavHostController = rememberNavController()) {
+internal fun LicenseScreen(
+  modifier: Modifier = Modifier,
+  navController: NavHostController = rememberNavController(),
+) {
   val scrollBehavior = enterAlwaysScrollBehavior(rememberTopAppBarState())
 
   Scaffold(
-    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = { TheToolbar(navController, scrollBehavior) },
   ) { paddingValues ->
     TheContent(paddingValues)

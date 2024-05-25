@@ -122,23 +122,36 @@ class GifScreenTest {
 
   @Test
   fun testTrendingThenClickOpenDialog() {
-    composeTestRule.mainClock.autoAdvance = false
-
-    // Wait until the gifs are showing
-    composeTestRule.waitUntil(
-      condition = {
-        composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription)
-          .fetchSemanticsNodes().isNotEmpty()
-      },
-      timeoutMillis = 5000,
-    )
+//    composeTestRule.mainClock.autoAdvance = false
+//
+//    // Wait until the gifs are showing
+//    composeTestRule.waitUntil(
+//      condition = {
+//        composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription)
+//          .fetchSemanticsNodes().isNotEmpty()
+//      },
+//      timeoutMillis = 10_000,
+//    )
+//
+//    // Perform click on the first node with the content description
+//    composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription).onFirst()
+//      .performClick()
+//    composeTestRule.mainClock.advanceTimeByFrame()
+//    composeTestRule.waitForIdle()
+//    composeTestRule.mainClock.advanceTimeByFrame()
+//
+//    // Assert that the dialog is displayed
+//    composeTestRule.onNode(isDialog()).assertIsDisplayed()
+//    composeTestRule.waitForIdle()
+//
+//    // Assert that the first node with the content description is displayed
+//    composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription).onFirst()
+//      .assertIsDisplayed()
 
     // Perform click on the first node with the content description
     composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription).onFirst()
       .performClick()
-    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
-    composeTestRule.mainClock.advanceTimeByFrame()
 
     // Assert that the dialog is displayed
     composeTestRule.onNode(isDialog()).assertIsDisplayed()
@@ -151,23 +164,38 @@ class GifScreenTest {
 
   @Test
   fun testTrendingThenClickOpenDialogAndCopyLink() {
-    composeTestRule.mainClock.autoAdvance = false
-
-    // Wait until the gifs are showing
-    composeTestRule.waitUntil(
-      condition = {
-        composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription)
-          .fetchSemanticsNodes().isNotEmpty()
-      },
-      timeoutMillis = 5000,
-    )
+//    composeTestRule.mainClock.autoAdvance = false
+//
+//    // Wait until the gifs are showing
+//    composeTestRule.waitUntil(
+//      condition = {
+//        composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription)
+//          .fetchSemanticsNodes().isNotEmpty()
+//      },
+//      timeoutMillis = 10_000,
+//    )
+//
+//    // Perform click on the first node with the content description
+//    composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription).onFirst()
+//      .performClick()
+//    composeTestRule.mainClock.advanceTimeByFrame()
+//    composeTestRule.waitForIdle()
+//    composeTestRule.mainClock.advanceTimeByFrame()
+//
+//    // Assert that the dialog is displayed
+//    composeTestRule.onNodeWithText(text = copyUrl).performClick()
+//    composeTestRule.waitForIdle()
+//
+//    // Assert that the clipboard has the correct URL
+//    val clipboardManager = context.getSystemService(ClipboardManager::class.java)
+//    assertThat(
+//      clipboardManager.primaryClip?.getItemAt(0)?.coerceToText(context).toString(),
+//    ).matches("http.*localhost.*gif")
 
     // Perform click on the first node with the content description
     composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription).onFirst()
       .performClick()
-    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
-    composeTestRule.mainClock.advanceTimeByFrame()
 
     // Assert that the dialog is displayed
     composeTestRule.onNodeWithText(text = copyUrl).performClick()
@@ -182,6 +210,21 @@ class GifScreenTest {
 
   @Test
   fun testSearchAndCancelViaHardwareBackButton() {
+//    enterSearchMode()
+//
+//    performSearchInput("hello")
+//
+//    composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
+//    composeTestRule.waitForIdle()
+//
+//    composeTestRule.mainClock.autoAdvance = false
+//    composeTestRule.onBackPressed()
+//    composeTestRule.mainClock.advanceTimeByFrame()
+//    composeTestRule.waitForIdle()
+//    composeTestRule.mainClock.advanceTimeByFrame()
+//
+//    composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
+
     enterSearchMode()
 
     performSearchInput("hello")
@@ -189,17 +232,29 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
     composeTestRule.waitForIdle()
 
-    composeTestRule.mainClock.autoAdvance = false
     composeTestRule.onBackPressed()
-    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
-    composeTestRule.mainClock.advanceTimeByFrame()
 
     composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
   }
 
   @Test
   fun testSearchAndCancelByClickingClear() {
+//    enterSearchMode()
+//
+//    performSearchInput("hello")
+//
+//    composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
+//    composeTestRule.waitForIdle()
+//
+//    composeTestRule.mainClock.autoAdvance = false
+//    composeTestRule.onNodeWithContentDescription(label = menuCloseContentDescription).performClick()
+//    composeTestRule.mainClock.advanceTimeByFrame()
+//    composeTestRule.waitForIdle()
+//    composeTestRule.mainClock.advanceTimeByFrame()
+//
+//    composeTestRule.onNodeWithText(text = "hello").assertDoesNotExist()
+
     enterSearchMode()
 
     performSearchInput("hello")
@@ -207,11 +262,8 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
     composeTestRule.waitForIdle()
 
-    composeTestRule.mainClock.autoAdvance = false
     composeTestRule.onNodeWithContentDescription(label = menuCloseContentDescription).performClick()
-    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
-    composeTestRule.mainClock.advanceTimeByFrame()
 
     composeTestRule.onNodeWithText(text = "hello").assertDoesNotExist()
   }
