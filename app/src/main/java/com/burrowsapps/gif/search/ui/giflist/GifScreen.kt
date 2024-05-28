@@ -1,6 +1,6 @@
 @file:OptIn(
-  ExperimentalMaterial3Api::class,
   ExperimentalFoundationApi::class,
+  ExperimentalMaterial3Api::class,
   ExperimentalMaterialApi::class,
 )
 
@@ -117,17 +117,22 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 private fun DefaultPreview(navController: NavHostController = rememberNavController()) {
   GifTheme {
-    GifScreen(navController)
+    GifScreen(
+      navController = navController,
+    )
   }
 }
 
 @Composable
-internal fun GifScreen(navController: NavHostController) {
+internal fun GifScreen(
+  navController: NavHostController,
+  modifier: Modifier = Modifier,
+) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
   val gifViewModel = hiltViewModel<GifViewModel>()
 
   Scaffold(
-    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
       TheToolbar(
         navController = navController,

@@ -71,10 +71,12 @@ private fun DefaultPreview() {
  * rememberNavController function to manage the navigation between the two destinations.
  */
 @Composable
-fun MainScreen() {
+fun MainScreen(modifier: Modifier = Modifier) {
   val navController = rememberNavController()
 
-  Scaffold { innerPadding ->
+  Scaffold(
+    modifier = modifier,
+  ) { innerPadding ->
     NavHost(
       modifier = Modifier.padding(innerPadding),
       navController = navController,
@@ -90,7 +92,9 @@ fun MainScreen() {
       composable(
         route = Screen.License.route,
       ) {
-        LicenseScreen(navController)
+        LicenseScreen(
+          navController = navController,
+        )
       }
     }
   }
