@@ -267,7 +267,7 @@ private fun TheSearchBar(
     },
   )
 
-  val searchText = gifViewModel.searchText.collectAsState(initial = "")
+  val searchText by gifViewModel.searchText.collectAsState(initial = "")
 
   SearchBar(
     scrollBehavior = scrollBehavior,
