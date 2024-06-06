@@ -1,6 +1,6 @@
 @file:OptIn(
-  ExperimentalMaterial3Api::class,
   ExperimentalFoundationApi::class,
+  ExperimentalMaterial3Api::class,
   ExperimentalMaterialApi::class,
 )
 
@@ -54,9 +54,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
@@ -117,17 +117,26 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 private fun DefaultPreview(navController: NavHostController = rememberNavController()) {
   GifTheme {
-    GifScreen(navController)
+    GifScreen(
+      navController = navController,
+    )
   }
 }
 
 @Composable
-internal fun GifScreen(navController: NavHostController) {
+internal fun GifScreen(
+  navController: NavHostController,
+  modifier: Modifier = Modifier,
+) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
   val gifViewModel = hiltViewModel<GifViewModel>()
 
+  LaunchedEffect(Unit) {
+    gifViewModel.loadTrendingImages()
+  }
+
   Scaffold(
-    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
       TheToolbar(
         navController = navController,
@@ -136,8 +145,8 @@ internal fun GifScreen(navController: NavHostController) {
       )
     },
   ) { paddingValues ->
-    val listItems = gifViewModel.gifListResponse.collectAsState()
-    val isRefreshing = gifViewModel.isRefreshing.collectAsState()
+    val listItems by gifViewModel.gifListResponse.collectAsState()
+    val isRefreshing by gifViewModel.isRefreshing.collectAsState()
 
     TheContent(
       innerPadding = paddingValues,
@@ -258,7 +267,7 @@ private fun TheSearchBar(
     },
   )
 
-  val searchText = gifViewModel.searchText.collectAsState(initial = "")
+  val searchText by gifViewModel.searchText.collectAsState(initial = "")
 
   SearchBar(
     scrollBehavior = scrollBehavior,
@@ -283,8 +292,8 @@ private fun TheSearchBar(
 private fun TheContent(
   innerPadding: PaddingValues,
   gifViewModel: GifViewModel,
-  listItems: State<List<GifImageInfo>>,
-  isRefreshing: State<Boolean>,
+  listItems: List<GifImageInfo>,
+  isRefreshing: Boolean,
 ) {
   Column(
     modifier = Modifier.padding(innerPadding),
@@ -301,7 +310,7 @@ private fun TheContent(
     }
     val pullRefreshState =
       rememberPullRefreshState(
-        refreshing = isRefreshing.value,
+        refreshing = isRefreshing,
         onRefresh = {
           gifViewModel.loadTrendingImages()
         },
@@ -320,7 +329,7 @@ private fun TheContent(
         modifier = Modifier.fillMaxSize(),
       ) {
         // TODO update default state
-        if (listItems.value.isEmpty()) {
+        if (listItems.isEmpty()) {
           item {
             Text(
               text = "No Gifs!",
@@ -334,7 +343,7 @@ private fun TheContent(
         }
 
         items(
-          items = listItems.value,
+          items = listItems,
           // TODO update key
 //          key = { item -> item.gifUrl },
         ) { item ->
@@ -383,7 +392,7 @@ private fun TheContent(
       }
 
       PullRefreshIndicator(
-        isRefreshing.value,
+        isRefreshing,
         pullRefreshState,
         modifier = Modifier.align(Alignment.TopCenter),
       )
