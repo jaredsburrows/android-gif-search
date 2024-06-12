@@ -45,7 +45,7 @@ androidx-activityktx = { module = "androidx.activity:activity-ktx", version.ref 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.8.0" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.0" }
-androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2024.05.00" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2024.06.00" }
 androidx-compose-material = { module = "androidx.compose.material:material", version = "1.6.7" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.2.1" }
 androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.7.7" }
