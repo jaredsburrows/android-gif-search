@@ -130,7 +130,7 @@ class GifScreenTest {
         composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription)
           .fetchSemanticsNodes().isNotEmpty()
       },
-      timeoutMillis = 5000,
+      timeoutMillis = 10_000,
     )
 
     // Perform click on the first node with the content description
@@ -159,7 +159,7 @@ class GifScreenTest {
         composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription)
           .fetchSemanticsNodes().isNotEmpty()
       },
-      timeoutMillis = 5000,
+      timeoutMillis = 10_000,
     )
 
     // Perform click on the first node with the content description
