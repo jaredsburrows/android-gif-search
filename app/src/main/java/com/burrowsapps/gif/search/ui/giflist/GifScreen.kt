@@ -59,6 +59,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -164,14 +165,12 @@ private fun TheToolbar(
   gifViewModel: GifViewModel,
 ) {
   val openSearch = remember { mutableStateOf(true) }
-  val showMenu = remember { mutableStateOf(false) }
 
   if (openSearch.value) {
     TheToolBar(
       navController = navController,
       scrollBehavior = scrollBehavior,
       openSearch = openSearch,
-      showMenu = showMenu,
     )
   } else {
     TheSearchBar(
@@ -187,8 +186,8 @@ private fun TheToolBar(
   navController: NavHostController,
   scrollBehavior: TopAppBarScrollBehavior,
   openSearch: MutableState<Boolean>,
-  showMenu: MutableState<Boolean>,
 ) {
+  val showMenu = remember { mutableStateOf(false) }
   val searchTooltipState = remember { TooltipState() }
   val moreTooltipState = remember { TooltipState() }
   val context = LocalContext.current
@@ -481,6 +480,7 @@ private fun InfiniteGridHandler(
   buffer: Int = 15,
   onLoadMore: () -> Unit,
 ) {
+  val currentOnLoadMore by rememberUpdatedState(onLoadMore)
   val loadMore =
     remember {
       derivedStateOf {
@@ -494,7 +494,7 @@ private fun InfiniteGridHandler(
 
   LaunchedEffect(loadMore) {
     snapshotFlow { loadMore.value }.distinctUntilChanged().collect {
-      onLoadMore()
+      if (it) currentOnLoadMore()
     }
   }
 }
