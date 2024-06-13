@@ -53,7 +53,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -170,12 +169,12 @@ private fun TheToolbar(
     TheToolBar(
       navController = navController,
       scrollBehavior = scrollBehavior,
-      openSearch = openSearch,
+      openSearch = { openSearch.value = it },
     )
   } else {
     TheSearchBar(
       gifViewModel = gifViewModel,
-      openSearch = openSearch,
+      openSearch = { openSearch.value = it },
       scrollBehavior = scrollBehavior,
     )
   }
@@ -185,7 +184,7 @@ private fun TheToolbar(
 private fun TheToolBar(
   navController: NavHostController,
   scrollBehavior: TopAppBarScrollBehavior,
-  openSearch: MutableState<Boolean>,
+  openSearch: (Boolean) -> Unit,
 ) {
   val showMenu = remember { mutableStateOf(false) }
   val searchTooltipState = remember { TooltipState() }
@@ -207,7 +206,7 @@ private fun TheToolBar(
         state = searchTooltipState,
       ) {
         IconButton(
-          onClick = { openSearch.value = false },
+          onClick = { openSearch(false) },
         ) {
           Icon(
             imageVector = Icons.Filled.Search,
@@ -255,12 +254,12 @@ private fun TheToolBar(
 @Composable
 private fun TheSearchBar(
   gifViewModel: GifViewModel,
-  openSearch: MutableState<Boolean>,
+  openSearch: (Boolean) -> Unit,
   scrollBehavior: TopAppBarScrollBehavior,
 ) {
   BackHandler(
     onBack = {
-      openSearch.value = true
+      openSearch(true)
       gifViewModel.onClearClick()
       gifViewModel.loadTrendingImages()
     },
@@ -281,7 +280,7 @@ private fun TheSearchBar(
       gifViewModel.loadTrendingImages()
     },
   ) {
-    openSearch.value = true
+    openSearch(true)
     gifViewModel.onClearClick()
     gifViewModel.loadTrendingImages()
   }
@@ -303,8 +302,8 @@ private fun TheContent(
 
     if (openDialog.value) {
       TheDialogPreview(
-        currentSelectedItem = currentSelectedItem,
-        openDialog = openDialog,
+        currentSelectedItem = currentSelectedItem.value,
+        onDialogDismiss = { openDialog.value = it },
       )
     }
     val pullRefreshState =
@@ -407,15 +406,15 @@ private fun TheContent(
 
 @Composable
 private fun TheDialogPreview(
-  currentSelectedItem: MutableState<GifImageInfo>,
-  openDialog: MutableState<Boolean>,
+  currentSelectedItem: GifImageInfo,
+  onDialogDismiss: (Boolean) -> Unit,
 ) {
   val clipboardManager = LocalClipboardManager.current
   val context = LocalContext.current
 
   Dialog(
     onDismissRequest = {
-      openDialog.value = false
+      onDialogDismiss(false)
     },
   ) {
     Column(
@@ -430,13 +429,13 @@ private fun TheDialogPreview(
       val requestBuilder =
         loadGif(
           context = context,
-          imageUrl = currentSelectedItem.value.gifUrl,
-          thumbnailUrl = currentSelectedItem.value.gifPreviewUrl,
+          imageUrl = currentSelectedItem.gifUrl,
+          thumbnailUrl = currentSelectedItem.gifPreviewUrl,
         )
 
       CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
         GlideImage(
-          imageModel = { currentSelectedItem.value.gifUrl },
+          imageModel = { currentSelectedItem.gifUrl },
           glideRequestType = GIF,
           modifier =
             Modifier
@@ -460,8 +459,8 @@ private fun TheDialogPreview(
 
       TextButton(
         onClick = {
-          openDialog.value = false
-          clipboardManager.setText(AnnotatedString(currentSelectedItem.value.gifUrl))
+          onDialogDismiss(false)
+          clipboardManager.setText(AnnotatedString(currentSelectedItem.gifUrl))
         },
       ) {
         Text(

@@ -32,7 +32,6 @@ android {
     testInstrumentationRunnerArguments +=
       mapOf(
         "disableAnalytics" to "true",
-        "clearPackageData" to "true",
       )
 
     resourceConfigurations += setOf("en")
