@@ -1,4 +1,5 @@
 import org.gradle.api.JavaVersion.VERSION_11
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -139,6 +140,12 @@ android {
   }
 }
 
+ktlint {
+  reporters {
+    reporter(ReporterType.HTML)
+  }
+}
+
 licenseReport {
   generateHtmlReport = true
 }
@@ -159,12 +166,13 @@ dependencies {
 
   // Kotlin
   implementation(platform(libs.kotlin.bom))
+  implementation(libs.kotlin.stdlib)
+//  ktlintRuleset(libs.ktlint.compose.ruleset)
 
   // KotlinX
   implementation(platform(libs.kotlinx.coroutines.bom))
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.coroutines.core)
-  implementation(libs.kotlinx.coroutinesjdk8)
   testImplementation(libs.kotlinx.coroutines.test)
 
   // Dagger / Dependency Injection

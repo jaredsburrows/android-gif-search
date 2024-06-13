@@ -127,9 +127,9 @@ private fun DefaultPreview(navController: NavHostController = rememberNavControl
 internal fun GifScreen(
   navController: NavHostController,
   modifier: Modifier = Modifier,
+  gifViewModel: GifViewModel = hiltViewModel(),
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-  val gifViewModel = hiltViewModel<GifViewModel>()
 
   LaunchedEffect(Unit) {
     gifViewModel.loadTrendingImages()
