@@ -116,6 +116,7 @@ class LicenseScreenTest {
     composeTestRule.onNodeWithText(text = licenseScreenTitle).assertIsDisplayed()
   }
 
+  @SkipLeakDetection("https://issuetracker.google.com/issues/296928070")
   @Test
   fun testGoBackViaHardwareBackButton() {
     openLicenseScreen()
