@@ -6,7 +6,6 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import java.util.Locale
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 rootProject.apply {
   extra["release"] = hasProperty("release")
