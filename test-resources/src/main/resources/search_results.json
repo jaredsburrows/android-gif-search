@@ -8,35 +8,35 @@
       "h1_title": "",
       "media": [
         {
-          "gif": {
-            "preview": "http://localhost:8080/boZ_Hd_L_TEAAAAD/finding-nemo-darla.png",
-            "duration": 0.7,
-            "size": 633863,
-            "url": "http://localhost:8080/boZ_Hd_L_TEAAAAC/finding-nemo-darla.gif",
-            "dims": [
-              498,
-              331
-            ]
-          },
           "mp4": {
             "size": 67535,
             "url": "http://localhost:8080/boZ_Hd_L_TEAAAPo/finding-nemo-darla.mp4",
+            "preview": "http://localhost:8080/boZ_Hd_L_TEAAAAD/finding-nemo-darla.png",
             "dims": [
               498,
               332
             ],
-            "duration": 0.7,
-            "preview": "http://localhost:8080/boZ_Hd_L_TEAAAAD/finding-nemo-darla.png"
+            "duration": 0.7
           },
           "tinygif": {
-            "size": 129115,
             "url": "http://localhost:8080/boZ_Hd_L_TEAAAAM/finding-nemo-darla.gif",
-            "preview": "http://localhost:8080/boZ_Hd_L_TEAAAAN/finding-nemo-darla.png",
-            "duration": 0.7,
             "dims": [
               220,
               147
-            ]
+            ],
+            "size": 129115,
+            "preview": "http://localhost:8080/boZ_Hd_L_TEAAAAN/finding-nemo-darla.png",
+            "duration": 0.7
+          },
+          "gif": {
+            "duration": 0.7,
+            "url": "http://localhost:8080/boZ_Hd_L_TEAAAAC/finding-nemo-darla.gif",
+            "size": 633863,
+            "dims": [
+              498,
+              331
+            ],
+            "preview": "http://localhost:8080/boZ_Hd_L_TEAAAAD/finding-nemo-darla.png"
           }
         }
       ],

@@ -49,7 +49,7 @@ class LicenseScreenTest {
   internal val composeTestRule = createAndroidComposeRule<MainActivity>()
 
   @get:Rule(order = 2)
-  internal val rule = DetectLeaksAfterTestSuccess()
+  internal val leakCanaryRule = DetectLeaksAfterTestSuccess()
 
   @Inject
   @ApplicationContext
@@ -130,6 +130,7 @@ class LicenseScreenTest {
     composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
   }
 
+  @SkipLeakDetection("https://issuetracker.google.com/issues/296928070")
   @Test
   fun testGoBackViaClickMenuBackButton() {
     openLicenseScreen()

@@ -53,12 +53,12 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -127,13 +127,17 @@ private fun DefaultPreview(navController: NavHostController = rememberNavControl
 internal fun GifScreen(
   navController: NavHostController,
   modifier: Modifier = Modifier,
+  gifViewModel: GifViewModel = hiltViewModel(),
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-  val gifViewModel = hiltViewModel<GifViewModel>()
 
   LaunchedEffect(Unit) {
     gifViewModel.loadTrendingImages()
   }
+
+  val listItems by gifViewModel.gifListResponse.collectAsState()
+  val isRefreshing by gifViewModel.isRefreshing.collectAsState()
+  val searchText by gifViewModel.searchText.collectAsState(initial = "")
 
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -141,18 +145,28 @@ internal fun GifScreen(
       TheToolbar(
         navController = navController,
         scrollBehavior = scrollBehavior,
-        gifViewModel = gifViewModel,
+        searchText = searchText,
+        onSearchTextChange = {
+          gifViewModel.onSearchTextChanged(it)
+          if (it.isNotEmpty()) {
+            gifViewModel.loadSearchImages(it)
+          } else {
+            gifViewModel.loadTrendingImages()
+          }
+        },
+        onClearClick = {
+          gifViewModel.onClearClick()
+          gifViewModel.loadTrendingImages()
+        },
       )
     },
   ) { paddingValues ->
-    val listItems by gifViewModel.gifListResponse.collectAsState()
-    val isRefreshing by gifViewModel.isRefreshing.collectAsState()
-
     TheContent(
       innerPadding = paddingValues,
-      gifViewModel = gifViewModel,
       listItems = listItems,
       isRefreshing = isRefreshing,
+      onRefresh = { gifViewModel.loadTrendingImages() },
+      onLoadMore = { gifViewModel.loadMore() },
     )
   }
 }
@@ -161,22 +175,24 @@ internal fun GifScreen(
 private fun TheToolbar(
   navController: NavHostController,
   scrollBehavior: TopAppBarScrollBehavior,
-  gifViewModel: GifViewModel,
+  searchText: String,
+  onSearchTextChange: (String) -> Unit,
+  onClearClick: () -> Unit,
 ) {
   val openSearch = remember { mutableStateOf(true) }
-  val showMenu = remember { mutableStateOf(false) }
 
   if (openSearch.value) {
     TheToolBar(
       navController = navController,
       scrollBehavior = scrollBehavior,
-      openSearch = openSearch,
-      showMenu = showMenu,
+      openSearch = { openSearch.value = it },
     )
   } else {
     TheSearchBar(
-      gifViewModel = gifViewModel,
-      openSearch = openSearch,
+      searchText = searchText,
+      onSearchTextChange = onSearchTextChange,
+      onClearClick = onClearClick,
+      openSearch = { openSearch.value = it },
       scrollBehavior = scrollBehavior,
     )
   }
@@ -186,9 +202,9 @@ private fun TheToolbar(
 private fun TheToolBar(
   navController: NavHostController,
   scrollBehavior: TopAppBarScrollBehavior,
-  openSearch: MutableState<Boolean>,
-  showMenu: MutableState<Boolean>,
+  openSearch: (Boolean) -> Unit,
 ) {
+  val showMenu = remember { mutableStateOf(false) }
   val searchTooltipState = remember { TooltipState() }
   val moreTooltipState = remember { TooltipState() }
   val context = LocalContext.current
@@ -208,7 +224,7 @@ private fun TheToolBar(
         state = searchTooltipState,
       ) {
         IconButton(
-          onClick = { openSearch.value = false },
+          onClick = { openSearch(false) },
         ) {
           Icon(
             imageVector = Icons.Filled.Search,
@@ -255,45 +271,42 @@ private fun TheToolBar(
 
 @Composable
 private fun TheSearchBar(
-  gifViewModel: GifViewModel,
-  openSearch: MutableState<Boolean>,
+  searchText: String,
+  onSearchTextChange: (String) -> Unit,
+  onClearClick: () -> Unit,
+  openSearch: (Boolean) -> Unit,
   scrollBehavior: TopAppBarScrollBehavior,
 ) {
   BackHandler(
     onBack = {
-      openSearch.value = true
-      gifViewModel.onClearClick()
-      gifViewModel.loadTrendingImages()
+      openSearch(true)
+      onClearClick()
     },
   )
-
-  val searchText by gifViewModel.searchText.collectAsState(initial = "")
 
   SearchBar(
     scrollBehavior = scrollBehavior,
     searchText = searchText,
     placeholderText = stringResource(R.string.search_gifs),
-    onSearchTextChanged = {
-      gifViewModel.onSearchTextChanged(changedSearchText = it)
-      gifViewModel.loadSearchImages(searchString = it)
+    onSearchTextChange = {
+      onSearchTextChange(it)
     },
     onClearClick = {
-      gifViewModel.onClearClick()
-      gifViewModel.loadTrendingImages()
+      onClearClick()
     },
   ) {
-    openSearch.value = true
-    gifViewModel.onClearClick()
-    gifViewModel.loadTrendingImages()
+    openSearch(true)
+    onClearClick()
   }
 }
 
 @Composable
 private fun TheContent(
   innerPadding: PaddingValues,
-  gifViewModel: GifViewModel,
   listItems: List<GifImageInfo>,
   isRefreshing: Boolean,
+  onRefresh: () -> Unit,
+  onLoadMore: () -> Unit,
 ) {
   Column(
     modifier = Modifier.padding(innerPadding),
@@ -304,16 +317,14 @@ private fun TheContent(
 
     if (openDialog.value) {
       TheDialogPreview(
-        currentSelectedItem = currentSelectedItem,
-        openDialog = openDialog,
+        currentSelectedItem = currentSelectedItem.value,
+        onDialogDismiss = { openDialog.value = it },
       )
     }
     val pullRefreshState =
       rememberPullRefreshState(
         refreshing = isRefreshing,
-        onRefresh = {
-          gifViewModel.loadTrendingImages()
-        },
+        onRefresh = onRefresh,
       )
 
     Box(
@@ -344,8 +355,6 @@ private fun TheContent(
 
         items(
           items = listItems,
-          // TODO update key
-//          key = { item -> item.gifUrl },
         ) { item ->
           Box(
             modifier =
@@ -400,7 +409,7 @@ private fun TheContent(
       InfiniteGridHandler(
         gridState = gridState,
       ) {
-        gifViewModel.loadMore()
+        onLoadMore()
       }
     }
   }
@@ -408,15 +417,15 @@ private fun TheContent(
 
 @Composable
 private fun TheDialogPreview(
-  currentSelectedItem: MutableState<GifImageInfo>,
-  openDialog: MutableState<Boolean>,
+  currentSelectedItem: GifImageInfo,
+  onDialogDismiss: (Boolean) -> Unit,
 ) {
   val clipboardManager = LocalClipboardManager.current
   val context = LocalContext.current
 
   Dialog(
     onDismissRequest = {
-      openDialog.value = false
+      onDialogDismiss(false)
     },
   ) {
     Column(
@@ -431,13 +440,13 @@ private fun TheDialogPreview(
       val requestBuilder =
         loadGif(
           context = context,
-          imageUrl = currentSelectedItem.value.gifUrl,
-          thumbnailUrl = currentSelectedItem.value.gifPreviewUrl,
+          imageUrl = currentSelectedItem.gifUrl,
+          thumbnailUrl = currentSelectedItem.gifPreviewUrl,
         )
 
       CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
         GlideImage(
-          imageModel = { currentSelectedItem.value.gifUrl },
+          imageModel = { currentSelectedItem.gifUrl },
           glideRequestType = GIF,
           modifier =
             Modifier
@@ -461,8 +470,8 @@ private fun TheDialogPreview(
 
       TextButton(
         onClick = {
-          openDialog.value = false
-          clipboardManager.setText(AnnotatedString(currentSelectedItem.value.gifUrl))
+          onDialogDismiss(false)
+          clipboardManager.setText(AnnotatedString(currentSelectedItem.gifUrl))
         },
       ) {
         Text(
@@ -481,6 +490,7 @@ private fun InfiniteGridHandler(
   buffer: Int = 15,
   onLoadMore: () -> Unit,
 ) {
+  val currentOnLoadMore by rememberUpdatedState(onLoadMore)
   val loadMore =
     remember {
       derivedStateOf {
@@ -494,7 +504,7 @@ private fun InfiniteGridHandler(
 
   LaunchedEffect(loadMore) {
     snapshotFlow { loadMore.value }.distinctUntilChanged().collect {
-      onLoadMore()
+      if (it) currentOnLoadMore()
     }
   }
 }

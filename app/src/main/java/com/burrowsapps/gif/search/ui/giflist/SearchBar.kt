@@ -41,7 +41,7 @@ internal fun SearchBar(
   scrollBehavior: TopAppBarScrollBehavior,
   searchText: String,
   placeholderText: String = "",
-  onSearchTextChanged: (String) -> Unit = {},
+  onSearchTextChange: (String) -> Unit = {},
   onClearClick: () -> Unit = {},
   onNavigateBack: () -> Unit = {},
 ) {
@@ -70,7 +70,7 @@ internal fun SearchBar(
             }
             .focusRequester(focusRequester),
         value = searchText,
-        onValueChange = onSearchTextChanged,
+        onValueChange = onSearchTextChange,
         placeholder = {
           Text(text = placeholderText)
         },

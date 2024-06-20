@@ -3,10 +3,9 @@ import org.gradle.api.JavaVersion.VERSION_11
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
-import java.util.Locale
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import java.util.Locale
 
 rootProject.apply {
   extra["release"] = hasProperty("release")
@@ -19,8 +18,8 @@ plugins {
   kotlin("plugin.compose") version (libs.versions.kotlin.get()) apply false
   alias(libs.plugins.ksp) apply false
   alias(libs.plugins.dagger) apply false
-  alias(libs.plugins.ktlint) apply false
   alias(libs.plugins.license) apply false
+  alias(libs.plugins.ktlint)
   alias(libs.plugins.versions)
 }
 
@@ -87,12 +86,13 @@ allprojects {
 
     // Show all warnings except boot classpath
     options.apply {
-      compilerArgs = compilerArgs + listOf(
-        // Turn on all warnings
-        "-Xlint:all",
-        // Ignore "warning: No processor claimed any of these annotations"
-        "-Xlint:-processing",
-      )
+      compilerArgs = compilerArgs +
+        listOf(
+          // Turn on all warnings
+          "-Xlint:all",
+          // Ignore "warning: No processor claimed any of these annotations"
+          "-Xlint:-processing",
+        )
       compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "10000"))
       encoding = "utf-8"
       isFork = true
