@@ -2,153 +2,49 @@
   "locale": "en",
   "results": [
     {
-      "id": "9941475419188903059",
+      "id": "11710434152676937445",
       "title": "",
-      "content_description": "Happy Friday Friyay GIF",
+      "content_description": "Summer Welcome GIF",
       "content_rating": "",
       "h1_title": "",
       "media": [
         {
           "tinygif": {
-            "size": 299320,
-            "duration": 2,
-            "preview": "http://localhost:8080/ifc3OLgIPJMAAAAN/happy-friday-friday.png",
+            "duration": 0.5,
             "dims": [
               220,
-              220
+              125
             ],
-            "url": "http://localhost:8080/ifc3OLgIPJMAAAAM/happy-friday-friday.gif"
-          },
-          "mp4": {
-            "duration": 2,
-            "url": "http://localhost:8080/ifc3OLgIPJMAAAPo/happy-friday-friday.mp4",
-            "size": 177740,
-            "preview": "http://localhost:8080/ifc3OLgIPJMAAAAD/happy-friday-friday.png",
-            "dims": [
-              480,
-              480
-            ]
+            "preview": "http://localhost:8080/ooPR0TvpTuUAAAAF/summer-welcome.png",
+            "size": 21131,
+            "url": "http://localhost:8080/ooPR0TvpTuUAAAAM/summer-welcome.gif"
           },
           "gif": {
-            "duration": 2,
-            "preview": "http://localhost:8080/ifc3OLgIPJMAAAAD/happy-friday-friday.png",
-            "dims": [
-              480,
-              480
-            ],
-            "size": 2258296,
-            "url": "http://localhost:8080/ifc3OLgIPJMAAAAC/happy-friday-friday.gif"
-          }
-        }
-      ],
-      "bg_color": "",
-      "created": 1712153305.5804551,
-      "itemurl": "http://localhost:8080/view/happy-friday-friday-friyay-tgif-thank-god-its-friday-gif-9941475419188903059",
-      "url": "http://localhost:8080/l0yd3UVq8lj.gif",
-      "tags": [],
-      "flags": [],
-      "shares": 1,
-      "hasaudio": false,
-      "hascaption": false,
-      "source_id": "",
-      "composite": null
-    },
-    {
-      "id": "10654535271838067535",
-      "title": "",
-      "content_description": "Happy Memorial Day Greeting GIF",
-      "content_rating": "",
-      "h1_title": "",
-      "media": [
-        {
-          "gif": {
-            "size": 125167,
-            "dims": [
-              282,
-              200
-            ],
-            "duration": 0.3,
-            "preview": "http://localhost:8080/k9yDYSzHK08AAAAD/happy-memorial-day-greeting.png",
-            "url": "http://localhost:8080/k9yDYSzHK08AAAAC/happy-memorial-day-greeting.gif"
-          },
-          "tinygif": {
-            "dims": [
-              220,
-              157
-            ],
-            "url": "http://localhost:8080/k9yDYSzHK08AAAAM/happy-memorial-day-greeting.gif",
-            "preview": "http://localhost:8080/k9yDYSzHK08AAAAN/happy-memorial-day-greeting.png",
-            "size": 87048,
-            "duration": 0.3
-          },
-          "mp4": {
-            "url": "http://localhost:8080/k9yDYSzHK08AAAPo/happy-memorial-day-greeting.mp4",
-            "duration": 0.3,
-            "dims": [
-              282,
-              200
-            ],
-            "preview": "http://localhost:8080/k9yDYSzHK08AAAAD/happy-memorial-day-greeting.png",
-            "size": 32477
-          }
-        }
-      ],
-      "bg_color": "",
-      "created": 1697064939.80915,
-      "itemurl": "http://localhost:8080/view/happy-memorial-day-greeting-shining-glittery-gif-10654535271838067535",
-      "url": "http://localhost:8080/mRd20uHcPDL.gif",
-      "tags": [],
-      "flags": [],
-      "shares": 1,
-      "hasaudio": false,
-      "hascaption": false,
-      "source_id": "",
-      "composite": null
-    },
-    {
-      "id": "4021189587920427655",
-      "title": "",
-      "content_description": "Eagle Smile GIF",
-      "content_rating": "",
-      "h1_title": "",
-      "media": [
-        {
-          "mp4": {
-            "size": 553776,
-            "url": "http://localhost:8080/N84ioAJ_GocAAAPo/eagle-smile.mp4",
-            "dims": [
-              640,
-              592
-            ],
-            "preview": "http://localhost:8080/N84ioAJ_GocAAAAD/eagle-smile.png",
-            "duration": 2
-          },
-          "tinygif": {
-            "url": "http://localhost:8080/N84ioAJ_GocAAAAM/eagle-smile.gif",
-            "duration": 2,
-            "dims": [
-              220,
-              204
-            ],
-            "preview": "http://localhost:8080/N84ioAJ_GocAAAAF/eagle-smile.png",
-            "size": 128183
-          },
-          "gif": {
-            "url": "http://localhost:8080/N84ioAJ_GocAAAAC/eagle-smile.gif",
-            "duration": 2,
-            "size": 1424257,
+            "size": 586292,
+            "duration": 0.5,
+            "url": "http://localhost:8080/ooPR0TvpTuUAAAAC/summer-welcome.gif",
             "dims": [
               498,
-              460
+              283
             ],
-            "preview": "http://localhost:8080/N84ioAJ_GocAAAAD/eagle-smile.png"
+            "preview": "http://localhost:8080/ooPR0TvpTuUAAAAD/summer-welcome.png"
+          },
+          "mp4": {
+            "dims": [
+              600,
+              342
+            ],
+            "url": "http://localhost:8080/ooPR0TvpTuUAAAPo/summer-welcome.mp4",
+            "size": 106506,
+            "duration": 0.5,
+            "preview": "http://localhost:8080/ooPR0TvpTuUAAAAD/summer-welcome.png"
           }
         }
       ],
       "bg_color": "",
-      "created": 1590216936.16761,
-      "itemurl": "http://localhost:8080/view/eagle-smile-happy-memorial-day-weekend-grilling-gif-17293815",
-      "url": "http://localhost:8080/bkI4F.gif",
+      "created": 1560987076.3149731,
+      "itemurl": "http://localhost:8080/view/summer-welcome-sun-happy-first-day-gif-14376872",
+      "url": "http://localhost:8080/8ufc.gif",
       "tags": [],
       "flags": [],
       "shares": 1,
@@ -158,5 +54,5 @@
       "composite": null
     }
   ],
-  "next": "1716557775.917270"
+  "next": "1718890479.248423"
 }

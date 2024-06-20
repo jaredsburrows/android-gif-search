@@ -49,7 +49,7 @@ class LicenseScreenTest {
   internal val composeTestRule = createAndroidComposeRule<MainActivity>()
 
   @get:Rule(order = 2)
-  internal val rule = DetectLeaksAfterTestSuccess()
+  internal val leakCanaryRule = DetectLeaksAfterTestSuccess()
 
   @Inject
   @ApplicationContext
