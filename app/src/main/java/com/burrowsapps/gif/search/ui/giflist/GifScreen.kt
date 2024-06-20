@@ -146,7 +146,7 @@ internal fun GifScreen(
         navController = navController,
         scrollBehavior = scrollBehavior,
         searchText = searchText,
-        onSearchTextChanged = {
+        onSearchTextChange = {
           gifViewModel.onSearchTextChanged(it)
           if (it.isNotEmpty()) {
             gifViewModel.loadSearchImages(it)
@@ -176,7 +176,7 @@ private fun TheToolbar(
   navController: NavHostController,
   scrollBehavior: TopAppBarScrollBehavior,
   searchText: String,
-  onSearchTextChanged: (String) -> Unit,
+  onSearchTextChange: (String) -> Unit,
   onClearClick: () -> Unit,
 ) {
   val openSearch = remember { mutableStateOf(true) }
@@ -190,7 +190,7 @@ private fun TheToolbar(
   } else {
     TheSearchBar(
       searchText = searchText,
-      onSearchTextChanged = onSearchTextChanged,
+      onSearchTextChange = onSearchTextChange,
       onClearClick = onClearClick,
       openSearch = { openSearch.value = it },
       scrollBehavior = scrollBehavior,
@@ -272,7 +272,7 @@ private fun TheToolBar(
 @Composable
 private fun TheSearchBar(
   searchText: String,
-  onSearchTextChanged: (String) -> Unit,
+  onSearchTextChange: (String) -> Unit,
   onClearClick: () -> Unit,
   openSearch: (Boolean) -> Unit,
   scrollBehavior: TopAppBarScrollBehavior,
@@ -288,8 +288,8 @@ private fun TheSearchBar(
     scrollBehavior = scrollBehavior,
     searchText = searchText,
     placeholderText = stringResource(R.string.search_gifs),
-    onSearchTextChanged = {
-      onSearchTextChanged(it)
+    onSearchTextChange = {
+      onSearchTextChange(it)
     },
     onClearClick = {
       onClearClick()
