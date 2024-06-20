@@ -135,24 +135,38 @@ internal fun GifScreen(
     gifViewModel.loadTrendingImages()
   }
 
+  val listItems by gifViewModel.gifListResponse.collectAsState()
+  val isRefreshing by gifViewModel.isRefreshing.collectAsState()
+  val searchText by gifViewModel.searchText.collectAsState(initial = "")
+
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
       TheToolbar(
         navController = navController,
         scrollBehavior = scrollBehavior,
-        gifViewModel = gifViewModel,
+        searchText = searchText,
+        onSearchTextChanged = {
+          gifViewModel.onSearchTextChanged(it)
+          if (it.isNotEmpty()) {
+            gifViewModel.loadSearchImages(it)
+          } else {
+            gifViewModel.loadTrendingImages()
+          }
+        },
+        onClearClick = {
+          gifViewModel.onClearClick()
+          gifViewModel.loadTrendingImages()
+        },
       )
     },
   ) { paddingValues ->
-    val listItems by gifViewModel.gifListResponse.collectAsState()
-    val isRefreshing by gifViewModel.isRefreshing.collectAsState()
-
     TheContent(
       innerPadding = paddingValues,
-      gifViewModel = gifViewModel,
       listItems = listItems,
       isRefreshing = isRefreshing,
+      onRefresh = { gifViewModel.loadTrendingImages() },
+      onLoadMore = { gifViewModel.loadMore() },
     )
   }
 }
@@ -161,7 +175,9 @@ internal fun GifScreen(
 private fun TheToolbar(
   navController: NavHostController,
   scrollBehavior: TopAppBarScrollBehavior,
-  gifViewModel: GifViewModel,
+  searchText: String,
+  onSearchTextChanged: (String) -> Unit,
+  onClearClick: () -> Unit,
 ) {
   val openSearch = remember { mutableStateOf(true) }
 
@@ -173,7 +189,9 @@ private fun TheToolbar(
     )
   } else {
     TheSearchBar(
-      gifViewModel = gifViewModel,
+      searchText = searchText,
+      onSearchTextChanged = onSearchTextChanged,
+      onClearClick = onClearClick,
       openSearch = { openSearch.value = it },
       scrollBehavior = scrollBehavior,
     )
@@ -253,45 +271,42 @@ private fun TheToolBar(
 
 @Composable
 private fun TheSearchBar(
-  gifViewModel: GifViewModel,
+  searchText: String,
+  onSearchTextChanged: (String) -> Unit,
+  onClearClick: () -> Unit,
   openSearch: (Boolean) -> Unit,
   scrollBehavior: TopAppBarScrollBehavior,
 ) {
   BackHandler(
     onBack = {
       openSearch(true)
-      gifViewModel.onClearClick()
-      gifViewModel.loadTrendingImages()
+      onClearClick()
     },
   )
-
-  val searchText by gifViewModel.searchText.collectAsState(initial = "")
 
   SearchBar(
     scrollBehavior = scrollBehavior,
     searchText = searchText,
     placeholderText = stringResource(R.string.search_gifs),
     onSearchTextChanged = {
-      gifViewModel.onSearchTextChanged(changedSearchText = it)
-      gifViewModel.loadSearchImages(searchString = it)
+      onSearchTextChanged(it)
     },
     onClearClick = {
-      gifViewModel.onClearClick()
-      gifViewModel.loadTrendingImages()
+      onClearClick()
     },
   ) {
     openSearch(true)
-    gifViewModel.onClearClick()
-    gifViewModel.loadTrendingImages()
+    onClearClick()
   }
 }
 
 @Composable
 private fun TheContent(
   innerPadding: PaddingValues,
-  gifViewModel: GifViewModel,
   listItems: List<GifImageInfo>,
   isRefreshing: Boolean,
+  onRefresh: () -> Unit,
+  onLoadMore: () -> Unit,
 ) {
   Column(
     modifier = Modifier.padding(innerPadding),
@@ -309,9 +324,7 @@ private fun TheContent(
     val pullRefreshState =
       rememberPullRefreshState(
         refreshing = isRefreshing,
-        onRefresh = {
-          gifViewModel.loadTrendingImages()
-        },
+        onRefresh = onRefresh,
       )
 
     Box(
@@ -342,8 +355,6 @@ private fun TheContent(
 
         items(
           items = listItems,
-          // TODO update key
-//          key = { item -> item.gifUrl },
         ) { item ->
           Box(
             modifier =
@@ -398,7 +409,7 @@ private fun TheContent(
       InfiniteGridHandler(
         gridState = gridState,
       ) {
-        gifViewModel.loadMore()
+        onLoadMore()
       }
     }
   }
