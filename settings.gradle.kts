@@ -1,12 +1,11 @@
 pluginManagement {
   repositories {
     mavenCentral()
-    google()
-    maven("https://androidx.dev/storage/compose-compiler/repository/") {
-      name = "compose-compiler"
+    google {
       content {
-        // this repository *only* contains compose-compiler artifacts
-        includeGroup("androidx.compose.compiler")
+        includeGroupByRegex("com\\.android.*")
+        includeGroupByRegex("com\\.google.*")
+        includeGroupByRegex("androidx.*")
       }
     }
     gradlePluginPortal()
@@ -18,12 +17,11 @@ dependencyResolutionManagement {
 
   repositories {
     mavenCentral()
-    google()
-    maven("https://androidx.dev/storage/compose-compiler/repository/") {
-      name = "compose-compiler"
+    google {
       content {
-        // this repository *only* contains compose-compiler artifacts
-        includeGroup("androidx.compose.compiler")
+        includeGroupByRegex("com\\.android.*")
+        includeGroupByRegex("com\\.google.*")
+        includeGroupByRegex("androidx.*")
       }
     }
     gradlePluginPortal()
@@ -31,7 +29,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-  id("com.gradle.develocity") version("3.17.4")
+  id("com.gradle.develocity") version("3.17.5")
 }
 
 develocity {
@@ -46,4 +44,4 @@ develocity {
 rootProject.name = "android-gif-search"
 
 include(":app")
-include(":test-shared")
+include(":test-resources")

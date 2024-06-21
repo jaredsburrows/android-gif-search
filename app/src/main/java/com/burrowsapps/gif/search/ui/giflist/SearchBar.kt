@@ -22,7 +22,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -40,9 +39,9 @@ import com.burrowsapps.gif.search.R
 @Composable
 internal fun SearchBar(
   scrollBehavior: TopAppBarScrollBehavior,
-  searchText: State<String>,
+  searchText: String,
   placeholderText: String = "",
-  onSearchTextChanged: (String) -> Unit = {},
+  onSearchTextChange: (String) -> Unit = {},
   onClearClick: () -> Unit = {},
   onNavigateBack: () -> Unit = {},
 ) {
@@ -70,8 +69,8 @@ internal fun SearchBar(
               showClearButton.value = focusState.isFocused
             }
             .focusRequester(focusRequester),
-        value = searchText.value,
-        onValueChange = onSearchTextChanged,
+        value = searchText,
+        onValueChange = onSearchTextChange,
         placeholder = {
           Text(text = placeholderText)
         },

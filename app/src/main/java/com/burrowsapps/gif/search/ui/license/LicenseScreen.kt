@@ -73,18 +73,23 @@ import timber.log.Timber
   uiMode = UI_MODE_NIGHT_NO,
 )
 @Composable
-private fun DefaultPreview() {
+private fun DefaultPreview(navController: NavHostController = rememberNavController()) {
   GifTheme {
-    LicenseScreen()
+    LicenseScreen(
+      navController = navController,
+    )
   }
 }
 
 @Composable
-internal fun LicenseScreen(navController: NavHostController = rememberNavController()) {
+internal fun LicenseScreen(
+  navController: NavHostController,
+  modifier: Modifier = Modifier,
+) {
   val scrollBehavior = enterAlwaysScrollBehavior(rememberTopAppBarState())
 
   Scaffold(
-    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = { TheToolbar(navController, scrollBehavior) },
   ) { paddingValues ->
     TheContent(paddingValues)

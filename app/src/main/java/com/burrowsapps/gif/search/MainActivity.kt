@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_7_PRO
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -56,9 +57,11 @@ class MainActivity : ComponentActivity() {
   uiMode = UI_MODE_NIGHT_NO,
 )
 @Composable
-private fun DefaultPreview() {
+private fun DefaultPreview(navController: NavHostController = rememberNavController()) {
   GifTheme {
-    MainScreen()
+    MainScreen(
+      navController = navController,
+    )
   }
 }
 
@@ -71,10 +74,13 @@ private fun DefaultPreview() {
  * rememberNavController function to manage the navigation between the two destinations.
  */
 @Composable
-fun MainScreen() {
-  val navController = rememberNavController()
-
-  Scaffold { innerPadding ->
+fun MainScreen(
+  modifier: Modifier = Modifier,
+  navController: NavHostController = rememberNavController(),
+) {
+  Scaffold(
+    modifier = modifier,
+  ) { innerPadding ->
     NavHost(
       modifier = Modifier.padding(innerPadding),
       navController = navController,
@@ -90,7 +96,9 @@ fun MainScreen() {
       composable(
         route = Screen.License.route,
       ) {
-        LicenseScreen(navController)
+        LicenseScreen(
+          navController = navController,
+        )
       }
     }
   }

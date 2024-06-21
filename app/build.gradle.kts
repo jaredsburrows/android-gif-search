@@ -1,4 +1,5 @@
 import org.gradle.api.JavaVersion.VERSION_11
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -138,6 +139,12 @@ android {
   }
 }
 
+ktlint {
+  reporters {
+    reporter(ReporterType.HTML)
+  }
+}
+
 licenseReport {
   generateHtmlReport = true
 }
@@ -158,12 +165,13 @@ dependencies {
 
   // Kotlin
   implementation(platform(libs.kotlin.bom))
+  implementation(libs.kotlin.stdlib)
+  ktlintRuleset(libs.ktlint.compose.ruleset)
 
   // KotlinX
   implementation(platform(libs.kotlinx.coroutines.bom))
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.coroutines.core)
-  implementation(libs.kotlinx.coroutinesjdk8)
   testImplementation(libs.kotlinx.coroutines.test)
 
   // Dagger / Dependency Injection
@@ -242,7 +250,7 @@ dependencies {
   implementation(libs.jakewharton.timber)
 
   // Unit Tests
-  testImplementation(project(":test-shared"))
+  testImplementation(project(":test-resources"))
   testImplementation(libs.androidx.test.annotation)
   testImplementation(libs.androidx.test.core)
   testImplementation(libs.androidx.test.junit)
@@ -254,7 +262,7 @@ dependencies {
 
   // Android Tests
   androidTestUtil(libs.androidx.test.orchestrator)
-  androidTestImplementation(project(":test-shared"))
+  androidTestImplementation(project(":test-resources"))
   androidTestImplementation(libs.androidx.test.annotation)
   androidTestImplementation(libs.androidx.test.core)
   androidTestImplementation(libs.androidx.test.junit)

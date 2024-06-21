@@ -1,0 +1,58 @@
+{
+  "locale": "en",
+  "results": [
+    {
+      "id": "11710434152676937445",
+      "title": "",
+      "content_description": "Summer Welcome GIF",
+      "content_rating": "",
+      "h1_title": "",
+      "media": [
+        {
+          "tinygif": {
+            "duration": 0.5,
+            "dims": [
+              220,
+              125
+            ],
+            "preview": "http://localhost:8080/ooPR0TvpTuUAAAAF/summer-welcome.png",
+            "size": 21131,
+            "url": "http://localhost:8080/ooPR0TvpTuUAAAAM/summer-welcome.gif"
+          },
+          "gif": {
+            "size": 586292,
+            "duration": 0.5,
+            "url": "http://localhost:8080/ooPR0TvpTuUAAAAC/summer-welcome.gif",
+            "dims": [
+              498,
+              283
+            ],
+            "preview": "http://localhost:8080/ooPR0TvpTuUAAAAD/summer-welcome.png"
+          },
+          "mp4": {
+            "dims": [
+              600,
+              342
+            ],
+            "url": "http://localhost:8080/ooPR0TvpTuUAAAPo/summer-welcome.mp4",
+            "size": 106506,
+            "duration": 0.5,
+            "preview": "http://localhost:8080/ooPR0TvpTuUAAAAD/summer-welcome.png"
+          }
+        }
+      ],
+      "bg_color": "",
+      "created": 1560987076.3149731,
+      "itemurl": "http://localhost:8080/view/summer-welcome-sun-happy-first-day-gif-14376872",
+      "url": "http://localhost:8080/8ufc.gif",
+      "tags": [],
+      "flags": [],
+      "shares": 1,
+      "hasaudio": false,
+      "hascaption": false,
+      "source_id": "",
+      "composite": null
+    }
+  ],
+  "next": "1718890479.248423"
+}

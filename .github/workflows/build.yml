@@ -10,7 +10,7 @@ on:
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
   JAVA_VERSION: 21
-  ANDROID_API_LEVEL: 29 # 34
+  ANDROID_API_LEVEL: 34
 
 jobs:
   build:
@@ -23,10 +23,10 @@ jobs:
 
     steps:
       - name: Checkout Project
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4.1.7
 
       - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v3.3.2
+        uses: gradle/actions/wrapper-validation@v3.4.2
 
       - name: Configure JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4.2.1
@@ -36,7 +36,7 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3.3.2
+        uses: gradle/actions/setup-gradle@v3.4.2
       - run: ./gradlew --version
 
       - name: Run Ktlint Check On All Sources
