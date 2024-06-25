@@ -124,7 +124,7 @@ allprojects {
     }
   }
 
-  tasks.withType(Wrapper::class.java).configureEach {
+  tasks.withType<Wrapper>().configureEach {
     distributionType = Wrapper.DistributionType.ALL
   }
 }
