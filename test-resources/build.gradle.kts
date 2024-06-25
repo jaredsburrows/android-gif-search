@@ -1,5 +1,6 @@
 import org.gradle.api.JavaVersion.VERSION_11
 import java.net.URL
+import java.nio.file.Paths
 
 plugins {
   alias(libs.plugins.android.library)
@@ -31,7 +32,7 @@ android {
     checkTestSources = true
     checkDependencies = true
     checkReleaseBuilds = false
-    lintConfig = file("${project.rootDir}/config/lint/lint.xml")
+    lintConfig = Paths.get(project.rootDir.toString(), "config", "lint", "lint.xml").toFile()
     textReport = true
     sarifReport = true
   }
