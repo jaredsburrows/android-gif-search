@@ -1,6 +1,7 @@
 import org.gradle.api.JavaVersion.VERSION_11
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML
 import java.io.FileInputStream
+import java.nio.file.Paths
 import java.util.Properties
 
 plugins {
@@ -56,7 +57,7 @@ android {
     checkTestSources = true
     checkDependencies = true
     checkReleaseBuilds = false
-    lintConfig = file("${project.rootDir}/config/lint/lint.xml")
+    lintConfig = Paths.get(project.rootDir.toString(), "config", "lint", "lint.xml").toFile()
     textReport = true
     sarifReport = true
   }
@@ -65,14 +66,14 @@ android {
   val hasKeyPath = !keyPath.isNullOrEmpty()
   signingConfigs {
     getByName("debug") {
-      storeFile = file("${project.rootDir}/config/signing/debug.keystore")
+      storeFile = Paths.get(project.rootDir.toString(), "config", "signing", "debug.keystore").toFile()
       storePassword = libs.versions.debug.password.get()
       keyAlias = libs.versions.debug.alias.get()
       keyPassword = libs.versions.debug.password.get()
     }
 
     if (hasKeyPath) {
-      val keystorePropertiesFile = file("$keyPath/android-gif-search/keystore.properties")
+      val keystorePropertiesFile = Paths.get(keyPath, "android-gif-search", "keystore.properties").toFile()
       val keystoreProperties = Properties()
       keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
@@ -103,7 +104,7 @@ android {
       proguardFiles +=
         listOf(
           getDefaultProguardFile("proguard-android-optimize.txt"),
-          file("${project.rootDir}/config/proguard/proguard-rules.txt"),
+          file(Paths.get(project.rootDir.toString(), "config", "proguard", "proguard-rules.txt").toFile()),
         )
       signingConfig = signingConfigs.getByName(if (hasKeyPath) "release" else "debug")
     }
@@ -141,7 +142,7 @@ android {
 
 ktlint {
   reporters {
-    reporter(ReporterType.HTML)
+    reporter(HTML)
   }
 }
 
