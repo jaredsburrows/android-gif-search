@@ -16,12 +16,10 @@ robolectric = "4.12.2"
 java = "11"
 kotlin = "2.0.0"
 # build
-sdk-compile = "34"
-sdk-min = "26"
-sdk-target = "34"
+sdk = "34"
 # signing
-debug-alias = "androiddebugkey"
-debug-password = "android"
+alias = "androiddebugkey"
+password = "android"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
