@@ -19,14 +19,14 @@ plugins {
 android {
   namespace = "com.burrowsapps.gif.search"
   testNamespace = "com.burrowsapps.gif.search.test"
-  compileSdk = libs.versions.sdk.compile.get().toInt()
+  compileSdk = libs.versions.sdk.get().toInt()
 
   defaultConfig {
     applicationId = "com.burrowsapps.gif.search"
     versionCode = 1
     versionName = "1.0"
-    minSdk = libs.versions.sdk.min.get().toInt()
-    targetSdk = libs.versions.sdk.target.get().toInt()
+    minSdk = libs.versions.sdk.get().toInt()
+    targetSdk = libs.versions.sdk.get().toInt()
 
     testApplicationId = "com.burrowsapps.gif.search.test"
     testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner"
@@ -67,9 +67,9 @@ android {
   signingConfigs {
     getByName("debug") {
       storeFile = Paths.get(project.rootDir.toString(), "config", "signing", "debug.keystore").toFile()
-      storePassword = libs.versions.debug.password.get()
-      keyAlias = libs.versions.debug.alias.get()
-      keyPassword = libs.versions.debug.password.get()
+      storePassword = libs.versions.password.get()
+      keyAlias = libs.versions.alias.get()
+      keyPassword = libs.versions.password.get()
     }
 
     if (hasKeyPath) {

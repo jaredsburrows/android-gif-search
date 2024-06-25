@@ -1,10 +1,7 @@
 package com.burrowsapps.gif.search.di
 
 import android.content.Context
-import android.graphics.Bitmap.CompressFormat.PNG
 import android.graphics.Bitmap.CompressFormat.WEBP_LOSSLESS
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
@@ -55,7 +52,7 @@ internal class GlideModule : AppGlideModule() {
 
     builder.setDefaultRequestOptions(
       RequestOptions()
-        .encodeFormat(if (VERSION.SDK_INT >= VERSION_CODES.R) WEBP_LOSSLESS else PNG)
+        .encodeFormat(WEBP_LOSSLESS)
         .encodeQuality(ENCODE_QUALITY)
         .diskCacheStrategy(ALL)
         .error(R.mipmap.ic_launcher)

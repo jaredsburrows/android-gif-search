@@ -10,10 +10,10 @@ plugins {
 
 android {
   namespace = "com.burrowsapps.gif.search.test.shared"
-  compileSdk = libs.versions.sdk.compile.get().toInt()
+  compileSdk = libs.versions.sdk.get().toInt()
 
   defaultConfig {
-    minSdk = libs.versions.sdk.min.get().toInt()
+    minSdk = libs.versions.sdk.get().toInt()
   }
 
   compileOptions {

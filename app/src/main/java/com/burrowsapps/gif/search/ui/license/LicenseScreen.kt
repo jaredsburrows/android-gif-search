@@ -2,13 +2,10 @@
 
 package com.burrowsapps.gif.search.ui.license
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.Bitmap
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -228,18 +225,11 @@ private fun TheWebView() {
           allowFileAccess = false
           allowContentAccess = false
           setGeolocationEnabled(false)
-          @Suppress(names = ["DEPRECATION"])
-          if (VERSION.SDK_INT < VERSION_CODES.R) {
-            allowFileAccessFromFileURLs = false
-            allowUniversalAccessFromFileURLs = false
-          }
 
           // Handle dark mode for WebView
-          @SuppressLint("NewApi")
           if (isFeatureSupported(ALGORITHMIC_DARKENING)) {
             setAlgorithmicDarkeningAllowed(this, true)
           } else if (isFeatureSupported(FORCE_DARK)) {
-            @Suppress(names = ["DEPRECATION"])
             when (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
               UI_MODE_NIGHT_YES -> setForceDark(this, FORCE_DARK_ON)
               else -> setForceDark(this, FORCE_DARK_OFF)
