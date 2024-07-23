@@ -1,6 +1,7 @@
 package com.burrowsapps.gif.search.data.api.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.burrowsapps.gif.search.data.api.model.NetworkResult.Companion.safeApiCall
 import com.burrowsapps.gif.search.data.api.model.NetworkResult.Empty
 import com.burrowsapps.gif.search.data.api.model.NetworkResult.Error
 import com.burrowsapps.gif.search.data.api.model.NetworkResult.Success
@@ -21,7 +22,7 @@ class NetworkResultTest {
     runTest {
       val result =
         runBlocking(IO) {
-          NetworkResult.safeApiCall {
+          safeApiCall {
             Response.success("body")
           }
         }
@@ -34,7 +35,7 @@ class NetworkResultTest {
     runTest {
       val result =
         runBlocking(IO) {
-          NetworkResult.safeApiCall {
+          safeApiCall {
             Response.success(null)
           }
         }
@@ -47,7 +48,7 @@ class NetworkResultTest {
     runTest {
       val result =
         runBlocking(IO) {
-          NetworkResult.safeApiCall {
+          safeApiCall {
             Response.error<String>(HTTP_INTERNAL_ERROR, "error".toResponseBody())
           }
         }
@@ -60,7 +61,7 @@ class NetworkResultTest {
     runTest {
       val result =
         runBlocking(IO) {
-          NetworkResult.safeApiCall<String> {
+          safeApiCall<String> {
             throw RuntimeException("API call failed")
           }
         }
