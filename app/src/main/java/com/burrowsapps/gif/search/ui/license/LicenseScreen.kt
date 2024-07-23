@@ -2,7 +2,6 @@
 
 package com.burrowsapps.gif.search.ui.license
 
-import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.Bitmap
@@ -40,13 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF
-import androidx.webkit.WebSettingsCompat.FORCE_DARK_ON
 import androidx.webkit.WebSettingsCompat.setAlgorithmicDarkeningAllowed
-import androidx.webkit.WebSettingsCompat.setForceDark
 import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewFeature.ALGORITHMIC_DARKENING
-import androidx.webkit.WebViewFeature.FORCE_DARK
 import androidx.webkit.WebViewFeature.isFeatureSupported
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.ui.theme.GifTheme
@@ -103,7 +98,10 @@ private fun TheToolbar(
   TopAppBar(
     title = {
       Text(
-        modifier = Modifier.semantics { contentDescription = context.getString(R.string.license_screen_content_description) },
+        modifier =
+          Modifier.semantics {
+            contentDescription = context.getString(R.string.license_screen_content_description)
+          },
         text = stringResource(R.string.license_screen_title),
       )
     },
@@ -229,11 +227,6 @@ private fun TheWebView() {
           // Handle dark mode for WebView
           if (isFeatureSupported(ALGORITHMIC_DARKENING)) {
             setAlgorithmicDarkeningAllowed(this, true)
-          } else if (isFeatureSupported(FORCE_DARK)) {
-            when (resources.configuration.uiMode and UI_MODE_NIGHT_MASK) {
-              UI_MODE_NIGHT_YES -> setForceDark(this, FORCE_DARK_ON)
-              else -> setForceDark(this, FORCE_DARK_OFF)
-            }
           } else {
             Timber.w("Dark mode not set")
           }
