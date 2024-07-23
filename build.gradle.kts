@@ -14,8 +14,8 @@ rootProject.apply {
 plugins {
   alias(libs.plugins.android.application) apply false
   alias(libs.plugins.android.library) apply false
-  kotlin("android") version (libs.versions.kotlin.get()) apply false
-  kotlin("plugin.compose") version (libs.versions.kotlin.get()) apply false
+  kotlin("android") version libs.versions.kotlin.get() apply false
+  kotlin("plugin.compose") version libs.versions.kotlin.get() apply false
   alias(libs.plugins.ksp) apply false
   alias(libs.plugins.dagger) apply false
   alias(libs.plugins.license) apply false
@@ -108,6 +108,7 @@ allprojects {
       events = setOf(FAILED, SKIPPED)
     }
 
+    // For mockito to work with JDK 21
     jvmArgs("-Dnet.bytebuddy.experimental=true")
 
     val maxWorkerCount = gradle.startParameter.maxWorkerCount

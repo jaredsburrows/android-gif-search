@@ -45,5 +45,3 @@ rootProject.name = "android-gif-search"
 
 include(":app")
 include(":test-resources")
-
-fun Provider<String>.value(): Int = get().toInt()
