@@ -1,4 +1,4 @@
-import org.gradle.api.JavaVersion.VERSION_11
+import org.gradle.api.JavaVersion.VERSION_17
 import java.net.URL
 import java.nio.file.Paths
 
@@ -17,12 +17,13 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility = VERSION_11
-    targetCompatibility = VERSION_11
+    isCoreLibraryDesugaringEnabled = true
+    sourceCompatibility = VERSION_17
+    targetCompatibility = VERSION_17
   }
 
   kotlinOptions {
-    jvmTarget = VERSION_11.toString()
+    jvmTarget = VERSION_17.toString()
   }
 
   lint {
@@ -78,6 +79,9 @@ tasks.register("updateTestFiles") {
 }
 
 dependencies {
+  // JDK libs
+  coreLibraryDesugaring(libs.android.desugar)
+
   // Kotlin
   implementation(platform(libs.kotlin.bom))
 

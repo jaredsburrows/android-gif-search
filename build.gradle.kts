@@ -1,9 +1,9 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import org.gradle.api.JavaVersion.VERSION_11
+import org.gradle.api.JavaVersion.VERSION_17
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import java.util.Locale
 
@@ -66,7 +66,7 @@ allprojects {
 
   tasks.withType<KotlinJvmCompile>().configureEach {
     compilerOptions {
-      jvmTarget.set(JvmTarget.JVM_11)
+      jvmTarget.set(JVM_17)
       freeCompilerArgs.addAll(
         // https://kotlinlang.org/docs/compiler-reference.html#progressive
         "-progressive",
@@ -81,8 +81,8 @@ allprojects {
   }
 
   tasks.withType<JavaCompile>().configureEach {
-    sourceCompatibility = VERSION_11.toString()
-    targetCompatibility = VERSION_11.toString()
+    sourceCompatibility = VERSION_17.toString()
+    targetCompatibility = VERSION_17.toString()
 
     // Show all warnings except boot classpath
     options.apply {
