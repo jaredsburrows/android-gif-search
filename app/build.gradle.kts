@@ -16,37 +16,37 @@ plugins {
   alias(libs.plugins.publish)
 }
 
+val sdkVersion = libs.versions.sdk.get().toInt()
+val jvmVersion = VERSION_17
+
 android {
   namespace = "com.burrowsapps.gif.search"
   testNamespace = "com.burrowsapps.gif.search.test"
-  compileSdk = libs.versions.sdk.get().toInt()
+  compileSdk = sdkVersion
 
   defaultConfig {
     applicationId = "com.burrowsapps.gif.search"
     versionCode = 1
     versionName = "1.0"
-    minSdk = libs.versions.sdk.get().toInt()
-    targetSdk = libs.versions.sdk.get().toInt()
+    minSdk = sdkVersion
+    targetSdk = sdkVersion
 
     testApplicationId = "com.burrowsapps.gif.search.test"
     testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner"
-    testInstrumentationRunnerArguments +=
-      mapOf(
-        "disableAnalytics" to "true",
-      )
+    testInstrumentationRunnerArguments["disableAnalytics"] = "true"
 
-    resourceConfigurations += setOf("en")
+    resourceConfigurations.add("en")
     vectorDrawables.useSupportLibrary = true
   }
 
   compileOptions {
     isCoreLibraryDesugaringEnabled = true
-    sourceCompatibility = VERSION_17
-    targetCompatibility = VERSION_17
+    sourceCompatibility = jvmVersion
+    targetCompatibility = jvmVersion
   }
 
   kotlinOptions {
-    jvmTarget = VERSION_17.toString()
+    jvmTarget = jvmVersion.toString()
   }
 
   buildFeatures {
@@ -61,7 +61,7 @@ android {
     checkTestSources = true
     checkDependencies = true
     checkReleaseBuilds = false
-    lintConfig = Paths.get(project.rootDir.toString(), "config", "lint", "lint.xml").toFile()
+    lintConfig = Paths.get(rootDir.toString(), "config", "lint", "lint.xml").toFile()
     textReport = true
     sarifReport = true
   }
@@ -70,7 +70,7 @@ android {
   val hasKeyPath = !keyPath.isNullOrEmpty()
   signingConfigs {
     getByName("debug") {
-      storeFile = Paths.get(project.rootDir.toString(), "config", "signing", "debug.keystore").toFile()
+      storeFile = Paths.get(rootDir.toString(), "config", "signing", "debug.keystore").toFile()
       storePassword = libs.versions.password.get()
       keyAlias = libs.versions.alias.get()
       keyPassword = libs.versions.password.get()
@@ -108,7 +108,7 @@ android {
       proguardFiles +=
         listOf(
           getDefaultProguardFile("proguard-android-optimize.txt"),
-          file(Paths.get(project.rootDir.toString(), "config", "proguard", "proguard-rules.txt").toFile()),
+          Paths.get(rootDir.toString(), "config", "proguard", "proguard-rules.txt").toFile(),
         )
       signingConfig = signingConfigs.getByName(if (hasKeyPath) "release" else "debug")
     }

@@ -8,22 +8,25 @@ plugins {
   alias(libs.plugins.ktlint)
 }
 
+val sdkVersion = libs.versions.sdk.get().toInt()
+val jvmVersion = VERSION_17
+
 android {
   namespace = "com.burrowsapps.gif.search.test.shared"
-  compileSdk = libs.versions.sdk.get().toInt()
+  compileSdk = sdkVersion
 
   defaultConfig {
-    minSdk = libs.versions.sdk.get().toInt()
+    minSdk = sdkVersion
   }
 
   compileOptions {
     isCoreLibraryDesugaringEnabled = true
-    sourceCompatibility = VERSION_17
-    targetCompatibility = VERSION_17
+    sourceCompatibility = jvmVersion
+    targetCompatibility = jvmVersion
   }
 
   kotlinOptions {
-    jvmTarget = VERSION_17.toString()
+    jvmTarget = jvmVersion.toString()
   }
 
   lint {
@@ -33,7 +36,7 @@ android {
     checkTestSources = true
     checkDependencies = true
     checkReleaseBuilds = false
-    lintConfig = Paths.get(project.rootDir.toString(), "config", "lint", "lint.xml").toFile()
+    lintConfig = Paths.get(rootDir.toString(), "config", "lint", "lint.xml").toFile()
     textReport = true
     sarifReport = true
   }
