@@ -17,7 +17,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
@@ -74,9 +73,7 @@ internal class NetworkModule {
     @Named("TrafficStatsInterceptor") trafficStatsInterceptor: Interceptor,
     cache: Cache,
   ): OkHttpClient {
-    if (Looper.myLooper() == Looper.getMainLooper()) {
-      throw IllegalStateException("HTTP client initialized on main thread.")
-    }
+    checkNotMainThread()
 
     return OkHttpClient.Builder()
       .addInterceptor(httpLoggingInterceptor)
@@ -90,16 +87,14 @@ internal class NetworkModule {
   @Singleton
   @Provides
   fun provideTrafficStatsInterceptor(): Interceptor {
-    return object : Interceptor {
-      override fun intercept(chain: Interceptor.Chain): Response {
-        val trafficStatsTag = 0xF00D
-        try {
-          TrafficStats.setThreadStatsTag(trafficStatsTag)
-          return chain.proceed(chain.request())
-        } finally {
-          TrafficStats.clearThreadStatsTag()
-        }
-      }
+    return Interceptor { chain ->
+      val trafficStatsTag = 0xF00D
+      runCatching {
+        TrafficStats.setThreadStatsTag(trafficStatsTag)
+        chain.proceed(chain.request())
+      }.also {
+        TrafficStats.clearThreadStatsTag()
+      }.getOrThrow()
     }
   }
 
@@ -119,11 +114,15 @@ internal class NetworkModule {
   fun provideCache(
     @ApplicationContext context: Context,
   ): Cache {
-    if (Looper.myLooper() == Looper.getMainLooper()) {
-      throw IllegalStateException("Cache initialized on main thread.")
-    }
+    checkNotMainThread()
 
     return Cache(context.cacheDir, CLIENT_CACHE_SIZE)
+  }
+
+  private fun checkNotMainThread() {
+    if (Looper.myLooper() == Looper.getMainLooper()) {
+      throw IllegalStateException("Operation initialized on main thread.")
+    }
   }
 
   private companion object {

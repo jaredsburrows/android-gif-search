@@ -29,7 +29,7 @@ internal annotation class MainImmediateDispatcher
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal class CoroutinesModule {
+internal object CoroutinesModule {
   @DefaultDispatcher
   @Provides
   fun provideDefaultDispatcher(): CoroutineDispatcher = Default
