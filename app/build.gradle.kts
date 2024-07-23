@@ -1,4 +1,4 @@
-import org.gradle.api.JavaVersion.VERSION_11
+import org.gradle.api.JavaVersion.VERSION_17
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML
 import java.io.FileInputStream
 import java.nio.file.Paths
@@ -41,8 +41,12 @@ android {
 
   compileOptions {
     isCoreLibraryDesugaringEnabled = true
-    sourceCompatibility = VERSION_11
-    targetCompatibility = VERSION_11
+    sourceCompatibility = VERSION_17
+    targetCompatibility = VERSION_17
+  }
+
+  kotlinOptions {
+    jvmTarget = VERSION_17.toString()
   }
 
   buildFeatures {
@@ -161,7 +165,7 @@ ksp {
 }
 
 dependencies {
-  // JDK 11 libs
+  // JDK libs
   coreLibraryDesugaring(libs.android.desugar)
 
   // Kotlin
