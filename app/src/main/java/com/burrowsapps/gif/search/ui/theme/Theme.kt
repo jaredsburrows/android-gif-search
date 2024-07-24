@@ -17,7 +17,7 @@ import androidx.core.view.WindowCompat.getInsetsController
 @Composable
 fun GifTheme(
   darkTheme: Boolean = isSystemInDarkTheme(),
-  dynamicColor: Boolean = false,
+  dynamicColor: Boolean = true,
   content: @Composable () -> Unit,
 ) {
   val colorScheme =
