@@ -5,6 +5,7 @@ import com.burrowsapps.gif.search.data.api.GifService
 import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.test.TestFileUtils.MOCK_SERVER_URL
 import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -35,24 +36,24 @@ class GifRepositoryTest {
   @Test
   fun testLoadTrendingImagesSuccess() =
     runTest {
-      whenever(service.fetchTrendingResults(eq(next)))
+      whenever(service.fetchTrendingResults(eq(next), any(), any(), any()))
         .thenReturn(Response.success(response))
 
       val result = sut.getTrendingResults(next).data
 
-      verify(service).fetchTrendingResults(eq(next))
+      verify(service).fetchTrendingResults(eq(next), any(), any(), any())
       assertThat(result).isEqualTo(response)
     }
 
   @Test
   fun testLoadTrendingImagesEmpty() =
     runTest {
-      whenever(service.fetchTrendingResults(eq(next)))
+      whenever(service.fetchTrendingResults(eq(next), any(), any(), any()))
         .thenReturn(Response.success(null))
 
       val result = sut.getTrendingResults(next).data
 
-      verify(service).fetchTrendingResults(eq(next))
+      verify(service).fetchTrendingResults(eq(next), any(), any(), any())
       assertThat(result).isNull()
     }
 
@@ -68,12 +69,12 @@ class GifRepositoryTest {
           .build()
       val plainText = "text/plain; charset=utf-8".toMediaType()
       val errorBody = "Broken!".toResponseBody(plainText)
-      whenever(service.fetchTrendingResults(eq(next)))
+      whenever(service.fetchTrendingResults(eq(next), any(), any(), any()))
         .thenReturn(Response.error(errorBody, errorResponse))
 
       val result = sut.getTrendingResults(next).data
 
-      verify(service).fetchTrendingResults(eq(next))
+      verify(service).fetchTrendingResults(eq(next), any(), any(), any())
       assertThat(result).isNull()
     }
 
@@ -81,12 +82,12 @@ class GifRepositoryTest {
   fun testLoadSearchImagesSuccess() =
     runTest {
       val searchString = "gifs"
-      whenever(service.fetchSearchResults(eq(searchString), eq(next)))
+      whenever(service.fetchSearchResults(eq(searchString), eq(next), any(), any(), any()))
         .thenReturn(Response.success(response))
 
       val result = sut.getSearchResults(searchString, next).data
 
-      verify(service).fetchSearchResults(eq(searchString), eq(next))
+      verify(service).fetchSearchResults(eq(searchString), eq(next), any(), any(), any())
       assertThat(result).isEqualTo(response)
     }
 
@@ -94,12 +95,12 @@ class GifRepositoryTest {
   fun testLoadSearchImagesEmpty() =
     runTest {
       val searchString = "gifs"
-      whenever(service.fetchSearchResults(eq(searchString), eq(next)))
+      whenever(service.fetchSearchResults(eq(searchString), eq(next), any(), any(), any()))
         .thenReturn(Response.success(null))
 
       val result = sut.getSearchResults(searchString, next).data
 
-      verify(service).fetchSearchResults(eq(searchString), eq(next))
+      verify(service).fetchSearchResults(eq(searchString), eq(next), any(), any(), any())
       assertThat(result).isNull()
     }
 
@@ -116,12 +117,12 @@ class GifRepositoryTest {
           .build()
       val plainText = "text/plain; charset=utf-8".toMediaType()
       val errorBody = "Broken!".toResponseBody(plainText)
-      whenever(service.fetchSearchResults(eq(searchString), eq(next)))
+      whenever(service.fetchSearchResults(eq(searchString), eq(next), any(), any(), any()))
         .thenReturn(Response.error(errorBody, errorResponse))
 
       val result = sut.getSearchResults(searchString, next).data
 
-      verify(service).fetchSearchResults(eq(searchString), eq(next))
+      verify(service).fetchSearchResults(eq(searchString), eq(next), any(), any(), any())
       assertThat(result).isNull()
     }
 }
