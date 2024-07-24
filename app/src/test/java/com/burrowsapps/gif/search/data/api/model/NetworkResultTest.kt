@@ -28,6 +28,7 @@ class NetworkResultTest {
         }
 
       assertThat(result).isInstanceOf(Success::class.java)
+      assertThat((result as Success).data).isEqualTo("body")
     }
 
   @Test
@@ -41,6 +42,7 @@ class NetworkResultTest {
         }
 
       assertThat(result).isInstanceOf(Empty::class.java)
+      assertThat((result as Empty).data as Any?).isNull()
     }
 
   @Test
@@ -54,6 +56,7 @@ class NetworkResultTest {
         }
 
       assertThat(result).isInstanceOf(Error::class.java)
+      assertThat((result as Error).data).isNull()
     }
 
   @Test
@@ -67,5 +70,6 @@ class NetworkResultTest {
         }
 
       assertThat(result).isInstanceOf(Error::class.java)
+      assertThat((result as Error).data).isNull()
     }
 }

@@ -25,10 +25,7 @@ internal sealed class NetworkResult<T>(
 
   class Empty<T> : NetworkResult<T>()
 
-  class Error<T>(data: T? = null, message: String? = null) : NetworkResult<T>(
-    data = data,
-    message = message,
-  )
+  class Error<T>(data: T? = null, message: String? = null) : NetworkResult<T>(data = data, message = message)
 
   companion object {
     /**
@@ -45,32 +42,36 @@ internal sealed class NetworkResult<T>(
      * @return A NetworkResult object representing the result of the network request.
      */
     suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): NetworkResult<T> {
-      return try {
-        val response = apiCall()
-        val body = response.body()
-
-        // Success response with empty body
-        if (response.isSuccessful && body == null) {
-          Timber.e("request was successful with an empty body")
-          return Empty()
-        }
-
-        // Success response with body
-        if (response.isSuccessful && body != null) {
-          Timber.e("request was successful with a body")
-          return Success(data = body)
-        }
-
-        // Error response
-        Timber.e("request failed")
-        error(errorMessage = response.message())
-      } catch (e: Exception) {
-        // Error response because of exception
-        Timber.e(t = e, message = "request failed")
-        error(errorMessage = e.message ?: e.toString())
-      }
+      return runCatching { apiCall() }
+        .fold(
+          onSuccess = { response ->
+            val body = response.body()
+            when {
+              // Success response with empty body
+              response.isSuccessful && body == null -> {
+                Timber.e("Request was successful with an empty body")
+                Empty()
+              }
+              // Success response with body
+              response.isSuccessful && body != null -> {
+                Timber.e("Request was successful with a body")
+                Success(data = body)
+              }
+              else -> {
+                // Error response
+                Timber.e("Request failed with message: ${response.message()}")
+                error(response.message())
+              }
+            }
+          },
+          onFailure = { e ->
+            // Error response because of exception
+            Timber.e(e, "Request failed with exception")
+            error(e.message ?: e.toString())
+          },
+        )
     }
 
-    private fun <T> error(errorMessage: String): NetworkResult<T> = Error(data = null, message = errorMessage)
+    private fun <T> error(errorMessage: String): NetworkResult<T> = Error(message = errorMessage)
   }
 }
