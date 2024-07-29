@@ -49,12 +49,12 @@ internal sealed class NetworkResult<T>(
             when {
               // Success response with empty body
               response.isSuccessful && body == null -> {
-                Timber.e("Request was successful with an empty body")
+                Timber.i("Request was successful with an empty body")
                 Empty()
               }
               // Success response with body
               response.isSuccessful && body != null -> {
-                Timber.e("Request was successful with a body")
+                Timber.i("Request was successful with a body")
                 Success(data = body)
               }
               else -> {
