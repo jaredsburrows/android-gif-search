@@ -58,7 +58,7 @@ androidx-test-core = { module = "androidx.test:core", version = "1.6.1" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version = "1.2.1" }
 androidx-test-orchestrator = { module = "androidx.test:orchestrator", version = "1.5.0" }
 androidx-test-rules = { module = "androidx.test:rules", version = "1.6.1" }
-androidx-test-runner = { module = "androidx.test:runner", version = "1.6.1" }
+androidx-test-runner = { module = "androidx.test:runner", version = "1.6.2" }
 androidx-webkit = { module = "androidx.webkit:webkit", version = "1.11.0" }
 bumptech-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 bumptech-glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
