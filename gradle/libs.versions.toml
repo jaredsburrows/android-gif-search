@@ -1,7 +1,7 @@
 [versions]
 android = "8.6.0"
 dagger = "2.52"
-accompanist = "0.34.0"
+accompanist = "0.36.0"
 activity = "1.9.1"
 compose = "1.6.8"
 glide = "4.16.0"
