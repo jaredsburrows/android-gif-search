@@ -140,6 +140,9 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
     composeTestRule.mainClock.advanceTimeByFrame()
 
+    composeTestRule.mainClock.autoAdvance = true
+    composeTestRule.waitForIdle()
+
     // Assert that the dialog is displayed
     composeTestRule.onNode(isDialog()).assertIsDisplayed()
     composeTestRule.waitForIdle()
@@ -168,6 +171,9 @@ class GifScreenTest {
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
     composeTestRule.mainClock.advanceTimeByFrame()
+
+    composeTestRule.mainClock.autoAdvance = true
+    composeTestRule.waitForIdle()
 
     // Assert that the dialog is displayed
     composeTestRule.onNodeWithText(text = copyUrl).performClick()
