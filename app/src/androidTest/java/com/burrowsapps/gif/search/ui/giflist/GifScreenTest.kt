@@ -121,7 +121,7 @@ class GifScreenTest {
     composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
   }
 
-  @Ignore
+  @Ignore("only flaky on github actions")
   @Test
   fun testTrendingThenClickOpenDialog() {
     composeTestRule.mainClock.autoAdvance = false
@@ -151,7 +151,7 @@ class GifScreenTest {
       .assertIsDisplayed()
   }
 
-  @Ignore
+  @Ignore("only flaky on github actions")
   @Test
   fun testTrendingThenClickOpenDialogAndCopyLink() {
     composeTestRule.mainClock.autoAdvance = false
