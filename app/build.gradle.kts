@@ -10,8 +10,8 @@ plugins {
   kotlin("plugin.compose")
   alias(libs.plugins.ksp)
   alias(libs.plugins.dagger)
-  alias(libs.plugins.ktlint)
   alias(libs.plugins.license)
+  alias(libs.plugins.ktlint)
   alias(libs.plugins.dexcount)
   alias(libs.plugins.publish)
 }
