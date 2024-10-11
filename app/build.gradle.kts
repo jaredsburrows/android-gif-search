@@ -35,7 +35,7 @@ android {
     testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner"
     testInstrumentationRunnerArguments["disableAnalytics"] = "true"
 
-    resourceConfigurations.add("en")
+    resourceConfigurations += "en"
     vectorDrawables.useSupportLibrary = true
   }
 
@@ -118,7 +118,7 @@ android {
   testBuildType = if (rootProject.extra["release"] as Boolean) "release" else "debug"
 
   testOptions {
-    unitTests.apply {
+    unitTests {
       isReturnDefaultValues = true
       isIncludeAndroidResources = true
     }

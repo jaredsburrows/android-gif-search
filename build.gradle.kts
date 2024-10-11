@@ -30,21 +30,6 @@ tasks.withType<Wrapper>().configureEach {
 allprojects {
   apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
-  configurations.configureEach {
-    resolutionStrategy {
-      preferProjectModules()
-
-      enableDependencyVerification()
-
-      eachDependency {
-        when (requested.group) {
-          "org.jetbrains.kotlin" -> useVersion(libs.versions.kotlin.get())
-          "com.google.dagger" -> useVersion(libs.versions.dagger.get())
-        }
-      }
-    }
-  }
-
   tasks.withType<DependencyUpdatesTask>().configureEach {
     fun isNonStable(version: String): Boolean {
       val stableKeyword =
@@ -58,7 +43,8 @@ allprojects {
       componentSelection {
         all {
           when (candidate.group) {
-            "androidx.compose.compiler", "com.android.application", "org.jetbrains.kotlin" -> {}
+            // Allow non-stable versions for these groups
+            "com.android.application", "org.jetbrains.kotlin" -> {}
             else -> {
               if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
                 reject("Release candidate")
