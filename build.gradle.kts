@@ -23,6 +23,10 @@ plugins {
   alias(libs.plugins.versions)
 }
 
+tasks.withType<Wrapper>().configureEach {
+  distributionType = Wrapper.DistributionType.ALL
+}
+
 allprojects {
   configurations.configureEach {
     resolutionStrategy {
@@ -125,9 +129,5 @@ allprojects {
         jvmArgs("-Dapple.awt.UIElement=true")
       }
     }
-  }
-
-  tasks.withType<Wrapper>().configureEach {
-    distributionType = Wrapper.DistributionType.ALL
   }
 }
