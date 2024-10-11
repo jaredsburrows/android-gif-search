@@ -28,6 +28,8 @@ tasks.withType<Wrapper>().configureEach {
 }
 
 allprojects {
+  apply(plugin = "org.jlleitschuh.gradle.ktlint")
+
   configurations.configureEach {
     resolutionStrategy {
       preferProjectModules()
