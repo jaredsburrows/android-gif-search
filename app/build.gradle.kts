@@ -6,8 +6,8 @@ import java.util.Properties
 
 plugins {
   alias(libs.plugins.android.application)
-  kotlin("android")
-  kotlin("plugin.compose")
+  alias(libs.plugins.kotlin.android)
+  alias(libs.plugins.kotlin.compose)
   alias(libs.plugins.ksp)
   alias(libs.plugins.dagger)
   alias(libs.plugins.license)
