@@ -11,9 +11,6 @@
   <!-- AGP not seeing custom "Application" class -->
   <issue id="Registered" severity="ignore" />
 
-  <!-- AGP 7.2.0 - Error: Invalid package reference in org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm; -->
-  <issue id="InvalidPackage" severity="ignore" />
-
   <!-- https://issuetracker.google.com/issues/322379997 -->
   <issue id="ObsoleteLintCustomCheck" severity="ignore" />
 </lint>
