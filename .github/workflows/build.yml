@@ -55,8 +55,8 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2.18.0
         if: always()
         with:
+          comment_mode: off
           check_name: "Unit Test Results"
-          comment_mode: always
           action_fail_on_inconclusive: true
           files: |
             app/build/test-results/**/TEST-*.xml
@@ -103,8 +103,8 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2.18.0
         if: always()
         with:
+          comment_mode: off
           check_name: "Integration Test Results"
-          comment_mode: always
           action_fail_on_inconclusive: true
           files: |
             app/build/outputs/androidTest-results/**/TEST-*.xml
