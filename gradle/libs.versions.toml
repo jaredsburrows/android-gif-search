@@ -30,7 +30,7 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 ksp = { id = "com.google.devtools.ksp", version = "2.0.21-1.0.27" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.1.1" }
 license = { id = "com.jaredsburrows.license", version = "0.9.8" }
-publish = { id = "com.github.triplet.play", version = "3.11.0" }
+publish = { id = "com.github.triplet.play", version = "3.12.0" }
 versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 
 [libraries]
