@@ -1,5 +1,5 @@
 [versions]
-android = "8.7.2"
+android = "8.7.3"
 dagger = "2.53"
 accompanist = "0.36.0"
 activity = "1.9.3"
