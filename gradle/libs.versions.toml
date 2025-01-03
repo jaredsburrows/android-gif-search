@@ -33,7 +33,6 @@ publish = { id = "com.github.triplet.play", version = "3.12.1" }
 versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 
 [libraries]
-android-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "2.1.4" }
 androidx-activityktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.9.1" }

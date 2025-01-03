@@ -40,7 +40,6 @@ android {
   }
 
   compileOptions {
-    isCoreLibraryDesugaringEnabled = true
     sourceCompatibility = jvmVersion
     targetCompatibility = jvmVersion
   }
@@ -162,9 +161,6 @@ ksp {
 }
 
 dependencies {
-  // JDK libs
-  coreLibraryDesugaring(libs.android.desugar)
-
   // Kotlin
   implementation(platform(libs.kotlin.bom))
   implementation(libs.kotlin.stdlib)
