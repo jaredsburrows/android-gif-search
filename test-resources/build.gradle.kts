@@ -19,7 +19,6 @@ android {
   }
 
   compileOptions {
-    isCoreLibraryDesugaringEnabled = true
     sourceCompatibility = jvmVersion
     targetCompatibility = jvmVersion
   }
@@ -83,9 +82,6 @@ tasks.register("updateTestFiles") {
 }
 
 dependencies {
-  // JDK libs
-  coreLibraryDesugaring(libs.android.desugar)
-
   // Kotlin
   implementation(platform(libs.kotlin.bom))
 
