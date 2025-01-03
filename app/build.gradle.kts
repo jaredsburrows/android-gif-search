@@ -61,7 +61,7 @@ android {
     checkTestSources = true
     checkDependencies = true
     checkReleaseBuilds = false
-    lintConfig = Paths.get(rootDir.toString(), "config", "lint", "lint.xml").toFile()
+    lintConfig = rootDir.resolve("config/lint/lint.xml")
     textReport = true
     sarifReport = true
   }
@@ -70,23 +70,25 @@ android {
   val hasKeyPath = !keyPath.isNullOrEmpty()
   signingConfigs {
     getByName("debug") {
-      storeFile = Paths.get(rootDir.toString(), "config", "signing", "debug.keystore").toFile()
+      storeFile = rootDir.resolve("config/signing/debug.keystore")
       storePassword = libs.versions.password.get()
       keyAlias = libs.versions.alias.get()
       keyPassword = libs.versions.password.get()
     }
 
     if (hasKeyPath) {
-      val keystorePropertiesFile = Paths.get(keyPath, "android-gif-search", "keystore.properties").toFile()
-      val keystoreProperties = Properties()
-      keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+      val keystorePropertiesFile = Paths.get(keyPath).resolve("android-gif-search/keystore.properties").toFile()
+      val keystoreProperties =
+        Properties().apply {
+          load(FileInputStream(keystorePropertiesFile))
+        }
 
       play {
-        serviceAccountCredentials.set(file(keystoreProperties["playKey"].toString()))
+        serviceAccountCredentials.set(rootDir.resolve(keystoreProperties["playKey"].toString()))
       }
 
       register("release") {
-        storeFile = file(keystoreProperties["storeFile"].toString())
+        storeFile = rootDir.resolve(keystoreProperties["storeFile"].toString())
         storePassword = keystoreProperties["storePassword"].toString()
         keyAlias = keystoreProperties["keyAlias"].toString()
         keyPassword = keystoreProperties["keyPassword"].toString()
@@ -101,21 +103,16 @@ android {
       signingConfig = signingConfigs.getByName("debug")
     }
 
-    // Apply fake signing config to release to test "assembleRelease" locally
     getByName("release") {
       isMinifyEnabled = true
       isShrinkResources = true
-      proguardFiles +=
-        listOf(
-          getDefaultProguardFile("proguard-android-optimize.txt"),
-          Paths.get(rootDir.toString(), "config", "proguard", "proguard-rules.txt").toFile(),
-        )
+      proguardFiles(
+        getDefaultProguardFile("proguard-android-optimize.txt"),
+        rootDir.resolve("config/proguard/proguard-rules.txt"),
+      )
       signingConfig = signingConfigs.getByName(if (hasKeyPath) "release" else "debug")
     }
   }
-
-  // Allows "connectedDebugAndroidTest"
-  testBuildType = if (rootProject.extra["release"] as Boolean) "release" else "debug"
 
   testOptions {
     unitTests {
