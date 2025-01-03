@@ -7,10 +7,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import java.util.Locale
 
-rootProject.apply {
-  extra["release"] = hasProperty("release")
-}
-
 plugins {
   alias(libs.plugins.android.application) apply false
   alias(libs.plugins.android.library) apply false

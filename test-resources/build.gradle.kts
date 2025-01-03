@@ -1,10 +1,9 @@
 import org.gradle.api.JavaVersion.VERSION_17
 import java.net.URL
-import java.nio.file.Paths
 
 plugins {
   alias(libs.plugins.android.library)
-  kotlin("android")
+  alias(libs.plugins.kotlin.android)
   alias(libs.plugins.ktlint)
 }
 
@@ -36,7 +35,7 @@ android {
     checkTestSources = true
     checkDependencies = true
     checkReleaseBuilds = false
-    lintConfig = Paths.get(rootDir.toString(), "config", "lint", "lint.xml").toFile()
+    lintConfig = rootDir.resolve("config/lint/lint.xml")
     textReport = true
     sarifReport = true
   }
@@ -59,24 +58,26 @@ tasks.register("updateTestFiles") {
     // test-shared/src/main/resources
     val resourcesFolder = android.sourceSets["main"].resources.srcDirs.first()
 
-    mapOf(
-      // Show enough to emulate a filtered "search" for testing
-      "search_results.json" to
-        "https://g.tenor.com/v1/search?key=LIVDSRZULELA&media_filter=minimal&q=hello&limit=1",
-      // Show just enough to fill the screen for testing
-      "trending_results.json" to
-        "https://g.tenor.com/v1/trending?key=LIVDSRZULELA&media_filter=minimal&limit=1",
-    ).forEach { (file, url) ->
-      File(resourcesFolder, file)
-        .writeText(
-          URL(url)
-            .readText()
-            // Point our mock JSON to point to local OkHTTP Mock server
-            .replace("media.tenor.com", "localhost:8080")
-            .replace("tenor.com", "localhost:8080")
-            // Enforce HTTP for local MockWebServer
-            .replace("https:", "http:"),
-        )
+    val testData =
+      mapOf(
+        // Show enough to emulate a filtered "search" for testing
+        "search_results.json" to
+          "https://g.tenor.com/v1/search?key=LIVDSRZULELA&media_filter=minimal&q=hello&limit=1",
+        // Show just enough to fill the screen for testing
+        "trending_results.json" to
+          "https://g.tenor.com/v1/trending?key=LIVDSRZULELA&media_filter=minimal&limit=1",
+      )
+
+    testData.forEach { (file, url) ->
+      val jsonContent =
+        URL(url).readText()
+          // Point our mock JSON to point to local OkHTTP Mock server
+          .replace("media.tenor.com", "localhost:8080")
+          .replace("tenor.com", "localhost:8080")
+          // Enforce HTTP for local MockWebServer
+          .replace("https:", "http:")
+
+      File(resourcesFolder, file).writeText(jsonContent)
     }
   }
 }
