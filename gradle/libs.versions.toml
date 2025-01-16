@@ -1,7 +1,7 @@
 [versions]
 android = "8.8.0"
 dagger = "2.55"
-activity = "1.9.3"
+activity = "1.10.0"
 compose = "1.7.6"
 glide = "4.16.0"
 kotlinx = "1.10.1"
