@@ -2,7 +2,7 @@
 android = "8.8.0"
 dagger = "2.55"
 activity = "1.10.0"
-compose = "1.7.6"
+compose = "1.7.7"
 glide = "4.16.0"
 kotlinx = "1.10.1"
 landscapist = "2.4.6"
