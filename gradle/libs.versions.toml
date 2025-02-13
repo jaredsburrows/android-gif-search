@@ -1,5 +1,5 @@
 [versions]
-android = "8.8.0"
+android = "8.8.1"
 dagger = "2.55"
 activity = "1.10.0"
 compose = "1.7.7"
