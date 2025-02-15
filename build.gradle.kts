@@ -17,6 +17,14 @@ plugins {
   alias(libs.plugins.license) apply false
   alias(libs.plugins.ktlint)
   alias(libs.plugins.versions)
+  idea
+}
+
+idea {
+  module {
+    isDownloadSources = true
+    isDownloadJavadoc = true
+  }
 }
 
 tasks.withType<Wrapper>().configureEach {
