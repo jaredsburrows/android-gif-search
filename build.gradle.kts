@@ -21,10 +21,10 @@ plugins {
 }
 
 idea {
-    module {
-        isDownloadSources = true
-        isDownloadJavadoc = true
-    }
+  module {
+    isDownloadSources = true
+    isDownloadJavadoc = true
+  }
 }
 
 tasks.withType<Wrapper>().configureEach {
