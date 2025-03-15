@@ -84,7 +84,7 @@ ktlint-compose-ruleset = { module = "io.nlopez.compose.rules:ktlint", version = 
 landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landscapist" }
 landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version.ref = "landscapist" }
 landscapist-palette = { module = "com.github.skydoves:landscapist-palette", version.ref = "landscapist" }
-mockito = { module = "org.mockito:mockito-core", version = "5.16.0" }
+mockito = { module = "org.mockito:mockito-core", version = "5.16.1" }
 mockito-kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version = "2.2.0" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 robolectric-annotations = { module = "org.robolectric:annotations", version.ref = "robolectric" }
