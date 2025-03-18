@@ -161,13 +161,13 @@ internal fun GifScreen(
       )
     },
   ) { paddingValues ->
-    TheContent(
-      innerPadding = paddingValues,
-      listItems = listItems,
-      isRefreshing = isRefreshing,
-      onRefresh = { gifViewModel.loadTrendingImages() },
-      onLoadMore = { gifViewModel.loadMore() },
-    )
+//    TheContent(
+//      innerPadding = paddingValues,
+//      listItems = listItems,
+//      isRefreshing = isRefreshing,
+//      onRefresh = { gifViewModel.loadTrendingImages() },
+//      onLoadMore = { gifViewModel.loadMore() },
+//    )
   }
 }
 

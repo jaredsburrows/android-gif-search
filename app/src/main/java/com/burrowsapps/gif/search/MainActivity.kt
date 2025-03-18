@@ -34,6 +34,13 @@ class MainActivity : ComponentActivity() {
     enableEdgeToEdge()
     super.onCreate(savedInstanceState)
 
+//    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
+//      val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+//      view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+//      insets
+//    }
+
+
     setContent {
       GifTheme {
         MainScreen()
