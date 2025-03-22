@@ -31,9 +31,9 @@ internal class GlideModule : AppGlideModule() {
   @EntryPoint
   @InstallIn(SingletonComponent::class)
   internal interface GlideModuleEntryPoint {
-    fun getOkHttpClient(): OkHttpClient
+    fun provideOkHttpClient(): OkHttpClient
 
-    fun getApplicationMode(): ApplicationMode
+    fun provideApplicationMode(): ApplicationMode
   }
 
   private fun getGlideEntryPoint(context: Context): GlideModuleEntryPoint {
@@ -44,7 +44,7 @@ internal class GlideModule : AppGlideModule() {
     context: Context,
     builder: GlideBuilder,
   ) {
-    val applicationMode = getGlideEntryPoint(context).getApplicationMode()
+    val applicationMode = getGlideEntryPoint(context).provideApplicationMode()
 
     builder.setDefaultRequestOptions(
       RequestOptions()
@@ -63,7 +63,7 @@ internal class GlideModule : AppGlideModule() {
     glide: Glide,
     registry: Registry,
   ) {
-    val okHttpClient = getGlideEntryPoint(context).getOkHttpClient()
+    val okHttpClient = getGlideEntryPoint(context).provideOkHttpClient()
 
     registry.replace(
       GlideUrl::class.java,
