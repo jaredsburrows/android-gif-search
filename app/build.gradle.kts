@@ -235,6 +235,7 @@ dependencies {
   implementation(libs.squareup.moshi)
   implementation(libs.squareup.moshi.adapters)
   ksp(libs.squareup.moshi.kotlin)
+  implementation(platform(libs.squareup.retrofit.bom))
   implementation(libs.squareup.retrofit)
   implementation(libs.squareup.retrofit.moshi)
 
