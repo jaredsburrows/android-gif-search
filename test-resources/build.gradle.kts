@@ -84,6 +84,7 @@ tasks.register("updateTestFiles") {
 dependencies {
   // Kotlin
   implementation(platform(libs.kotlin.bom))
+  implementation(libs.kotlin.stdlib)
 
   // Kotlin X
   implementation(platform(libs.kotlinx.coroutines.bom))
@@ -91,5 +92,7 @@ dependencies {
   implementation(libs.kotlinx.coroutines.core)
 
   // OkHTTP
+  implementation(platform(libs.squareup.okhttp.bom))
+  implementation(libs.squareup.okhttp)
   implementation(libs.squareup.okhttp.mockwebserver)
 }
