@@ -20,7 +20,7 @@ internal class GifViewModel
   @Inject
   internal constructor(
     private val repository: GifRepository,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher,
+    @param:IoDispatcher private val dispatcher: CoroutineDispatcher,
   ) : ViewModel() {
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: MutableStateFlow<Boolean> = _isRefreshing

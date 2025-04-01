@@ -358,10 +358,11 @@ private fun TheContent(
         ) { item ->
           Box(
             modifier =
-              Modifier
-                .animateItemPlacement(
-                  animationSpec = tween(durationMillis = 350),
-                )
+              Modifier.animateItem(
+                fadeInSpec = null,
+                fadeOutSpec = null,
+                placementSpec = tween(durationMillis = 350),
+              )
                 .semantics {
                   contentDescription = context.getString(R.string.gif_image_content_description)
                 },
