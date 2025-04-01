@@ -125,8 +125,8 @@ private fun DefaultPreview(navController: NavHostController = rememberNavControl
 
 @Composable
 internal fun GifScreen(
-  navController: NavHostController,
   modifier: Modifier = Modifier,
+  navController: NavHostController = rememberNavController(),
   gifViewModel: GifViewModel = hiltViewModel(),
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())

@@ -75,8 +75,8 @@ private fun DefaultPreview(navController: NavHostController = rememberNavControl
 
 @Composable
 internal fun LicenseScreen(
-  navController: NavHostController,
   modifier: Modifier = Modifier,
+  navController: NavHostController = rememberNavController(),
 ) {
   val scrollBehavior = enterAlwaysScrollBehavior(rememberTopAppBarState())
 
