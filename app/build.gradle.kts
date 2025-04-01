@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import org.gradle.api.JavaVersion.VERSION_17
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML
 import java.io.FileInputStream
@@ -35,8 +37,11 @@ android {
     testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner"
     testInstrumentationRunnerArguments["disableAnalytics"] = "true"
 
-    resourceConfigurations += "en"
     vectorDrawables.useSupportLibrary = true
+  }
+
+  androidResources {
+    localeFilters += listOf("en")
   }
 
   compileOptions {
