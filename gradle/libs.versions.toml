@@ -97,7 +97,7 @@ squareup-okhttp = { module = "com.squareup.okhttp3:okhttp" }
 squareup-okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp" }
 squareup-okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor" } # uses squareup-okhttp-bom
 squareup-okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver" }
-squareup-okio = { module = "com.squareup.okio:okio", version = "3.10.2" }
+squareup-okio = { module = "com.squareup.okio:okio", version = "3.11.0" }
 squareup-retrofit = { module = "com.squareup.retrofit2:retrofit" } # uses squareup-okhttp-bom
 squareup-retrofit-bom = { module = "com.squareup.retrofit2:retrofit-bom", version.ref = "retrofit" }
 squareup-retrofit-moshi = { module = "com.squareup.retrofit2:converter-moshi" } # uses squareup-retrofit-bom
