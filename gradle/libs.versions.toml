@@ -1,6 +1,6 @@
 [versions]
 android = "8.9.1"
-dagger = "2.56.1"
+dagger = "2.56.2"
 activity = "1.10.1"
 compose = "1.7.8"
 glide = "4.16.0"
