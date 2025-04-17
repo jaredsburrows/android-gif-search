@@ -2,19 +2,13 @@
 
 package com.burrowsapps.gif.search.ui.license
 
+import android.content.Context
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.graphics.Bitmap
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,6 +21,8 @@ import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -128,8 +124,7 @@ private fun TheContent(innerPadding: PaddingValues) {
   Column(
     modifier =
       Modifier
-        .padding(innerPadding)
-        .verticalScroll(rememberScrollState()),
+        .padding(innerPadding),
   ) {
     // TODO Nested WebView prevent anchor clicks
     TheWebView()
@@ -137,105 +132,63 @@ private fun TheContent(innerPadding: PaddingValues) {
 }
 
 @Composable
-private fun TheWebView() {
+fun TheWebView(url: String = "https://appassets.androidplatform.net/assets/open_source_licenses.html") {
   val context = LocalContext.current
   val runningInPreview = LocalInspectionMode.current
 
   // https://developer.android.com/reference/androidx/webkit/WebViewAssetLoader
-  val pathHandler = WebViewAssetLoader.AssetsPathHandler(context)
   // Instead of loading files using "files://" directly
-  val assetLoader = WebViewAssetLoader.Builder().addPathHandler("/assets/", pathHandler).build()
+  val assetLoader =
+    remember(context) {
+      WebViewAssetLoader.Builder()
+        .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(context))
+        .build()
+    }
 
-  AndroidView(
-    factory = { _ ->
-      WebView(context).apply {
-        isVerticalScrollBarEnabled = false
-        webViewClient =
-          object : WebViewClient() {
-            override fun onPageStarted(
-              view: WebView?,
-              url: String?,
-              favicon: Bitmap?,
-            ) {
-              super.onPageStarted(view, url, favicon)
+  val webView =
+    remember(url) {
+      createConfiguredWebView(
+        context = context,
+        assetLoader = assetLoader,
+        runningInPreview = runningInPreview,
+      )
+    }
 
-              Timber.i("onPageStarted:\t$url")
-            }
+  DisposableEffect(Unit) {
+    onDispose {
+      webView.destroy()
+    }
+  }
 
-            override fun onPageFinished(
-              view: WebView,
-              url: String,
-            ) {
-              super.onPageFinished(view, url)
+  AndroidView(factory = { webView }) { view ->
+    // from "main/assets/index.html" -> "file:///android_asset/index.html"
+    view.loadUrl(url)
+  }
+}
 
-              Timber.i("onPageFinished:\t$url")
-            }
+fun createConfiguredWebView(
+  context: Context,
+  assetLoader: WebViewAssetLoader,
+  runningInPreview: Boolean,
+): WebView =
+  WebView(context).apply {
+    isVerticalScrollBarEnabled = false
 
-            override fun onLoadResource(
-              view: WebView?,
-              url: String?,
-            ) {
-              super.onLoadResource(view, url)
+    webViewClient = LicenseWebViewClient(assetLoader)
+    webChromeClient = LicenseWebChromeClient()
 
-              Timber.i("onLoadResource:\t$url")
-            }
+    if (!runningInPreview) {
+      settings.apply {
+        allowFileAccess = false
+        allowContentAccess = false
+        setGeolocationEnabled(false)
 
-            override fun shouldInterceptRequest(
-              view: WebView,
-              request: WebResourceRequest,
-            ): WebResourceResponse? {
-              super.shouldInterceptRequest(view, request)
-
-              // Override URLs for AssetsPathHandler
-              val override = assetLoader.shouldInterceptRequest(request.url)
-              val default = super.shouldInterceptRequest(view, request)
-              val newRequest = override ?: default
-              Timber.i("shouldInterceptRequest:\t${request.url}\t${override?.statusCode}")
-              return newRequest
-            }
-
-            override fun onReceivedHttpError(
-              view: WebView,
-              request: WebResourceRequest,
-              errorResponse: WebResourceResponse,
-            ) {
-              Timber.e("onReceivedHttpError:\t${request.url}\t${errorResponse.statusCode}")
-            }
-          }
-
-        webChromeClient =
-          object : WebChromeClient() {
-            override fun onProgressChanged(
-              view: WebView?,
-              newProgress: Int,
-            ) {
-              super.onProgressChanged(view, newProgress)
-
-              Timber.i("onProgressChanged:\t$newProgress")
-            }
-          }
-
-        if (runningInPreview) {
-          return@apply
-        }
-
-        settings.apply {
-          allowFileAccess = false
-          allowContentAccess = false
-          setGeolocationEnabled(false)
-
-          // Handle dark mode for WebView
-          if (isFeatureSupported(ALGORITHMIC_DARKENING)) {
-            setAlgorithmicDarkeningAllowed(this, true)
-          } else {
-            Timber.w("Dark mode not set")
-          }
+        // Handle dark mode for WebView
+        if (isFeatureSupported(ALGORITHMIC_DARKENING)) {
+          setAlgorithmicDarkeningAllowed(this, true)
+        } else {
+          Timber.w("Dark mode not set")
         }
       }
-    },
-    update = { webView ->
-      // from "main/assets/index.html" -> "file:///android_asset/index.html"
-      webView.loadUrl("https://appassets.androidplatform.net/assets/open_source_licenses.html")
-    },
-  )
-}
+    }
+  }
