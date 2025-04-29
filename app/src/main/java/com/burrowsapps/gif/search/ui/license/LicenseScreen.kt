@@ -2,19 +2,14 @@
 
 package com.burrowsapps.gif.search.ui.license
 
-import android.content.res.Configuration.UI_MODE_NIGHT_NO
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.graphics.Bitmap
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
+import android.content.Context
+import android.content.res.Configuration
+import android.webkit.WebSettings
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,10 +18,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -34,7 +31,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Devices.PIXEL_7_PRO
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
@@ -50,19 +47,19 @@ import timber.log.Timber
 /** Shows the license screen of the app. */
 @Preview(
   name = "dark",
-  showBackground = true,
-  device = PIXEL_7_PRO,
   locale = "en",
   showSystemUi = true,
-  uiMode = UI_MODE_NIGHT_YES,
+  showBackground = true,
+  uiMode = Configuration.UI_MODE_NIGHT_YES,
+  device = Devices.PIXEL_7_PRO,
 )
 @Preview(
   name = "light",
-  showBackground = true,
-  device = PIXEL_7_PRO,
   locale = "en",
   showSystemUi = true,
-  uiMode = UI_MODE_NIGHT_NO,
+  showBackground = true,
+  uiMode = Configuration.UI_MODE_NIGHT_NO,
+  device = Devices.PIXEL_7_PRO,
 )
 @Composable
 private fun DefaultPreview(navController: NavHostController = rememberNavController()) {
@@ -78,13 +75,23 @@ internal fun LicenseScreen(
   modifier: Modifier = Modifier,
   navController: NavHostController = rememberNavController(),
 ) {
-  val scrollBehavior = enterAlwaysScrollBehavior(rememberTopAppBarState())
+  val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+  val context = LocalContext.current
+
+  // https://developer.android.com/reference/androidx/webkit/WebViewAssetLoader
+  // Instead of loading files using "files://" directly
+  val assetLoader =
+    remember(context) {
+      WebViewAssetLoader.Builder()
+        .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(context))
+        .build()
+    }
 
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = { TheToolbar(navController, scrollBehavior) },
   ) { paddingValues ->
-    TheContent(paddingValues)
+    TheContent(paddingValues, assetLoader)
   }
 }
 
@@ -107,11 +114,7 @@ private fun TheToolbar(
     },
     navigationIcon = {
       if (navController.previousBackStackEntry != null) {
-        IconButton(
-          onClick = {
-            navController.navigateUp()
-          },
-        ) {
+        IconButton(onClick = { navController.navigateUp() }) {
           Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(id = R.string.menu_back_content_description),
@@ -124,118 +127,71 @@ private fun TheToolbar(
 }
 
 @Composable
-private fun TheContent(innerPadding: PaddingValues) {
+private fun TheContent(
+  innerPadding: PaddingValues,
+  assetLoader: WebViewAssetLoader,
+) {
   Column(
-    modifier =
-      Modifier
-        .padding(innerPadding)
-        .verticalScroll(rememberScrollState()),
+    modifier = Modifier.padding(innerPadding),
   ) {
     // TODO Nested WebView prevent anchor clicks
-    TheWebView()
+    TheWebView(assetLoader)
   }
 }
 
 @Composable
-private fun TheWebView() {
+private fun TheWebView(assetLoader: WebViewAssetLoader) {
   val context = LocalContext.current
   val runningInPreview = LocalInspectionMode.current
 
-  // https://developer.android.com/reference/androidx/webkit/WebViewAssetLoader
-  val pathHandler = WebViewAssetLoader.AssetsPathHandler(context)
-  // Instead of loading files using "files://" directly
-  val assetLoader = WebViewAssetLoader.Builder().addPathHandler("/assets/", pathHandler).build()
+  val webView =
+    remember {
+      configuredWebView(
+        context = context,
+        assetLoader = assetLoader,
+        runningInPreview = runningInPreview,
+      )
+    }
+
+  DisposableEffect(webView) {
+    onDispose { webView.destroy() }
+  }
 
   AndroidView(
-    factory = { _ ->
-      WebView(context).apply {
-        isVerticalScrollBarEnabled = false
-        webViewClient =
-          object : WebViewClient() {
-            override fun onPageStarted(
-              view: WebView?,
-              url: String?,
-              favicon: Bitmap?,
-            ) {
-              super.onPageStarted(view, url, favicon)
+    factory = { webView },
+    modifier = Modifier.fillMaxSize(),
+  ) {
+    // from "main/assets/index.html" -> "file:///android_asset/index.html"
+    it.loadUrl("https://appassets.androidplatform.net/assets/open_source_licenses.html")
+  }
+}
 
-              Timber.i("onPageStarted:\t$url")
-            }
+private fun configuredWebView(
+  context: Context,
+  assetLoader: WebViewAssetLoader,
+  runningInPreview: Boolean,
+): WebView =
+  WebView(context).apply {
+    isVerticalScrollBarEnabled = false
 
-            override fun onPageFinished(
-              view: WebView,
-              url: String,
-            ) {
-              super.onPageFinished(view, url)
+    webViewClient = LicenseWebViewClient(assetLoader)
+    webChromeClient = LicenseWebChromeClient()
 
-              Timber.i("onPageFinished:\t$url")
-            }
+    if (!runningInPreview) {
+      settings.apply {
+        allowFileAccess = false
+        allowContentAccess = false
+        setGeolocationEnabled(false)
+        cacheMode = WebSettings.LOAD_NO_CACHE
+        builtInZoomControls = false
+        displayZoomControls = false
 
-            override fun onLoadResource(
-              view: WebView?,
-              url: String?,
-            ) {
-              super.onLoadResource(view, url)
-
-              Timber.i("onLoadResource:\t$url")
-            }
-
-            override fun shouldInterceptRequest(
-              view: WebView,
-              request: WebResourceRequest,
-            ): WebResourceResponse? {
-              super.shouldInterceptRequest(view, request)
-
-              // Override URLs for AssetsPathHandler
-              val override = assetLoader.shouldInterceptRequest(request.url)
-              val default = super.shouldInterceptRequest(view, request)
-              val newRequest = override ?: default
-              Timber.i("shouldInterceptRequest:\t${request.url}\t${override?.statusCode}")
-              return newRequest
-            }
-
-            override fun onReceivedHttpError(
-              view: WebView,
-              request: WebResourceRequest,
-              errorResponse: WebResourceResponse,
-            ) {
-              Timber.e("onReceivedHttpError:\t${request.url}\t${errorResponse.statusCode}")
-            }
-          }
-
-        webChromeClient =
-          object : WebChromeClient() {
-            override fun onProgressChanged(
-              view: WebView?,
-              newProgress: Int,
-            ) {
-              super.onProgressChanged(view, newProgress)
-
-              Timber.i("onProgressChanged:\t$newProgress")
-            }
-          }
-
-        if (runningInPreview) {
-          return@apply
-        }
-
-        settings.apply {
-          allowFileAccess = false
-          allowContentAccess = false
-          setGeolocationEnabled(false)
-
-          // Handle dark mode for WebView
-          if (isFeatureSupported(ALGORITHMIC_DARKENING)) {
-            setAlgorithmicDarkeningAllowed(this, true)
-          } else {
-            Timber.w("Dark mode not set")
-          }
+        // Handle dark mode for WebView
+        if (isFeatureSupported(ALGORITHMIC_DARKENING)) {
+          setAlgorithmicDarkeningAllowed(this, true)
+        } else {
+          Timber.tag("LicenseScreen").w("Dark mode not set")
         }
       }
-    },
-    update = { webView ->
-      // from "main/assets/index.html" -> "file:///android_asset/index.html"
-      webView.loadUrl("https://appassets.androidplatform.net/assets/open_source_licenses.html")
-    },
-  )
-}
+    }
+  }
