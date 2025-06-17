@@ -40,6 +40,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TooltipBox
@@ -57,6 +59,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -95,6 +98,7 @@ import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import com.skydoves.landscapist.palette.PalettePlugin
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 
 /** Shows the main screen of trending gifs. */
 @Preview(
@@ -116,8 +120,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 private fun DefaultPreview(navController: NavHostController = rememberNavController()) {
   GifTheme {
+    val snackbarHostState = remember { SnackbarHostState() }
     GifScreen(
       navController = navController,
+      snackbarHostState = snackbarHostState,
     )
   }
 }
@@ -127,6 +133,7 @@ internal fun GifScreen(
   modifier: Modifier = Modifier,
   navController: NavHostController = rememberNavController(),
   gifViewModel: GifViewModel = hiltViewModel(),
+  snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
@@ -140,6 +147,7 @@ internal fun GifScreen(
 
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    snackbarHost = { SnackbarHost(snackbarHostState) },
     topBar = {
       TheToolbar(
         navController = navController,
@@ -166,6 +174,7 @@ internal fun GifScreen(
       isRefreshing = isRefreshing,
       onRefresh = { gifViewModel.loadTrendingImages() },
       onLoadMore = { gifViewModel.loadMore() },
+      snackbarHostState = snackbarHostState,
     )
   }
 }
@@ -306,6 +315,7 @@ private fun TheContent(
   isRefreshing: Boolean,
   onRefresh: () -> Unit,
   onLoadMore: () -> Unit,
+  snackbarHostState: SnackbarHostState,
 ) {
   Column(
     modifier = Modifier.padding(innerPadding),
@@ -318,6 +328,7 @@ private fun TheContent(
       TheDialogPreview(
         currentSelectedItem = currentSelectedItem.value,
         onDialogDismiss = { openDialog.value = it },
+        snackbarHostState = snackbarHostState,
       )
     }
     val pullRefreshState =
@@ -419,9 +430,11 @@ private fun TheContent(
 private fun TheDialogPreview(
   currentSelectedItem: GifImageInfo,
   onDialogDismiss: (Boolean) -> Unit,
+  snackbarHostState: SnackbarHostState,
 ) {
   val clipboardManager = LocalClipboardManager.current
   val context = LocalContext.current
+  val coroutineScope = rememberCoroutineScope()
 
   Dialog(
     onDismissRequest = {
@@ -472,6 +485,11 @@ private fun TheDialogPreview(
         onClick = {
           onDialogDismiss(false)
           clipboardManager.setText(AnnotatedString(currentSelectedItem.gifUrl))
+          coroutineScope.launch {
+            snackbarHostState.showSnackbar(
+              context.getString(R.string.copied_to_clipboard),
+            )
+          }
         },
       ) {
         Text(
