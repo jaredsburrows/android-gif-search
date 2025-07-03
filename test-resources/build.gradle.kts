@@ -1,4 +1,5 @@
 import org.gradle.api.JavaVersion.VERSION_17
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
 import java.net.URL
 
 plugins {
@@ -23,9 +24,6 @@ android {
     targetCompatibility = jvmVersion
   }
 
-  kotlinOptions {
-    jvmTarget = jvmVersion.toString()
-  }
 
   lint {
     abortOnError = true
@@ -49,6 +47,12 @@ android {
         "**/*.xml",
         "**/*.properties",
       )
+  }
+}
+
+kotlin {
+  compilerOptions {
+    jvmTarget.set(JVM_17)
   }
 }
 
