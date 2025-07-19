@@ -18,7 +18,5 @@ enum class ApplicationMode {
 internal class AppConfigModule {
   @Provides
   @Singleton
-  fun provideApplicationMode(): ApplicationMode {
-    return NORMAL
-  }
+  fun provideApplicationMode(): ApplicationMode = NORMAL
 }

@@ -149,7 +149,8 @@ class LicenseScreenTest {
     composeTestRule.waitForIdle()
 
     composeTestRule.mainClock.autoAdvance = false
-    composeTestRule.onNodeWithContentDescription(label = licenseScreenContentDescription)
+    composeTestRule
+      .onNodeWithContentDescription(label = licenseScreenContentDescription)
       .performClick()
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()

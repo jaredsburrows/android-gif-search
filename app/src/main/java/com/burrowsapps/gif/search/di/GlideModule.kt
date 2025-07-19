@@ -36,9 +36,8 @@ internal class GlideModule : AppGlideModule() {
     fun provideApplicationMode(): ApplicationMode
   }
 
-  private fun getGlideEntryPoint(context: Context): GlideModuleEntryPoint {
-    return fromApplication(context.applicationContext, GlideModuleEntryPoint::class.java)
-  }
+  private fun getGlideEntryPoint(context: Context): GlideModuleEntryPoint =
+    fromApplication(context.applicationContext, GlideModuleEntryPoint::class.java)
 
   override fun applyOptions(
     context: Context,
@@ -46,15 +45,15 @@ internal class GlideModule : AppGlideModule() {
   ) {
     val applicationMode = getGlideEntryPoint(context).provideApplicationMode()
 
-    builder.setDefaultRequestOptions(
-      RequestOptions()
-        .encodeFormat(WEBP_LOSSLESS)
-        .encodeQuality(ENCODE_QUALITY)
-        .diskCacheStrategy(ALL)
-        .error(R.mipmap.ic_launcher)
-        .fallback(R.mipmap.ic_launcher),
-    )
-      .setLogLevel(if (applicationMode == TESTING || DEBUG) Log.WARN else Log.ERROR)
+    builder
+      .setDefaultRequestOptions(
+        RequestOptions()
+          .encodeFormat(WEBP_LOSSLESS)
+          .encodeQuality(ENCODE_QUALITY)
+          .diskCacheStrategy(ALL)
+          .error(R.mipmap.ic_launcher)
+          .fallback(R.mipmap.ic_launcher),
+      ).setLogLevel(if (applicationMode == TESTING || DEBUG) Log.WARN else Log.ERROR)
       .setIsActiveResourceRetentionAllowed(true)
   }
 

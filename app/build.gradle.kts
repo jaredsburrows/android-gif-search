@@ -18,7 +18,10 @@ plugins {
   alias(libs.plugins.publish)
 }
 
-val sdkVersion = libs.versions.sdk.get().toInt()
+val sdkVersion =
+  libs.versions.sdk
+    .get()
+    .toInt()
 val jvmVersion = VERSION_17
 
 android {

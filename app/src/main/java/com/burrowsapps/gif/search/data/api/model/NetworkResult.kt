@@ -21,11 +21,16 @@ internal sealed class NetworkResult<T>(
 ) {
   class Loading<T> : NetworkResult<T>()
 
-  class Success<T>(data: T) : NetworkResult<T>(data = data)
+  class Success<T>(
+    data: T,
+  ) : NetworkResult<T>(data = data)
 
   class Empty<T> : NetworkResult<T>()
 
-  class Error<T>(data: T? = null, message: String? = null) : NetworkResult<T>(data = data, message = message)
+  class Error<T>(
+    data: T? = null,
+    message: String? = null,
+  ) : NetworkResult<T>(data = data, message = message)
 
   companion object {
     /**
@@ -41,8 +46,8 @@ internal sealed class NetworkResult<T>(
      * @param apiCall A suspend function that performs a network request using Retrofit.
      * @return A NetworkResult object representing the result of the network request.
      */
-    suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): NetworkResult<T> {
-      return runCatching { apiCall() }
+    suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): NetworkResult<T> =
+      runCatching { apiCall() }
         .fold(
           onSuccess = { response ->
             val body = response.body()
@@ -70,7 +75,6 @@ internal sealed class NetworkResult<T>(
             error(e.message ?: e.toString())
           },
         )
-    }
 
     private fun <T> error(errorMessage: String): NetworkResult<T> = Error(message = errorMessage)
   }

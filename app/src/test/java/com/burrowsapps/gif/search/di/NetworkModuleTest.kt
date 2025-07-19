@@ -35,7 +35,8 @@ class NetworkModuleTest {
   @Test
   fun provideGifServiceReturnsGifService() {
     val retrofit =
-      Retrofit.Builder()
+      Retrofit
+        .Builder()
         .baseUrl("https://example.com")
         .addConverterFactory(MoshiConverterFactory.create())
         .build()
@@ -48,7 +49,8 @@ class NetworkModuleTest {
   @Test
   fun provideRetrofitReturnsRetrofit() {
     val moshi =
-      Moshi.Builder()
+      Moshi
+        .Builder()
         .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
         .build()
 

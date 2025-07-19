@@ -7,7 +7,10 @@ plugins {
   alias(libs.plugins.ktlint)
 }
 
-val sdkVersion = libs.versions.sdk.get().toInt()
+val sdkVersion =
+  libs.versions.sdk
+    .get()
+    .toInt()
 val jvmVersion = VERSION_17
 
 android {
@@ -55,7 +58,10 @@ android {
 tasks.register("updateTestFiles") {
   doLast {
     // test-shared/src/main/resources
-    val resourcesFolder = android.sourceSets["main"].resources.srcDirs.first()
+    val resourcesFolder =
+      android.sourceSets["main"]
+        .resources.srcDirs
+        .first()
 
     val testData =
       mapOf(
@@ -69,7 +75,8 @@ tasks.register("updateTestFiles") {
 
     testData.forEach { (file, url) ->
       val jsonContent =
-        URL(url).readText()
+        URL(url)
+          .readText()
           // Point our mock JSON to point to local OkHTTP Mock server
           .replace("media.tenor.com", "localhost:8080")
           .replace("tenor.com", "localhost:8080")

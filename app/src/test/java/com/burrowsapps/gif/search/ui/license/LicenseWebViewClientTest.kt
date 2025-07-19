@@ -24,7 +24,8 @@ class LicenseWebViewClientTest {
   fun setUp() {
     val context = ApplicationProvider.getApplicationContext<Context>()
     assetLoader =
-      WebViewAssetLoader.Builder()
+      WebViewAssetLoader
+        .Builder()
         .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(context))
         .build()
 

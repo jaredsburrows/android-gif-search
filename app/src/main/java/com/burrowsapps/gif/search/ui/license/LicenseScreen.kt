@@ -82,7 +82,8 @@ internal fun LicenseScreen(
   // Instead of loading files using "files://" directly
   val assetLoader =
     remember(context) {
-      WebViewAssetLoader.Builder()
+      WebViewAssetLoader
+        .Builder()
         .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(context))
         .build()
     }

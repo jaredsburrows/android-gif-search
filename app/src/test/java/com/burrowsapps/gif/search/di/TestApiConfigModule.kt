@@ -13,7 +13,5 @@ import javax.inject.Singleton
 internal class TestApiConfigModule {
   @Provides
   @Singleton
-  fun provideBaseUrl(): String {
-    return MOCK_SERVER_URL
-  }
+  fun provideBaseUrl(): String = MOCK_SERVER_URL
 }

@@ -79,7 +79,13 @@ class GifServiceTest {
       val response = runBlocking(IO) { sut.fetchTrendingResults(null) }
       val body = response.body()!!
 
-      assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
+      assertThat(
+        body.results
+          .first()
+          .media
+          .first()
+          .tinyGif.url,
+      ).matches("http.*localhost.*gif")
     }
 
   @Test
@@ -88,7 +94,13 @@ class GifServiceTest {
       val response = runBlocking(IO) { sut.fetchTrendingResults(null) }
       val body = response.body()!!
 
-      assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")
+      assertThat(
+        body.results
+          .first()
+          .media
+          .first()
+          .tinyGif.preview,
+      ).matches("http.*localhost.*png")
     }
 
   @Test
@@ -97,7 +109,13 @@ class GifServiceTest {
       val response = runBlocking(IO) { sut.fetchSearchResults("hello", null) }
       val body = response.body()!!
 
-      assertThat(body.results.first().media.first().tinyGif.url).matches("http.*localhost.*gif")
+      assertThat(
+        body.results
+          .first()
+          .media
+          .first()
+          .tinyGif.url,
+      ).matches("http.*localhost.*gif")
     }
 
   @Test
@@ -106,6 +124,12 @@ class GifServiceTest {
       val response = runBlocking(IO) { sut.fetchSearchResults("hello", null) }
       val body = response.body()!!
 
-      assertThat(body.results.first().media.first().tinyGif.preview).matches("http.*localhost.*png")
+      assertThat(
+        body.results
+          .first()
+          .media
+          .first()
+          .tinyGif.preview,
+      ).matches("http.*localhost.*png")
     }
 }

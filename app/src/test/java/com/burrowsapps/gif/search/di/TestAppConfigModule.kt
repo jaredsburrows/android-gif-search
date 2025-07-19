@@ -13,7 +13,5 @@ import javax.inject.Singleton
 internal class TestAppConfigModule {
   @Provides
   @Singleton
-  fun provideApplicationMode(): ApplicationMode {
-    return TESTING
-  }
+  fun provideApplicationMode(): ApplicationMode = TESTING
 }
