@@ -11,14 +11,16 @@ class DebugApplication : MainApplication() {
     Timber.plant(DebugTree())
 
     StrictMode.setThreadPolicy(
-      StrictMode.ThreadPolicy.Builder()
+      StrictMode.ThreadPolicy
+        .Builder()
         .detectAll()
         .penaltyLog()
         .penaltyDeath()
         .build(),
     )
     StrictMode.setVmPolicy(
-      StrictMode.VmPolicy.Builder()
+      StrictMode.VmPolicy
+        .Builder()
         .detectAll()
         .penaltyLog()
         // TODO: search bar

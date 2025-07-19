@@ -67,8 +67,7 @@ internal fun SearchBar(
             .padding(2.dp)
             .onFocusChanged { focusState ->
               showClearButton.value = focusState.isFocused
-            }
-            .focusRequester(focusRequester),
+            }.focusRequester(focusRequester),
         value = searchText,
         onValueChange = onSearchTextChange,
         placeholder = {

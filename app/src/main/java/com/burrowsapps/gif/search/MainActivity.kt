@@ -119,7 +119,9 @@ fun MainScreen(
  * This sealed class has two subclasses: Gif and License. Each subclass represents a screen in the
  * app, and has a route property that corresponds to the screen's route in the navigation graph.
  */
-sealed class Screen(val route: String) {
+sealed class Screen(
+  val route: String,
+) {
   data object Gif : Screen("gif")
 
   data object License : Screen("license")

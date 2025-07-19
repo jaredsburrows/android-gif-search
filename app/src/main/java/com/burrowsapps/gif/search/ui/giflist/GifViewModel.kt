@@ -127,18 +127,19 @@ internal class GifViewModel
       }
     }
 
-    private fun buildGifList(response: GifResponseDto?): List<GifImageInfo> {
-      return response?.results?.map { result ->
-        val media = result.media.first()
-        val gif = media.gif
-        val tinyGif = media.tinyGif
+    private fun buildGifList(response: GifResponseDto?): List<GifImageInfo> =
+      response
+        ?.results
+        ?.map { result ->
+          val media = result.media.first()
+          val gif = media.gif
+          val tinyGif = media.tinyGif
 
-        GifImageInfo(
-          gifUrl = gif.url,
-          gifPreviewUrl = gif.preview,
-          tinyGifUrl = tinyGif.url,
-          tinyGifPreviewUrl = tinyGif.preview,
-        )
-      }.orEmpty()
-    }
+          GifImageInfo(
+            gifUrl = gif.url,
+            gifPreviewUrl = gif.preview,
+            tinyGifUrl = tinyGif.url,
+            tinyGifPreviewUrl = tinyGif.preview,
+          )
+        }.orEmpty()
   }

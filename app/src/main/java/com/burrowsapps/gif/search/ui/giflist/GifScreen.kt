@@ -368,12 +368,12 @@ private fun TheContent(
         ) { item ->
           Box(
             modifier =
-              Modifier.animateItem(
-                fadeInSpec = null,
-                fadeOutSpec = null,
-                placementSpec = tween(durationMillis = 350),
-              )
-                .semantics {
+              Modifier
+                .animateItem(
+                  fadeInSpec = null,
+                  fadeOutSpec = null,
+                  placementSpec = tween(durationMillis = 350),
+                ).semantics {
                   contentDescription = context.getString(R.string.gif_image_content_description)
                 },
           ) {
@@ -535,11 +535,17 @@ private fun loadGif(
 ): RequestBuilder<GifDrawable> {
   val request = Glide.with(context).asGif()
   val thumbnailRequest =
-    request.transition(DrawableTransitionOptions.withCrossFade()).load(thumbnailUrl)
-      .override(size).signature(ObjectKey(thumbnailUrl))
+    request
+      .transition(DrawableTransitionOptions.withCrossFade())
+      .load(thumbnailUrl)
+      .override(size)
+      .signature(ObjectKey(thumbnailUrl))
   val imageRequest =
-    request.transition(DrawableTransitionOptions.withCrossFade()).load(imageUrl)
+    request
+      .transition(DrawableTransitionOptions.withCrossFade())
+      .load(imageUrl)
       .thumbnail(thumbnailRequest)
-      .override(size).signature(ObjectKey(imageUrl))
+      .override(size)
+      .signature(ObjectKey(imageUrl))
   return imageRequest
 }

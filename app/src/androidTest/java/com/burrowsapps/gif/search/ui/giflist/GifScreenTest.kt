@@ -129,14 +129,18 @@ class GifScreenTest {
     // Wait until the gifs are showing
     composeTestRule.waitUntil(
       condition = {
-        composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription)
-          .fetchSemanticsNodes().isNotEmpty()
+        composeTestRule
+          .onAllNodesWithContentDescription(label = gifImageContentDescription)
+          .fetchSemanticsNodes()
+          .isNotEmpty()
       },
       timeoutMillis = 10_000,
     )
 
     // Perform click on the first node with the content description
-    composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription).onFirst()
+    composeTestRule
+      .onAllNodesWithContentDescription(label = gifImageContentDescription)
+      .onFirst()
       .performClick()
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
@@ -147,7 +151,9 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
 
     // Assert that the first node with the content description is displayed
-    composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription).onFirst()
+    composeTestRule
+      .onAllNodesWithContentDescription(label = gifImageContentDescription)
+      .onFirst()
       .assertIsDisplayed()
   }
 
@@ -159,14 +165,18 @@ class GifScreenTest {
     // Wait until the gifs are showing
     composeTestRule.waitUntil(
       condition = {
-        composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription)
-          .fetchSemanticsNodes().isNotEmpty()
+        composeTestRule
+          .onAllNodesWithContentDescription(label = gifImageContentDescription)
+          .fetchSemanticsNodes()
+          .isNotEmpty()
       },
       timeoutMillis = 10_000,
     )
 
     // Perform click on the first node with the content description
-    composeTestRule.onAllNodesWithContentDescription(label = gifImageContentDescription).onFirst()
+    composeTestRule
+      .onAllNodesWithContentDescription(label = gifImageContentDescription)
+      .onFirst()
       .performClick()
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
@@ -179,7 +189,10 @@ class GifScreenTest {
     // Assert that the clipboard has the correct URL
     val clipboardManager = context.getSystemService(ClipboardManager::class.java)
     assertThat(
-      clipboardManager.primaryClip?.getItemAt(0)?.coerceToText(context).toString(),
+      clipboardManager.primaryClip
+        ?.getItemAt(0)
+        ?.coerceToText(context)
+        .toString(),
     ).matches("http.*localhost.*gif")
   }
 
@@ -238,7 +251,8 @@ class GifScreenTest {
   }
 
   private fun enterSearchMode() {
-    composeTestRule.onNodeWithContentDescription(label = menuSearchContentDescription)
+    composeTestRule
+      .onNodeWithContentDescription(label = menuSearchContentDescription)
       .performClick()
     composeTestRule.waitForIdle()
   }

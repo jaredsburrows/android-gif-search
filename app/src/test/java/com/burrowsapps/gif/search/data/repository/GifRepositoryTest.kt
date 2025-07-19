@@ -61,12 +61,17 @@ class GifRepositoryTest {
   fun testLoadTrendingImagesError() =
     runTest {
       val errorResponse =
-        okhttp3.Response.Builder()
+        okhttp3.Response
+          .Builder()
           .code(HTTP_INTERNAL_ERROR)
           .message("Broken!")
           .protocol(HTTP_1_1)
-          .request(okhttp3.Request.Builder().url(MOCK_SERVER_URL).build())
-          .build()
+          .request(
+            okhttp3.Request
+              .Builder()
+              .url(MOCK_SERVER_URL)
+              .build(),
+          ).build()
       val plainText = "text/plain; charset=utf-8".toMediaType()
       val errorBody = "Broken!".toResponseBody(plainText)
       whenever(service.fetchTrendingResults(eq(next), any(), any(), any()))
@@ -109,12 +114,17 @@ class GifRepositoryTest {
     runTest {
       val searchString = "gifs"
       val errorResponse =
-        okhttp3.Response.Builder()
+        okhttp3.Response
+          .Builder()
           .code(HTTP_INTERNAL_ERROR)
           .message("Broken!")
           .protocol(HTTP_1_1)
-          .request(okhttp3.Request.Builder().url(MOCK_SERVER_URL).build())
-          .build()
+          .request(
+            okhttp3.Request
+              .Builder()
+              .url(MOCK_SERVER_URL)
+              .build(),
+          ).build()
       val plainText = "text/plain; charset=utf-8".toMediaType()
       val errorBody = "Broken!".toResponseBody(plainText)
       whenever(service.fetchSearchResults(eq(searchString), eq(next), any(), any(), any()))

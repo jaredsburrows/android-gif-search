@@ -33,10 +33,9 @@ import javax.inject.Singleton
 internal class NetworkModule {
   @Singleton
   @Provides
-  fun provideGifService(retrofit: Retrofit): GifService {
-    return retrofit
+  fun provideGifService(retrofit: Retrofit): GifService =
+    retrofit
       .create(GifService::class.java)
-  }
 
   @Singleton
   @Provides
@@ -44,27 +43,25 @@ internal class NetworkModule {
     converterFactory: MoshiConverterFactory,
     client: Lazy<OkHttpClient>,
     baseUrl: String,
-  ): Retrofit {
-    return Retrofit.Builder()
+  ): Retrofit =
+    Retrofit
+      .Builder()
       .addConverterFactory(converterFactory)
       .callFactory { client.get().newCall(it) } // Resolve StrictMode DiskReadViolation
       .baseUrl(baseUrl)
       .build()
-  }
 
   @Singleton
   @Provides
-  fun provideMoshiConverterFactory(moshi: Moshi): MoshiConverterFactory {
-    return MoshiConverterFactory.create(moshi)
-  }
+  fun provideMoshiConverterFactory(moshi: Moshi): MoshiConverterFactory = MoshiConverterFactory.create(moshi)
 
   @Singleton
   @Provides
-  fun provideMoshi(): Moshi {
-    return Moshi.Builder()
+  fun provideMoshi(): Moshi =
+    Moshi
+      .Builder()
       .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
       .build()
-  }
 
   @Singleton
   @Provides
@@ -75,7 +72,8 @@ internal class NetworkModule {
   ): OkHttpClient {
     checkNotMainThread()
 
-    return OkHttpClient.Builder()
+    return OkHttpClient
+      .Builder()
       .addInterceptor(httpLoggingInterceptor)
       .addInterceptor(trafficStatsInterceptor)
       .cache(cache)
@@ -86,8 +84,8 @@ internal class NetworkModule {
   @Named("TrafficStatsInterceptor")
   @Singleton
   @Provides
-  fun provideTrafficStatsInterceptor(): Interceptor {
-    return Interceptor { chain ->
+  fun provideTrafficStatsInterceptor(): Interceptor =
+    Interceptor { chain ->
       val trafficStatsTag = 0xF00D
       runCatching {
         TrafficStats.setThreadStatsTag(trafficStatsTag)
@@ -96,18 +94,16 @@ internal class NetworkModule {
         TrafficStats.clearThreadStatsTag()
       }.getOrThrow()
     }
-  }
 
   @Named("HttpLoggingInterceptor")
   @Singleton
   @Provides
-  fun provideHttpLoggingInterceptor(applicationMode: ApplicationMode): Interceptor {
-    return HttpLoggingInterceptor { message ->
+  fun provideHttpLoggingInterceptor(applicationMode: ApplicationMode): Interceptor =
+    HttpLoggingInterceptor { message ->
       Timber.i(message)
     }.apply {
       level = if (applicationMode == TESTING || DEBUG) BASIC else NONE
     }
-  }
 
   @Singleton
   @Provides
