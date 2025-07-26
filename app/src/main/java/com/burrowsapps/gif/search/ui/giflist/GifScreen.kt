@@ -6,6 +6,7 @@
 
 package com.burrowsapps.gif.search.ui.giflist
 
+import android.content.ClipData
 import android.content.Context
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
@@ -68,12 +69,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -432,7 +433,7 @@ private fun TheDialogPreview(
   onDialogDismiss: (Boolean) -> Unit,
   snackbarHostState: SnackbarHostState,
 ) {
-  val clipboardManager = LocalClipboardManager.current
+  val clipboardManager = LocalClipboard.current
   val context = LocalContext.current
   val coroutineScope = rememberCoroutineScope()
 
@@ -484,8 +485,10 @@ private fun TheDialogPreview(
       TextButton(
         onClick = {
           onDialogDismiss(false)
-          clipboardManager.setText(AnnotatedString(currentSelectedItem.gifUrl))
           coroutineScope.launch {
+            clipboardManager.setClipEntry(
+              ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
+            )
             snackbarHostState.showSnackbar(
               context.getString(R.string.copied_to_clipboard),
             )
