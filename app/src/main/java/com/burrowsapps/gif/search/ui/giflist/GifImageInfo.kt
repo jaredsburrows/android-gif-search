@@ -7,8 +7,8 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 internal data class GifImageInfo(
-  var tinyGifUrl: String = "",
-  var tinyGifPreviewUrl: String = "",
-  var gifUrl: String = "",
-  var gifPreviewUrl: String = "",
+  val tinyGifUrl: String = "",
+  val tinyGifPreviewUrl: String = "",
+  val gifUrl: String = "",
+  val gifPreviewUrl: String = "",
 )
