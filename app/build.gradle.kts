@@ -1,6 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import org.gradle.api.JavaVersion.VERSION_17
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML
 import java.io.FileInputStream
 import java.nio.file.Paths
@@ -50,10 +51,6 @@ android {
   compileOptions {
     sourceCompatibility = jvmVersion
     targetCompatibility = jvmVersion
-  }
-
-  kotlinOptions {
-    jvmTarget = jvmVersion.toString()
   }
 
   buildFeatures {
@@ -166,6 +163,12 @@ ksp {
   arg("dagger.formatGeneratedSource", "disabled")
   arg("dagger.fastInit", "enabled")
   arg("dagger.experimentalDaggerErrorMessages", "enabled")
+}
+
+kotlin {
+  compilerOptions {
+    jvmTarget.set(JVM_17)
+  }
 }
 
 dependencies {
