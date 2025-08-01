@@ -1,4 +1,5 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import com.github.benmanes.gradle.versions.updates.resolutionstrategy.ComponentSelectionWithCurrent
 import org.gradle.api.JavaVersion.VERSION_17
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
@@ -43,20 +44,20 @@ allprojects {
       return isStable.not()
     }
 
-    resolutionStrategy {
-      componentSelection {
-        all {
-          when (candidate.group) {
-            // Allow non-stable versions for these groups
-            "com.android.application", "org.jetbrains.kotlin" -> {}
-            else -> {
-              if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
-                reject("Release candidate")
+      resolutionStrategy {
+        componentSelection {
+          all { selection: ComponentSelectionWithCurrent ->
+            when (selection.candidate.group) {
+              // Allow non-stable versions for these groups
+              "com.android.application", "org.jetbrains.kotlin" -> {}
+              else -> {
+                if (isNonStable(selection.candidate.version) && !isNonStable(selection.currentVersion)) {
+                  selection.reject("Release candidate")
+                }
               }
             }
           }
         }
-      }
     }
   }
 
