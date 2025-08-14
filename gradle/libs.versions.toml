@@ -12,7 +12,7 @@ okhttp = "5.1.0"
 retrofit = "3.0.0"
 robolectric = "4.15.1"
 # language
-kotlin = "2.2.0"
+kotlin = "2.2.10"
 # build
 sdk = "35"
 # signing
