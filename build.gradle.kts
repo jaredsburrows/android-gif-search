@@ -37,25 +37,20 @@ allprojects {
   tasks.withType<DependencyUpdatesTask>().configureEach {
     fun isNonStable(version: String): Boolean {
       val stableKeyword =
-        listOf("RELEASE", "FINAL", "GA").any { version.uppercase(Locale.getDefault()).contains(it) }
+        listOf("RELEASE", "FINAL", "GA")
+          .any { version.uppercase(Locale.getDefault()).contains(it) }
       val regex = "^[0-9,.v-]+(-r)?$".toRegex()
       val isStable = stableKeyword || regex.matches(version)
-      return isStable.not()
+      return !isStable
     }
 
-    resolutionStrategy {
-      componentSelection {
-        all {
-          when (candidate.group) {
-            // Allow non-stable versions for these groups
-            "com.android.application", "org.jetbrains.kotlin" -> {}
-            else -> {
-              if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
-                reject("Release candidate")
-              }
-            }
-          }
-        }
+    rejectVersionIf {
+      val allowNonStableForGroup =
+        candidate.group in setOf("com.android.application", "org.jetbrains.kotlin")
+      if (allowNonStableForGroup) {
+        false
+      } else {
+        isNonStable(candidate.version) && !isNonStable(currentVersion)
       }
     }
   }
