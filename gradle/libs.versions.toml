@@ -14,7 +14,7 @@ robolectric = "4.15.1"
 # language
 kotlin = "2.2.10"
 # build
-sdk = "35"
+sdk = "36"
 # signing
 alias = "androiddebugkey"
 password = "android"
