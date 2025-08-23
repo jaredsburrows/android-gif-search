@@ -1,14 +1,15 @@
 [versions]
 android = "8.12.1"
-dagger = "2.57.1"
 activity = "1.10.1"
 compose = "1.9.0"
+dagger = "2.57.1"
 glide = "4.16.0"
 kotlinx = "1.10.2"
 landscapist = "2.5.1"
 leakcanary = "2.14"
 moshi = "1.15.2"
 okhttp = "5.1.0"
+paging = "3.3.4"
 retrofit = "3.0.0"
 robolectric = "4.15.1"
 # language
@@ -33,11 +34,12 @@ publish = { id = "com.github.triplet.play", version = "3.12.1" }
 versions = { id = "com.github.ben-manes.versions", version = "0.52.0" }
 
 [libraries]
-androidx-activityktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
+androidx-activityktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.9.1" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2025.08.00" }
+androidx-compose-junit = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 androidx-compose-material = { module = "androidx.compose.material:material", version = "1.9.0" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.3.2" }
 androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.9.3" }
@@ -46,11 +48,11 @@ androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compos
 androidx-compose-uimanifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 androidx-compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 androidx-compose-uitoolingpreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
-androidx-compose-junit = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 androidx-corektx = { module = "androidx.core:core-ktx", version = "1.16.0" }
 androidx-hilt-compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.2.0" }
 androidx-lifecycle-viewmodelktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version = "2.9.2" }
-#androidx-palette = { module = "androidx.palette:palette", version = "1.0.0" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-palette = { module = "com.kmpalette:kmpalette-core", version = "3.1.0" }
 androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.2.0" }
 androidx-test-annotation = { module = "androidx.test:annotation", version = "1.0.1" }
@@ -71,7 +73,6 @@ google-hilt-testing = { module = "com.google.dagger:hilt-android-testing", versi
 google-material = { module = "com.google.android.material:material", version = "1.12.0" }
 google-truth = { module = "com.google.truth:truth", version = "1.4.4" }
 jakewharton-timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
-#noinspection GradleDependency
 javax-annotation-jsr250 = { module = "javax.annotation:jsr250-api", version = "1.0" }
 junit = { module = "junit:junit", version = "4.13.2" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
@@ -88,8 +89,8 @@ mockito = { module = "org.mockito:mockito-core", version = "5.19.0" }
 mockito-kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version = "2.2.0" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 robolectric-annotations = { module = "org.robolectric:annotations", version.ref = "robolectric" }
-squareup-leakcanary-startup = { module = "com.squareup.leakcanary:leakcanary-android-startup", version.ref = "leakcanary" }
 squareup-leakcanary-instrumentation = { module = "com.squareup.leakcanary:leakcanary-android-instrumentation", version.ref = "leakcanary" }
+squareup-leakcanary-startup = { module = "com.squareup.leakcanary:leakcanary-android-startup", version.ref = "leakcanary" }
 squareup-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 squareup-moshi-adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
 squareup-moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
