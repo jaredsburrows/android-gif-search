@@ -9,7 +9,7 @@ landscapist = "2.5.1"
 leakcanary = "2.14"
 moshi = "1.15.2"
 okhttp = "5.1.0"
-paging = "3.3.4"
+paging = "3.3.6"
 retrofit = "3.0.0"
 robolectric = "4.15.1"
 # language
