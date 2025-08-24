@@ -22,9 +22,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -54,15 +52,11 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -82,6 +76,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -98,7 +95,6 @@ import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import com.skydoves.landscapist.palette.PalettePlugin
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 /** Shows the main screen of trending gifs. */
@@ -137,13 +133,8 @@ internal fun GifScreen(
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-
-  LaunchedEffect(Unit) {
-    gifViewModel.loadTrendingImages()
-  }
-
-  val listItems by gifViewModel.gifListResponse.collectAsState()
-  val isRefreshing by gifViewModel.isRefreshing.collectAsState()
+  val pagingItems = gifViewModel.gifPagingData.collectAsLazyPagingItems()
+  val isRefreshing = pagingItems.loadState.refresh is LoadState.Loading
   val searchText by gifViewModel.searchText.collectAsState(initial = "")
 
   Scaffold(
@@ -154,27 +145,18 @@ internal fun GifScreen(
         navController = navController,
         scrollBehavior = scrollBehavior,
         searchText = searchText,
-        onSearchTextChange = {
-          gifViewModel.onSearchTextChanged(it)
-          if (it.isNotEmpty()) {
-            gifViewModel.loadSearchImages(it)
-          } else {
-            gifViewModel.loadTrendingImages()
-          }
-        },
+        onSearchTextChange = { gifViewModel.onSearchTextChanged(it) },
         onClearClick = {
           gifViewModel.onClearClick()
-          gifViewModel.loadTrendingImages()
         },
       )
     },
   ) { paddingValues ->
     TheContent(
       innerPadding = paddingValues,
-      listItems = listItems,
+      pagingItems = pagingItems,
       isRefreshing = isRefreshing,
-      onRefresh = { gifViewModel.loadTrendingImages() },
-      onLoadMore = { gifViewModel.loadMore() },
+      onRefresh = { pagingItems.refresh() },
       snackbarHostState = snackbarHostState,
     )
   }
@@ -229,7 +211,7 @@ private fun TheToolBar(
       // Search for Gifs
       TooltipBox(
         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-        tooltip = { Text("Search gifs") },
+        tooltip = { Text(stringResource(R.string.search_gifs)) },
         state = searchTooltipState,
       ) {
         IconButton(
@@ -244,7 +226,7 @@ private fun TheToolBar(
       // More Tooltip Box
       TooltipBox(
         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-        tooltip = { Text("Show menu") },
+        tooltip = { Text(stringResource(R.string.show_menu)) },
         state = moreTooltipState,
       ) {
         IconButton(
@@ -312,10 +294,9 @@ private fun TheSearchBar(
 @Composable
 private fun TheContent(
   innerPadding: PaddingValues,
-  listItems: List<GifImageInfo>,
+  pagingItems: LazyPagingItems<GifImageInfo>,
   isRefreshing: Boolean,
   onRefresh: () -> Unit,
-  onLoadMore: () -> Unit,
   snackbarHostState: SnackbarHostState,
 ) {
   Column(
@@ -350,11 +331,11 @@ private fun TheContent(
         columns = GridCells.Fixed(3),
         modifier = Modifier.fillMaxSize(),
       ) {
-        // TODO update default state
-        if (listItems.isEmpty()) {
+        // Empty state
+        if (pagingItems.itemCount == 0 && pagingItems.loadState.refresh is LoadState.NotLoading) {
           item {
             Text(
-              text = "No Gifs!",
+              text = stringResource(R.string.no_gifs),
               style = MaterialTheme.typography.bodyLarge,
               modifier =
                 Modifier
@@ -365,8 +346,9 @@ private fun TheContent(
         }
 
         items(
-          items = listItems,
-        ) { item ->
+          count = pagingItems.itemCount,
+        ) { index ->
+          val item = pagingItems[index] ?: return@items
           Box(
             modifier =
               Modifier
@@ -417,12 +399,6 @@ private fun TheContent(
         pullRefreshState,
         modifier = Modifier.align(Alignment.TopCenter),
       )
-
-      InfiniteGridHandler(
-        gridState = gridState,
-      ) {
-        onLoadMore()
-      }
     }
   }
 }
@@ -501,31 +477,6 @@ private fun TheDialogPreview(
           fontSize = MaterialTheme.typography.titleMedium.fontSize,
         )
       }
-    }
-  }
-}
-
-@Composable
-private fun InfiniteGridHandler(
-  gridState: LazyGridState,
-  buffer: Int = 15,
-  onLoadMore: () -> Unit,
-) {
-  val currentOnLoadMore by rememberUpdatedState(onLoadMore)
-  val loadMore =
-    remember {
-      derivedStateOf {
-        val layoutInfo = gridState.layoutInfo
-        val totalItemsNumber = layoutInfo.totalItemsCount
-        val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
-
-        lastVisibleItemIndex > (totalItemsNumber - buffer)
-      }
-    }
-
-  LaunchedEffect(loadMore) {
-    snapshotFlow { loadMore.value }.distinctUntilChanged().collect {
-      if (it) currentOnLoadMore()
     }
   }
 }

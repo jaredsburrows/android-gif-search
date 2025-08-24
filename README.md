@@ -6,15 +6,15 @@
 
 
 Gif LazyVerticalGrid MVVM using Dagger 2 + Hilt with Retrofit 2, Moshi, Kotlin Coroutines,
-JUnit, Espresso and Robolectric tests!
+JUnit, Compose and Robolectric tests!
 
 <p align="center">
-  <a href="https://i.imgur.com/BATyXSX_d.webp?maxwidth=760&fidelity=grand" target="_blank"><img src="https://i.imgur.com/BATyXSX_d.webp?maxwidth=760&fidelity=grand" width="250px" /></a>
-  <a href="https://i.imgur.com/TXiAiS2_d.webp?maxwidth=760&fidelity=grand" target="_blank"><img src="https://i.imgur.com/TXiAiS2_d.webp?maxwidth=760&fidelity=grand" width="250px" /></a>
+  <a href="https://i.imgur.com/BATyXSX_d.webp?maxwidth=760&fidelity=grand" target="_blank"><img src="https://i.imgur.com/BATyXSX_d.webp?maxwidth=760&fidelity=grand" width="250px"  alt="Light"/></a>
+  <a href="https://i.imgur.com/TXiAiS2_d.webp?maxwidth=760&fidelity=grand" target="_blank"><img src="https://i.imgur.com/TXiAiS2_d.webp?maxwidth=760&fidelity=grand" width="250px"  alt="Dark"/></a>
 </p>
 
 <p align="center">
-  <a href="https://play.google.com/store/apps/details?id=com.burrowsapps.gif.search"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="100"/>
+  <a href="https://play.google.com/store/apps/details?id=com.burrowsapps.gif.search"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="100"/></a>
 </p>
 
 ## Build

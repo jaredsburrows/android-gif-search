@@ -206,6 +206,10 @@ dependencies {
   // AndroidX Lifecycle
   implementation(libs.androidx.lifecycle.viewmodelktx)
 
+  // AndroidX Paging
+  implementation(libs.androidx.paging.runtime)
+  implementation(libs.androidx.paging.compose)
+
   // AndroidX UI
   implementation(libs.androidx.webkit)
   implementation(libs.google.material)
