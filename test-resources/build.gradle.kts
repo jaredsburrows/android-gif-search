@@ -1,5 +1,5 @@
-import org.gradle.api.JavaVersion.VERSION_17
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+import org.gradle.api.JavaVersion.VERSION_21
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
 import java.net.URL
 
 plugins {
@@ -12,7 +12,7 @@ val sdkVersion =
   libs.versions.sdk
     .get()
     .toInt()
-val jvmVersion = VERSION_17
+val jvmVersion = VERSION_21
 
 android {
   namespace = "com.burrowsapps.gif.search.test.shared"
@@ -54,7 +54,7 @@ android {
 
 kotlin {
   compilerOptions {
-    jvmTarget.set(JVM_17)
+    jvmTarget.set(JVM_21)
   }
 }
 
