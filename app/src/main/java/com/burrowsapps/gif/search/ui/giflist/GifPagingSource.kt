@@ -65,11 +65,7 @@ internal class GifPagingSource(
           )
         is NetworkResult.Error -> LoadResult.Error(Exception(result.message))
         is NetworkResult.Loading ->
-          LoadResult.Page(
-            data = emptyList(),
-            prevKey = null,
-            nextKey = position,
-          )
+          LoadResult.Error(IllegalStateException("Unexpected Loading state from repository"))
       }
     }
 
