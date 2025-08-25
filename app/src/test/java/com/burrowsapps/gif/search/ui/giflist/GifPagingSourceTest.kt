@@ -133,7 +133,7 @@ class GifPagingSourceTest {
     }
 
   @Test
-  fun load_loading_returnsEmptyPageWithSameKey() =
+  fun load_loading_emitsLoadResultError() =
     runTest {
       whenever(repository.getTrendingResults(eq("10.0"))).thenReturn(
         NetworkResult.Loading(),
@@ -149,10 +149,7 @@ class GifPagingSourceTest {
 
       val result = pagingSource.load(params)
 
-      assertThat(result).isInstanceOf(PagingSource.LoadResult.Page::class.java)
-      val page = result as PagingSource.LoadResult.Page
-      assertThat(page.data).isEmpty()
-      assertThat(page.nextKey).isEqualTo("10.0")
+      assertThat(result).isInstanceOf(PagingSource.LoadResult.Error::class.java)
     }
 
   @Test
