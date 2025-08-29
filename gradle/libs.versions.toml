@@ -11,7 +11,7 @@ moshi = "1.15.2"
 okhttp = "5.1.0"
 paging = "3.3.6"
 retrofit = "3.0.0"
-robolectric = "4.16-beta-1"
+robolectric = "4.16"
 # language
 kotlin = "2.2.10"
 # build
