@@ -1,6 +1,6 @@
 import org.gradle.api.JavaVersion.VERSION_17
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-import java.net.URL
+import java.net.URI
 
 plugins {
   alias(libs.plugins.android.library)
@@ -78,7 +78,8 @@ tasks.register("updateTestFiles") {
 
     testData.forEach { (file, url) ->
       val jsonContent =
-        URL(url)
+        URI(url)
+          .toURL()
           .readText()
           // Point our mock JSON to point to local OkHTTP Mock server
           .replace("media.tenor.com", "localhost:8080")
