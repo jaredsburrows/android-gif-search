@@ -71,7 +71,7 @@ google-hilt-android = { module = "com.google.dagger:hilt-android", version.ref =
 google-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger" }
 google-hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger" }
 google-material = { module = "com.google.android.material:material", version = "1.13.0" }
-google-truth = { module = "com.google.truth:truth", version = "1.4.4" }
+google-truth = { module = "com.google.truth:truth", version = "1.4.5" }
 jakewharton-timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 javax-annotation-jsr250 = { module = "javax.annotation:jsr250-api", version = "1.0" }
 junit = { module = "junit:junit", version = "4.13.2" }
