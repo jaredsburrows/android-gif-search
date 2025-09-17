@@ -50,7 +50,7 @@ androidx-compose-uitooling = { module = "androidx.compose.ui:ui-tooling", versio
 androidx-compose-uitoolingpreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 androidx-corektx = { module = "androidx.core:core-ktx", version = "1.17.0" }
 androidx-hilt-compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.3.0" }
-androidx-lifecycle-viewmodelktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version = "2.9.3" }
+androidx-lifecycle-viewmodelktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version = "2.9.4" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-palette = { module = "com.kmpalette:kmpalette-core", version = "3.1.0" }
