@@ -215,13 +215,17 @@ dependencies {
   implementation(libs.google.material)
 
   // AndroidX Jetpack Compose
-  implementation(platform(libs.androidx.compose.bom))
+  val composeBom = platform(libs.androidx.compose.bom)
+  implementation(composeBom)
+  testImplementation(composeBom)
+  androidTestImplementation(composeBom)
   debugImplementation(libs.androidx.compose.uitoolingpreview)
   debugImplementation(libs.androidx.compose.uimanifest)
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.compose.runtime)
   implementation(libs.androidx.compose.material)
   implementation(libs.androidx.compose.material3)
+  implementation(libs.androidx.compose.material.icons.core)
   implementation(libs.androidx.compose.navigation)
   implementation(libs.androidx.compose.runtime)
   implementation(libs.androidx.compose.ui)
