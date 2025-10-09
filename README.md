@@ -9,8 +9,8 @@ Gif LazyVerticalGrid MVVM using Dagger 2 + Hilt with Retrofit 2, Moshi, Kotlin C
 JUnit, Compose and Robolectric tests!
 
 <p align="center">
-  <a href="https://i.imgur.com/BATyXSX_d.webp?maxwidth=760&fidelity=grand" target="_blank"><img src="https://i.imgur.com/BATyXSX_d.webp?maxwidth=760&fidelity=grand" width="250px"  alt="Light"/></a>
-  <a href="https://i.imgur.com/TXiAiS2_d.webp?maxwidth=760&fidelity=grand" target="_blank"><img src="https://i.imgur.com/TXiAiS2_d.webp?maxwidth=760&fidelity=grand" width="250px"  alt="Dark"/></a>
+  <a href="https://i.imgur.com/FldABUz.png" target="_blank"><img src="https://i.imgur.com/FldABUz.png" width="250px" alt="Light"/></a>
+  <a href="https://i.imgur.com/gqhJIqh.png" target="_blank"><img src="https://i.imgur.com/gqhJIqh.png" width="250px" alt="Dark"/></a>
 </p>
 
 <p align="center">

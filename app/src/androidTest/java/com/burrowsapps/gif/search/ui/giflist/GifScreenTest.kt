@@ -3,6 +3,7 @@ package com.burrowsapps.gif.search.ui.giflist
 import android.content.ClipboardManager
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -61,10 +62,8 @@ class GifScreenTest {
   @ApplicationContext
   internal lateinit var context: Context
 
-  private val gifScreenTitle by lazy { context.getString(R.string.gif_screen_title) }
-  private val searchGifs by lazy { context.getString(R.string.search_gifs) }
+  // Title text not asserted in current UI; search icon is used instead
   private val copyUrl by lazy { context.getString(R.string.copy_url) }
-  private val menuBackContentDescription by lazy { context.getString(R.string.menu_back_content_description) }
   private val menuCloseContentDescription by lazy { context.getString(R.string.menu_close_content_description) }
   private val menuSearchContentDescription by lazy { context.getString(R.string.menu_search_content_description) }
   private val gifImageContentDescription by lazy { context.getString(R.string.gif_image_content_description) }
@@ -118,7 +117,8 @@ class GifScreenTest {
 
   @Test
   fun testGifActivityTitleIsShowing() {
-    composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
+    // With TopSearchBar, validate the search icon is visible as the primary affordance
+    composeTestRule.onNodeWithContentDescription(label = menuSearchContentDescription).assertIsDisplayed()
   }
 
   @Ignore("only flaky on github actions")
@@ -211,7 +211,7 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
     composeTestRule.mainClock.advanceTimeByFrame()
 
-    composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
+    composeTestRule.onNodeWithContentDescription(label = menuSearchContentDescription).assertIsDisplayed()
   }
 
   @Test
@@ -242,7 +242,8 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
 
     composeTestRule.mainClock.autoAdvance = false
-    composeTestRule.onNodeWithContentDescription(label = menuBackContentDescription).performClick()
+    // TopSearchBar uses a clear button to cancel the search input
+    composeTestRule.onNodeWithContentDescription(label = menuCloseContentDescription).performClick()
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
     composeTestRule.mainClock.advanceTimeByFrame()
@@ -260,10 +261,11 @@ class GifScreenTest {
   private fun performSearchInput(
     @Suppress("SameParameterValue") searchText: String,
   ) {
-    composeTestRule.onNodeWithText(text = searchGifs).performClick()
+    // Focus the editable search field directly
+    composeTestRule.onNode(hasSetTextAction()).performClick()
     composeTestRule.waitForIdle()
 
-    composeTestRule.onNodeWithText(text = searchGifs).performTextInput(searchText)
+    composeTestRule.onNode(hasSetTextAction()).performTextInput(searchText)
     composeTestRule.waitForIdle()
   }
 }

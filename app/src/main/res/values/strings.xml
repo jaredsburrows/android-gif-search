@@ -5,7 +5,7 @@
   <string name="gif_screen_title">Top Trending Gifs</string>
   <string name="license_screen_title">Open Source Licenses</string>
   <string name="license_screen_content_description">Open Source Licenses Menu Button</string>
-  <string name="search_gifs">Search Gifs</string>
+  <string name="search_hint">Search Gifs</string>
   <string name="copy_url">Copy URL</string>
 
   <!-- Content Descriptions -->
