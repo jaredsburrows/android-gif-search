@@ -18,7 +18,7 @@ import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
+import okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -86,13 +86,12 @@ internal class NetworkModule {
   @Provides
   fun provideTrafficStatsInterceptor(): Interceptor =
     Interceptor { chain ->
-      val trafficStatsTag = 0xF00D
-      runCatching {
-        TrafficStats.setThreadStatsTag(trafficStatsTag)
+      TrafficStats.setThreadStatsTag(TRAFFIC_TAG)
+      try {
         chain.proceed(chain.request())
-      }.also {
+      } finally {
         TrafficStats.clearThreadStatsTag()
-      }.getOrThrow()
+      }
     }
 
   @Named("HttpLoggingInterceptor")
@@ -102,7 +101,7 @@ internal class NetworkModule {
     HttpLoggingInterceptor { message ->
       Timber.i(message)
     }.apply {
-      level = if (applicationMode == TESTING || DEBUG) BASIC else NONE
+      level = if (applicationMode == TESTING || DEBUG) HEADERS else NONE
     }
 
   @Singleton
@@ -122,6 +121,7 @@ internal class NetworkModule {
   }
 
   private companion object {
-    private const val CLIENT_CACHE_SIZE = 2 * 10 * 1024 * 1024L // 20 MiB
+    private const val TRAFFIC_TAG = 0xF00D
+    private const val CLIENT_CACHE_SIZE = 20L * 1024L * 1024L // 20 MiB
   }
 }
