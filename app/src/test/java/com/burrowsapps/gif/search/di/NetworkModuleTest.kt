@@ -108,7 +108,7 @@ class NetworkModuleTest {
     val interceptor = networkModule.provideHttpLoggingInterceptor(TESTING)
 
     assertThat(interceptor).isInstanceOf(HttpLoggingInterceptor::class.java)
-    assertThat((interceptor as HttpLoggingInterceptor).level).isEqualTo(HttpLoggingInterceptor.Level.BASIC)
+    assertThat((interceptor as HttpLoggingInterceptor).level).isEqualTo(HttpLoggingInterceptor.Level.HEADERS)
   }
 
   @Test
