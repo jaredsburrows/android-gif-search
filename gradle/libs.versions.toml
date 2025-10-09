@@ -12,7 +12,7 @@ paging = "3.3.6"
 retrofit = "3.0.0"
 robolectric = "4.16"
 # language
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 # build
 sdk = "36"
 # signing
