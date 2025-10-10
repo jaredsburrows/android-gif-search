@@ -55,11 +55,10 @@ class LicenseScreenTest {
   @ApplicationContext
   internal lateinit var context: Context
 
-  private val gifScreenTitle by lazy { context.getString(R.string.gif_screen_title) }
   private val licenseScreenTitle by lazy { context.getString(R.string.license_screen_title) }
-  private val licenseScreenContentDescription by lazy { context.getString(R.string.license_screen_content_description) }
   private val menuBackContentDescription by lazy { context.getString(R.string.menu_back_content_description) }
   private val menuMoreContentDescription by lazy { context.getString(R.string.menu_more_content_description) }
+  private val menuSearchContentDescription by lazy { context.getString(R.string.menu_search_content_description) }
 
   @Before
   fun setUp() {
@@ -127,7 +126,8 @@ class LicenseScreenTest {
     composeTestRule.waitForIdle()
     composeTestRule.mainClock.advanceTimeByFrame()
 
-    composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
+    // After navigating back, verify the search affordance is visible on the GIF screen
+    composeTestRule.onNodeWithContentDescription(label = menuSearchContentDescription).assertIsDisplayed()
   }
 
   @SkipLeakDetection("https://issuetracker.google.com/issues/296928070")
@@ -141,7 +141,8 @@ class LicenseScreenTest {
     composeTestRule.waitForIdle()
     composeTestRule.mainClock.advanceTimeByFrame()
 
-    composeTestRule.onNodeWithText(text = gifScreenTitle).assertIsDisplayed()
+    // After navigating back, verify the search affordance is visible on the GIF screen
+    composeTestRule.onNodeWithContentDescription(label = menuSearchContentDescription).assertIsDisplayed()
   }
 
   private fun openLicenseScreen() {
@@ -149,9 +150,8 @@ class LicenseScreenTest {
     composeTestRule.waitForIdle()
 
     composeTestRule.mainClock.autoAdvance = false
-    composeTestRule
-      .onNodeWithContentDescription(label = licenseScreenContentDescription)
-      .performClick()
+    // Click the menu item by visible text to match TopSearchBar overflow
+    composeTestRule.onNodeWithText(text = licenseScreenTitle).performClick()
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
     composeTestRule.mainClock.advanceTimeByFrame()

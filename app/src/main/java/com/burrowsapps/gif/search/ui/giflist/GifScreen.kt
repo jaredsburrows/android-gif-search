@@ -12,6 +12,7 @@ import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,44 +20,35 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
-import androidx.compose.material3.TooltipState
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -66,6 +58,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -132,25 +125,31 @@ internal fun GifScreen(
   gifViewModel: GifViewModel = hiltViewModel(),
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
-  val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
   val pagingItems = gifViewModel.gifPagingData.collectAsLazyPagingItems()
   val isRefreshing = pagingItems.loadState.refresh is LoadState.Loading
   val searchText by gifViewModel.searchText.collectAsState(initial = "")
 
+  var isSearchFocused by remember { mutableStateOf(false) }
+  val scrollBehavior =
+    SearchBarDefaults.enterAlwaysSearchBarScrollBehavior(
+      canScroll = { !isSearchFocused },
+    )
+
+  val focusManager = LocalFocusManager.current
+  BackHandler(enabled = isSearchFocused) { focusManager.clearFocus() }
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     snackbarHost = { SnackbarHost(snackbarHostState) },
     topBar = {
-      TheToolbar(
-        navController = navController,
+      KeepStyleTopBar(
+        query = searchText,
+        onQueryChange = { gifViewModel.onSearchTextChanged(it) },
         scrollBehavior = scrollBehavior,
-        searchText = searchText,
-        onSearchTextChange = { gifViewModel.onSearchTextChanged(it) },
-        onClearClick = {
-          gifViewModel.onClearClick()
-        },
+        onFocusChange = { isSearchFocused = it },
+        onOpenLicenses = { navController.navigate(Screen.License.route) },
       )
     },
+    // Use default insets so content and IME behave correctly
   ) { paddingValues ->
     TheContent(
       innerPadding = paddingValues,
@@ -162,134 +161,7 @@ internal fun GifScreen(
   }
 }
 
-@Composable
-private fun TheToolbar(
-  navController: NavHostController,
-  scrollBehavior: TopAppBarScrollBehavior,
-  searchText: String,
-  onSearchTextChange: (String) -> Unit,
-  onClearClick: () -> Unit,
-) {
-  val openSearch = remember { mutableStateOf(true) }
-
-  if (openSearch.value) {
-    TheToolBar(
-      navController = navController,
-      scrollBehavior = scrollBehavior,
-      openSearch = { openSearch.value = it },
-    )
-  } else {
-    TheSearchBar(
-      searchText = searchText,
-      onSearchTextChange = onSearchTextChange,
-      onClearClick = onClearClick,
-      openSearch = { openSearch.value = it },
-      scrollBehavior = scrollBehavior,
-    )
-  }
-}
-
-@Composable
-private fun TheToolBar(
-  navController: NavHostController,
-  scrollBehavior: TopAppBarScrollBehavior,
-  openSearch: (Boolean) -> Unit,
-) {
-  val showMenu = remember { mutableStateOf(false) }
-  val searchTooltipState = remember { TooltipState() }
-  val moreTooltipState = remember { TooltipState() }
-  val context = LocalContext.current
-
-  TopAppBar(
-    title = {
-      Text(
-        text = stringResource(R.string.gif_screen_title),
-      )
-    },
-    // Search Tooltip Box
-    actions = {
-      // Search for Gifs
-      TooltipBox(
-        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-        tooltip = { Text(stringResource(R.string.search_gifs)) },
-        state = searchTooltipState,
-      ) {
-        IconButton(
-          onClick = { openSearch(false) },
-        ) {
-          Icon(
-            imageVector = Icons.Filled.Search,
-            contentDescription = stringResource(R.string.menu_search_content_description),
-          )
-        }
-      }
-      // More Tooltip Box
-      TooltipBox(
-        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-        tooltip = { Text(stringResource(R.string.show_menu)) },
-        state = moreTooltipState,
-      ) {
-        IconButton(
-          onClick = { showMenu.value = !showMenu.value },
-        ) {
-          Icon(
-            imageVector = Icons.Filled.MoreVert,
-            contentDescription = stringResource(R.string.menu_more_content_description),
-          )
-        }
-      }
-      // Overflow menu
-      DropdownMenu(
-        expanded = showMenu.value,
-        onDismissRequest = { showMenu.value = false },
-      ) {
-        DropdownMenuItem(
-          modifier =
-            Modifier.semantics {
-              contentDescription = context.getString(R.string.license_screen_content_description)
-            },
-          onClick = {
-            showMenu.value = false
-            navController.navigate(Screen.License.route)
-          },
-          text = { Text(text = stringResource(R.string.license_screen_title)) },
-        )
-      }
-    },
-    scrollBehavior = scrollBehavior,
-  )
-}
-
-@Composable
-private fun TheSearchBar(
-  searchText: String,
-  onSearchTextChange: (String) -> Unit,
-  onClearClick: () -> Unit,
-  openSearch: (Boolean) -> Unit,
-  scrollBehavior: TopAppBarScrollBehavior,
-) {
-  BackHandler(
-    onBack = {
-      openSearch(true)
-      onClearClick()
-    },
-  )
-
-  SearchBar(
-    scrollBehavior = scrollBehavior,
-    searchText = searchText,
-    placeholderText = stringResource(R.string.search_gifs),
-    onSearchTextChange = {
-      onSearchTextChange(it)
-    },
-    onClearClick = {
-      onClearClick()
-    },
-  ) {
-    openSearch(true)
-    onClearClick()
-  }
-}
+// Old toolbar/search bar removed; search is integrated into content
 
 @Composable
 private fun TheContent(
@@ -299,107 +171,127 @@ private fun TheContent(
   onRefresh: () -> Unit,
   snackbarHostState: SnackbarHostState,
 ) {
-  Column(
-    modifier = Modifier.padding(innerPadding),
+  Box(
+    modifier =
+      Modifier
+        .padding(innerPadding)
+        .background(MaterialTheme.colorScheme.background)
+        .fillMaxSize()
+        .imePadding(),
   ) {
+    val context = LocalContext.current
     val gridState = rememberLazyGridState()
-    val openDialog = remember { mutableStateOf(false) }
-    val currentSelectedItem = remember { mutableStateOf(GifImageInfo()) }
-
-    if (openDialog.value) {
-      TheDialogPreview(
-        currentSelectedItem = currentSelectedItem.value,
-        onDialogDismiss = { openDialog.value = it },
-        snackbarHostState = snackbarHostState,
-      )
+    val focusManager = LocalFocusManager.current
+    LaunchedEffect(gridState) {
+      snapshotFlow { gridState.isScrollInProgress }.collect { isScrolling ->
+        if (isScrolling) focusManager.clearFocus()
+      }
     }
-    val pullRefreshState =
-      rememberPullRefreshState(
-        refreshing = isRefreshing,
-        onRefresh = onRefresh,
-      )
+    // Main scrolling content
+    Column(modifier = Modifier.fillMaxSize().padding(top = 8.dp)) {
+      val openDialog = remember { mutableStateOf(false) }
+      val currentSelectedItem = remember { mutableStateOf(GifImageInfo()) }
 
-    Box(
-      modifier =
-        Modifier
-          .pullRefresh(pullRefreshState),
-      contentAlignment = Alignment.Center,
-    ) {
-      val context = LocalContext.current
-      LazyVerticalGrid(
-        state = gridState,
-        columns = GridCells.Fixed(3),
-        modifier = Modifier.fillMaxSize(),
+      if (openDialog.value) {
+        TheDialogPreview(
+          currentSelectedItem = currentSelectedItem.value,
+          onDialogDismiss = { openDialog.value = it },
+          snackbarHostState = snackbarHostState,
+        )
+      }
+
+      val pullRefreshState =
+        rememberPullRefreshState(
+          refreshing = isRefreshing,
+          onRefresh = onRefresh,
+        )
+
+      Box(
+        modifier =
+          Modifier
+            .weight(1f)
+            .fillMaxWidth()
+            .pullRefresh(pullRefreshState),
+        contentAlignment = Alignment.Center,
       ) {
-        // Empty state
-        if (pagingItems.itemCount == 0 && pagingItems.loadState.refresh is LoadState.NotLoading) {
-          item {
-            Text(
-              text = stringResource(R.string.no_gifs),
-              style = MaterialTheme.typography.bodyLarge,
-              modifier =
-                Modifier
-                  .fillMaxWidth()
-                  .padding(horizontal = 16.dp),
-            )
-          }
-        }
-
-        items(
-          count = pagingItems.itemCount,
-        ) { index ->
-          val item = pagingItems[index] ?: return@items
-          Box(
-            modifier =
-              Modifier
-                .animateItem(
-                  fadeInSpec = null,
-                  fadeOutSpec = null,
-                  placementSpec = tween(durationMillis = 350),
-                ).semantics {
-                  contentDescription = context.getString(R.string.gif_image_content_description)
-                },
-          ) {
-            val requestBuilder =
-              loadGif(
-                context = context,
-                imageUrl = item.tinyGifUrl,
-                thumbnailUrl = item.tinyGifPreviewUrl,
-              )
-
-            CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
-              GlideImage(
-                imageModel = { item.tinyGifUrl },
-                glideRequestType = GIF,
+        LazyVerticalGrid(
+          state = gridState,
+          columns = GridCells.Fixed(3),
+          modifier = Modifier.fillMaxSize(),
+        ) {
+          // No header item; collapse handled by scrollBehavior on the app bar
+          // Empty state
+          if (pagingItems.itemCount == 0 && pagingItems.loadState.refresh is LoadState.NotLoading) {
+            item {
+              Text(
+                text = stringResource(R.string.no_gifs),
+                style = MaterialTheme.typography.bodyLarge,
                 modifier =
                   Modifier
-                    .padding(1.dp)
                     .fillMaxWidth()
-                    .size(135.dp)
-                    .clickable {
-                      openDialog.value = true
-                      currentSelectedItem.value = item
-                    },
-                imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-                loading = {
-                  Box(modifier = Modifier.matchParentSize()) {
-                    CircularProgressIndicator(
-                      modifier = Modifier.align(Alignment.Center),
-                    )
-                  }
-                },
+                    .padding(horizontal = 16.dp),
               )
             }
           }
-        }
-      }
 
-      PullRefreshIndicator(
-        isRefreshing,
-        pullRefreshState,
-        modifier = Modifier.align(Alignment.TopCenter),
-      )
+          items(
+            count = pagingItems.itemCount,
+          ) { index ->
+            val item = pagingItems[index] ?: return@items
+            Box(
+              modifier =
+                Modifier
+                  .animateItem(
+                    fadeInSpec = null,
+                    fadeOutSpec = null,
+                    placementSpec = tween(durationMillis = 350),
+                  ).semantics {
+                    contentDescription = context.getString(R.string.gif_image_content_description)
+                  },
+            ) {
+              val requestBuilder =
+                loadGif(
+                  context = context,
+                  imageUrl = item.tinyGifUrl,
+                  thumbnailUrl = item.tinyGifPreviewUrl,
+                )
+
+              CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
+                GlideImage(
+                  imageModel = { item.tinyGifUrl },
+                  glideRequestType = GIF,
+                  modifier =
+                    Modifier
+                      .padding(1.dp)
+                      .fillMaxWidth()
+                      .size(135.dp)
+                      .clickable {
+                        openDialog.value = true
+                        currentSelectedItem.value = item
+                      },
+                  imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+                  loading = {
+                    Box(modifier = Modifier.matchParentSize()) {
+                      CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                      )
+                    }
+                  },
+                )
+              }
+            }
+          }
+        }
+
+        PullRefreshIndicator(
+          isRefreshing,
+          pullRefreshState,
+          modifier = Modifier.align(Alignment.TopCenter),
+        )
+      }
     }
+
+    // No overlaid app bar; handled by Scaffold's topBar
   }
 }
 
