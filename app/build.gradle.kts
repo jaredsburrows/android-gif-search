@@ -197,14 +197,14 @@ dependencies {
 
   // AndroidX
   implementation(libs.androidx.annotation)
-  implementation(libs.androidx.activityktx)
+  implementation(libs.androidx.activity)
   implementation(libs.androidx.appcompat)
-  implementation(libs.androidx.corektx)
+  implementation(libs.androidx.core)
   implementation(libs.androidx.palette)
   implementation(libs.androidx.startup)
 
   // AndroidX Lifecycle
-  implementation(libs.androidx.lifecycle.viewmodelktx)
+  implementation(libs.androidx.lifecycle.viewmodel)
 
   // AndroidX Paging
   implementation(libs.androidx.paging.runtime)
@@ -223,7 +223,6 @@ dependencies {
   debugImplementation(libs.androidx.compose.uimanifest)
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.compose.runtime)
-  implementation(libs.androidx.compose.material)
   implementation(libs.androidx.compose.material3)
   implementation(libs.androidx.compose.material.icons.core)
   implementation(libs.androidx.compose.navigation)
