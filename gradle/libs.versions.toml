@@ -1,6 +1,6 @@
 [versions]
-android = "8.13.0"
 activity = "1.11.0"
+android = "8.13.0"
 dagger = "2.57.2"
 glide = "5.0.5"
 landscapist = "2.6.1"
@@ -8,6 +8,7 @@ leakcanary = "2.14"
 moshi = "1.15.2"
 paging = "3.3.6"
 robolectric = "4.16"
+room = "2.7.0"
 # language
 kotlin = "2.2.10"
 # build
@@ -30,8 +31,8 @@ publish = { id = "com.github.triplet.play", version = "3.12.1" }
 versions = { id = "com.github.ben-manes.versions", version = "0.53.0" }
 
 [libraries]
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.9.1" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2025.10.00" }
@@ -49,6 +50,10 @@ androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmode
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-palette = { module = "com.kmpalette:kmpalette-core", version = "3.1.0" }
+androidx-room = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.2.0" }
 androidx-test-annotation = { module = "androidx.test:annotation", version = "1.0.1" }
 androidx-test-core = { module = "androidx.test:core-ktx", version = "1.7.0" }
