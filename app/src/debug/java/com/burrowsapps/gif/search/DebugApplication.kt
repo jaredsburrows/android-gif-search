@@ -23,7 +23,7 @@ class DebugApplication : MainApplication() {
         .Builder()
         .detectAll()
         .penaltyLog()
-        // TODO: search bar
+        // TODO: go back from license page
 //        .penaltyDeath()
         .build(),
     )
