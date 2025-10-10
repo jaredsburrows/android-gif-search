@@ -36,7 +36,6 @@ androidx-annotation = { module = "androidx.annotation:annotation", version = "1.
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2025.10.00" }
 androidx-compose-junit = { module = "androidx.compose.ui:ui-test-junit4" } # uses compose-bom
-androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" } # uses compose-bom
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" } # uses compose-bom
 androidx-compose-navigation = { module = "androidx.navigation:navigation-compose" } # uses compose-bom
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime" } # uses compose-bom
