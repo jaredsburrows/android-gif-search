@@ -9,7 +9,7 @@ on:
 
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
-  JAVA_VERSION: 21
+  JAVA_VERSION: 25
   ANDROID_API_LEVEL: 36
 
 jobs:
