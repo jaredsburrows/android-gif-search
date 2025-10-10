@@ -13,6 +13,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Before
 import org.junit.Test
@@ -84,23 +85,27 @@ class NetworkModuleTest {
       runBlocking {
         withContext(IO) {
           val loggingInterceptor = networkModule.provideHttpLoggingInterceptor(TESTING)
-          val trafficStatsInterceptor = networkModule.provideTrafficStatsInterceptor()
+          val eventListener = networkModule.provideEventListener()
           val cache = networkModule.provideCache(context)
 
-          val client = networkModule.provideOkHttpClient(loggingInterceptor, trafficStatsInterceptor, cache)
+          val client = networkModule.provideOkHttpClient(loggingInterceptor, eventListener, cache)
 
           assertThat(client.cache).isEqualTo(cache)
           assertThat(client.interceptors).contains(loggingInterceptor)
-          assertThat(client.interceptors).contains(trafficStatsInterceptor)
+          // Verify the configured event listener is used by the client
+          val request = Request.Builder().url("https://example.com").build()
+          val call = client.newCall(request)
+          val created = client.eventListenerFactory.create(call)
+          assertThat(created::class.java.name).isEqualTo(eventListener::class.java.name)
         }
       }
     }
 
   @Test
-  fun provideTrafficStatsInterceptorReturnsInterceptor() {
-    val interceptor = networkModule.provideTrafficStatsInterceptor()
+  fun provideEventListenerReturnsListener() {
+    val listener = networkModule.provideEventListener()
 
-    assertThat(interceptor).isNotNull()
+    assertThat(listener).isNotNull()
   }
 
   @Test
