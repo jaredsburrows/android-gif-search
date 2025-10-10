@@ -15,16 +15,20 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Cache
+import okhttp3.Call
+import okhttp3.EventListener
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
+import java.net.InetSocketAddress
+import java.net.Proxy
 import java.util.Date
-import javax.inject.Named
 import javax.inject.Singleton
 
 /** Injections for the network. */
@@ -66,35 +70,43 @@ internal class NetworkModule {
   @Singleton
   @Provides
   fun provideOkHttpClient(
-    @Named("HttpLoggingInterceptor") httpLoggingInterceptor: Interceptor,
-    @Named("TrafficStatsInterceptor") trafficStatsInterceptor: Interceptor,
+    httpLoggingInterceptor: Interceptor,
+    eventListener: EventListener,
     cache: Cache,
   ): OkHttpClient {
     checkNotMainThread()
 
     return OkHttpClient
       .Builder()
+      .eventListener(eventListener)
       .addInterceptor(httpLoggingInterceptor)
-      .addInterceptor(trafficStatsInterceptor)
       .cache(cache)
       .build()
   }
 
   // Resolve StrictMode UntaggedSocket violation
-  @Named("TrafficStatsInterceptor")
   @Singleton
   @Provides
-  fun provideTrafficStatsInterceptor(): Interceptor =
-    Interceptor { chain ->
-      TrafficStats.setThreadStatsTag(TRAFFIC_TAG)
-      try {
-        chain.proceed(chain.request())
-      } finally {
+  fun provideEventListener(): EventListener =
+    object : EventListener() {
+      override fun connectStart(
+        call: Call,
+        inetSocketAddress: InetSocketAddress,
+        proxy: Proxy,
+      ) {
+        TrafficStats.setThreadStatsTag(TRAFFIC_TAG)
+      }
+
+      override fun connectEnd(
+        call: Call,
+        inetSocketAddress: InetSocketAddress,
+        proxy: Proxy,
+        protocol: Protocol?,
+      ) {
         TrafficStats.clearThreadStatsTag()
       }
     }
 
-  @Named("HttpLoggingInterceptor")
   @Singleton
   @Provides
   fun provideHttpLoggingInterceptor(applicationMode: ApplicationMode): Interceptor =
