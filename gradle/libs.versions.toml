@@ -9,7 +9,7 @@ moshi = "1.15.2"
 paging = "3.3.6"
 robolectric = "4.16"
 # language
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 # build
 sdk = "36"
 # signing
