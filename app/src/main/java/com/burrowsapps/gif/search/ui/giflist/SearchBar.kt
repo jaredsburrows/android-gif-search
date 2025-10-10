@@ -5,10 +5,6 @@ package com.burrowsapps.gif.search.ui.giflist
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.burrowsapps.gif.search.R
 
@@ -64,7 +61,7 @@ internal fun KeepStyleTopBar(
         interactionSource = interactionSource,
         leadingIcon = {
           Icon(
-            imageVector = Icons.Filled.Search,
+            painter = painterResource(id = R.drawable.search_24),
             contentDescription = stringResource(R.string.menu_search_content_description),
           )
         },
@@ -72,14 +69,14 @@ internal fun KeepStyleTopBar(
           if (query.isNotEmpty()) {
             IconButton(onClick = { onQueryChange("") }) {
               Icon(
-                imageVector = Icons.Filled.Close,
+                painter = painterResource(id = R.drawable.close_24),
                 contentDescription = stringResource(R.string.menu_close_content_description),
               )
             }
           } else {
             IconButton(onClick = { showMenu.value = true }) {
               Icon(
-                imageVector = Icons.Filled.MoreVert,
+                painter = painterResource(id = R.drawable.more_vert_24),
                 contentDescription = stringResource(R.string.menu_more_content_description),
               )
             }
