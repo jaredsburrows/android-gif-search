@@ -23,9 +23,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -37,6 +39,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -65,7 +68,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -193,7 +195,7 @@ private fun TheContent(
       val currentSelectedItem = remember { mutableStateOf(GifImageInfo()) }
 
       if (openDialog.value) {
-        TheDialogPreview(
+        GifOverlay(
           currentSelectedItem = currentSelectedItem.value,
           onDialogDismiss = { openDialog.value = it },
           snackbarHostState = snackbarHostState,
@@ -296,80 +298,102 @@ private fun TheContent(
 }
 
 @Composable
-private fun TheDialogPreview(
-  currentSelectedItem: GifImageInfo,
+private fun GifOverlay(
+  currentSelectedItem: GifImageInfo?,
   onDialogDismiss: (Boolean) -> Unit,
   snackbarHostState: SnackbarHostState,
 ) {
+  if (currentSelectedItem == null) return
+
   val clipboardManager = LocalClipboard.current
   val context = LocalContext.current
   val coroutineScope = rememberCoroutineScope()
+  val palette = remember { mutableStateOf<Palette?>(null) }
 
-  Dialog(
-    onDismissRequest = {
-      onDialogDismiss(false)
-    },
+  // Root scrim + modal layout
+  Box(
+    modifier =
+      Modifier
+        .fillMaxSize()
+        .background(Color.Black.copy(alpha = 0.6f))
+        .clickable(onClick = { onDialogDismiss(false) }),
+    contentAlignment = Alignment.Center,
   ) {
-    Column(
+    Surface(
+      shape = RoundedCornerShape(16.dp),
+      tonalElevation = 8.dp,
+      color = MaterialTheme.colorScheme.surface,
       modifier =
-        Modifier.semantics {
-          contentDescription = context.getString(R.string.gif_image_dialog_content_description)
-        },
-      verticalArrangement = Arrangement.Center,
-      horizontalAlignment = Alignment.CenterHorizontally,
+        Modifier
+          .padding(24.dp)
+          .wrapContentHeight()
+          .fillMaxWidth(),
     ) {
-      val palette = remember { mutableStateOf<Palette?>(null) }
-      val requestBuilder =
-        loadGif(
-          context = context,
-          imageUrl = currentSelectedItem.gifUrl,
-          thumbnailUrl = currentSelectedItem.gifPreviewUrl,
-        )
-
-      CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
-        GlideImage(
-          imageModel = { currentSelectedItem.gifUrl },
-          glideRequestType = GIF,
-          modifier =
-            Modifier
-              .padding(1.dp)
-              .fillMaxWidth()
-              .size(350.dp),
-          component =
-            rememberImageComponent {
-              +PalettePlugin { palette.value = it }
+      Column(
+        modifier =
+          Modifier
+            .padding(16.dp)
+            .semantics {
+              contentDescription = context.getString(R.string.gif_image_dialog_content_description)
             },
-          imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-          loading = {
-            Box(modifier = Modifier.matchParentSize()) {
-              CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+      ) {
+        val requestBuilder =
+          loadGif(
+            context = context,
+            imageUrl = currentSelectedItem.gifUrl,
+            thumbnailUrl = currentSelectedItem.gifPreviewUrl,
+          )
+
+        CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
+          GlideImage(
+            imageModel = { currentSelectedItem.gifUrl },
+            glideRequestType = GIF,
+            modifier =
+              Modifier
+                .padding(1.dp)
+                .fillMaxWidth()
+                .size(350.dp),
+            component =
+              rememberImageComponent {
+                +PalettePlugin { palette.value = it }
+              },
+            imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+            loading = {
+              Box(modifier = Modifier.matchParentSize()) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+              }
+            },
+          )
+        }
+
+        TextButton(
+          onClick = {
+            onDialogDismiss(false)
+            coroutineScope.launch {
+              clipboardManager.setClipEntry(
+                ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
+              )
+              snackbarHostState.showSnackbar(
+                context.getString(R.string.copied_to_clipboard),
               )
             }
           },
-        )
-      }
-
-      TextButton(
-        onClick = {
-          onDialogDismiss(false)
-          coroutineScope.launch {
-            clipboardManager.setClipEntry(
-              ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
-            )
-            snackbarHostState.showSnackbar(
-              context.getString(R.string.copied_to_clipboard),
-            )
-          }
-        },
-      ) {
-        Text(
-          text = context.getString(R.string.copy_url),
-          color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
-          fontSize = MaterialTheme.typography.titleMedium.fontSize,
-        )
+        ) {
+          Text(
+            text = context.getString(R.string.copy_url),
+            color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
+            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+          )
+        }
       }
     }
+  }
+
+  // Optional back button handling
+  BackHandler {
+    onDialogDismiss(false)
   }
 }
 
