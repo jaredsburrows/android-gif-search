@@ -1,7 +1,6 @@
 @file:OptIn(
   ExperimentalFoundationApi::class,
   ExperimentalMaterial3Api::class,
-  ExperimentalMaterialApi::class,
 )
 
 package com.burrowsapps.gif.search.ui.giflist
@@ -28,10 +27,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +37,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -115,7 +112,7 @@ private fun DefaultPreview(navController: NavHostController = rememberNavControl
     val snackbarHostState = remember { SnackbarHostState() }
     GifScreen(
       navController = navController,
-      snackbarHostState = snackbarHostState,
+      hostState = snackbarHostState,
     )
   }
 }
@@ -125,7 +122,7 @@ internal fun GifScreen(
   modifier: Modifier = Modifier,
   navController: NavHostController = rememberNavController(),
   gifViewModel: GifViewModel = hiltViewModel(),
-  snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+  hostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
   val pagingItems = gifViewModel.gifPagingData.collectAsLazyPagingItems()
   val isRefreshing = pagingItems.loadState.refresh is LoadState.Loading
@@ -141,7 +138,7 @@ internal fun GifScreen(
   BackHandler(enabled = isSearchFocused) { focusManager.clearFocus() }
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    snackbarHost = { SnackbarHost(snackbarHostState) },
+    snackbarHost = { SnackbarHost(hostState) },
     topBar = {
       KeepStyleTopBar(
         query = searchText,
@@ -158,12 +155,10 @@ internal fun GifScreen(
       pagingItems = pagingItems,
       isRefreshing = isRefreshing,
       onRefresh = { pagingItems.refresh() },
-      snackbarHostState = snackbarHostState,
+      hostState = hostState,
     )
   }
 }
-
-// Old toolbar/search bar removed; search is integrated into content
 
 @Composable
 private fun TheContent(
@@ -171,7 +166,7 @@ private fun TheContent(
   pagingItems: LazyPagingItems<GifImageInfo>,
   isRefreshing: Boolean,
   onRefresh: () -> Unit,
-  snackbarHostState: SnackbarHostState,
+  hostState: SnackbarHostState,
 ) {
   Box(
     modifier =
@@ -198,23 +193,19 @@ private fun TheContent(
         GifOverlay(
           currentSelectedItem = currentSelectedItem.value,
           onDialogDismiss = { openDialog.value = it },
-          snackbarHostState = snackbarHostState,
+          hostState = hostState,
         )
       }
 
-      val pullRefreshState =
-        rememberPullRefreshState(
-          refreshing = isRefreshing,
-          onRefresh = onRefresh,
-        )
-
-      Box(
+      val pullToRefreshState = rememberPullToRefreshState()
+      PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        state = pullToRefreshState,
         modifier =
           Modifier
             .weight(1f)
-            .fillMaxWidth()
-            .pullRefresh(pullRefreshState),
-        contentAlignment = Alignment.Center,
+            .fillMaxWidth(),
       ) {
         LazyVerticalGrid(
           state = gridState,
@@ -284,12 +275,6 @@ private fun TheContent(
             }
           }
         }
-
-        PullRefreshIndicator(
-          isRefreshing,
-          pullRefreshState,
-          modifier = Modifier.align(Alignment.TopCenter),
-        )
       }
     }
 
@@ -301,7 +286,7 @@ private fun TheContent(
 private fun GifOverlay(
   currentSelectedItem: GifImageInfo?,
   onDialogDismiss: (Boolean) -> Unit,
-  snackbarHostState: SnackbarHostState,
+  hostState: SnackbarHostState,
 ) {
   if (currentSelectedItem == null) return
 
@@ -375,7 +360,7 @@ private fun GifOverlay(
               clipboardManager.setClipEntry(
                 ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
               )
-              snackbarHostState.showSnackbar(
+              hostState.showSnackbar(
                 context.getString(R.string.copied_to_clipboard),
               )
             }
