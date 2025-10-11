@@ -2,7 +2,10 @@
 
 package com.burrowsapps.gif.search.ui.giflist
 
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.burrowsapps.gif.search.data.db.AppDatabase
 import com.burrowsapps.gif.search.data.repository.GifRepository
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.mock
@@ -18,10 +21,21 @@ class GifViewModelTest {
   private val repository = mock<GifRepository>()
 
   private lateinit var sut: GifViewModel
+  private lateinit var db: AppDatabase
 
   @Before
   fun setUp() {
-    sut = GifViewModel(repository, testDispatcher)
+    db =
+      Room
+        .inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabase::class.java)
+        .allowMainThreadQueries()
+        .build()
+    sut = GifViewModel(repository, db, testDispatcher)
+  }
+
+  @org.junit.After
+  fun tearDown() {
+    db.close()
   }
 
   @Test

@@ -230,6 +230,12 @@ dependencies {
   implementation(libs.androidx.compose.uitooling)
   androidTestImplementation(libs.androidx.compose.junit)
 
+  // Room Database
+  implementation(libs.androidx.room.runtime)
+  implementation(libs.androidx.room)
+  implementation(libs.androidx.room.paging)
+  ksp(libs.androidx.room.compiler)
+
   // Glide
   implementation(libs.landscapist.animation)
   implementation(libs.landscapist.glide)
