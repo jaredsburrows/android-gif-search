@@ -95,7 +95,7 @@ squareup-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 squareup-moshi-adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
 squareup-moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 squareup-okhttp = { module = "com.squareup.okhttp3:okhttp" } # uses-okhttp-bom
-squareup-okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version = "5.2.1" }
+squareup-okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version = "5.3.0" }
 squareup-okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor" } # uses-okhttp-bom
 squareup-okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver" } # uses-okhttp-bom
 squareup-okio = { module = "com.squareup.okio:okio", version = "3.16.2" }
