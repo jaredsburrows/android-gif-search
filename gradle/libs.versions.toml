@@ -1,6 +1,6 @@
 [versions]
 activity = "1.11.0"
-android = "8.13.0"
+android = "8.13.1"
 dagger = "2.57.2"
 glide = "5.0.5"
 landscapist = "2.6.1"
