@@ -277,7 +277,6 @@ dependencies {
   testImplementation(libs.google.truth)
   testImplementation(libs.junit)
   testImplementation(libs.mockito)
-  testImplementation(libs.mockito.kotlin)
   testImplementation(libs.robolectric)
 
   // Android Tests
