@@ -17,9 +17,6 @@ import com.burrowsapps.gif.search.data.api.model.ResultDto
 import com.burrowsapps.gif.search.data.db.AppDatabase
 import com.burrowsapps.gif.search.ui.giflist.GifImageInfo
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.anyOrNull
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -27,6 +24,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class GifRemoteMediatorTest {
