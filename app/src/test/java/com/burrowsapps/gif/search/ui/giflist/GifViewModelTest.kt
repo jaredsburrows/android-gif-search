@@ -10,6 +10,7 @@ import com.burrowsapps.gif.search.data.repository.GifRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,13 +28,15 @@ class GifViewModelTest {
   fun setUp() {
     db =
       Room
-        .inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabase::class.java)
-        .allowMainThreadQueries()
+        .inMemoryDatabaseBuilder(
+          ApplicationProvider.getApplicationContext(),
+          AppDatabase::class.java,
+        ).allowMainThreadQueries()
         .build()
     sut = GifViewModel(repository, db, testDispatcher)
   }
 
-  @org.junit.After
+  @After
   fun tearDown() {
     db.close()
   }
@@ -50,9 +53,23 @@ class GifViewModelTest {
   }
 
   @Test
+  fun onSearchTextChanged_withWhitespace_keepsOriginal() {
+    sut.onSearchTextChanged("  dogs  ")
+    // searchText stores the raw input
+    assertThat(sut.searchText.value).isEqualTo("  dogs  ")
+    // The normalization happens in the flow (trim, lowercase)
+  }
+
+  @Test
   fun onClearClick_resetsSearchText() {
     sut.onSearchTextChanged("dogs")
     sut.onClearClick()
     assertThat(sut.searchText.value).isEmpty()
+  }
+
+  @Test
+  fun gifPagingData_isNotNull() {
+    // Basic smoke test that the Flow is properly initialized
+    assertThat(sut.gifPagingData).isNotNull()
   }
 }

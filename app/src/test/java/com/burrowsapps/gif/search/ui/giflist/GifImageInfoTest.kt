@@ -16,7 +16,13 @@ class GifImageInfoTest {
 
   @Before
   fun setUp() {
-    sut = GifImageInfo(gifUrl, previewUrl, gifUrl, previewUrl)
+    sut =
+      GifImageInfo(
+        tinyGifUrl = gifUrl,
+        tinyGifPreviewUrl = previewUrl,
+        gifUrl = gifUrl,
+        gifPreviewUrl = previewUrl,
+      )
   }
 
   @Test

@@ -9,7 +9,6 @@ import android.content.ClipData
 import android.content.Context
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -58,12 +57,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -71,9 +72,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
@@ -88,6 +90,12 @@ import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import com.skydoves.landscapist.palette.PalettePlugin
 import kotlinx.coroutines.launch
+
+// Grid cell size for GIF thumbnails (3 columns fit on screen)
+private val GifCellSize: Dp = 135.dp
+
+// Full-size GIF dialog size
+private val GifDialogSize: Dp = 350.dp
 
 /** Shows the main screen of trending gifs. */
 @Preview(
@@ -179,13 +187,22 @@ private fun TheContent(
     val context = LocalContext.current
     val gridState = rememberLazyGridState()
     val focusManager = LocalFocusManager.current
+
+    // Calculate cell size once, outside the items block
+    val cellSizePx = with(LocalDensity.current) { GifCellSize.roundToPx() }
+
     LaunchedEffect(gridState) {
       snapshotFlow { gridState.isScrollInProgress }.collect { isScrolling ->
         if (isScrolling) focusManager.clearFocus()
       }
     }
     // Main scrolling content
-    Column(modifier = Modifier.fillMaxSize().padding(top = 8.dp)) {
+    Column(
+      modifier =
+        Modifier
+          .fillMaxSize()
+          .padding(top = 8.dp),
+    ) {
       val openDialog = remember { mutableStateOf(false) }
       val currentSelectedItem = remember { mutableStateOf(GifImageInfo()) }
 
@@ -213,8 +230,13 @@ private fun TheContent(
           modifier = Modifier.fillMaxSize(),
         ) {
           // No header item; collapse handled by scrollBehavior on the app bar
-          // Empty state
-          if (pagingItems.itemCount == 0 && pagingItems.loadState.refresh is LoadState.NotLoading) {
+          // Empty state - only show if we're not loading and have no items
+          val showEmptyState =
+            pagingItems.itemCount == 0 &&
+              pagingItems.loadState.refresh is LoadState.NotLoading &&
+              pagingItems.loadState.append.endOfPaginationReached
+
+          if (showEmptyState) {
             item {
               Text(
                 text = stringResource(R.string.no_gifs),
@@ -229,25 +251,31 @@ private fun TheContent(
 
           items(
             count = pagingItems.itemCount,
+            key = pagingItems.itemKey { it.tinyGifUrl },
+            contentType = pagingItems.itemContentType { "gif" },
           ) { index ->
             val item = pagingItems[index] ?: return@items
             Box(
               modifier =
                 Modifier
-                  .animateItem(
-                    fadeInSpec = null,
-                    fadeOutSpec = null,
-                    placementSpec = tween(durationMillis = 350),
-                  ).semantics {
+                  .semantics {
                     contentDescription = context.getString(R.string.gif_image_content_description)
+                  }.clickable {
+                    openDialog.value = true
+                    currentSelectedItem.value = item
                   },
             ) {
+              // Remember Glide request, invalidate on URL, context, or size changes
+              // Context changes on configuration change, cellSizePx changes on density change
               val requestBuilder =
-                loadGif(
-                  context = context,
-                  imageUrl = item.tinyGifUrl,
-                  thumbnailUrl = item.tinyGifPreviewUrl,
-                )
+                remember(item.tinyGifUrl, item.tinyGifPreviewUrl, context, cellSizePx) {
+                  loadGif(
+                    context = context,
+                    imageUrl = item.tinyGifUrl,
+                    thumbnailUrl = item.tinyGifPreviewUrl,
+                    size = cellSizePx,
+                  )
+                }
 
               CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
                 GlideImage(
@@ -257,18 +285,16 @@ private fun TheContent(
                     Modifier
                       .padding(1.dp)
                       .fillMaxWidth()
-                      .size(135.dp)
-                      .clickable {
-                        openDialog.value = true
-                        currentSelectedItem.value = item
-                      },
+                      .size(GifCellSize),
                   imageOptions = ImageOptions(contentScale = ContentScale.Crop),
                   loading = {
-                    Box(modifier = Modifier.matchParentSize()) {
-                      CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center),
-                      )
-                    }
+                    // Static placeholder to avoid per-cell animated spinners
+                    Box(
+                      modifier =
+                        Modifier
+                          .matchParentSize()
+                          .background(MaterialTheme.colorScheme.surfaceVariant),
+                    )
                   },
                 )
               }
@@ -339,7 +365,7 @@ private fun GifOverlay(
               Modifier
                 .padding(1.dp)
                 .fillMaxWidth()
-                .size(350.dp),
+                .size(GifDialogSize),
             component =
               rememberImageComponent {
                 +PalettePlugin { palette.value = it }
@@ -391,16 +417,16 @@ private fun loadGif(
   val request = Glide.with(context).asGif()
   val thumbnailRequest =
     request
-      .transition(DrawableTransitionOptions.withCrossFade())
       .load(thumbnailUrl)
       .override(size)
+      .dontTransform()
       .signature(ObjectKey(thumbnailUrl))
   val imageRequest =
     request
-      .transition(DrawableTransitionOptions.withCrossFade())
       .load(imageUrl)
       .thumbnail(thumbnailRequest)
       .override(size)
+      .dontTransform()
       .signature(ObjectKey(imageUrl))
   return imageRequest
 }
