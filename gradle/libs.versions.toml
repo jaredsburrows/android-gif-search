@@ -46,7 +46,7 @@ androidx-compose-uitooling = { module = "androidx.compose.ui:ui-tooling" } # use
 androidx-compose-uitoolingpreview = { module = "androidx.compose.ui:ui-tooling-preview" } # uses compose-bom
 androidx-core = { module = "androidx.core:core-ktx", version = "1.17.0" }
 androidx-hilt-compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.3.0" }
-androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version = "2.9.4" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version = "2.10.0" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-palette = { module = "com.kmpalette:kmpalette-core", version = "3.1.0" }
