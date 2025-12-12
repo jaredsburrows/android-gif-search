@@ -28,14 +28,22 @@ val jvmVersion = VERSION_21
 android {
   namespace = "com.burrowsapps.gif.search"
   testNamespace = "com.burrowsapps.gif.search.test"
-  compileSdk = sdkVersion
+  compileSdk {
+    version = release(sdkVersion) {
+      minorApiLevel = 1
+    }
+  }
 
   defaultConfig {
     applicationId = "com.burrowsapps.gif.search"
     versionCode = 1
     versionName = "1.0"
-    minSdk = sdkVersion
-    targetSdk = sdkVersion
+    minSdk {
+      version = release(sdkVersion)
+    }
+    targetSdk {
+      version = release(sdkVersion)
+    }
 
     testApplicationId = "com.burrowsapps.gif.search.test"
     testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner"
@@ -101,13 +109,13 @@ android {
   }
 
   buildTypes {
-    getByName("debug") {
+    debug {
       applicationIdSuffix = ".debug"
       versionNameSuffix = "-dev"
       signingConfig = signingConfigs.getByName("debug")
     }
 
-    getByName("release") {
+    release {
       isMinifyEnabled = true
       isShrinkResources = true
       proguardFiles(
