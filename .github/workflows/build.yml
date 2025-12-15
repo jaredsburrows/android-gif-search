@@ -62,7 +62,7 @@ jobs:
             app/build/test-results/**/TEST-*.xml
 
       - name: Cache AVD
-        uses: actions/cache@v5.0.0
+        uses: actions/cache@v5.0.1
         id: avd-cache
         with:
           path: |
