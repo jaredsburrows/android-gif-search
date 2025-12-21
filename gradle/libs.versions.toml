@@ -1,5 +1,5 @@
 [versions]
-activity = "1.12.1"
+activity = "1.12.2"
 android = "8.13.2"
 dagger = "2.57.2"
 glide = "5.0.5"
