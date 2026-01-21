@@ -85,7 +85,7 @@ ktlint-compose-ruleset = { module = "io.nlopez.compose.rules:ktlint", version = 
 landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landscapist" }
 landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version.ref = "landscapist" }
 landscapist-palette = { module = "com.github.skydoves:landscapist-palette", version.ref = "landscapist" }
-mockito = { module = "org.mockito.kotlin:mockito-kotlin", version = "6.2.1" }
+mockito = { module = "org.mockito.kotlin:mockito-kotlin", version = "6.2.2" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 robolectric-annotations = { module = "org.robolectric:annotations", version.ref = "robolectric" }
 squareup-leakcanary-instrumentation = { module = "com.squareup.leakcanary:leakcanary-android-instrumentation", version.ref = "leakcanary" }
