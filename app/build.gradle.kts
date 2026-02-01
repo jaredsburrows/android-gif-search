@@ -29,9 +29,10 @@ android {
   namespace = "com.burrowsapps.gif.search"
   testNamespace = "com.burrowsapps.gif.search.test"
   compileSdk {
-    version = release(sdkVersion) {
-      minorApiLevel = 1
-    }
+    version =
+      release(sdkVersion) {
+        minorApiLevel = 1
+      }
   }
 
   defaultConfig {

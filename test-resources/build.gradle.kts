@@ -17,9 +17,10 @@ val jvmVersion = VERSION_21
 android {
   namespace = "com.burrowsapps.gif.search.test.shared"
   compileSdk {
-    version = release(sdkVersion) {
-      minorApiLevel = 1
-    }
+    version =
+      release(sdkVersion) {
+        minorApiLevel = 1
+      }
   }
 
   defaultConfig {
