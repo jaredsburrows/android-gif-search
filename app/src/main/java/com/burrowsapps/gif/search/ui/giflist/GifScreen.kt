@@ -94,7 +94,9 @@ import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import com.skydoves.landscapist.palette.PalettePlugin
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // Grid cell size for GIF thumbnails (3 columns fit on screen)
 private val GifCellSize: Dp = 135.dp
@@ -317,73 +319,79 @@ private fun TheContent(
 private suspend fun downloadGif(
   context: Context,
   gifUrl: String,
-  onSuccess: () -> Unit,
-  onError: () -> Unit,
+  onSuccess: suspend () -> Unit,
+  onError: suspend () -> Unit,
 ) {
-  try {
-    // Download the GIF file using Glide
-    val file = Glide.with(context)
-      .asFile()
-      .load(gifUrl)
-      .submit()
-      .get()
+  withContext(Dispatchers.IO) {
+    try {
+      // Download the GIF file using Glide
+      val file = Glide.with(context)
+        .asFile()
+        .load(gifUrl)
+        .submit()
+        .get()
 
-    // Get the file name from URL
-    val fileName = "gif_${System.currentTimeMillis()}.gif"
+      // Get the file name from URL
+      val fileName = "gif_${System.currentTimeMillis()}.gif"
 
-    // Save to Downloads folder using MediaStore
-    val contentValues = ContentValues().apply {
-      put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-      put(MediaStore.MediaColumns.MIME_TYPE, "image/gif")
-      put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-    }
-
-    val resolver = context.contentResolver
-    val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-
-    uri?.let {
-      resolver.openOutputStream(it)?.use { outputStream ->
-        file.inputStream().use { inputStream ->
-          inputStream.copyTo(outputStream)
-        }
+      // Save to Downloads folder using MediaStore
+      val contentValues = ContentValues().apply {
+        put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+        put(MediaStore.MediaColumns.MIME_TYPE, "image/gif")
+        put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
       }
-      onSuccess()
-    } ?: onError()
-  } catch (e: Exception) {
-    onError()
+
+      val resolver = context.contentResolver
+      val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+
+      uri?.let {
+        resolver.openOutputStream(it)?.use { outputStream ->
+          file.inputStream().use { inputStream ->
+            inputStream.copyTo(outputStream)
+          }
+        }
+        onSuccess()
+      } ?: onError()
+    } catch (e: Exception) {
+      onError()
+    }
   }
 }
 
 private suspend fun shareGif(
   context: Context,
   gifUrl: String,
-  onError: () -> Unit,
+  onError: suspend () -> Unit,
 ) {
-  try {
-    // Download the GIF file using Glide
-    val file = Glide.with(context)
-      .asFile()
-      .load(gifUrl)
-      .submit()
-      .get()
+  withContext(Dispatchers.IO) {
+    try {
+      // Download the GIF file using Glide
+      val file = Glide.with(context)
+        .asFile()
+        .load(gifUrl)
+        .submit()
+        .get()
 
-    // Create a content URI for the file
-    val contentUri = androidx.core.content.FileProvider.getUriForFile(
-      context,
-      "${context.packageName}.fileprovider",
-      file,
-    )
+      // Create a content URI for the file
+      val contentUri = androidx.core.content.FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.fileprovider",
+        file,
+      )
 
-    // Create share intent
-    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-      type = "image/gif"
-      putExtra(Intent.EXTRA_STREAM, contentUri)
-      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      // Create share intent
+      val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "image/gif"
+        putExtra(Intent.EXTRA_STREAM, contentUri)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      }
+
+      withContext(Dispatchers.Main) {
+        context.startActivity(Intent.createChooser(shareIntent, null))
+      }
+    } catch (e: Exception) {
+      onError()
     }
-
-    context.startActivity(Intent.createChooser(shareIntent, null))
-  } catch (e: Exception) {
-    onError()
   }
 }
 
@@ -496,14 +504,10 @@ private fun GifOverlay(
                   context = context,
                   gifUrl = currentSelectedItem.gifUrl,
                   onSuccess = {
-                    coroutineScope.launch {
-                      hostState.showSnackbar(imageSavedMsg)
-                    }
+                    hostState.showSnackbar(imageSavedMsg)
                   },
                   onError = {
-                    coroutineScope.launch {
-                      hostState.showSnackbar(downloadFailedMsg)
-                    }
+                    hostState.showSnackbar(downloadFailedMsg)
                   },
                 )
               }
@@ -524,9 +528,7 @@ private fun GifOverlay(
                   context = context,
                   gifUrl = currentSelectedItem.gifUrl,
                   onError = {
-                    coroutineScope.launch {
-                      hostState.showSnackbar(downloadFailedMsg)
-                    }
+                    hostState.showSnackbar(downloadFailedMsg)
                   },
                 )
               }
