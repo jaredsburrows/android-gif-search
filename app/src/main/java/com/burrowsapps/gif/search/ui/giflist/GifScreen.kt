@@ -6,8 +6,12 @@
 package com.burrowsapps.gif.search.ui.giflist
 
 import android.content.ClipData
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
+import android.os.Environment
+import android.provider.MediaStore
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -16,6 +20,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -309,6 +314,79 @@ private fun TheContent(
   }
 }
 
+private suspend fun downloadGif(
+  context: Context,
+  gifUrl: String,
+  onSuccess: () -> Unit,
+  onError: () -> Unit,
+) {
+  try {
+    // Download the GIF file using Glide
+    val file = Glide.with(context)
+      .asFile()
+      .load(gifUrl)
+      .submit()
+      .get()
+
+    // Get the file name from URL
+    val fileName = "gif_${System.currentTimeMillis()}.gif"
+
+    // Save to Downloads folder using MediaStore
+    val contentValues = ContentValues().apply {
+      put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+      put(MediaStore.MediaColumns.MIME_TYPE, "image/gif")
+      put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+    }
+
+    val resolver = context.contentResolver
+    val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+
+    uri?.let {
+      resolver.openOutputStream(it)?.use { outputStream ->
+        file.inputStream().use { inputStream ->
+          inputStream.copyTo(outputStream)
+        }
+      }
+      onSuccess()
+    } ?: onError()
+  } catch (e: Exception) {
+    onError()
+  }
+}
+
+private suspend fun shareGif(
+  context: Context,
+  gifUrl: String,
+  onError: () -> Unit,
+) {
+  try {
+    // Download the GIF file using Glide
+    val file = Glide.with(context)
+      .asFile()
+      .load(gifUrl)
+      .submit()
+      .get()
+
+    // Create a content URI for the file
+    val contentUri = androidx.core.content.FileProvider.getUriForFile(
+      context,
+      "${context.packageName}.fileprovider",
+      file,
+    )
+
+    // Create share intent
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+      type = "image/gif"
+      putExtra(Intent.EXTRA_STREAM, contentUri)
+      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+
+    context.startActivity(Intent.createChooser(shareIntent, null))
+  } catch (e: Exception) {
+    onError()
+  }
+}
+
 @Composable
 private fun GifOverlay(
   currentSelectedItem: GifImageInfo?,
@@ -324,6 +402,10 @@ private fun GifOverlay(
   val gifImageDialogContentDesc = stringResource(R.string.gif_image_dialog_content_description)
   val copiedToClipboardMsg = stringResource(R.string.copied_to_clipboard)
   val copyUrlText = stringResource(R.string.copy_url)
+  val downloadImageText = stringResource(R.string.download_image)
+  val shareImageText = stringResource(R.string.share_image)
+  val imageSavedMsg = stringResource(R.string.image_saved)
+  val downloadFailedMsg = stringResource(R.string.download_failed)
 
   // Root scrim + modal layout
   Box(
@@ -383,24 +465,79 @@ private fun GifOverlay(
           )
         }
 
-        TextButton(
-          onClick = {
-            onDialogDismiss(false)
-            coroutineScope.launch {
-              clipboardManager.setClipEntry(
-                ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
-              )
-              hostState.showSnackbar(
-                copiedToClipboardMsg,
-              )
-            }
-          },
+        Row(
+          modifier = Modifier.fillMaxWidth(),
+          horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-          Text(
-            text = copyUrlText,
-            color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
-            fontSize = MaterialTheme.typography.titleMedium.fontSize,
-          )
+          TextButton(
+            onClick = {
+              onDialogDismiss(false)
+              coroutineScope.launch {
+                clipboardManager.setClipEntry(
+                  ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
+                )
+                hostState.showSnackbar(
+                  copiedToClipboardMsg,
+                )
+              }
+            },
+          ) {
+            Text(
+              text = copyUrlText,
+              color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
+              fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            )
+          }
+
+          TextButton(
+            onClick = {
+              coroutineScope.launch {
+                downloadGif(
+                  context = context,
+                  gifUrl = currentSelectedItem.gifUrl,
+                  onSuccess = {
+                    coroutineScope.launch {
+                      hostState.showSnackbar(imageSavedMsg)
+                    }
+                  },
+                  onError = {
+                    coroutineScope.launch {
+                      hostState.showSnackbar(downloadFailedMsg)
+                    }
+                  },
+                )
+              }
+            },
+          ) {
+            Text(
+              text = downloadImageText,
+              color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
+              fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            )
+          }
+
+          TextButton(
+            onClick = {
+              onDialogDismiss(false)
+              coroutineScope.launch {
+                shareGif(
+                  context = context,
+                  gifUrl = currentSelectedItem.gifUrl,
+                  onError = {
+                    coroutineScope.launch {
+                      hostState.showSnackbar(downloadFailedMsg)
+                    }
+                  },
+                )
+              }
+            },
+          ) {
+            Text(
+              text = shareImageText,
+              color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
+              fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            )
+          }
         }
       }
     }

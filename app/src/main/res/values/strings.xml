@@ -7,6 +7,8 @@
   <string name="license_screen_content_description">Open Source Licenses Menu Button</string>
   <string name="search_hint">Search Gifs</string>
   <string name="copy_url">Copy URL</string>
+  <string name="download_image">Download Image</string>
+  <string name="share_image">Share Image</string>
 
   <!-- Content Descriptions -->
   <string name="menu_back_content_description">Back Button</string>
@@ -21,4 +23,7 @@
   <!-- Snackbar Messages -->
   <string name="copied_to_clipboard">Copied to clipboard</string>
   <string name="error_loading_list">Something went wrong</string>
+  <string name="download_started">Download started</string>
+  <string name="download_failed">Download failed</string>
+  <string name="image_saved">Image saved to Downloads</string>
 </resources>
