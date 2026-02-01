@@ -55,13 +55,8 @@ internal class GlideModule : AppGlideModule() {
           .fallback(R.mipmap.ic_launcher),
       ).setLogLevel(if (applicationMode == TESTING || DEBUG) Log.WARN else Log.ERROR)
       .setIsActiveResourceRetentionAllowed(true)
-      // Enable bitmap pooling for better memory performance
-      .setMemorySizeCalculator(
-        com.bumptech.glide.load.engine.cache.MemorySizeCalculator
-          .Builder(context)
-          .setBitmapPoolScreens(3f) // Keep 3 screens worth of bitmaps in the pool
-          .build(),
-      )
+      // Use Glide's default MemorySizeCalculator for optimal bitmap pool management
+      // Custom bitmap pool sizes can cause blinking during fast scrolling
   }
 
   override fun registerComponents(
