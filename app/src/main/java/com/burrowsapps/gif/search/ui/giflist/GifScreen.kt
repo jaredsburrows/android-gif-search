@@ -96,7 +96,11 @@ import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import com.skydoves.landscapist.palette.PalettePlugin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import java.io.File
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 // Grid cell size for GIF thumbnails (3 columns fit on screen)
 private val GifCellSize: Dp = 135.dp
@@ -316,21 +320,39 @@ private fun TheContent(
   }
 }
 
+private suspend fun downloadGifFile(
+  context: Context,
+  gifUrl: String,
+): File = withContext(Dispatchers.IO) {
+  suspendCancellableCoroutine { continuation ->
+    val futureTarget = Glide.with(context)
+      .asFile()
+      .load(gifUrl)
+      .submit()
+
+    continuation.invokeOnCancellation {
+      futureTarget.cancel(true)
+    }
+
+    try {
+      val file = futureTarget.get()
+      continuation.resume(file)
+    } catch (e: Exception) {
+      continuation.resumeWithException(e)
+    }
+  }
+}
+
 private suspend fun downloadGif(
   context: Context,
   gifUrl: String,
   onSuccess: suspend () -> Unit,
   onError: suspend () -> Unit,
 ) {
-  withContext(Dispatchers.IO) {
-    try {
-      // Download the GIF file using Glide
-      val file = Glide.with(context)
-        .asFile()
-        .load(gifUrl)
-        .submit()
-        .get()
+  try {
+    val file = downloadGifFile(context, gifUrl)
 
+    withContext(Dispatchers.IO) {
       // Get the file name from URL
       val fileName = "gif_${System.currentTimeMillis()}.gif"
 
@@ -352,9 +374,9 @@ private suspend fun downloadGif(
         }
         onSuccess()
       } ?: onError()
-    } catch (e: Exception) {
-      onError()
     }
+  } catch (e: Exception) {
+    onError()
   }
 }
 
@@ -363,15 +385,10 @@ private suspend fun shareGif(
   gifUrl: String,
   onError: suspend () -> Unit,
 ) {
-  withContext(Dispatchers.IO) {
-    try {
-      // Download the GIF file using Glide
-      val file = Glide.with(context)
-        .asFile()
-        .load(gifUrl)
-        .submit()
-        .get()
+  try {
+    val file = downloadGifFile(context, gifUrl)
 
+    withContext(Dispatchers.Main) {
       // Create a content URI for the file
       val contentUri = androidx.core.content.FileProvider.getUriForFile(
         context,
@@ -386,12 +403,10 @@ private suspend fun shareGif(
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
       }
 
-      withContext(Dispatchers.Main) {
-        context.startActivity(Intent.createChooser(shareIntent, null))
-      }
-    } catch (e: Exception) {
-      onError()
+      context.startActivity(Intent.createChooser(shareIntent, null))
     }
+  } catch (e: Exception) {
+    onError()
   }
 }
 
@@ -414,6 +429,7 @@ private fun GifOverlay(
   val shareImageText = stringResource(R.string.share_image)
   val imageSavedMsg = stringResource(R.string.image_saved)
   val downloadFailedMsg = stringResource(R.string.download_failed)
+  val shareFailedMsg = stringResource(R.string.share_failed)
 
   // Root scrim + modal layout
   Box(
@@ -528,7 +544,7 @@ private fun GifOverlay(
                   context = context,
                   gifUrl = currentSelectedItem.gifUrl,
                   onError = {
-                    hostState.showSnackbar(downloadFailedMsg)
+                    hostState.showSnackbar(shareFailedMsg)
                   },
                 )
               }
