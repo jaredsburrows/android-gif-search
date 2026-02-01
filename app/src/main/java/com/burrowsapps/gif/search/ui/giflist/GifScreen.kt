@@ -291,7 +291,6 @@ private fun TheContent(
  * @param cellSizePx The cell size in pixels for the thumbnail
  * @param onItemClick Callback when the item is clicked
  */
-@Stable
 @Composable
 private fun GifGridItem(
   item: GifImageInfo,
@@ -299,6 +298,7 @@ private fun GifGridItem(
   onItemClick: () -> Unit,
 ) {
   val context = LocalContext.current
+  val surfaceColor = MaterialTheme.colorScheme.surfaceVariant
   
   Box(
     modifier =
@@ -330,14 +330,13 @@ private fun GifGridItem(
             .size(GifCellSize),
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
         loading = {
-          // Use drawWithCache for better performance - avoids unnecessary recomposition
-          // Read theme color inside drawWithCache to avoid recomposition on every theme read
+          // Use drawWithCache for better performance - caches the draw operation
+          // surfaceColor is captured outside to cache properly when color changes
           Box(
             modifier =
               Modifier
                 .matchParentSize()
                 .drawWithCache {
-                  val surfaceColor = MaterialTheme.colorScheme.surfaceVariant
                   onDrawBehind {
                     drawRect(color = surfaceColor)
                   }
