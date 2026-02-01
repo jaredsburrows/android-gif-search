@@ -59,7 +59,7 @@ internal class GlideModule : AppGlideModule() {
       .setMemorySizeCalculator(
         com.bumptech.glide.load.engine.cache.MemorySizeCalculator.Builder(context)
           .setBitmapPoolScreens(3f) // Keep 3 screens worth of bitmaps in the pool
-          .build()
+          .build(),
       )
   }
 

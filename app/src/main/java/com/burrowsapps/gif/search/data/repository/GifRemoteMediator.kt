@@ -271,7 +271,8 @@ internal class GifRemoteMediator(
                 items.mapIndexed { index, item ->
                   QueryResultEntity(
                     searchKey = queryKey,
-                    gifId = item.tinyGifUrl, // Foreign key to GifEntity
+                    // Foreign key to GifEntity
+                    gifId = item.tinyGifUrl,
                     position = startPos + index,
                   )
                 }

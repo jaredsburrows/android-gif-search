@@ -57,11 +57,16 @@ internal class GifViewModel
           Pager(
             config =
               PagingConfig(
-                pageSize = 45, // 3 columns × 15 rows = 45 items per page
-                initialLoadSize = 30, // 3 columns × 10 rows - fills screen + buffer for faster startup
-                prefetchDistance = 15, // Start loading next page 15 items before reaching end
-                enablePlaceholders = false, // Don't show null placeholders
-                maxSize = 200, // Don't store more than 200 items in memory
+                // 3 columns × 15 rows = 45 items per page
+                pageSize = 45,
+                // 3 columns × 10 rows - fills screen + buffer for faster startup
+                initialLoadSize = 30,
+                // Start loading next page 15 items before reaching end
+                prefetchDistance = 15,
+                // Don't show null placeholders
+                enablePlaceholders = false,
+                // Don't store more than 200 items in memory
+                maxSize = 200,
               ),
             remoteMediator =
               GifRemoteMediator(
