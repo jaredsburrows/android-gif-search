@@ -456,7 +456,8 @@ private fun loadGif(
 ): RequestBuilder<GifDrawable> {
   // Create thumbnail request builder
   val thumbnailRequest =
-    Glide.with(context)
+    Glide
+      .with(context)
       .asGif()
       .load(thumbnailUrl)
       .override(size)
@@ -464,7 +465,8 @@ private fun loadGif(
       .signature(ObjectKey(thumbnailUrl))
 
   // Create and return the main image request with thumbnail
-  return Glide.with(context)
+  return Glide
+    .with(context)
     .asGif()
     .load(imageUrl)
     .thumbnail(thumbnailRequest)

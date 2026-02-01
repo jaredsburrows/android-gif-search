@@ -57,7 +57,8 @@ internal class GlideModule : AppGlideModule() {
       .setIsActiveResourceRetentionAllowed(true)
       // Enable bitmap pooling for better memory performance
       .setMemorySizeCalculator(
-        com.bumptech.glide.load.engine.cache.MemorySizeCalculator.Builder(context)
+        com.bumptech.glide.load.engine.cache.MemorySizeCalculator
+          .Builder(context)
           .setBitmapPoolScreens(3f) // Keep 3 screens worth of bitmaps in the pool
           .build(),
       )
