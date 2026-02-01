@@ -65,6 +65,8 @@ allprojects {
         "-Xemit-jvm-type-annotations",
         // https://publicobject.com/2019/11/18/kotlins-assert-is-not-like-javas-assert/
         "-Xassertions=jvm",
+        // Generate JVM default methods for Kotlin interfaces
+        "-jvm-default=enable",
       )
     }
   }
