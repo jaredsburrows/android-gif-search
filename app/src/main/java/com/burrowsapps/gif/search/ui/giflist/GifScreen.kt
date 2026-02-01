@@ -299,7 +299,6 @@ private fun GifGridItem(
   onItemClick: () -> Unit,
 ) {
   val context = LocalContext.current
-  val surfaceColor = MaterialTheme.colorScheme.surfaceVariant
   
   Box(
     modifier =
@@ -332,13 +331,15 @@ private fun GifGridItem(
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
         loading = {
           // Use drawWithCache for better performance - avoids unnecessary recomposition
+          // Read theme color inside drawWithCache to avoid recomposition on every theme read
           Box(
             modifier =
               Modifier
                 .matchParentSize()
                 .drawWithCache {
+                  val surfaceColor = MaterialTheme.colorScheme.surfaceVariant
                   onDrawBehind {
-                    drawRect(surfaceColor)
+                    drawRect(color = surfaceColor)
                   }
                 },
           )
