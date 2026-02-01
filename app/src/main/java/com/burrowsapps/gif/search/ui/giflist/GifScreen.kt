@@ -193,8 +193,9 @@ private fun TheContent(
     // Calculate cell size once, outside the items block
     val cellSizePx = with(LocalDensity.current) { GifCellSize.roundToPx() }
     
-    // Use derivedStateOf to avoid recomposition when itemCount doesn't actually change
-    val showEmptyState by remember(pagingItems) {
+    // Use derivedStateOf to avoid recomposition when values don't actually change
+    // Track both pagingItems and loadState to ensure proper recalculation
+    val showEmptyState by remember(pagingItems, pagingItems.loadState) {
       derivedStateOf {
         pagingItems.itemCount == 0 &&
           pagingItems.loadState.refresh is LoadState.NotLoading &&
@@ -330,7 +331,7 @@ private fun GifGridItem(
         imageOptions = ImageOptions(contentScale = ContentScale.Crop),
         loading = {
           // Use drawWithCache for better performance - caches the draw operation
-          // surfaceColor is captured outside to cache properly when color changes
+          // surfaceColor captures theme color; cache invalidates on theme change (as intended)
           Box(
             modifier =
               Modifier
