@@ -1,7 +1,7 @@
 [versions]
 activity = "1.12.3"
-android = "8.13.2"
-dagger = "2.58"
+android = "9.0.0"
+dagger = "2.59"
 glide = "5.0.5"
 landscapist = "2.6.1"
 leakcanary = "2.14"
@@ -22,7 +22,7 @@ android-application = { id = "com.android.application", version.ref = "android" 
 android-library = { id = "com.android.library", version.ref = "android" }
 dagger = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 dexcount = { id = "com.getkeepsafe.dexcount", version = "4.0.0" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+#kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.3.5" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "14.0.1" }
