@@ -3,6 +3,7 @@ package com.burrowsapps.gif.search.data.db.entity
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
+import com.burrowsapps.gif.search.data.db.entity.GifEntity
 
 @Entity(
   tableName = "query_results",
@@ -23,7 +24,6 @@ import androidx.room.Index
 )
 internal data class QueryResultEntity(
   val searchKey: String,
-  // references GifEntity.tinyGifUrl
-  val gifId: String,
+  val gifId: String, // references GifEntity.tinyGifUrl
   val position: Long,
 )

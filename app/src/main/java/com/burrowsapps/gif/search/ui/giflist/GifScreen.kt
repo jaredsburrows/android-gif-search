@@ -299,12 +299,13 @@ private fun GifGridItem(
 ) {
   val context = LocalContext.current
   val surfaceColor = MaterialTheme.colorScheme.surfaceVariant
+  val gifImageContentDesc = stringResource(R.string.gif_image_content_description)
 
   Box(
     modifier =
       Modifier
         .semantics {
-          contentDescription = context.getString(R.string.gif_image_content_description)
+          contentDescription = gifImageContentDesc
         }.clickable(onClick = onItemClick),
   ) {
     // Remember Glide request, invalidate on URL, context, or size changes
@@ -360,6 +361,7 @@ private fun GifOverlay(
   val context = LocalContext.current
   val coroutineScope = rememberCoroutineScope()
   val palette = remember { mutableStateOf<Palette?>(null) }
+  val gifImageDialogContentDesc = stringResource(R.string.gif_image_dialog_content_description)
 
   // Root scrim + modal layout
   Box(
@@ -385,7 +387,7 @@ private fun GifOverlay(
           Modifier
             .padding(16.dp)
             .semantics {
-              contentDescription = context.getString(R.string.gif_image_dialog_content_description)
+              contentDescription = gifImageDialogContentDesc
             },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
