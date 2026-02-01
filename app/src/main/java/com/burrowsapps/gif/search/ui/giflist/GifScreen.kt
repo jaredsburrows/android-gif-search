@@ -255,11 +255,12 @@ private fun TheContent(
             contentType = pagingItems.itemContentType { "gif" },
           ) { index ->
             val item = pagingItems[index] ?: return@items
+            val gifImageContentDesc = stringResource(R.string.gif_image_content_description)
             Box(
               modifier =
                 Modifier
                   .semantics {
-                    contentDescription = context.getString(R.string.gif_image_content_description)
+                    contentDescription = gifImageContentDesc
                   }.clickable {
                     openDialog.value = true
                     currentSelectedItem.value = item
@@ -320,6 +321,9 @@ private fun GifOverlay(
   val context = LocalContext.current
   val coroutineScope = rememberCoroutineScope()
   val palette = remember { mutableStateOf<Palette?>(null) }
+  val gifImageDialogContentDesc = stringResource(R.string.gif_image_dialog_content_description)
+  val copiedToClipboardMsg = stringResource(R.string.copied_to_clipboard)
+  val copyUrlText = stringResource(R.string.copy_url)
 
   // Root scrim + modal layout
   Box(
@@ -345,7 +349,7 @@ private fun GifOverlay(
           Modifier
             .padding(16.dp)
             .semantics {
-              contentDescription = context.getString(R.string.gif_image_dialog_content_description)
+              contentDescription = gifImageDialogContentDesc
             },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -387,13 +391,13 @@ private fun GifOverlay(
                 ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
               )
               hostState.showSnackbar(
-                context.getString(R.string.copied_to_clipboard),
+                copiedToClipboardMsg,
               )
             }
           },
         ) {
           Text(
-            text = context.getString(R.string.copy_url),
+            text = copyUrlText,
             color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
             fontSize = MaterialTheme.typography.titleMedium.fontSize,
           )

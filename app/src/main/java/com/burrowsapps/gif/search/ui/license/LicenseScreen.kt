@@ -100,14 +100,14 @@ private fun TheToolbar(
   navController: NavHostController,
   scrollBehavior: TopAppBarScrollBehavior,
 ) {
-  val context = LocalContext.current
+  val licenseScreenContentDesc = stringResource(R.string.license_screen_content_description)
 
   TopAppBar(
     title = {
       Text(
         modifier =
           Modifier.semantics {
-            contentDescription = context.getString(R.string.license_screen_content_description)
+            contentDescription = licenseScreenContentDesc
           },
         text = stringResource(R.string.license_screen_title),
       )
