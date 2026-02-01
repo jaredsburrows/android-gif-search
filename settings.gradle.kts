@@ -40,6 +40,8 @@ develocity {
   }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "android-gif-search"
 
 include(":app")
