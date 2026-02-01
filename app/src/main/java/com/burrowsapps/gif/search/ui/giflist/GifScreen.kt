@@ -388,12 +388,22 @@ private suspend fun shareGif(
   try {
     val file = downloadGifFile(context, gifUrl)
 
-    withContext(Dispatchers.Main) {
-      // Create a content URI for the file
+    withContext(Dispatchers.IO) {
+      // Copy file to cache directory for stable sharing
+      val cacheDir = File(context.cacheDir, "shared_gifs")
+      cacheDir.mkdirs()
+      val cachedFile = File(cacheDir, "shared_${System.currentTimeMillis()}.gif")
+      file.inputStream().use { input ->
+        cachedFile.outputStream().use { output ->
+          input.copyTo(output)
+        }
+      }
+
+      // Create a content URI for the cached file
       val contentUri = androidx.core.content.FileProvider.getUriForFile(
         context,
         "${context.packageName}.fileprovider",
-        file,
+        cachedFile,
       )
 
       // Create share intent
