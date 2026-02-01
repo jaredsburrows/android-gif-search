@@ -6,7 +6,7 @@ glide = "5.0.5"
 landscapist = "2.6.1"
 leakcanary = "2.14"
 moshi = "1.15.2"
-paging = "3.3.6"
+paging = "3.4.0"
 robolectric = "4.16.1"
 room = "2.8.4"
 # language
