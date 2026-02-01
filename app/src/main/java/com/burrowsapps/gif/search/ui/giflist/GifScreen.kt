@@ -193,9 +193,9 @@ private fun TheContent(
     // Calculate cell size once, outside the items block
     val cellSizePx = with(LocalDensity.current) { GifCellSize.roundToPx() }
     
-    // Use derivedStateOf to avoid recomposition when values don't actually change
-    // Track both pagingItems and loadState to ensure proper recalculation
-    val showEmptyState by remember(pagingItems, pagingItems.loadState) {
+    // Use derivedStateOf to avoid recomposition when computed value doesn't change
+    // even if individual properties are read multiple times
+    val showEmptyState by remember(pagingItems.loadState) {
       derivedStateOf {
         pagingItems.itemCount == 0 &&
           pagingItems.loadState.refresh is LoadState.NotLoading &&
