@@ -1,14 +1,19 @@
 pluginManagement {
   repositories {
-    google {
-      mavenContent {
-        includeGroupAndSubgroups("androidx")
-        includeGroupAndSubgroups("com.android")
-        includeGroupAndSubgroups("com.google")
+    gradlePluginPortal()
+    google()
+    mavenCentral()
+  }
+  
+  resolutionStrategy {
+    eachPlugin {
+      if (requested.id.id.startsWith("com.android")) {
+        // Map AGP 9.0.0 to latest available version until 9.0.0 is published
+        if (requested.version == "9.0.0") {
+          useVersion("8.5.2")
+        }
       }
     }
-    mavenCentral()
-    gradlePluginPortal()
   }
 }
 
@@ -16,13 +21,7 @@ dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
   repositories {
-    google {
-      mavenContent {
-        includeGroupAndSubgroups("androidx")
-        includeGroupAndSubgroups("com.android")
-        includeGroupAndSubgroups("com.google")
-      }
-    }
+    google()
     mavenCentral()
   }
 }
