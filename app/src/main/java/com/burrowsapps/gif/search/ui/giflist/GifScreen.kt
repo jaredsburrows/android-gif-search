@@ -280,6 +280,18 @@ private fun TheContent(
   }
 }
 
+/**
+ * Grid item composable for displaying a GIF thumbnail.
+ * 
+ * Extracted from the items{} block to reduce complexity and improve scroll performance.
+ * Uses remember for Glide requests and drawWithCache for static placeholders to minimize
+ * recompositions during scrolling.
+ * 
+ * @param item The GIF image information to display
+ * @param cellSizePx The cell size in pixels for the thumbnail
+ * @param onItemClick Callback when the item is clicked
+ */
+@Stable
 @Composable
 private fun GifGridItem(
   item: GifImageInfo,
