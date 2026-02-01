@@ -192,7 +192,7 @@ private fun TheContent(
 
     // Calculate cell size once, outside the items block
     val cellSizePx = with(LocalDensity.current) { GifCellSize.roundToPx() }
-    
+
     // Use derivedStateOf to avoid recomposition when computed value doesn't change
     // even if individual properties are read multiple times
     val showEmptyState by remember(pagingItems.loadState) {
@@ -262,7 +262,7 @@ private fun TheContent(
             contentType = pagingItems.itemContentType { "gif" },
           ) { index ->
             val item = pagingItems[index] ?: return@items
-            
+
             GifGridItem(
               item = item,
               cellSizePx = cellSizePx,
@@ -462,7 +462,7 @@ private fun loadGif(
       .override(size)
       .dontTransform()
       .signature(ObjectKey(thumbnailUrl))
-  
+
   // Create and return the main image request with thumbnail
   return Glide.with(context)
     .asGif()
