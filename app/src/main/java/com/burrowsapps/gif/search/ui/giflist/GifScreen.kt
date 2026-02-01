@@ -41,7 +41,6 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -195,7 +194,7 @@ private fun TheContent(
     val cellSizePx = with(LocalDensity.current) { GifCellSize.roundToPx() }
     
     // Use derivedStateOf to avoid recomposition when itemCount doesn't actually change
-    val showEmptyState by remember {
+    val showEmptyState by remember(pagingItems) {
       derivedStateOf {
         pagingItems.itemCount == 0 &&
           pagingItems.loadState.refresh is LoadState.NotLoading &&
