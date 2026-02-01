@@ -41,7 +41,9 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +52,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -190,6 +193,15 @@ private fun TheContent(
 
     // Calculate cell size once, outside the items block
     val cellSizePx = with(LocalDensity.current) { GifCellSize.roundToPx() }
+    
+    // Use derivedStateOf to avoid recomposition when itemCount doesn't actually change
+    val showEmptyState by remember {
+      derivedStateOf {
+        pagingItems.itemCount == 0 &&
+          pagingItems.loadState.refresh is LoadState.NotLoading &&
+          pagingItems.loadState.append.endOfPaginationReached
+      }
+    }
 
     LaunchedEffect(gridState) {
       snapshotFlow { gridState.isScrollInProgress }.collect { isScrolling ->
@@ -231,11 +243,6 @@ private fun TheContent(
         ) {
           // No header item; collapse handled by scrollBehavior on the app bar
           // Empty state - only show if we're not loading and have no items
-          val showEmptyState =
-            pagingItems.itemCount == 0 &&
-              pagingItems.loadState.refresh is LoadState.NotLoading &&
-              pagingItems.loadState.append.endOfPaginationReached
-
           if (showEmptyState) {
             item {
               Text(
@@ -255,56 +262,77 @@ private fun TheContent(
             contentType = pagingItems.itemContentType { "gif" },
           ) { index ->
             val item = pagingItems[index] ?: return@items
-            Box(
-              modifier =
-                Modifier
-                  .semantics {
-                    contentDescription = context.getString(R.string.gif_image_content_description)
-                  }.clickable {
-                    openDialog.value = true
-                    currentSelectedItem.value = item
-                  },
-            ) {
-              // Remember Glide request, invalidate on URL, context, or size changes
-              // Context changes on configuration change, cellSizePx changes on density change
-              val requestBuilder =
-                remember(item.tinyGifUrl, item.tinyGifPreviewUrl, context, cellSizePx) {
-                  loadGif(
-                    context = context,
-                    imageUrl = item.tinyGifUrl,
-                    thumbnailUrl = item.tinyGifPreviewUrl,
-                    size = cellSizePx,
-                  )
-                }
-
-              CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
-                GlideImage(
-                  imageModel = { item.tinyGifUrl },
-                  glideRequestType = GIF,
-                  modifier =
-                    Modifier
-                      .padding(1.dp)
-                      .fillMaxWidth()
-                      .size(GifCellSize),
-                  imageOptions = ImageOptions(contentScale = ContentScale.Crop),
-                  loading = {
-                    // Static placeholder to avoid per-cell animated spinners
-                    Box(
-                      modifier =
-                        Modifier
-                          .matchParentSize()
-                          .background(MaterialTheme.colorScheme.surfaceVariant),
-                    )
-                  },
-                )
-              }
-            }
+            
+            GifGridItem(
+              item = item,
+              cellSizePx = cellSizePx,
+              onItemClick = {
+                openDialog.value = true
+                currentSelectedItem.value = item
+              },
+            )
           }
         }
       }
     }
 
     // No overlaid app bar; handled by Scaffold's topBar
+  }
+}
+
+@Composable
+private fun GifGridItem(
+  item: GifImageInfo,
+  cellSizePx: Int,
+  onItemClick: () -> Unit,
+) {
+  val context = LocalContext.current
+  val surfaceColor = MaterialTheme.colorScheme.surfaceVariant
+  
+  Box(
+    modifier =
+      Modifier
+        .semantics {
+          contentDescription = context.getString(R.string.gif_image_content_description)
+        }.clickable(onClick = onItemClick),
+  ) {
+    // Remember Glide request, invalidate on URL, context, or size changes
+    // Context changes on configuration change, cellSizePx changes on density change
+    val requestBuilder =
+      remember(item.tinyGifUrl, item.tinyGifPreviewUrl, context, cellSizePx) {
+        loadGif(
+          context = context,
+          imageUrl = item.tinyGifUrl,
+          thumbnailUrl = item.tinyGifPreviewUrl,
+          size = cellSizePx,
+        )
+      }
+
+    CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
+      GlideImage(
+        imageModel = { item.tinyGifUrl },
+        glideRequestType = GIF,
+        modifier =
+          Modifier
+            .padding(1.dp)
+            .fillMaxWidth()
+            .size(GifCellSize),
+        imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+        loading = {
+          // Use drawWithCache for better performance - avoids unnecessary recomposition
+          Box(
+            modifier =
+              Modifier
+                .matchParentSize()
+                .drawWithCache {
+                  onDrawBehind {
+                    drawRect(surfaceColor)
+                  }
+                },
+          )
+        },
+      )
+    }
   }
 }
 
@@ -414,19 +442,21 @@ private fun loadGif(
   thumbnailUrl: String,
   size: Int = Target.SIZE_ORIGINAL,
 ): RequestBuilder<GifDrawable> {
-  val request = Glide.with(context).asGif()
+  // Create thumbnail request builder
   val thumbnailRequest =
-    request
+    Glide.with(context)
+      .asGif()
       .load(thumbnailUrl)
       .override(size)
       .dontTransform()
       .signature(ObjectKey(thumbnailUrl))
-  val imageRequest =
-    request
-      .load(imageUrl)
-      .thumbnail(thumbnailRequest)
-      .override(size)
-      .dontTransform()
-      .signature(ObjectKey(imageUrl))
-  return imageRequest
+  
+  // Create and return the main image request with thumbnail
+  return Glide.with(context)
+    .asGif()
+    .load(imageUrl)
+    .thumbnail(thumbnailRequest)
+    .override(size)
+    .dontTransform()
+    .signature(ObjectKey(imageUrl))
 }
