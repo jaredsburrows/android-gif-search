@@ -108,6 +108,9 @@ private val GifCellSize: Dp = 135.dp
 // Full-size GIF dialog size
 private val GifDialogSize: Dp = 350.dp
 
+// Shared GIFs cache directory name
+private const val SHARED_GIFS_DIR = "shared_gifs"
+
 /** Shows the main screen of trending gifs. */
 @Preview(
   name = "dark",
@@ -391,7 +394,7 @@ private suspend fun shareGif(
 
     withContext(Dispatchers.IO) {
       // Copy file to cache directory for stable sharing
-      val cacheDir = File(context.cacheDir, "shared_gifs")
+      val cacheDir = File(context.cacheDir, SHARED_GIFS_DIR)
       
       // Clean up old cached files (older than 1 hour)
       cleanupOldCachedFiles(cacheDir)
@@ -541,6 +544,7 @@ private fun GifOverlay(
 
           TextButton(
             onClick = {
+              onDialogDismiss(false)
               coroutineScope.launch {
                 downloadGif(
                   context = context,
