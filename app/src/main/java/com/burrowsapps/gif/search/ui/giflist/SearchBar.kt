@@ -22,9 +22,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.burrowsapps.gif.search.R
+import com.burrowsapps.gif.search.ui.icons.Close24
+import com.burrowsapps.gif.search.ui.icons.MoreVert24
+import com.burrowsapps.gif.search.ui.icons.Search24
 
 @Composable
 internal fun KeepStyleTopBar(
@@ -61,7 +63,7 @@ internal fun KeepStyleTopBar(
         interactionSource = interactionSource,
         leadingIcon = {
           Icon(
-            painter = painterResource(id = R.drawable.search_24),
+            imageVector = Search24,
             contentDescription = stringResource(R.string.menu_search_content_description),
           )
         },
@@ -69,14 +71,14 @@ internal fun KeepStyleTopBar(
           if (query.isNotEmpty()) {
             IconButton(onClick = { onQueryChange("") }) {
               Icon(
-                painter = painterResource(id = R.drawable.close_24),
+                imageVector = Close24,
                 contentDescription = stringResource(R.string.menu_close_content_description),
               )
             }
           } else {
             IconButton(onClick = { showMenu.value = true }) {
               Icon(
-                painter = painterResource(id = R.drawable.more_vert_24),
+                imageVector = MoreVert24,
                 contentDescription = stringResource(R.string.menu_more_content_description),
               )
             }
