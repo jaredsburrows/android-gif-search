@@ -395,11 +395,11 @@ private suspend fun shareGif(
     val contentUri = withContext(Dispatchers.IO) {
       // Copy file to cache directory for stable sharing
       val cacheDir = File(context.cacheDir, SHARED_GIFS_DIR)
+      cacheDir.mkdirs()
       
       // Clean up old cached files (older than 1 hour)
       cleanupOldCachedFiles(cacheDir)
       
-      cacheDir.mkdirs()
       val cachedFile = File(cacheDir, "shared_${System.currentTimeMillis()}.gif")
       file.inputStream().use { input ->
         cachedFile.outputStream().use { output ->
