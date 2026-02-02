@@ -376,11 +376,19 @@ private suspend fun downloadGif(
             inputStream.copyTo(outputStream)
           }
         }
-        onSuccess()
-      } ?: onError()
+        withContext(Dispatchers.Main) {
+          onSuccess()
+        }
+      } ?: run {
+        withContext(Dispatchers.Main) {
+          onError()
+        }
+      }
     }
   } catch (e: Exception) {
-    onError()
+    withContext(Dispatchers.Main) {
+      onError()
+    }
   }
 }
 
@@ -416,17 +424,21 @@ private suspend fun shareGif(
     }
 
     // Create and launch share intent on main thread
-    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-      type = "image/gif"
-      putExtra(Intent.EXTRA_STREAM, contentUri)
-      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    }
+    withContext(Dispatchers.Main) {
+      val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "image/gif"
+        putExtra(Intent.EXTRA_STREAM, contentUri)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      }
 
-    context.startActivity(Intent.createChooser(shareIntent, null).apply {
-      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    })
+      context.startActivity(Intent.createChooser(shareIntent, null).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      })
+    }
   } catch (e: Exception) {
-    onError()
+    withContext(Dispatchers.Main) {
+      onError()
+    }
   }
 }
 
