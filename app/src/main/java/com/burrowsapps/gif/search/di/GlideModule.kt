@@ -55,6 +55,8 @@ internal class GlideModule : AppGlideModule() {
           .fallback(R.mipmap.ic_launcher),
       ).setLogLevel(if (applicationMode == TESTING || DEBUG) Log.WARN else Log.ERROR)
       .setIsActiveResourceRetentionAllowed(true)
+      // Use Glide's default MemorySizeCalculator for optimal bitmap pool management
+      // Custom bitmap pool sizes can cause blinking during fast scrolling
   }
 
   override fun registerComponents(
