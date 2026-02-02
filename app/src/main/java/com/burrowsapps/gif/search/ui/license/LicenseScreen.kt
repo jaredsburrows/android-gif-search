@@ -40,7 +40,6 @@ import androidx.webkit.WebViewFeature.ALGORITHMIC_DARKENING
 import androidx.webkit.WebViewFeature.isFeatureSupported
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.ui.icons.ArrowBack24
-import com.burrowsapps.gif.search.ui.icons.Close24
 import com.burrowsapps.gif.search.ui.theme.GifTheme
 import timber.log.Timber
 
