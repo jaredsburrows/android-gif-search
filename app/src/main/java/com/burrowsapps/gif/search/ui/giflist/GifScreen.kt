@@ -392,7 +392,7 @@ private suspend fun shareGif(
   try {
     val file = downloadGifFile(context, gifUrl)
 
-    withContext(Dispatchers.IO) {
+    val contentUri = withContext(Dispatchers.IO) {
       // Copy file to cache directory for stable sharing
       val cacheDir = File(context.cacheDir, SHARED_GIFS_DIR)
       
@@ -408,21 +408,23 @@ private suspend fun shareGif(
       }
 
       // Create a content URI for the cached file
-      val contentUri = androidx.core.content.FileProvider.getUriForFile(
+      androidx.core.content.FileProvider.getUriForFile(
         context,
         "${context.packageName}.fileprovider",
         cachedFile,
       )
-
-      // Create share intent
-      val shareIntent = Intent(Intent.ACTION_SEND).apply {
-        type = "image/gif"
-        putExtra(Intent.EXTRA_STREAM, contentUri)
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-      }
-
-      context.startActivity(Intent.createChooser(shareIntent, null))
     }
+
+    // Create and launch share intent on main thread
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+      type = "image/gif"
+      putExtra(Intent.EXTRA_STREAM, contentUri)
+      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+
+    context.startActivity(Intent.createChooser(shareIntent, null).apply {
+      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    })
   } catch (e: Exception) {
     onError()
   }
