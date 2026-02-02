@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -40,6 +39,8 @@ import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewFeature.ALGORITHMIC_DARKENING
 import androidx.webkit.WebViewFeature.isFeatureSupported
 import com.burrowsapps.gif.search.R
+import com.burrowsapps.gif.search.ui.icons.ArrowBack24
+import com.burrowsapps.gif.search.ui.icons.Close24
 import com.burrowsapps.gif.search.ui.theme.GifTheme
 import timber.log.Timber
 
@@ -116,7 +117,7 @@ private fun TheToolbar(
       if (navController.previousBackStackEntry != null) {
         IconButton(onClick = { navController.navigateUp() }) {
           Icon(
-            painter = painterResource(id = R.drawable.arrow_back_24),
+            imageVector = ArrowBack24,
             contentDescription = stringResource(id = R.string.menu_back_content_description),
           )
         }
