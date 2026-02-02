@@ -335,6 +335,7 @@ private suspend fun downloadGifFile(
     }
 
     try {
+      // Blocking call, but safe since we're already on Dispatchers.IO
       val file = futureTarget.get()
       continuation.resume(file)
     } catch (e: Exception) {
@@ -391,6 +392,10 @@ private suspend fun shareGif(
     withContext(Dispatchers.IO) {
       // Copy file to cache directory for stable sharing
       val cacheDir = File(context.cacheDir, "shared_gifs")
+      
+      // Clean up old cached files (older than 1 hour)
+      cleanupOldCachedFiles(cacheDir)
+      
       cacheDir.mkdirs()
       val cachedFile = File(cacheDir, "shared_${System.currentTimeMillis()}.gif")
       file.inputStream().use { input ->
@@ -417,6 +422,17 @@ private suspend fun shareGif(
     }
   } catch (e: Exception) {
     onError()
+  }
+}
+
+private fun cleanupOldCachedFiles(cacheDir: File) {
+  if (!cacheDir.exists()) return
+  
+  val oneHourAgo = System.currentTimeMillis() - (60 * 60 * 1000)
+  cacheDir.listFiles()?.forEach { file ->
+    if (file.lastModified() < oneHourAgo) {
+      file.delete()
+    }
   }
 }
 
