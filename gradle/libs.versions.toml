@@ -10,7 +10,7 @@ paging = "3.4.0"
 robolectric = "4.16.1"
 room = "2.8.4"
 # language
-kotlin = "2.3.0"
+kotlin = "2.3.10"
 # build
 sdk = "36"
 # signing
