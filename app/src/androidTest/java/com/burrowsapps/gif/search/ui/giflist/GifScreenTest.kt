@@ -71,6 +71,14 @@ class GifScreenTest {
   @Before
   fun setUp() {
     hiltRule.inject()
+
+    // Disable auto-advance so that Compose does not wait indefinitely for idle.
+    // Landscapist 2.9.x introduces produceState coroutines (rememberImageSourceFile) and
+    // explicit Loading state emissions that, combined with animated GIF drawables, prevent
+    // Compose from ever reaching a fully idle state within the test timeout.
+    composeTestRule.mainClock.autoAdvance = false
+    composeTestRule.mainClock.advanceTimeByFrame()
+    composeTestRule.waitForIdle()
   }
 
   companion object {
@@ -118,14 +126,14 @@ class GifScreenTest {
   @Test
   fun testGifActivityTitleIsShowing() {
     // With TopSearchBar, validate the search icon is visible as the primary affordance
+    composeTestRule.mainClock.advanceTimeByFrame()
+    composeTestRule.waitForIdle()
     composeTestRule.onNodeWithContentDescription(label = menuSearchContentDescription).assertIsDisplayed()
   }
 
   @Ignore("only flaky on github actions")
   @Test
   fun testTrendingThenClickOpenDialog() {
-    composeTestRule.mainClock.autoAdvance = false
-
     // Wait until the gifs are showing
     composeTestRule.waitUntil(
       condition = {
@@ -160,8 +168,6 @@ class GifScreenTest {
   @Ignore("only flaky on github actions")
   @Test
   fun testTrendingThenClickOpenDialogAndCopyLink() {
-    composeTestRule.mainClock.autoAdvance = false
-
     // Wait until the gifs are showing
     composeTestRule.waitUntil(
       condition = {
@@ -203,9 +209,9 @@ class GifScreenTest {
     performSearchInput("hello")
 
     composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
 
-    composeTestRule.mainClock.autoAdvance = false
     composeTestRule.onBackPressed()
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
@@ -221,9 +227,9 @@ class GifScreenTest {
     performSearchInput("hello")
 
     composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
 
-    composeTestRule.mainClock.autoAdvance = false
     composeTestRule.onNodeWithContentDescription(label = menuCloseContentDescription).performClick()
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
@@ -239,9 +245,9 @@ class GifScreenTest {
     performSearchInput("hello")
 
     composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
 
-    composeTestRule.mainClock.autoAdvance = false
     // TopSearchBar uses a clear button to cancel the search input
     composeTestRule.onNodeWithContentDescription(label = menuCloseContentDescription).performClick()
     composeTestRule.mainClock.advanceTimeByFrame()
@@ -255,6 +261,7 @@ class GifScreenTest {
     composeTestRule
       .onNodeWithContentDescription(label = menuSearchContentDescription)
       .performClick()
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
   }
 
@@ -263,9 +270,11 @@ class GifScreenTest {
   ) {
     // Focus the editable search field directly
     composeTestRule.onNode(hasSetTextAction()).performClick()
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
 
     composeTestRule.onNode(hasSetTextAction()).performTextInput(searchText)
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
   }
 }
