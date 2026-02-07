@@ -6,8 +6,12 @@
 package com.burrowsapps.gif.search.ui.giflist
 
 import android.content.ClipData
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
+import android.os.Environment
+import android.provider.MediaStore
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -16,6 +20,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -89,13 +94,22 @@ import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import com.skydoves.landscapist.palette.PalettePlugin
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
+import java.io.File
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 // Grid cell size for GIF thumbnails (3 columns fit on screen)
 private val GifCellSize: Dp = 135.dp
 
 // Full-size GIF dialog size
 private val GifDialogSize: Dp = 350.dp
+
+// Shared GIFs cache directory name
+private const val SHARED_GIFS_DIR = "shared_gifs"
 
 /** Shows the main screen of trending gifs. */
 @Preview(
@@ -309,6 +323,136 @@ private fun TheContent(
   }
 }
 
+private suspend fun downloadGifFile(
+  context: Context,
+  gifUrl: String,
+): File = withContext(Dispatchers.IO) {
+  suspendCancellableCoroutine { continuation ->
+    val futureTarget = Glide.with(context)
+      .asFile()
+      .load(gifUrl)
+      .submit()
+
+    continuation.invokeOnCancellation {
+      futureTarget.cancel(true)
+    }
+
+    try {
+      // Blocking call, but safe since we're already on Dispatchers.IO
+      val file = futureTarget.get()
+      continuation.resume(file)
+    } catch (e: Exception) {
+      continuation.resumeWithException(e)
+    }
+  }
+}
+
+private suspend fun downloadGif(
+  context: Context,
+  gifUrl: String,
+  onSuccess: suspend () -> Unit,
+  onError: suspend () -> Unit,
+) {
+  try {
+    val file = downloadGifFile(context, gifUrl)
+
+    withContext(Dispatchers.IO) {
+      // Get the file name from URL
+      val fileName = "gif_${System.currentTimeMillis()}.gif"
+
+      // Save to Downloads folder using MediaStore
+      val contentValues = ContentValues().apply {
+        put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+        put(MediaStore.MediaColumns.MIME_TYPE, "image/gif")
+        put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+      }
+
+      val resolver = context.contentResolver
+      val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+
+      uri?.let {
+        resolver.openOutputStream(it)?.use { outputStream ->
+          file.inputStream().use { inputStream ->
+            inputStream.copyTo(outputStream)
+          }
+        }
+        withContext(Dispatchers.Main) {
+          onSuccess()
+        }
+      } ?: run {
+        withContext(Dispatchers.Main) {
+          onError()
+        }
+      }
+    }
+  } catch (e: Exception) {
+    withContext(Dispatchers.Main) {
+      onError()
+    }
+  }
+}
+
+private suspend fun shareGif(
+  context: Context,
+  gifUrl: String,
+  onError: suspend () -> Unit,
+) {
+  try {
+    val file = downloadGifFile(context, gifUrl)
+
+    val contentUri = withContext(Dispatchers.IO) {
+      // Copy file to cache directory for stable sharing
+      val cacheDir = File(context.cacheDir, SHARED_GIFS_DIR)
+      cacheDir.mkdirs()
+      
+      // Clean up old cached files (older than 1 hour)
+      cleanupOldCachedFiles(cacheDir)
+      
+      val cachedFile = File(cacheDir, "shared_${System.currentTimeMillis()}.gif")
+      file.inputStream().use { input ->
+        cachedFile.outputStream().use { output ->
+          input.copyTo(output)
+        }
+      }
+
+      // Create a content URI for the cached file
+      androidx.core.content.FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.fileprovider",
+        cachedFile,
+      )
+    }
+
+    // Create and launch share intent on main thread
+    withContext(Dispatchers.Main) {
+      val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "image/gif"
+        putExtra(Intent.EXTRA_STREAM, contentUri)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+      }
+
+      context.startActivity(Intent.createChooser(shareIntent, null).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      })
+    }
+  } catch (e: Exception) {
+    withContext(Dispatchers.Main) {
+      onError()
+    }
+  }
+}
+
+private fun cleanupOldCachedFiles(cacheDir: File) {
+  if (!cacheDir.exists()) return
+  
+  val oneHourAgo = System.currentTimeMillis() - (60 * 60 * 1000)
+  cacheDir.listFiles()?.forEach { file ->
+    if (file.lastModified() < oneHourAgo) {
+      file.delete()
+    }
+  }
+}
+
 @Composable
 private fun GifOverlay(
   currentSelectedItem: GifImageInfo?,
@@ -324,6 +468,11 @@ private fun GifOverlay(
   val gifImageDialogContentDesc = stringResource(R.string.gif_image_dialog_content_description)
   val copiedToClipboardMsg = stringResource(R.string.copied_to_clipboard)
   val copyUrlText = stringResource(R.string.copy_url)
+  val downloadImageText = stringResource(R.string.download_image)
+  val shareImageText = stringResource(R.string.share_image)
+  val imageSavedMsg = stringResource(R.string.image_saved)
+  val downloadFailedMsg = stringResource(R.string.download_failed)
+  val shareFailedMsg = stringResource(R.string.share_failed)
 
   // Root scrim + modal layout
   Box(
@@ -383,24 +532,74 @@ private fun GifOverlay(
           )
         }
 
-        TextButton(
-          onClick = {
-            onDialogDismiss(false)
-            coroutineScope.launch {
-              clipboardManager.setClipEntry(
-                ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
-              )
-              hostState.showSnackbar(
-                copiedToClipboardMsg,
-              )
-            }
-          },
+        Row(
+          modifier = Modifier.fillMaxWidth(),
+          horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-          Text(
-            text = copyUrlText,
-            color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
-            fontSize = MaterialTheme.typography.titleMedium.fontSize,
-          )
+          TextButton(
+            onClick = {
+              onDialogDismiss(false)
+              coroutineScope.launch {
+                clipboardManager.setClipEntry(
+                  ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
+                )
+                hostState.showSnackbar(
+                  copiedToClipboardMsg,
+                )
+              }
+            },
+          ) {
+            Text(
+              text = copyUrlText,
+              color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
+              fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            )
+          }
+
+          TextButton(
+            onClick = {
+              onDialogDismiss(false)
+              coroutineScope.launch {
+                downloadGif(
+                  context = context,
+                  gifUrl = currentSelectedItem.gifUrl,
+                  onSuccess = {
+                    hostState.showSnackbar(imageSavedMsg)
+                  },
+                  onError = {
+                    hostState.showSnackbar(downloadFailedMsg)
+                  },
+                )
+              }
+            },
+          ) {
+            Text(
+              text = downloadImageText,
+              color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
+              fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            )
+          }
+
+          TextButton(
+            onClick = {
+              onDialogDismiss(false)
+              coroutineScope.launch {
+                shareGif(
+                  context = context,
+                  gifUrl = currentSelectedItem.gifUrl,
+                  onError = {
+                    hostState.showSnackbar(shareFailedMsg)
+                  },
+                )
+              }
+            },
+          ) {
+            Text(
+              text = shareImageText,
+              color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
+              fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            )
+          }
         }
       }
     }
