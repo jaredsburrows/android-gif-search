@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 import org.gradle.api.JavaVersion.VERSION_21
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML
@@ -298,4 +296,13 @@ dependencies {
   androidTestImplementation(libs.google.truth)
   androidTestImplementation(libs.junit)
   androidTestImplementation(libs.robolectric.annotations)
+
+  constraints {
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0") {
+      because("Force espresso-core 3.7.0+ for API 36 support (InputManager.getInstance was removed).")
+    }
+    androidTestImplementation("androidx.test.espresso:espresso-idling-resource:3.7.0") {
+      because("Force espresso-core 3.7.0+ for API 36 support (InputManager.getInstance was removed).")
+    }
+  }
 }

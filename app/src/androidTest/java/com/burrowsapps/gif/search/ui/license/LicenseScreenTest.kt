@@ -3,6 +3,8 @@ package com.burrowsapps.gif.search.ui.license
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -63,6 +65,14 @@ class LicenseScreenTest {
   @Before
   fun setUp() {
     hiltRule.inject()
+
+    // Disable auto-advance so that Compose does not wait indefinitely for idle.
+    // Landscapist 2.9.x introduces produceState coroutines (rememberImageSourceFile) and
+    // explicit Loading state emissions that, combined with animated GIF drawables, prevent
+    // Compose from ever reaching a fully idle state within the test timeout.
+    composeTestRule.mainClock.autoAdvance = false
+    composeTestRule.mainClock.advanceTimeByFrame()
+    composeTestRule.waitForIdle()
   }
 
   companion object {
@@ -112,7 +122,9 @@ class LicenseScreenTest {
   fun testLicenseScreenTitleIsShowing() {
     openLicenseScreen()
 
-    composeTestRule.onNodeWithText(text = licenseScreenTitle).assertIsDisplayed()
+    // The title text appears in both the top bar and the WebView HTML content,
+    // so match on all nodes and assert the first (top bar) is displayed.
+    composeTestRule.onAllNodesWithText(text = licenseScreenTitle).onFirst().assertIsDisplayed()
   }
 
   @SkipLeakDetection("https://issuetracker.google.com/issues/296928070")
@@ -120,7 +132,6 @@ class LicenseScreenTest {
   fun testGoBackViaHardwareBackButton() {
     openLicenseScreen()
 
-    composeTestRule.mainClock.autoAdvance = false
     composeTestRule.onBackPressed()
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
@@ -135,7 +146,6 @@ class LicenseScreenTest {
   fun testGoBackViaClickMenuBackButton() {
     openLicenseScreen()
 
-    composeTestRule.mainClock.autoAdvance = false
     composeTestRule.onNodeWithContentDescription(label = menuBackContentDescription).performClick()
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
@@ -147,16 +157,14 @@ class LicenseScreenTest {
 
   private fun openLicenseScreen() {
     composeTestRule.onNodeWithContentDescription(label = menuMoreContentDescription).performClick()
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
 
-    composeTestRule.mainClock.autoAdvance = false
     // Click the menu item by visible text to match TopSearchBar overflow
     composeTestRule.onNodeWithText(text = licenseScreenTitle).performClick()
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
     composeTestRule.mainClock.advanceTimeByFrame()
-
-    composeTestRule.mainClock.autoAdvance = true
     composeTestRule.waitForIdle()
   }
 }
