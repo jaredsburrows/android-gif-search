@@ -1,7 +1,7 @@
 [versions]
 activity = "1.12.3"
 android = "9.0.0"
-dagger = "2.59"
+dagger = "2.59.1"
 glide = "5.0.5"
 landscapist = "2.6.1"
 leakcanary = "2.14"
