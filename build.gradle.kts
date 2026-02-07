@@ -76,7 +76,6 @@ allprojects {
 
     // Show all warnings except boot classpath
     options.apply {
-      release = JavaLanguageVersion.of(VERSION_21.toString()).asInt()
       compilerArgs = compilerArgs +
         listOf(
           // Turn on all warnings
