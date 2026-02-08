@@ -1,5 +1,4 @@
 @file:OptIn(
-  ExperimentalFoundationApi::class,
   ExperimentalMaterial3Api::class,
 )
 
@@ -9,7 +8,6 @@ import android.content.ClipData
 import android.content.Context
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,8 +19,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -50,8 +48,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipEntry
@@ -62,10 +58,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -82,13 +81,10 @@ import com.bumptech.glide.signature.ObjectKey
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.Screen
 import com.burrowsapps.gif.search.ui.theme.GifTheme
-import com.kmpalette.palette.graphics.Palette
 import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
-import com.skydoves.landscapist.palette.PalettePlugin
 import kotlinx.coroutines.launch
 
 // Grid cell size for GIF thumbnails (3 columns fit on screen)
@@ -207,9 +203,9 @@ private fun TheContent(
       val currentSelectedItem = remember { mutableStateOf(GifImageInfo()) }
 
       if (openDialog.value) {
-        GifOverlay(
+        GifDialog(
           currentSelectedItem = currentSelectedItem.value,
-          onDialogDismiss = { openDialog.value = it },
+          onDismiss = { openDialog.value = false },
           hostState = hostState,
         )
       }
@@ -237,14 +233,15 @@ private fun TheContent(
               pagingItems.loadState.append.endOfPaginationReached
 
           if (showEmptyState) {
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
               Text(
                 text = stringResource(R.string.no_gifs),
                 style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center,
                 modifier =
                   Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp, vertical = 32.dp),
               )
             }
           }
@@ -310,9 +307,9 @@ private fun TheContent(
 }
 
 @Composable
-private fun GifOverlay(
+private fun GifDialog(
   currentSelectedItem: GifImageInfo?,
-  onDialogDismiss: (Boolean) -> Unit,
+  onDismiss: () -> Unit,
   hostState: SnackbarHostState,
 ) {
   if (currentSelectedItem == null) return
@@ -320,19 +317,13 @@ private fun GifOverlay(
   val clipboardManager = LocalClipboard.current
   val context = LocalContext.current
   val coroutineScope = rememberCoroutineScope()
-  val palette = remember { mutableStateOf<Palette?>(null) }
   val gifImageDialogContentDesc = stringResource(R.string.gif_image_dialog_content_description)
   val copiedToClipboardMsg = stringResource(R.string.copied_to_clipboard)
   val copyUrlText = stringResource(R.string.copy_url)
 
-  // Root scrim + modal layout
-  Box(
-    modifier =
-      Modifier
-        .fillMaxSize()
-        .background(Color.Black.copy(alpha = 0.6f))
-        .clickable(onClick = { onDialogDismiss(false) }),
-    contentAlignment = Alignment.Center,
+  Dialog(
+    onDismissRequest = onDismiss,
+    properties = DialogProperties(usePlatformDefaultWidth = false),
   ) {
     Surface(
       shape = RoundedCornerShape(16.dp),
@@ -341,7 +332,6 @@ private fun GifOverlay(
       modifier =
         Modifier
           .padding(24.dp)
-          .wrapContentHeight()
           .fillMaxWidth(),
     ) {
       Column(
@@ -370,10 +360,6 @@ private fun GifOverlay(
                 .padding(1.dp)
                 .fillMaxWidth()
                 .size(GifDialogSize),
-            component =
-              rememberImageComponent {
-                +PalettePlugin { palette.value = it }
-              },
             imageOptions = ImageOptions(contentScale = ContentScale.Crop),
             loading = {
               Box(modifier = Modifier.matchParentSize()) {
@@ -385,7 +371,7 @@ private fun GifOverlay(
 
         TextButton(
           onClick = {
-            onDialogDismiss(false)
+            onDismiss()
             coroutineScope.launch {
               clipboardManager.setClipEntry(
                 ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
@@ -398,17 +384,12 @@ private fun GifOverlay(
         ) {
           Text(
             text = copyUrlText,
-            color = Color(palette.value?.lightMutedSwatch?.rgb ?: Color.White.toArgb()),
+            color = MaterialTheme.colorScheme.primary,
             fontSize = MaterialTheme.typography.titleMedium.fontSize,
           )
         }
       }
     }
-  }
-
-  // Optional back button handling
-  BackHandler {
-    onDialogDismiss(false)
   }
 }
 

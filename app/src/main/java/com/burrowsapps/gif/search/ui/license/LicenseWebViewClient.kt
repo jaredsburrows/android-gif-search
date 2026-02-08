@@ -8,7 +8,7 @@ import android.webkit.WebViewClient
 import androidx.webkit.WebViewAssetLoader
 import timber.log.Timber
 
-class LicenseWebViewClient(
+internal class LicenseWebViewClient(
   private val assetLoader: WebViewAssetLoader,
 ) : WebViewClient() {
   override fun onPageStarted(
