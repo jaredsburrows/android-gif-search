@@ -82,7 +82,4 @@ internal class GifViewModel
       _searchText.value = changedSearchText
     }
 
-    fun onClearClick() {
-      _searchText.value = ""
-    }
-  }
+}

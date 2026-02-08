@@ -61,13 +61,6 @@ class GifViewModelTest {
   }
 
   @Test
-  fun onClearClick_resetsSearchText() {
-    sut.onSearchTextChanged("dogs")
-    sut.onClearClick()
-    assertThat(sut.searchText.value).isEmpty()
-  }
-
-  @Test
   fun gifPagingData_isNotNull() {
     // Basic smoke test that the Flow is properly initialized
     assertThat(sut.gifPagingData).isNotNull()

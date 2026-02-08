@@ -35,7 +35,6 @@ import okhttp3.mockwebserver.RecordedRequest
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -67,6 +66,7 @@ class GifScreenTest {
   private val menuCloseContentDescription by lazy { context.getString(R.string.menu_close_content_description) }
   private val menuSearchContentDescription by lazy { context.getString(R.string.menu_search_content_description) }
   private val gifImageContentDescription by lazy { context.getString(R.string.gif_image_content_description) }
+  private val gifImageDialogContentDescription by lazy { context.getString(R.string.gif_image_dialog_content_description) }
 
   @Before
   fun setUp() {
@@ -131,12 +131,12 @@ class GifScreenTest {
     composeTestRule.onNodeWithContentDescription(label = menuSearchContentDescription).assertIsDisplayed()
   }
 
-  @Ignore("only flaky on github actions")
   @Test
   fun testTrendingThenClickOpenDialog() {
     // Wait until the gifs are showing
     composeTestRule.waitUntil(
       condition = {
+        composeTestRule.mainClock.advanceTimeByFrame()
         composeTestRule
           .onAllNodesWithContentDescription(label = gifImageContentDescription)
           .fetchSemanticsNodes()
@@ -154,23 +154,22 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
     composeTestRule.mainClock.advanceTimeByFrame()
 
-    // Assert that the dialog is displayed
+    // Assert that the dialog is displayed (uses real Dialog composable)
     composeTestRule.onNode(isDialog()).assertIsDisplayed()
     composeTestRule.waitForIdle()
 
-    // Assert that the first node with the content description is displayed
+    // Assert that the gif image content description is visible in the dialog
     composeTestRule
-      .onAllNodesWithContentDescription(label = gifImageContentDescription)
-      .onFirst()
+      .onNodeWithContentDescription(label = gifImageDialogContentDescription)
       .assertIsDisplayed()
   }
 
-  @Ignore("only flaky on github actions")
   @Test
   fun testTrendingThenClickOpenDialogAndCopyLink() {
     // Wait until the gifs are showing
     composeTestRule.waitUntil(
       condition = {
+        composeTestRule.mainClock.advanceTimeByFrame()
         composeTestRule
           .onAllNodesWithContentDescription(label = gifImageContentDescription)
           .fetchSemanticsNodes()
@@ -188,8 +187,9 @@ class GifScreenTest {
     composeTestRule.waitForIdle()
     composeTestRule.mainClock.advanceTimeByFrame()
 
-    // Assert that the dialog is displayed
+    // Click copy URL in the dialog
     composeTestRule.onNodeWithText(text = copyUrl).performClick()
+    composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
 
     // Assert that the clipboard has the correct URL
@@ -230,25 +230,6 @@ class GifScreenTest {
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
 
-    composeTestRule.onNodeWithContentDescription(label = menuCloseContentDescription).performClick()
-    composeTestRule.mainClock.advanceTimeByFrame()
-    composeTestRule.waitForIdle()
-    composeTestRule.mainClock.advanceTimeByFrame()
-
-    composeTestRule.onNodeWithText(text = "hello").assertDoesNotExist()
-  }
-
-  @Test
-  fun testSearchAndClickMenuBackButtonClear() {
-    enterSearchMode()
-
-    performSearchInput("hello")
-
-    composeTestRule.onNodeWithText(text = "hello").assertIsDisplayed()
-    composeTestRule.mainClock.advanceTimeByFrame()
-    composeTestRule.waitForIdle()
-
-    // TopSearchBar uses a clear button to cancel the search input
     composeTestRule.onNodeWithContentDescription(label = menuCloseContentDescription).performClick()
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
