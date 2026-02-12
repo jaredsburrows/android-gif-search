@@ -6,8 +6,6 @@ leakcanary = "2.14"
 moshi = "1.15.2"
 robolectric = "4.16.1"
 room = "2.8.4"
-# language
-kotlin = "2.3.10"
 # build
 sdk = "36"
 # signing
@@ -19,7 +17,7 @@ android-application = { id = "com.android.application", version.ref = "android" 
 android-library = { id = "com.android.library", version.ref = "android" }
 dagger = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 dexcount = { id = "com.getkeepsafe.dexcount", version = "4.0.0" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version = "2.3.10" }
 ksp = { id = "com.google.devtools.ksp", version = "2.3.5" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "14.0.1" }
 license = { id = "com.jaredsburrows.license", version = "0.9.8" }
@@ -64,8 +62,6 @@ google-truth = { module = "com.google.truth:truth", version = "1.4.5" }
 jakewharton-timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 javax-annotation-jsr250 = { module = "javax.annotation:jsr250-api", version = "1.0" }
 junit = { module = "junit:junit", version = "4.13.2" }
-kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" } # uses kotlin-bom
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android" } # uses kotlinx-bom
 kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version = "1.10.2" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" } # uses kotlinx-bom

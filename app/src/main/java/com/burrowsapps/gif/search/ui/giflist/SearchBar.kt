@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.burrowsapps.gif.search.ui.giflist
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -7,15 +5,14 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SearchBarScrollBehavior
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopSearchBar
 import androidx.compose.material3.rememberSearchBarState
@@ -34,7 +31,7 @@ import com.burrowsapps.gif.search.ui.icons.MoreVert24
 import com.burrowsapps.gif.search.ui.icons.Search24
 
 @Composable
-internal fun KeepStyleTopBar(
+internal fun SearchBar(
   query: String,
   onQueryChange: (String) -> Unit,
   scrollBehavior: SearchBarScrollBehavior,
@@ -81,7 +78,9 @@ internal fun KeepStyleTopBar(
         trailingIcon = {
           if (query.isNotEmpty()) {
             TooltipBox(
-              positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+              positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                TooltipAnchorPosition.Above,
+              ),
               tooltip = { PlainTooltip { Text(stringResource(R.string.menu_close_content_description)) } },
               state = rememberTooltipState(),
             ) {
@@ -94,7 +93,9 @@ internal fun KeepStyleTopBar(
             }
           } else {
             TooltipBox(
-              positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+              positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                TooltipAnchorPosition.Above,
+              ),
               tooltip = { PlainTooltip { Text(stringResource(R.string.menu_more_content_description)) } },
               state = rememberTooltipState(),
             ) {

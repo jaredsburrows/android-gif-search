@@ -1,8 +1,5 @@
-@file:OptIn(ExperimentalPagingApi::class, ExperimentalCoroutinesApi::class)
-
 package com.burrowsapps.gif.search.data.repository
 
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingConfig
 import androidx.paging.PagingState
@@ -17,7 +14,6 @@ import com.burrowsapps.gif.search.data.api.model.ResultDto
 import com.burrowsapps.gif.search.data.db.AppDatabase
 import com.burrowsapps.gif.search.ui.giflist.GifImageInfo
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
