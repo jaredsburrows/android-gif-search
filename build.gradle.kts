@@ -71,7 +71,7 @@ allprojects {
         "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
         "-opt-in=androidx.paging.ExperimentalPagingApi",
-        "-opt-in=kotlinx.coroutines.FlowPreview"
+        "-opt-in=kotlinx.coroutines.FlowPreview",
       )
     }
   }
