@@ -146,18 +146,9 @@ dependencies {
   androidTestImplementation(libs.google.hilt.testing)
 
   // AndroidX
-  implementation(libs.androidx.annotation)
-  implementation(libs.androidx.activity)
-  implementation(libs.androidx.appcompat)
   implementation(libs.androidx.core)
-  implementation(libs.androidx.palette)
-  implementation(libs.androidx.startup)
-
-  // AndroidX Lifecycle
-  implementation(libs.androidx.lifecycle.viewmodel)
 
   // AndroidX Paging
-  implementation(libs.androidx.paging.runtime)
   implementation(libs.androidx.paging.compose)
 
   // AndroidX UI
@@ -175,7 +166,6 @@ dependencies {
   implementation(libs.androidx.compose.runtime)
   implementation(libs.androidx.compose.material3)
   implementation(libs.androidx.compose.navigation)
-  implementation(libs.androidx.compose.runtime)
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.uitooling)
   androidTestImplementation(libs.androidx.compose.junit)
@@ -187,9 +177,7 @@ dependencies {
   ksp(libs.androidx.room.compiler)
 
   // Glide
-  implementation(libs.landscapist.animation)
   implementation(libs.landscapist.glide)
-  implementation(libs.landscapist.palette)
   implementation(libs.bumptech.glide)
   implementation(libs.bumptech.glide.okhttp)
   ksp(libs.bumptech.glide.ksp)
