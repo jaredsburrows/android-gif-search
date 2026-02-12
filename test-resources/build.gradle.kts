@@ -1,5 +1,3 @@
-import org.gradle.api.JavaVersion.VERSION_21
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
 import java.net.URI
 
 plugins {
@@ -7,61 +5,8 @@ plugins {
   alias(libs.plugins.ktlint)
 }
 
-val sdkVersion =
-  libs.versions.sdk
-    .get()
-    .toInt()
-val jvmVersion = VERSION_21
-
 android {
   namespace = "com.burrowsapps.gif.search.test.shared"
-  compileSdk {
-    version =
-      release(sdkVersion) {
-        minorApiLevel = 1
-      }
-  }
-
-  defaultConfig {
-    minSdk {
-      version = release(sdkVersion)
-    }
-  }
-
-  compileOptions {
-    sourceCompatibility = jvmVersion
-    targetCompatibility = jvmVersion
-  }
-
-  lint {
-    abortOnError = true
-    checkAllWarnings = true
-    warningsAsErrors = true
-    checkTestSources = true
-    checkDependencies = true
-    checkReleaseBuilds = false
-    lintConfig = rootDir.resolve("config/lint/lint.xml")
-    textReport = true
-    sarifReport = true
-  }
-
-  packaging {
-    resources.excludes +=
-      listOf(
-        "**/*.kotlin_module",
-        "**/*.version",
-        "**/kotlin/**",
-        "**/*.txt",
-        "**/*.xml",
-        "**/*.properties",
-      )
-  }
-}
-
-kotlin {
-  compilerOptions {
-    jvmTarget.set(JVM_21)
-  }
 }
 
 tasks.register("updateTestFiles") {
@@ -102,6 +47,7 @@ dependencies {
   // Kotlin
   implementation(platform(libs.kotlin.bom))
   implementation(libs.kotlin.stdlib)
+  ktlintRuleset(libs.ktlint.compose.ruleset)
 
   // Kotlin X
   implementation(platform(libs.kotlinx.coroutines.bom))

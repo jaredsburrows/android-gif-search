@@ -1,6 +1,3 @@
-import org.gradle.api.JavaVersion.VERSION_21
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML
 import java.io.FileInputStream
 import java.nio.file.Paths
 import java.util.Properties
@@ -20,25 +17,15 @@ val sdkVersion =
   libs.versions.sdk
     .get()
     .toInt()
-val jvmVersion = VERSION_21
 
 android {
   namespace = "com.burrowsapps.gif.search"
   testNamespace = "com.burrowsapps.gif.search.test"
-  compileSdk {
-    version =
-      release(sdkVersion) {
-        minorApiLevel = 1
-      }
-  }
 
   defaultConfig {
     applicationId = "com.burrowsapps.gif.search"
     versionCode = 1
     versionName = "1.0"
-    minSdk {
-      version = release(sdkVersion)
-    }
     targetSdk {
       version = release(sdkVersion)
     }
@@ -46,34 +33,15 @@ android {
     testApplicationId = "com.burrowsapps.gif.search.test"
     testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner"
     testInstrumentationRunnerArguments["disableAnalytics"] = "true"
-
-    vectorDrawables.useSupportLibrary = true
   }
 
   androidResources {
     localeFilters += listOf("en")
   }
 
-  compileOptions {
-    sourceCompatibility = jvmVersion
-    targetCompatibility = jvmVersion
-  }
-
   buildFeatures {
     buildConfig = true
     compose = true
-  }
-
-  lint {
-    abortOnError = true
-    checkAllWarnings = true
-    warningsAsErrors = true
-    checkTestSources = true
-    checkDependencies = true
-    checkReleaseBuilds = false
-    lintConfig = rootDir.resolve("config/lint/lint.xml")
-    textReport = true
-    sarifReport = true
   }
 
   val keyPath = System.getenv("APP_KEYS_PATH")
@@ -133,27 +101,9 @@ android {
     execution = "ANDROIDX_TEST_ORCHESTRATOR"
   }
 
-  packaging {
-    resources.excludes +=
-      listOf(
-        "**/*.kotlin_module",
-        "**/*.version",
-        "**/kotlin/**",
-        "**/*.txt",
-        "**/*.xml",
-        "**/*.properties",
-      )
-  }
-
   dependenciesInfo {
     includeInApk = false
     includeInBundle = false
-  }
-}
-
-ktlint {
-  reporters {
-    reporter(HTML)
   }
 }
 
@@ -169,12 +119,6 @@ ksp {
   arg("dagger.formatGeneratedSource", "disabled")
   arg("dagger.fastInit", "enabled")
   arg("dagger.experimentalDaggerErrorMessages", "enabled")
-}
-
-kotlin {
-  compilerOptions {
-    jvmTarget.set(JVM_21)
-  }
 }
 
 dependencies {

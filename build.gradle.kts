@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.CommonExtension
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.gradle.api.JavaVersion.VERSION_21
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
@@ -5,6 +6,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML
 import java.util.Locale
 
 plugins {
@@ -114,6 +116,63 @@ allprojects {
         jvmArgs("-Djava.awt.headless=true")
         jvmArgs("-Dapple.awt.UIElement=true")
       }
+    }
+  }
+}
+
+subprojects {
+  ktlint {
+    reporters {
+      reporter(HTML)
+    }
+  }
+
+  plugins.withId("com.android.base") {
+    val sdkVersion =
+      libs.versions.sdk
+        .get()
+        .toInt()
+
+    extensions.configure<CommonExtension> {
+      compileSdk {
+        version =
+          release(sdkVersion) {
+            minorApiLevel = 1
+          }
+      }
+
+      defaultConfig.apply {
+        minSdk {
+          version = release(sdkVersion)
+        }
+      }
+
+      compileOptions.apply {
+        sourceCompatibility = VERSION_21
+        targetCompatibility = VERSION_21
+      }
+
+      lint.apply {
+        abortOnError = true
+        checkAllWarnings = true
+        warningsAsErrors = true
+        checkTestSources = true
+        checkDependencies = true
+        checkReleaseBuilds = false
+        lintConfig = rootDir.resolve("config/lint/lint.xml")
+        textReport = true
+        sarifReport = true
+      }
+
+      packaging.resources.excludes +=
+        listOf(
+          "**/*.kotlin_module",
+          "**/*.version",
+          "**/kotlin/**",
+          "**/*.txt",
+          "**/*.xml",
+          "**/*.properties",
+        )
     }
   }
 }
