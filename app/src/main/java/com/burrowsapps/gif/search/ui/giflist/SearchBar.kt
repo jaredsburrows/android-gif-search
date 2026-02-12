@@ -10,11 +10,16 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SearchBarScrollBehavior
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopSearchBar
 import androidx.compose.material3.rememberSearchBarState
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -62,25 +67,43 @@ internal fun KeepStyleTopBar(
         placeholder = { Text(text = stringResource(R.string.search_hint)) },
         interactionSource = interactionSource,
         leadingIcon = {
-          Icon(
-            imageVector = Search24,
-            contentDescription = stringResource(R.string.menu_search_content_description),
-          )
+          TooltipBox(
+            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+            tooltip = { PlainTooltip { Text(stringResource(R.string.search_hint)) } },
+            state = rememberTooltipState(),
+          ) {
+            Icon(
+              imageVector = Search24,
+              contentDescription = stringResource(R.string.menu_search_content_description),
+            )
+          }
         },
         trailingIcon = {
           if (query.isNotEmpty()) {
-            IconButton(onClick = { onQueryChange("") }) {
-              Icon(
-                imageVector = Close24,
-                contentDescription = stringResource(R.string.menu_close_content_description),
-              )
+            TooltipBox(
+              positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+              tooltip = { PlainTooltip { Text(stringResource(R.string.menu_close_content_description)) } },
+              state = rememberTooltipState(),
+            ) {
+              IconButton(onClick = { onQueryChange("") }) {
+                Icon(
+                  imageVector = Close24,
+                  contentDescription = stringResource(R.string.menu_close_content_description),
+                )
+              }
             }
           } else {
-            IconButton(onClick = { showMenu.value = true }) {
-              Icon(
-                imageVector = MoreVert24,
-                contentDescription = stringResource(R.string.menu_more_content_description),
-              )
+            TooltipBox(
+              positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+              tooltip = { PlainTooltip { Text(stringResource(R.string.menu_more_content_description)) } },
+              state = rememberTooltipState(),
+            ) {
+              IconButton(onClick = { showMenu.value = true }) {
+                Icon(
+                  imageVector = MoreVert24,
+                  contentDescription = stringResource(R.string.menu_more_content_description),
+                )
+              }
             }
             DropdownMenu(expanded = showMenu.value, onDismissRequest = { showMenu.value = false }) {
               DropdownMenuItem(
