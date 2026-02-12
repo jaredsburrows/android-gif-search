@@ -68,6 +68,10 @@ allprojects {
         "-Xassertions=jvm",
         // Generate JVM default methods for Kotlin interfaces
         "-jvm-default=enable",
+        "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        "-opt-in=androidx.paging.ExperimentalPagingApi",
+        "-opt-in=kotlinx.coroutines.FlowPreview",
       )
     }
   }

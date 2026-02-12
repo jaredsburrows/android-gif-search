@@ -45,8 +45,6 @@ tasks.register("updateTestFiles") {
 
 dependencies {
   // Kotlin
-  implementation(platform(libs.kotlin.bom))
-  implementation(libs.kotlin.stdlib)
   ktlintRuleset(libs.ktlint.compose.ruleset)
 
   // Kotlin X
