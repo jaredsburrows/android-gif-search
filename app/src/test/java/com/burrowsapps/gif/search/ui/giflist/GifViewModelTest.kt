@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package com.burrowsapps.gif.search.ui.giflist
 
 import androidx.room.Room
@@ -8,7 +6,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.data.db.AppDatabase
 import com.burrowsapps.gif.search.data.repository.GifRepository
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.After
 import org.junit.Before

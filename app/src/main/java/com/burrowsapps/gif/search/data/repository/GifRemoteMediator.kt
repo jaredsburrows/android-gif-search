@@ -1,10 +1,8 @@
 package com.burrowsapps.gif.search.data.repository
 
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.paging.RemoteMediator.InitializeAction
 import androidx.room.withTransaction
 import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.data.api.model.NetworkResult
@@ -19,7 +17,6 @@ import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
-@OptIn(ExperimentalPagingApi::class)
 internal class GifRemoteMediator(
   private val queryKey: String,
   private val repository: GifRepository,

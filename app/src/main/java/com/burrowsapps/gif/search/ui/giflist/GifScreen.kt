@@ -1,7 +1,3 @@
-@file:OptIn(
-  ExperimentalMaterial3Api::class,
-)
-
 package com.burrowsapps.gif.search.ui.giflist
 
 import android.content.ClipData
@@ -25,7 +21,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarDefaults
@@ -144,7 +139,7 @@ internal fun GifScreen(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     snackbarHost = { SnackbarHost(hostState) },
     topBar = {
-      KeepStyleTopBar(
+      SearchBar(
         query = searchText,
         onQueryChange = { gifViewModel.onSearchTextChanged(it) },
         scrollBehavior = scrollBehavior,
@@ -258,7 +253,8 @@ private fun TheContent(
                 Modifier
                   .semantics {
                     contentDescription = gifImageContentDesc
-                  }.clickable {
+                  }
+                  .clickable {
                     openDialog.value = true
                     currentSelectedItem.value = item
                   },

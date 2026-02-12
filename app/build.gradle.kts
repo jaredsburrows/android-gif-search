@@ -123,8 +123,6 @@ ksp {
 
 dependencies {
   // Kotlin
-  implementation(platform(libs.kotlin.bom))
-  implementation(libs.kotlin.stdlib)
   ktlintRuleset(libs.ktlint.compose.ruleset)
 
   // KotlinX
@@ -168,6 +166,7 @@ dependencies {
   implementation(libs.androidx.compose.navigation)
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.uitooling)
+  testImplementation(libs.androidx.compose.junit)
   androidTestImplementation(libs.androidx.compose.junit)
 
   // Room Database
