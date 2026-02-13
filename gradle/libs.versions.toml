@@ -1,5 +1,5 @@
 [versions]
-android = "9.0.0"
+android = "9.0.1"
 dagger = "2.59.1"
 glide = "5.0.5"
 leakcanary = "2.14"
