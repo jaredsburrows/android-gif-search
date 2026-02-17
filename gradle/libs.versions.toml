@@ -18,7 +18,7 @@ android-library = { id = "com.android.library", version.ref = "android" }
 dagger = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 dexcount = { id = "com.getkeepsafe.dexcount", version = "4.0.0" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version = "2.3.10" }
-ksp = { id = "com.google.devtools.ksp", version = "2.3.5" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.6" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "14.0.1" }
 license = { id = "com.jaredsburrows.license", version = "0.9.8" }
 publish = { id = "com.github.triplet.play", version = "4.0.0" }
