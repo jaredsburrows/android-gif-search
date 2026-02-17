@@ -3,6 +3,7 @@
   "extends": [
     "config:recommended"
   ],
+  "semanticCommits": "disabled",
   "packageRules": [
     {
       "matchUpdateTypes": [
@@ -12,16 +13,7 @@
         "pin",
         "digest"
       ],
-      "automerge": true,
-      "matchDatasources": [
-        "maven"
-      ],
-      "registryUrls": [
-        "https://repo.maven.apache.org/maven2/",
-        "https://dl.google.com/dl/android/maven2/",
-        "https://plugins.gradle.org/m2/"
-      ]
+      "automerge": true
     }
-  ],
-  "semanticCommits": "disabled"
+  ]
 }
