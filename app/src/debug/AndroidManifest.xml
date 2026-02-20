@@ -6,9 +6,11 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
   <!-- Keep usesCleartextTraffic for androidTests -->
+  <!-- Allow network inspection for debug builds defined in debug_network_security_config-->
   <application
     android:name=".DebugApplication"
     android:icon="@mipmap/ic_launcher"
+    android:networkSecurityConfig="@xml/debug_network_security_config"
     android:usesCleartextTraffic="true"
     tools:replace="android:name" />
 </manifest>
