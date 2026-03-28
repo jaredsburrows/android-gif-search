@@ -18,4 +18,7 @@
 
   <!-- Snackbar Messages -->
   <string name="copied_to_clipboard">Copied to clipboard</string>
+  <string name="save_to_gallery">Save to Gallery</string>
+  <string name="saved_to_gallery">GIF saved to gallery</string>
+  <string name="save_to_gallery_error">Failed to save GIF</string>
 </resources>

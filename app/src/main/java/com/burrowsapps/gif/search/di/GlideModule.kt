@@ -1,7 +1,7 @@
 package com.burrowsapps.gif.search.di
 
 import android.content.Context
-import android.graphics.Bitmap.CompressFormat.WEBP_LOSSLESS
+import android.graphics.Bitmap.CompressFormat.WEBP_LOSSY
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
@@ -48,7 +48,7 @@ internal class GlideModule : AppGlideModule() {
     builder
       .setDefaultRequestOptions(
         RequestOptions()
-          .encodeFormat(WEBP_LOSSLESS)
+          .encodeFormat(WEBP_LOSSY)
           .encodeQuality(ENCODE_QUALITY)
           .diskCacheStrategy(ALL)
           .error(R.mipmap.ic_launcher)
@@ -72,6 +72,6 @@ internal class GlideModule : AppGlideModule() {
   }
 
   private companion object {
-    private const val ENCODE_QUALITY = 100
+    private const val ENCODE_QUALITY = 85
   }
 }
