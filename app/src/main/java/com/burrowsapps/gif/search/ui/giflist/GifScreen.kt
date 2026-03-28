@@ -1,8 +1,10 @@
 package com.burrowsapps.gif.search.ui.giflist
 
 import android.content.ClipData
+import android.content.ContentValues
 import android.content.Context
 import android.content.res.Configuration
+import android.provider.MediaStore
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -80,9 +83,11 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-// Grid cell size for GIF thumbnails (3 columns fit on screen)
+// Grid cell size for GIF thumbnails
 private val GifCellSize: Dp = 135.dp
 
 // Full-size GIF dialog size
@@ -217,7 +222,8 @@ private fun TheContent(
       ) {
         LazyVerticalGrid(
           state = gridState,
-          columns = GridCells.Fixed(3),
+          // Adaptive fills any screen width (phones, tablets, landscape) correctly
+          columns = GridCells.Adaptive(GifCellSize),
           modifier = Modifier.fillMaxSize(),
         ) {
           // No header item; collapse handled by scrollBehavior on the app bar
@@ -255,6 +261,8 @@ private fun TheContent(
                     contentDescription = gifImageContentDesc
                   }
                   .clickable {
+                    // Preload full-size GIF before dialog opens for faster display
+                    Glide.with(context).asGif().load(item.gifUrl).preload()
                     openDialog.value = true
                     currentSelectedItem.value = item
                   },
@@ -316,6 +324,9 @@ private fun GifDialog(
   val gifImageDialogContentDesc = stringResource(R.string.gif_image_dialog_content_description)
   val copiedToClipboardMsg = stringResource(R.string.copied_to_clipboard)
   val copyUrlText = stringResource(R.string.copy_url)
+  val saveToGalleryText = stringResource(R.string.save_to_gallery)
+  val savedToGalleryMsg = stringResource(R.string.saved_to_gallery)
+  val saveErrorMsg = stringResource(R.string.save_to_gallery_error)
 
   Dialog(
     onDismissRequest = onDismiss,
@@ -340,12 +351,15 @@ private fun GifDialog(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
       ) {
+        // Memoized so the RequestBuilder is not recreated on every recomposition
         val requestBuilder =
-          loadGif(
-            context = context,
-            imageUrl = currentSelectedItem.gifUrl,
-            thumbnailUrl = currentSelectedItem.gifPreviewUrl,
-          )
+          remember(currentSelectedItem.gifUrl, currentSelectedItem.gifPreviewUrl, context) {
+            loadGif(
+              context = context,
+              imageUrl = currentSelectedItem.gifUrl,
+              thumbnailUrl = currentSelectedItem.gifPreviewUrl,
+            )
+          }
 
         CompositionLocalProvider(LocalGlideRequestBuilder provides requestBuilder) {
           GlideImage(
@@ -365,29 +379,88 @@ private fun GifDialog(
           )
         }
 
-        TextButton(
-          onClick = {
-            onDismiss()
-            coroutineScope.launch {
-              clipboardManager.setClipEntry(
-                ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
-              )
-              hostState.showSnackbar(
-                copiedToClipboardMsg,
-              )
-            }
-          },
+        Row(
+          horizontalArrangement = Arrangement.SpaceEvenly,
+          modifier = Modifier.fillMaxWidth(),
         ) {
-          Text(
-            text = copyUrlText,
-            color = MaterialTheme.colorScheme.primary,
-            fontSize = MaterialTheme.typography.titleMedium.fontSize,
-          )
+          TextButton(
+            onClick = {
+              onDismiss()
+              coroutineScope.launch {
+                clipboardManager.setClipEntry(
+                  ClipEntry(ClipData.newPlainText("gif url", currentSelectedItem.gifUrl)),
+                )
+                hostState.showSnackbar(copiedToClipboardMsg)
+              }
+            },
+          ) {
+            Text(
+              text = copyUrlText,
+              color = MaterialTheme.colorScheme.primary,
+              fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            )
+          }
+
+          TextButton(
+            onClick = {
+              coroutineScope.launch {
+                val success = saveGifToGallery(context, currentSelectedItem.gifUrl)
+                hostState.showSnackbar(if (success) savedToGalleryMsg else saveErrorMsg)
+              }
+            },
+          ) {
+            Text(
+              text = saveToGalleryText,
+              color = MaterialTheme.colorScheme.primary,
+              fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            )
+          }
         }
       }
     }
   }
 }
+
+/**
+ * Saves a GIF to the device gallery using MediaStore.
+ *
+ * Reads the file from Glide's disk cache (no redundant network request since
+ * the GIF was already loaded for display), then writes it to Pictures/GIF Search/.
+ * No WRITE_EXTERNAL_STORAGE permission required on Android 10+ (API 29+).
+ */
+private suspend fun saveGifToGallery(
+  context: Context,
+  gifUrl: String,
+): Boolean =
+  withContext(Dispatchers.IO) {
+    try {
+      // Fetch from Glide — likely already in disk cache from being displayed
+      val file =
+        Glide
+          .with(context.applicationContext)
+          .asFile()
+          .load(gifUrl)
+          .submit()
+          .get()
+      val values =
+        ContentValues().apply {
+          put(MediaStore.Images.Media.DISPLAY_NAME, "gif_${System.currentTimeMillis()}.gif")
+          put(MediaStore.Images.Media.MIME_TYPE, "image/gif")
+          put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/GIF Search")
+        }
+      val uri =
+        context.contentResolver.insert(
+          MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+          values,
+        ) ?: return@withContext false
+      context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+        file.inputStream().use { inputStream -> inputStream.copyTo(outputStream) }
+      }
+      true
+    } catch (_: Exception) {
+      false
+    }
+  }
 
 private fun loadGif(
   context: Context,

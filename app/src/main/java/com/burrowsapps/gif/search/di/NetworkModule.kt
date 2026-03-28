@@ -20,6 +20,7 @@ import okhttp3.EventListener
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.HEADERS
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
@@ -80,9 +81,31 @@ internal class NetworkModule {
       .Builder()
       .eventListener(eventListener)
       .addInterceptor(httpLoggingInterceptor)
+      .addNetworkInterceptor(forceCacheInterceptor())
       .cache(cache)
       .build()
   }
+
+  /**
+   * Forces API responses to be cacheable for [FORCE_CACHE_MAX_AGE_SECONDS] seconds.
+   *
+   * Tenor's API returns no Cache-Control headers, so OkHttp's disk cache is never
+   * populated. This interceptor injects a max-age directive so that identical requests
+   * within the window are served from disk without a network round-trip.
+   */
+  private fun forceCacheInterceptor(): Interceptor =
+    Interceptor { chain ->
+      val response: Response = chain.proceed(chain.request())
+      val cacheHeader = response.header("Cache-Control")
+      if (cacheHeader.isNullOrBlank() || cacheHeader.contains("no-store") || cacheHeader.contains("no-cache")) {
+        response
+          .newBuilder()
+          .header("Cache-Control", "public, max-age=$FORCE_CACHE_MAX_AGE_SECONDS")
+          .build()
+      } else {
+        response
+      }
+    }
 
   // Resolve StrictMode UntaggedSocket violation
   @Singleton
@@ -134,6 +157,7 @@ internal class NetworkModule {
 
   private companion object {
     private const val TRAFFIC_TAG = 0xF00D
-    private const val CLIENT_CACHE_SIZE = 20L * 1024L * 1024L // 20 MiB
+    private const val CLIENT_CACHE_SIZE = 50L * 1024L * 1024L // 50 MiB
+    private const val FORCE_CACHE_MAX_AGE_SECONDS = 600 // 10 minutes
   }
 }

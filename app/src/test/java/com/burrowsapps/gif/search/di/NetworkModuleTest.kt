@@ -124,7 +124,7 @@ class NetworkModuleTest {
           val cache = networkModule.provideCache(context)
 
           assertThat(cache.directory).isEqualTo(context.cacheDir)
-          assertThat(cache.maxSize()).isEqualTo(20 * 1024 * 1024L)
+          assertThat(cache.maxSize()).isEqualTo(50 * 1024 * 1024L)
         }
       }
     }
