@@ -78,9 +78,10 @@ internal fun SearchBar(
         trailingIcon = {
           if (query.isNotEmpty()) {
             TooltipBox(
-              positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                TooltipAnchorPosition.Above,
-              ),
+              positionProvider =
+                TooltipDefaults.rememberTooltipPositionProvider(
+                  TooltipAnchorPosition.Above,
+                ),
               tooltip = { PlainTooltip { Text(stringResource(R.string.menu_close_content_description)) } },
               state = rememberTooltipState(),
             ) {
@@ -93,9 +94,10 @@ internal fun SearchBar(
             }
           } else {
             TooltipBox(
-              positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
-                TooltipAnchorPosition.Above,
-              ),
+              positionProvider =
+                TooltipDefaults.rememberTooltipPositionProvider(
+                  TooltipAnchorPosition.Above,
+                ),
               tooltip = { PlainTooltip { Text(stringResource(R.string.menu_more_content_description)) } },
               state = rememberTooltipState(),
             ) {

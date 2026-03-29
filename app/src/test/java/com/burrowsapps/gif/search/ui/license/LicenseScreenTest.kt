@@ -52,7 +52,8 @@ class LicenseScreenTest {
       }
     }
 
-    composeTestRule.onNodeWithContentDescription(licenseScreenContentDescription)
+    composeTestRule
+      .onNodeWithContentDescription(licenseScreenContentDescription)
       .assertIsDisplayed()
   }
 
