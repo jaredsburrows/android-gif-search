@@ -23,54 +23,53 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class GifViewModel
-@Inject
-internal constructor(
-  private val repository: GifRepository,
-  private val database: AppDatabase,
-  @param:IoDispatcher private val dispatcher: CoroutineDispatcher,
-) : ViewModel() {
-  private val _searchText = MutableStateFlow("")
-  val searchText: StateFlow<String> = _searchText
+  @Inject
+  internal constructor(
+    private val repository: GifRepository,
+    private val database: AppDatabase,
+    @param:IoDispatcher private val dispatcher: CoroutineDispatcher,
+  ) : ViewModel() {
+    private val _searchText = MutableStateFlow("")
+    val searchText: StateFlow<String> = _searchText
 
-  val gifPagingData: Flow<PagingData<GifImageInfo>> =
-    searchText
-      .debounce(300) // Wait 300ms after user stops typing
-      .map { query ->
-        // Normalize the query: trim, lowercase, empty string for trending
-        query
-          .trim()
-          .lowercase()
-          .takeIf { it.isNotBlank() }
-          .orEmpty()
-      }.distinctUntilChanged() // Only emit if the normalized query actually changed
-      .flatMapLatest { queryKey ->
-        // Create a new Pager for each unique query
-        Pager(
-          config =
-            PagingConfig(
-              pageSize = 45, // 3 columns × 15 rows = 45 items per page
-              initialLoadSize = 30, // 3 columns × 10 rows - fills screen + buffer for faster startup
-              prefetchDistance = 15, // Start loading next page 15 items before reaching end
-              enablePlaceholders = false, // Don't show null placeholders
-              maxSize = 200, // Don't store more than 200 items in memory
-            ),
-          remoteMediator =
-            GifRemoteMediator(
-              queryKey = queryKey,
-              repository = repository,
-              database = database,
-              dispatcher = dispatcher,
-            ),
-          pagingSourceFactory = {
-            // PagingSource reads from Room Database for smooth scrolling,
-            // while RemoteMediator handles network updates in the background
-            database.queryResultDao().pagingSource(queryKey)
-          },
-        ).flow
-      }.cachedIn(viewModelScope) // Cache across configuration changes
+    val gifPagingData: Flow<PagingData<GifImageInfo>> =
+      searchText
+        .debounce(300) // Wait 300ms after user stops typing
+        .map { query ->
+          // Normalize the query: trim, lowercase, empty string for trending
+          query
+            .trim()
+            .lowercase()
+            .takeIf { it.isNotBlank() }
+            .orEmpty()
+        }.distinctUntilChanged() // Only emit if the normalized query actually changed
+        .flatMapLatest { queryKey ->
+          // Create a new Pager for each unique query
+          Pager(
+            config =
+              PagingConfig(
+                pageSize = 45, // 3 columns × 15 rows = 45 items per page
+                initialLoadSize = 30, // 3 columns × 10 rows - fills screen + buffer for faster startup
+                prefetchDistance = 15, // Start loading next page 15 items before reaching end
+                enablePlaceholders = false, // Don't show null placeholders
+                maxSize = 200, // Don't store more than 200 items in memory
+              ),
+            remoteMediator =
+              GifRemoteMediator(
+                queryKey = queryKey,
+                repository = repository,
+                database = database,
+                dispatcher = dispatcher,
+              ),
+            pagingSourceFactory = {
+              // PagingSource reads from Room Database for smooth scrolling,
+              // while RemoteMediator handles network updates in the background
+              database.queryResultDao().pagingSource(queryKey)
+            },
+          ).flow
+        }.cachedIn(viewModelScope) // Cache across configuration changes
 
-  fun onSearchTextChanged(changedSearchText: String) {
-    _searchText.value = changedSearchText
+    fun onSearchTextChanged(changedSearchText: String) {
+      _searchText.value = changedSearchText
+    }
   }
-
-}

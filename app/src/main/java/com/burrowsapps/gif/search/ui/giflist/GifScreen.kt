@@ -259,10 +259,13 @@ private fun TheContent(
                 Modifier
                   .semantics {
                     contentDescription = gifImageContentDesc
-                  }
-                  .clickable {
+                  }.clickable {
                     // Preload full-size GIF before dialog opens for faster display
-                    Glide.with(context).asGif().load(item.gifUrl).preload()
+                    Glide
+                      .with(context)
+                      .asGif()
+                      .load(item.gifUrl)
+                      .preload()
                     openDialog.value = true
                     currentSelectedItem.value = item
                   },
