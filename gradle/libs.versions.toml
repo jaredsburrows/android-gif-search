@@ -63,7 +63,7 @@ jakewharton-timber = { module = "com.jakewharton.timber:timber", version = "5.0.
 javax-annotation-jsr250 = { module = "javax.annotation:jsr250-api", version = "1.0" }
 junit = { module = "junit:junit", version = "4.13.2" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android" } # uses kotlinx-bom
-kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version = "1.10.2" }
+kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version = "1.11.0" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" } # uses kotlinx-bom
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" } # uses kotlinx-bom
 ktlint-compose-ruleset = { module = "io.nlopez.compose.rules:ktlint", version = "0.5.8" }
