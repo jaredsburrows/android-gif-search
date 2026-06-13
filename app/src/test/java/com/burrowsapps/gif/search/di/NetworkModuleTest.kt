@@ -9,7 +9,6 @@ import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -58,7 +57,8 @@ class NetworkModuleTest {
     val converterFactory = MoshiConverterFactory.create(moshi)
     val client = OkHttpClient.Builder().build()
     val lazyClient = dagger.Lazy { client }
-    val retrofit = networkModule.provideRetrofit(converterFactory, lazyClient, "https://example.com")
+    val retrofit =
+      networkModule.provideRetrofit(converterFactory, lazyClient, "https://example.com")
 
     assertThat(retrofit.baseUrl().toString()).isEqualTo("https://example.com/")
   }
@@ -82,22 +82,20 @@ class NetworkModuleTest {
   @Test
   fun provideOkHttpClientReturnsOkHttpClient() =
     runTest {
-      runBlocking {
-        withContext(IO) {
-          val loggingInterceptor = networkModule.provideHttpLoggingInterceptor(TESTING)
-          val eventListener = networkModule.provideEventListener()
-          val cache = networkModule.provideCache(context)
+      withContext(IO) {
+        val loggingInterceptor = networkModule.provideHttpLoggingInterceptor(TESTING)
+        val eventListener = networkModule.provideEventListener()
+        val cache = networkModule.provideCache(context)
 
-          val client = networkModule.provideOkHttpClient(loggingInterceptor, eventListener, cache)
+        val client = networkModule.provideOkHttpClient(loggingInterceptor, eventListener, cache)
 
-          assertThat(client.cache).isEqualTo(cache)
-          assertThat(client.interceptors).contains(loggingInterceptor)
-          // Verify the configured event listener is used by the client
-          val request = Request.Builder().url("https://example.com").build()
-          val call = client.newCall(request)
-          val created = client.eventListenerFactory.create(call)
-          assertThat(created::class.java.name).isEqualTo(eventListener::class.java.name)
-        }
+        assertThat(client.cache).isEqualTo(cache)
+        assertThat(client.interceptors).contains(loggingInterceptor)
+        // Verify the configured event listener is used by the client
+        val request = Request.Builder().url("https://example.com").build()
+        val call = client.newCall(request)
+        val created = client.eventListenerFactory.create(call)
+        assertThat(created::class.java.name).isEqualTo(eventListener::class.java.name)
       }
     }
 
@@ -119,13 +117,11 @@ class NetworkModuleTest {
   @Test
   fun provideCacheReturnsCache() =
     runTest {
-      runBlocking {
-        withContext(IO) {
-          val cache = networkModule.provideCache(context)
+      withContext(IO) {
+        val cache = networkModule.provideCache(context)
 
-          assertThat(cache.directory).isEqualTo(context.cacheDir)
-          assertThat(cache.maxSize()).isEqualTo(50 * 1024 * 1024L)
-        }
+        assertThat(cache.directory).isEqualTo(context.cacheDir)
+        assertThat(cache.maxSize()).isEqualTo(50 * 1024 * 1024L)
       }
     }
 }

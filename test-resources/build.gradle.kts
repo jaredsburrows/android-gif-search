@@ -10,6 +10,8 @@ android {
 }
 
 tasks.register("updateTestFiles") {
+  description = "Updates the test JSON files with fresh data from the Tenor API."
+
   // Resolve the output dir at configuration time so the doLast lambda captures only a
   // File (configuration-cache safe), not the Project via android.sourceSets.
   val resourcesFolder = layout.projectDirectory.dir("src/main/resources").asFile

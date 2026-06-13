@@ -9,14 +9,14 @@ class GifEntityTest {
     val entity =
       GifEntity(
         tinyGifUrl = "tiny",
-        tinyGifPreviewUrl = "tinyp",
+        tinyGifPreviewUrl = "tiny-preview",
         gifUrl = "gif",
-        gifPreviewUrl = "gifp",
+        gifPreviewUrl = "gif-preview",
       )
 
     assertThat(entity.tinyGifUrl).isEqualTo("tiny")
-    assertThat(entity.tinyGifPreviewUrl).isEqualTo("tinyp")
+    assertThat(entity.tinyGifPreviewUrl).isEqualTo("tiny-preview")
     assertThat(entity.gifUrl).isEqualTo("gif")
-    assertThat(entity.gifPreviewUrl).isEqualTo("gifp")
+    assertThat(entity.gifPreviewUrl).isEqualTo("gif-preview")
   }
 }
