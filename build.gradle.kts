@@ -109,6 +109,20 @@ subprojects {
           "**/*.properties",
         )
     }
+
+    // Attach mockito agent for tests to work with JDK 21+
+    val mockitoAgent = configurations.create("mockitoAgent")
+    dependencies {
+      add("mockitoAgent", libs.mockito)
+    }
+    tasks.withType<Test>().configureEach {
+      val agentFiles = mockitoAgent.incoming.files
+      jvmArgumentProviders.add(
+        CommandLineArgumentProvider {
+          listOf("-javaagent:${agentFiles.single { it.name.startsWith("mockito-core") }}")
+        },
+      )
+    }
   }
 
   tasks.withType<KotlinJvmCompile>().configureEach {
@@ -157,9 +171,6 @@ subprojects {
       showStackTraces = true
       events = setOf(FAILED, SKIPPED)
     }
-
-    // For mockito to work with JDK 21
-    jvmArgs("-Dnet.bytebuddy.experimental=true")
 
     maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
   }
