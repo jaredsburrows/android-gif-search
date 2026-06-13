@@ -11,14 +11,14 @@ env:
   JAVA_VERSION: 25
   ANDROID_API_LEVEL: 36
 
+permissions:
+  checks: write
+  pull-requests: write
+
 jobs:
   checks:
     name: Checks
     runs-on: ubuntu-latest
-
-    permissions:
-      checks: write
-      pull-requests: write
 
     steps:
       - name: Checkout Project
@@ -75,10 +75,6 @@ jobs:
   instrumentation:
     name: Instrumentation Tests
     runs-on: ubuntu-latest
-
-    permissions:
-      checks: write
-      pull-requests: write
 
     steps:
       - name: Checkout Project
