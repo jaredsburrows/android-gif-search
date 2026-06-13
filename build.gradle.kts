@@ -110,12 +110,60 @@ subprojects {
         )
     }
 
+    tasks.withType<KotlinJvmCompile>().configureEach {
+      compilerOptions {
+        jvmTarget.set(JVM_21)
+        freeCompilerArgs.addAll(
+          // https://kotlinlang.org/docs/compiler-reference.html#progressive
+          "-progressive",
+          "-Xjsr305=strict",
+          "-Xemit-jvm-type-annotations",
+          // https://publicobject.com/2019/11/18/kotlins-assert-is-not-like-javas-assert/
+          "-Xassertions=jvm",
+          // Generate JVM default methods for Kotlin interfaces
+          "-jvm-default=enable",
+          "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+          "-opt-in=kotlinx.coroutines.FlowPreview",
+        )
+      }
+    }
+
+    tasks.withType<JavaCompile>().configureEach {
+      sourceCompatibility = VERSION_21.toString()
+      targetCompatibility = VERSION_21.toString()
+
+      // Show all warnings except boot classpath
+      options.apply {
+        compilerArgs.addAll(
+          listOf(
+            // Turn on all warnings
+            "-Xlint:all",
+            // Ignore "warning: No processor claimed any of these annotations"
+            "-Xlint:-processing",
+            "-Xmaxerrs", "10000",
+            "-Xmaxwarns", "10000",
+          ),
+        )
+        encoding = "utf-8"
+      }
+    }
+
     // Attach mockito agent for tests to work with JDK 21+
     val mockitoAgent = configurations.create("mockitoAgent")
     dependencies {
       add("mockitoAgent", libs.mockito)
     }
     tasks.withType<Test>().configureEach {
+      testLogging {
+        exceptionFormat = FULL
+        showCauses = true
+        showExceptions = true
+        showStackTraces = true
+        events = setOf(FAILED, SKIPPED)
+      }
+
+      maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+
       val agentFiles = mockitoAgent.incoming.files
       jvmArgumentProviders.add(
         CommandLineArgumentProvider {
@@ -123,66 +171,29 @@ subprojects {
         },
       )
     }
-  }
 
-  tasks.withType<KotlinJvmCompile>().configureEach {
-    compilerOptions {
-      jvmTarget.set(JVM_21)
-      freeCompilerArgs.addAll(
-        // https://kotlinlang.org/docs/compiler-reference.html#progressive
-        "-progressive",
-        "-Xjsr305=strict",
-        "-Xemit-jvm-type-annotations",
-        // https://publicobject.com/2019/11/18/kotlins-assert-is-not-like-javas-assert/
-        "-Xassertions=jvm",
-        // Generate JVM default methods for Kotlin interfaces
-        "-jvm-default=enable",
-        "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-        "-opt-in=androidx.paging.ExperimentalPagingApi",
-        "-opt-in=kotlinx.coroutines.FlowPreview",
-      )
+    tasks.configureEach {
+      when (this) {
+        is JavaForkOptions -> {
+          // should improve memory on a 64bit JVM
+          jvmArgs("-XX:+UseCompressedOops")
+          // should avoid GradleWorkerMain to steal focus
+          jvmArgs("-Djava.awt.headless=true")
+          jvmArgs("-Dapple.awt.UIElement=true")
+        }
+      }
     }
   }
 
-  tasks.withType<JavaCompile>().configureEach {
-    sourceCompatibility = VERSION_21.toString()
-    targetCompatibility = VERSION_21.toString()
-
-    // Show all warnings except boot classpath
-    options.apply {
-      compilerArgs = compilerArgs +
-        listOf(
-          // Turn on all warnings
-          "-Xlint:all",
-          // Ignore "warning: No processor claimed any of these annotations"
-          "-Xlint:-processing",
+  // Compose/Paging opt-in markers only exist in :app; opting in here (com.android.application,
+  // not com.android.base) avoids unresolved-marker warnings in the :test-resources library.
+  plugins.withId("com.android.application") {
+    tasks.withType<KotlinJvmCompile>().configureEach {
+      compilerOptions {
+        freeCompilerArgs.addAll(
+          "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+          "-opt-in=androidx.paging.ExperimentalPagingApi",
         )
-      compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "10000"))
-      encoding = "utf-8"
-    }
-  }
-
-  tasks.withType<Test>().configureEach {
-    testLogging {
-      exceptionFormat = FULL
-      showCauses = true
-      showExceptions = true
-      showStackTraces = true
-      events = setOf(FAILED, SKIPPED)
-    }
-
-    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
-  }
-
-  tasks.configureEach {
-    when (this) {
-      is JavaForkOptions -> {
-        // should improve memory on a 64bit JVM
-        jvmArgs("-XX:+UseCompressedOops")
-        // should avoid GradleWorkerMain to steal focus
-        jvmArgs("-Djava.awt.headless=true")
-        jvmArgs("-Dapple.awt.UIElement=true")
       }
     }
   }

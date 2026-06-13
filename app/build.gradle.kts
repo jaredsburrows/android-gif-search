@@ -29,6 +29,7 @@ android {
     targetSdk {
       version = release(sdkVersion)
     }
+    manifestPlaceholders["applicationName"] = ".MainApplication"
 
     testApplicationId = "com.burrowsapps.gif.search.test"
     testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner"
@@ -78,6 +79,7 @@ android {
     debug {
       applicationIdSuffix = ".debug"
       versionNameSuffix = "-dev"
+      manifestPlaceholders["applicationName"] = ".DebugApplication"
       signingConfig = signingConfigs.getByName("debug")
     }
 
