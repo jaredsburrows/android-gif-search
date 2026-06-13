@@ -32,27 +32,82 @@ tasks.withType<Wrapper>().configureEach {
   distributionType = Wrapper.DistributionType.BIN
 }
 
-allprojects {
-  apply(plugin = "org.jlleitschuh.gradle.ktlint")
+tasks.withType<DependencyUpdatesTask>().configureEach {
+  fun isNonStable(version: String): Boolean {
+    val stableKeyword =
+      listOf("RELEASE", "FINAL", "GA")
+        .any { version.uppercase(Locale.getDefault()).contains(it) }
+    val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+    val isStable = stableKeyword || regex.matches(version)
+    return !isStable
+  }
 
-  tasks.withType<DependencyUpdatesTask>().configureEach {
-    fun isNonStable(version: String): Boolean {
-      val stableKeyword =
-        listOf("RELEASE", "FINAL", "GA")
-          .any { version.uppercase(Locale.getDefault()).contains(it) }
-      val regex = "^[0-9,.v-]+(-r)?$".toRegex()
-      val isStable = stableKeyword || regex.matches(version)
-      return !isStable
+  rejectVersionIf {
+    val allowNonStableForGroup =
+      candidate.group in setOf("com.android.application", "org.jetbrains.kotlin")
+    if (allowNonStableForGroup) {
+      false
+    } else {
+      isNonStable(candidate.version) && !isNonStable(currentVersion)
     }
+  }
+}
 
-    rejectVersionIf {
-      val allowNonStableForGroup =
-        candidate.group in setOf("com.android.application", "org.jetbrains.kotlin")
-      if (allowNonStableForGroup) {
-        false
-      } else {
-        isNonStable(candidate.version) && !isNonStable(currentVersion)
+subprojects {
+  plugins.withId("org.jlleitschuh.gradle.ktlint") {
+    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+      reporters {
+        reporter(HTML)
       }
+    }
+  }
+
+  plugins.withId("com.android.base") {
+    val sdkVersion =
+      libs.versions.sdk
+        .get()
+        .toInt()
+
+    extensions.configure<CommonExtension> {
+      compileSdk {
+        version =
+          release(sdkVersion) {
+            minorApiLevel = 1
+          }
+      }
+
+      defaultConfig.apply {
+        minSdk {
+          version = release(sdkVersion)
+        }
+      }
+
+      compileOptions.apply {
+        sourceCompatibility = VERSION_21
+        targetCompatibility = VERSION_21
+      }
+
+      lint.apply {
+        abortOnError = true
+        checkAllWarnings = true
+        warningsAsErrors = true
+        checkTestSources = true
+        checkDependencies = true
+        checkReleaseBuilds = false
+        lintConfig = rootDir.resolve("config/lint/lint.xml")
+        textReport = true
+        sarifReport = true
+      }
+
+      packaging.resources.excludes +=
+        listOf(
+          "**/*.kotlin_module",
+          "**/*.version",
+          "**/kotlin/**",
+          "**/*.txt",
+          "**/*.xml",
+          "**/*.properties",
+        )
     }
   }
 
@@ -106,8 +161,6 @@ allprojects {
     // For mockito to work with JDK 21
     jvmArgs("-Dnet.bytebuddy.experimental=true")
 
-    // Derived from the machine (not gradle.startParameter) so the value is stable across
-    // configuration-cache reuse. Half the cores matches the previous behaviour.
     maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
   }
 
@@ -120,63 +173,6 @@ allprojects {
         jvmArgs("-Djava.awt.headless=true")
         jvmArgs("-Dapple.awt.UIElement=true")
       }
-    }
-  }
-}
-
-subprojects {
-  ktlint {
-    reporters {
-      reporter(HTML)
-    }
-  }
-
-  plugins.withId("com.android.base") {
-    val sdkVersion =
-      libs.versions.sdk
-        .get()
-        .toInt()
-
-    extensions.configure<CommonExtension> {
-      compileSdk {
-        version =
-          release(sdkVersion) {
-            minorApiLevel = 1
-          }
-      }
-
-      defaultConfig.apply {
-        minSdk {
-          version = release(sdkVersion)
-        }
-      }
-
-      compileOptions.apply {
-        sourceCompatibility = VERSION_21
-        targetCompatibility = VERSION_21
-      }
-
-      lint.apply {
-        abortOnError = true
-        checkAllWarnings = true
-        warningsAsErrors = true
-        checkTestSources = true
-        checkDependencies = true
-        checkReleaseBuilds = false
-        lintConfig = rootDir.resolve("config/lint/lint.xml")
-        textReport = true
-        sarifReport = true
-      }
-
-      packaging.resources.excludes +=
-        listOf(
-          "**/*.kotlin_module",
-          "**/*.version",
-          "**/kotlin/**",
-          "**/*.txt",
-          "**/*.xml",
-          "**/*.properties",
-        )
     }
   }
 }
