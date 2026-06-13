@@ -140,8 +140,10 @@ subprojects {
             "-Xlint:all",
             // Ignore "warning: No processor claimed any of these annotations"
             "-Xlint:-processing",
-            "-Xmaxerrs", "10000",
-            "-Xmaxwarns", "10000",
+            "-Xmaxerrs",
+            "10000",
+            "-Xmaxwarns",
+            "10000",
           ),
         )
         encoding = "utf-8"
