@@ -173,18 +173,6 @@ subprojects {
         },
       )
     }
-
-    tasks.configureEach {
-      when (this) {
-        is JavaForkOptions -> {
-          // should improve memory on a 64bit JVM
-          jvmArgs("-XX:+UseCompressedOops")
-          // should avoid GradleWorkerMain to steal focus
-          jvmArgs("-Djava.awt.headless=true")
-          jvmArgs("-Dapple.awt.UIElement=true")
-        }
-      }
-    }
   }
 
   // Compose/Paging opt-in markers only exist in :app; opting in here (com.android.application,
