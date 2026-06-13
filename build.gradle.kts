@@ -29,7 +29,7 @@ idea {
 }
 
 tasks.withType<Wrapper>().configureEach {
-  distributionType = Wrapper.DistributionType.ALL
+  distributionType = Wrapper.DistributionType.BIN
 }
 
 allprojects {
@@ -91,7 +91,6 @@ allprojects {
         )
       compilerArgs.addAll(listOf("-Xmaxerrs", "10000", "-Xmaxwarns", "10000"))
       encoding = "utf-8"
-      isFork = true
     }
   }
 
@@ -107,8 +106,9 @@ allprojects {
     // For mockito to work with JDK 21
     jvmArgs("-Dnet.bytebuddy.experimental=true")
 
-    val maxWorkerCount = gradle.startParameter.maxWorkerCount
-    maxParallelForks = if (maxWorkerCount < 2) 1 else maxWorkerCount / 2
+    // Derived from the machine (not gradle.startParameter) so the value is stable across
+    // configuration-cache reuse. Half the cores matches the previous behaviour.
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
   }
 
   tasks.configureEach {

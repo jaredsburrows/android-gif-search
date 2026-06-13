@@ -98,7 +98,6 @@ android {
       isIncludeAndroidResources = true
     }
     animationsDisabled = true
-    execution = "ANDROIDX_TEST_ORCHESTRATOR"
   }
 
   dependenciesInfo {
@@ -217,7 +216,6 @@ dependencies {
   testImplementation(libs.robolectric)
 
   // Android Tests
-  androidTestUtil(libs.androidx.test.orchestrator)
   androidTestImplementation(projects.testResources)
   androidTestImplementation(libs.androidx.test.annotation)
   androidTestImplementation(libs.androidx.test.core)

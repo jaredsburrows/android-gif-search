@@ -1,6 +1,5 @@
 package com.burrowsapps.gif.search.data.repository
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.data.api.GifService
 import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.test.TestFileUtils.MOCK_SERVER_URL
@@ -11,7 +10,6 @@ import okhttp3.Protocol.HTTP_1_1
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
@@ -20,7 +18,6 @@ import org.mockito.kotlin.whenever
 import retrofit2.Response
 import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 
-@RunWith(AndroidJUnit4::class)
 class GifRepositoryTest {
   private val service = mock<GifService>()
   private val next = "0.0"

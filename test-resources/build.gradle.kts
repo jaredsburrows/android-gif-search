@@ -10,13 +10,10 @@ android {
 }
 
 tasks.register("updateTestFiles") {
+  // Resolve the output dir at configuration time so the doLast lambda captures only a
+  // File (configuration-cache safe), not the Project via android.sourceSets.
+  val resourcesFolder = layout.projectDirectory.dir("src/main/resources").asFile
   doLast {
-    // test-shared/src/main/resources
-    val resourcesFolder =
-      android.sourceSets["main"]
-        .resources.srcDirs
-        .first()
-
     val testData =
       mapOf(
         // Show enough to emulate a filtered "search" for testing
