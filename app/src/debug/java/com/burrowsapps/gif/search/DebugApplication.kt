@@ -18,13 +18,28 @@ class DebugApplication : MainApplication() {
         .penaltyDeath()
         .build(),
     )
+    // This is detectAll() minus detectIncorrectContextUse(). Once the license screen's WebView is
+    // created, WebView/Chromium registers an application-scoped ComponentCallbacks that reads
+    // ViewConfiguration from a non-UI context on every configuration change, raising an
+    // IncorrectContextUseViolation (https://issuetracker.google.com/issues/296928070). That is not
+    // fixable from app code and would kill penaltyDeath() on rotation, so it is the only detector
+    // left off; everything else is fatal.
     StrictMode.setVmPolicy(
       StrictMode.VmPolicy
         .Builder()
-        .detectAll()
+        .detectActivityLeaks()
+        .detectLeakedClosableObjects()
+        .detectLeakedRegistrationObjects()
+        .detectLeakedSqlLiteObjects()
+        .detectContentUriWithoutPermission()
+        .detectFileUriExposure()
+        .detectCleartextNetwork()
+        .detectUntaggedSockets()
+        .detectCredentialProtectedWhileLocked()
+        .detectImplicitDirectBoot()
+        .detectUnsafeIntentLaunch()
         .penaltyLog()
-        // TODO: go back from license page
-//        .penaltyDeath()
+        .penaltyDeath()
         .build(),
     )
   }
