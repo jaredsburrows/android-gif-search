@@ -2,6 +2,7 @@ package com.burrowsapps.gif.search.ui.giflist
 
 import android.content.ClipboardManager
 import android.content.Context
+import android.provider.MediaStore
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.isDialog
@@ -18,6 +19,7 @@ import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.di.ApiConfigModule
 import com.burrowsapps.gif.search.di.AppConfigModule
 import com.burrowsapps.gif.search.test.TestFileUtils.MOCK_SERVER_PORT
+import com.burrowsapps.gif.search.test.TestFileUtils.MOCK_SERVER_URL
 import com.burrowsapps.gif.search.test.TestFileUtils.getMockGifResponse
 import com.burrowsapps.gif.search.test.TestFileUtils.getMockResponse
 import com.burrowsapps.gif.search.test.onBackPressed
@@ -27,6 +29,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.android.testing.UninstallModules
+import kotlinx.coroutines.runBlocking
 import leakcanary.DetectLeaksAfterTestSuccess
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -203,6 +206,28 @@ class GifScreenTest {
   }
 
   @Test
+  fun testSaveGifToGalleryReturnsTrueOnSuccess() {
+    val gifUrl = "$MOCK_SERVER_URL/save-to-gallery-test.gif"
+
+    val saved = runBlocking { saveGifToGallery(context = context, gifUrl = gifUrl) }
+
+    deleteSavedGifs()
+
+    assertThat(saved).isTrue()
+  }
+
+  @Test
+  fun testSaveGifToGalleryReturnsFalseWhenDownloadFails() {
+    val missingUrl = "$MOCK_SERVER_URL/does-not-exist"
+
+    val saved = runBlocking { saveGifToGallery(context = context, gifUrl = missingUrl) }
+
+    deleteSavedGifs()
+
+    assertThat(saved).isFalse()
+  }
+
+  @Test
   fun testSearchAndCancelViaHardwareBackButton() {
     enterSearchMode()
 
@@ -257,5 +282,14 @@ class GifScreenTest {
     composeTestRule.onNode(hasSetTextAction()).performTextInput(searchText)
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
+  }
+
+  /** Removes any GIFs this test wrote to the shared gallery (Pictures/GIF Search). */
+  private fun deleteSavedGifs() {
+    context.contentResolver.delete(
+      MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+      "${MediaStore.Images.Media.RELATIVE_PATH} LIKE ?",
+      arrayOf("Pictures/GIF Search%"),
+    )
   }
 }
