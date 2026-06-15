@@ -84,6 +84,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -185,8 +186,11 @@ private fun TheContent(
     val gridState = rememberLazyGridState()
     val focusManager = LocalFocusManager.current
 
-    // Calculate cell size once, outside the items block
+    // Calculate sizes once, outside the items block
     val cellSizePx = with(LocalDensity.current) { GifCellSize.roundToPx() }
+    val dialogSizePx = with(LocalDensity.current) { GifDialogSize.roundToPx() }
+    // Scope tied to this screen, not the dialog, so clipboard/snackbar work survives dismissal
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(gridState) {
       snapshotFlow { gridState.isScrollInProgress }.collect { isScrolling ->
@@ -208,6 +212,7 @@ private fun TheContent(
           currentSelectedItem = currentSelectedItem.value,
           onDismiss = { openDialog.value = false },
           hostState = hostState,
+          coroutineScope = coroutineScope,
         )
       }
 
@@ -261,12 +266,9 @@ private fun TheContent(
                   .semantics {
                     contentDescription = gifImageContentDesc
                   }.clickable {
-                    // Preload full-size GIF before dialog opens for faster display
-                    Glide
-                      .with(context)
-                      .asGif()
-                      .load(item.gifUrl)
-                      .preload()
+                    // Warm Glide's cache with the exact request the dialog will use, so it shows
+                    // instantly and decodes at the dialog's size rather than full resolution.
+                    loadGif(context = context, imageUrl = item.gifUrl, size = dialogSizePx).preload()
                     openDialog.value = true
                     currentSelectedItem.value = item
                   },
@@ -274,11 +276,10 @@ private fun TheContent(
               // Remember Glide request, invalidate on URL, context, or size changes
               // Context changes on configuration change, cellSizePx changes on density change
               val requestBuilder =
-                remember(item.tinyGifUrl, item.tinyGifPreviewUrl, context, cellSizePx) {
+                remember(item.tinyGifUrl, context, cellSizePx) {
                   loadGif(
                     context = context,
                     imageUrl = item.tinyGifUrl,
-                    thumbnailUrl = item.tinyGifPreviewUrl,
                     size = cellSizePx,
                   )
                 }
@@ -319,12 +320,13 @@ private fun GifDialog(
   currentSelectedItem: GifImageInfo?,
   onDismiss: () -> Unit,
   hostState: SnackbarHostState,
+  coroutineScope: CoroutineScope,
 ) {
   if (currentSelectedItem == null) return
 
   val clipboardManager = LocalClipboard.current
   val context = LocalContext.current
-  val coroutineScope = rememberCoroutineScope()
+  val dialogSizePx = with(LocalDensity.current) { GifDialogSize.roundToPx() }
   val gifImageDialogContentDesc = stringResource(R.string.gif_image_dialog_content_description)
   val copiedToClipboardMsg = stringResource(R.string.copied_to_clipboard)
   val copyUrlText = stringResource(R.string.copy_url)
@@ -357,11 +359,11 @@ private fun GifDialog(
       ) {
         // Memoized so the RequestBuilder is not recreated on every recomposition
         val requestBuilder =
-          remember(currentSelectedItem.gifUrl, currentSelectedItem.gifPreviewUrl, context) {
+          remember(currentSelectedItem.gifUrl, context, dialogSizePx) {
             loadGif(
               context = context,
               imageUrl = currentSelectedItem.gifUrl,
-              thumbnailUrl = currentSelectedItem.gifPreviewUrl,
+              size = dialogSizePx,
             )
           }
 
@@ -466,25 +468,18 @@ internal suspend fun saveGifToGallery(
     }
   }
 
+// Landscapist applies this builder via .apply(BaseRequestOptions), which keeps override/signature/
+// dontTransform but drops .thumbnail(), so a progressive thumbnail here would be dead code. Use the
+// size to downsample instead of decoding at full resolution.
 private fun loadGif(
   context: Context,
   imageUrl: String,
-  thumbnailUrl: String,
   size: Int = Target.SIZE_ORIGINAL,
-): RequestBuilder<GifDrawable> {
-  val request = Glide.with(context).asGif()
-  val thumbnailRequest =
-    request
-      .load(thumbnailUrl)
-      .override(size)
-      .dontTransform()
-      .signature(ObjectKey(thumbnailUrl))
-  val imageRequest =
-    request
-      .load(imageUrl)
-      .thumbnail(thumbnailRequest)
-      .override(size)
-      .dontTransform()
-      .signature(ObjectKey(imageUrl))
-  return imageRequest
-}
+): RequestBuilder<GifDrawable> =
+  Glide
+    .with(context)
+    .asGif()
+    .load(imageUrl)
+    .override(size)
+    .dontTransform()
+    .signature(ObjectKey(imageUrl))

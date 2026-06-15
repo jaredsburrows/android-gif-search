@@ -14,7 +14,6 @@ import com.burrowsapps.gif.search.ui.giflist.GifImageInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
 internal class GifRemoteMediator(
@@ -24,126 +23,36 @@ internal class GifRemoteMediator(
   private val dispatcher: CoroutineDispatcher,
 ) : RemoteMediator<Int, GifImageInfo>() {
   companion object {
-    /**
-     * Number of refreshes between cleanup operations.
-     *
-     * Why 5? Based on empirical analysis of user behavior and performance characteristics:
-     *
-     * 1. **User behavior patterns:**
-     *    - Average session: 10-20 pull-to-refreshes
-     *    - Value of 5 = 2-4 cleanups per session (optimal maintenance frequency)
-     *
-     * 2. **Performance impact:**
-     *    - Reduces cleanup calls by 80% compared to every refresh
-     *    - With LEFT JOIN optimization: ~10ms per cleanup (negligible)
-     *    - Heavy user (20 refreshes): 4 cleanups = 40ms total (imperceptible)
-     *
-     * 3. **Database growth control:**
-     *    - Limits orphan accumulation to ~5x normal query size
-     *    - Example: If each query caches 45 GIFs, max 225 orphans before cleanup
-     *    - Prevents unbounded growth while avoiding excessive cleanup overhead
-     *
-     * 4. **Alternative values considered:**
-     *    - 3: More frequent, slightly higher CPU usage, marginal benefit
-     *    - 10: Less overhead, but allows 2x more orphan accumulation
-     *    - 5: Sweet spot between cleanliness and performance
-     */
+    // Run orphan cleanup at most once every CLEANUP_INTERVAL refreshes (count-based throttling)...
     private const val CLEANUP_INTERVAL = 5
 
-    /**
-     * Track last cleanup time per query to implement time-based throttling.
-     *
-     * Key: query key (e.g., "cats", "dogs", "" for trending)
-     * Value: timestamp of last cleanup in milliseconds
-     *
-     * Thread-safety: Uses ConcurrentHashMap to allow safe concurrent access
-     * from multiple coroutines/threads without explicit synchronization.
-     */
-    private val lastCleanupTime = ConcurrentHashMap<String, Long>()
-
-    /**
-     * Minimum time between cleanups (5 minutes).
-     *
-     * Ensures cleanup runs at least every 5 minutes even if user doesn't
-     * pull-to-refresh frequently. Prevents database bloat in long sessions
-     * with infrequent refreshes (e.g., user leaves app open and scrolls).
-     */
+    // ...or once enough time has passed since the last cleanup (time-based throttling).
     private val MIN_CLEANUP_INTERVAL_MS = TimeUnit.MINUTES.toMillis(5)
-
-    /**
-     * Track refresh count per query to implement count-based throttling.
-     *
-     * Key: query key (e.g., "cats", "dogs", "" for trending)
-     * Value: number of refreshes for that specific query
-     *
-     * This is per-query (not global) to ensure each query gets consistent cleanup
-     * behavior regardless of other active queries.
-     *
-     * Thread-safety: Uses ConcurrentHashMap to allow safe concurrent access.
-     * Note: While the map itself is thread-safe, the increment operation
-     * (get-modify-put) uses compute() for atomic updates.
-     */
-    private val refreshCounters = ConcurrentHashMap<String, Int>()
   }
 
+  // Throttling state is per-mediator: each instance handles exactly one queryKey, and Paging invokes
+  // load() serially, so plain fields are safe. This replaces the previous companion-object
+  // ConcurrentHashMaps, which were keyed by every distinct search and never evicted, growing
+  // unbounded for the whole process lifetime.
+  private var refreshCount = 0
+  private var lastCleanupTime = 0L
+
   /**
-   * Determines whether cleanup should run based on throttling rules.
-   *
-   * Cleanup runs when:
-   * 1. Every Nth refresh for this specific query (count-based throttling)
-   * 2. At least MIN_CLEANUP_INTERVAL_MS has passed since last cleanup (time-based throttling)
-   *
-   * Both throttling mechanisms are per-query to ensure consistent cleanup behavior
-   * regardless of other active queries.
-   *
-   * This prevents performance issues on every refresh while still keeping the database clean.
-   *
-   * Thread-safety: Uses atomic compute() operations on ConcurrentHashMap to ensure
-   * increment operations are thread-safe even under concurrent access.
-   *
-   * Note: Counter is incremented regardless of whether cleanup runs, because we want
-   * to track refresh frequency. The timestamp is only updated after successful cleanup
-   * to ensure accurate time-based throttling.
+   * Whether orphan cleanup should run for this load. Counts every refresh and runs cleanup on every
+   * CLEANUP_INTERVAL-th refresh, or whenever at least MIN_CLEANUP_INTERVAL_MS has elapsed since the
+   * last successful cleanup. The counter advances on every refresh; the timestamp only advances when
+   * cleanup actually completes (see recordCleanupCompleted).
    */
   private fun shouldRunCleanup(): Boolean {
-    // Atomically increment counter for THIS query only
-    // compute() ensures get-modify-put is atomic even if multiple threads access simultaneously
-    val currentCount =
-      refreshCounters.compute(queryKey) { _, currentValue ->
-        (currentValue ?: 0) + 1
-      } ?: 1 // Fallback (should never happen, but defensive)
-
-    // Count-based throttling: Only run every CLEANUP_INTERVAL refreshes for this query
-    val shouldRunByCount = currentCount % CLEANUP_INTERVAL == 0
-
-    // Time-based throttling: Only run if enough time has passed
-    val currentTime = System.currentTimeMillis()
-    val lastTime = lastCleanupTime.getOrDefault(queryKey, 0L)
-    val shouldRunByTime = (currentTime - lastTime) >= MIN_CLEANUP_INTERVAL_MS
-
-    // Return true if either condition is met (timestamp updated after cleanup completes)
+    refreshCount++
+    val shouldRunByCount = refreshCount % CLEANUP_INTERVAL == 0
+    val shouldRunByTime = (System.currentTimeMillis() - lastCleanupTime) >= MIN_CLEANUP_INTERVAL_MS
     return shouldRunByCount || shouldRunByTime
   }
 
-  /**
-   * Records that cleanup has successfully completed for this query.
-   *
-   * Thread-safety: Uses ConcurrentHashMap.compute() to atomically update the timestamp,
-   * preventing race conditions where multiple threads might try to update simultaneously.
-   * While simple put() would be atomic for a single write, using compute() or putIfAbsent()
-   * ensures we always record a timestamp close to when cleanup actually ran, which is
-   * important for accurate time-based throttling.
-   *
-   * The race condition with simple put() is acceptable in practice (cleanup might run
-   * slightly more often than intended), but using compute() is more correct and documents
-   * the intent clearly.
-   */
+  /** Records that cleanup has successfully completed, resetting the time-based throttle. */
   private fun recordCleanupCompleted() {
-    val currentTime = System.currentTimeMillis()
-    // Use compute() to atomically update, documenting that we care about race-free updates
-    lastCleanupTime.compute(queryKey) { _, _ ->
-      currentTime
-    }
+    lastCleanupTime = System.currentTimeMillis()
   }
 
   override suspend fun initialize(): InitializeAction {

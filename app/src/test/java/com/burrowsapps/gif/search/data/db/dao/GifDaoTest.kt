@@ -40,9 +40,12 @@ class GifDaoTest {
       dao.upsertAll(listOf(entity, entity2))
       assertThat(dao.count()).isEqualTo(2)
 
+      // IGNORE strategy: re-inserting an existing GIF (same tinyGifUrl) keeps the original row,
+      // it does not replace it (which would cascade-delete dependent query_results rows).
       val updated = entity2.copy(gifPreviewUrl = "changed")
       dao.upsertAll(listOf(updated))
-      assertThat(dao.getById("tiny2")?.gifPreviewUrl).isEqualTo("changed")
+      assertThat(dao.getById("tiny2")?.gifPreviewUrl).isEqualTo("gifPrev2")
+      assertThat(dao.count()).isEqualTo(2)
 
       dao.clearAll()
       assertThat(dao.count()).isEqualTo(0)

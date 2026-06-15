@@ -4,11 +4,11 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 /**
- * The main application class for this app.
+ * The base application class for this app.
  *
- * This class is annotated with @HiltAndroidApp, which enables the Hilt dependency injection
- * framework for the entire app. It also extends the Application class, and overrides its onCreate()
- * method to set the default night mode and enable compatibility mode for vector drawables.
+ * Annotated with @HiltAndroidApp to generate the Hilt dependency-injection components for the whole
+ * app. It is left `open` so the debug build can subclass it (see DebugApplication) to plant Timber
+ * and install StrictMode.
  */
 @HiltAndroidApp
 open class MainApplication : Application()
