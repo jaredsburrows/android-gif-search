@@ -9,5 +9,16 @@
   <application
     android:icon="@mipmap/ic_launcher"
     android:networkSecurityConfig="@xml/debug_network_security_config"
-    android:usesCleartextTraffic="true" />
+    android:usesCleartextTraffic="true">
+    <activity
+      android:name=".MainActivity"
+      android:exported="true">
+      <!-- Expose MainActivity to the monkey/UI-exerciser in debug builds only (not in release). -->
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.MONKEY" />
+      </intent-filter>
+    </activity>
+  </application>
 </manifest>

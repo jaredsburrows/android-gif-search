@@ -8,7 +8,10 @@ import com.burrowsapps.gif.search.data.db.entity.GifEntity
 
 @Dao
 internal interface GifDao {
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  // IGNORE, not REPLACE: GIF content is immutable (keyed by its tinyGifUrl), and REPLACE compiles to
+  // DELETE+INSERT, which would cascade-delete every query_results row referencing the GIF across all
+  // searches (ON DELETE CASCADE), silently corrupting other queries' cached pages.
+  @Insert(onConflict = OnConflictStrategy.IGNORE)
   suspend fun upsertAll(items: List<GifEntity>)
 
   @Query("DELETE FROM gifs")
