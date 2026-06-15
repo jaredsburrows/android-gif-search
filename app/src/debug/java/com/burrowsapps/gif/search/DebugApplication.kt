@@ -1,6 +1,8 @@
 package com.burrowsapps.gif.search
 
 import android.os.StrictMode
+import android.os.strictmode.IncorrectContextUseViolation
+import android.os.strictmode.Violation
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -18,29 +20,31 @@ class DebugApplication : MainApplication() {
         .penaltyDeath()
         .build(),
     )
-    // This is detectAll() minus detectIncorrectContextUse(). Once the license screen's WebView is
-    // created, WebView/Chromium registers an application-scoped ComponentCallbacks that reads
-    // ViewConfiguration from a non-UI context on every configuration change, raising an
-    // IncorrectContextUseViolation (https://issuetracker.google.com/issues/296928070). That is not
-    // fixable from app code and would kill penaltyDeath() on rotation, so it is the only detector
-    // left off; everything else is fatal.
+    // VmPolicy can't use penaltyDeath() directly (and there is no detectAll()-minus-one API): once
+    // the license screen's WebView is created, WebView/Chromium raises an IncorrectContextUseViolation
+    // from an application-scoped callback on every configuration change. Keep detectAll() + log, and
+    // crash on every violation via penaltyListener EXCEPT that one framework issue (see isFatalViolation).
     StrictMode.setVmPolicy(
       StrictMode.VmPolicy
         .Builder()
-        .detectActivityLeaks()
-        .detectLeakedClosableObjects()
-        .detectLeakedRegistrationObjects()
-        .detectLeakedSqlLiteObjects()
-        .detectContentUriWithoutPermission()
-        .detectFileUriExposure()
-        .detectCleartextNetwork()
-        .detectUntaggedSockets()
-        .detectCredentialProtectedWhileLocked()
-        .detectImplicitDirectBoot()
-        .detectUnsafeIntentLaunch()
+        .detectAll()
         .penaltyLog()
-        .penaltyDeath()
-        .build(),
+        .penaltyListener(mainExecutor) { violation ->
+          if (isFatalViolation(violation)) throw violation
+        }.build(),
     )
+  }
+
+  internal companion object {
+    /**
+     * Whether a [Violation] should crash the debug build (the penaltyDeath() equivalent).
+     *
+     * Every VmPolicy violation is fatal except [IncorrectContextUseViolation]. Once the license
+     * screen's WebView exists, WebView/Chromium registers an application-scoped ComponentCallbacks
+     * that reads ViewConfiguration from a non-UI context on every configuration change; that fires
+     * on rotation, is not fixable from app code (https://issuetracker.google.com/issues/296928070),
+     * and so is logged rather than fatal.
+     */
+    internal fun isFatalViolation(violation: Violation): Boolean = violation !is IncorrectContextUseViolation
   }
 }
