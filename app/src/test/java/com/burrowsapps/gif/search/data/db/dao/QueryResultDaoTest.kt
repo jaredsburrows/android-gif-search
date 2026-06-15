@@ -117,4 +117,26 @@ class QueryResultDaoTest {
       val remain = dao.allForQuery("")
       assertThat(remain).isEmpty()
     }
+
+  @Test
+  fun reinsertingExistingGif_keepsMappingsAcrossQueries() =
+    runBlocking {
+      val gif = GifEntity("shared", "p", "g", "gp")
+      db.gifDao().upsertAll(listOf(gif))
+      // The same GIF is referenced by two different searches.
+      dao.insertAll(
+        listOf(
+          QueryResultEntity("", "shared", 0),
+          QueryResultEntity("cats", "shared", 0),
+        ),
+      )
+
+      // The GIF reappears (later page / another search) and is re-inserted. With IGNORE this is a
+      // no-op; with REPLACE it would DELETE+INSERT the gifs row and cascade-delete both mappings.
+      db.gifDao().upsertAll(listOf(gif.copy(gifUrl = "changed")))
+
+      assertThat(dao.allForQuery("")).hasSize(1)
+      assertThat(dao.allForQuery("cats")).hasSize(1)
+      assertThat(db.gifDao().count()).isEqualTo(1)
+    }
 }
