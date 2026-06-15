@@ -1,41 +1,24 @@
 package com.burrowsapps.gif.search.data.api.model
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.burrowsapps.gif.search.di.ApiConfigModule
+import com.burrowsapps.gif.search.di.NetworkModule
 import com.google.common.truth.Truth.assertThat
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
-import dagger.hilt.android.testing.UninstallModules
-import jakarta.inject.Inject
 import org.junit.Assert.assertThrows
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 
-@HiltAndroidTest
-@UninstallModules(ApiConfigModule::class)
-@Config(application = HiltTestApplication::class)
-@RunWith(AndroidJUnit4::class)
 class MediaDtoTest {
   private val gifDto = GifDto()
   private var defaultSut = MediaDto()
   private lateinit var sut: MediaDto
 
-  @get:Rule(order = 0)
-  internal val hiltRule = HiltAndroidRule(this)
-
-  @Inject
   internal lateinit var moshi: Moshi
 
   @Before
   fun setUp() {
-    hiltRule.inject()
     sut = MediaDto(tinyGif = gifDto, gif = gifDto)
+    moshi = NetworkModule().provideMoshi()
   }
 
   @Test

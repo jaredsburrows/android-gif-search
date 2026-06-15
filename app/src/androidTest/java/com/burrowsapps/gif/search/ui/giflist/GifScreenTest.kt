@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -75,7 +75,7 @@ class GifScreenTest {
     // Disable auto-advance so that Compose does not wait indefinitely for idle.
     // Landscapist 2.9.x introduces produceState coroutines (rememberImageSourceFile) and
     // explicit Loading state emissions that, combined with animated GIF drawables, prevent
-    // Compose from ever reaching a fully idle state within the test timeout.
+    // Jetpack Compose of ever reaching a fully idle state within the test timeout.
     composeTestRule.mainClock.autoAdvance = false
     composeTestRule.mainClock.advanceTimeByFrame()
     composeTestRule.waitForIdle()
@@ -133,7 +133,7 @@ class GifScreenTest {
 
   @Test
   fun testTrendingThenClickOpenDialog() {
-    // Wait until the gifs are showing
+    // Wait until the GIFs are showing
     composeTestRule.waitUntil(
       condition = {
         composeTestRule.mainClock.advanceTimeByFrame()
@@ -166,7 +166,7 @@ class GifScreenTest {
 
   @Test
   fun testTrendingThenClickOpenDialogAndCopyLink() {
-    // Wait until the gifs are showing
+    // Wait until the GIFs are showing
     composeTestRule.waitUntil(
       condition = {
         composeTestRule.mainClock.advanceTimeByFrame()

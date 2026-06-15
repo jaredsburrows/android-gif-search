@@ -1,27 +1,24 @@
 package com.burrowsapps.gif.search.data.api.model
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.data.api.model.NetworkResult.Companion.safeApiCall
 import com.burrowsapps.gif.search.data.api.model.NetworkResult.Empty
 import com.burrowsapps.gif.search.data.api.model.NetworkResult.Error
 import com.burrowsapps.gif.search.data.api.model.NetworkResult.Success
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Test
-import org.junit.runner.RunWith
 import retrofit2.Response
 import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 
-@RunWith(AndroidJUnit4::class)
 class NetworkResultTest {
   @Test
   fun testSafeApiCallReturnsSuccessWhenResponseIsSuccessfulAndHasBody() =
     runTest {
       val result =
-        runBlocking(IO) {
+        withContext(IO) {
           safeApiCall {
             Response.success("body")
           }
@@ -35,7 +32,7 @@ class NetworkResultTest {
   fun testSafeApiCallReturnsEmptyWhenResponseIsSuccessfulAndHasNoBody() =
     runTest {
       val result =
-        runBlocking(IO) {
+        withContext(IO) {
           safeApiCall {
             Response.success(null)
           }
@@ -49,7 +46,7 @@ class NetworkResultTest {
   fun testSafeApiCallReturnsErrorWhenResponseIsNotSuccessful() =
     runTest {
       val result =
-        runBlocking(IO) {
+        withContext(IO) {
           safeApiCall {
             Response.error<String>(HTTP_INTERNAL_ERROR, "error".toResponseBody())
           }
@@ -63,7 +60,7 @@ class NetworkResultTest {
   fun testSafeApiCallReturnsErrorWhenAPICallThrowsException() =
     runTest {
       val result =
-        runBlocking(IO) {
+        withContext(IO) {
           safeApiCall<String> {
             throw RuntimeException("API call failed")
           }

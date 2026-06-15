@@ -215,7 +215,7 @@ class GifRemoteMediatorTest {
   fun error_returnsError() =
     runTest(dispatcher) {
       whenever(repository.getTrendingResults(anyOrNull())).thenReturn(
-        NetworkResult.Error<GifResponseDto>(
+        NetworkResult.Error(
           message = "boom",
         ),
       )
@@ -353,7 +353,7 @@ class GifRemoteMediatorTest {
       assertThat(allGifsAfterCats).hasSize(2)
       assertThat(allGifsAfterCats.all { it.tinyGifUrl.contains("cat") }).isTrue()
 
-      // Now REFRESH the same "cats" query multiple times to trigger cleanup
+      // Now REFRESH the same "cats" query multiple times to trigger clean up
       // Cleanup runs every 5th refresh due to throttling
       whenever(repository.getSearchResults("cats", null))
         .thenReturn(NetworkResult.Success(response(2, "dog", next = "5.0")))
