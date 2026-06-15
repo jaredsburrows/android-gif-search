@@ -53,7 +53,7 @@ jobs:
         run: ./gradlew ktlintCheck assembleDebug lintDebug testDebug -s --continue
 
       - name: Publish Unit Test Report
-        uses: EnricoMi/publish-unit-test-result-action@v2.23.0
+        uses: EnricoMi/publish-unit-test-result-action@v2.24.0
         if: always()
         with:
           comment_mode: off
@@ -138,7 +138,7 @@ jobs:
           script: ./gradlew connectedDebugAndroidTest -s || ./gradlew connectedDebugAndroidTest -s
 
       - name: Publish Integration Test Report
-        uses: EnricoMi/publish-unit-test-result-action@v2.23.0
+        uses: EnricoMi/publish-unit-test-result-action@v2.24.0
         if: always()
         with:
           comment_mode: off
