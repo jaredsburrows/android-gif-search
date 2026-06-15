@@ -211,18 +211,13 @@ class GifScreenTest {
 
     val saved = runBlocking { saveGifToGallery(context = context, gifUrl = gifUrl) }
 
-    // Always clean up the MediaStore entry this test created, even if the assertion fails.
     deleteSavedGifs()
 
-    // Regression for the broken "Save to Gallery": before forcing DiskCacheStrategy.DATA,
-    // Glide.asFile() threw NoResultEncoderAvailableException (default strategy ALL has no File
-    // encoder), so saveGifToGallery always returned false and nothing was ever saved.
     assertThat(saved).isTrue()
   }
 
   @Test
   fun testSaveGifToGalleryReturnsFalseWhenDownloadFails() {
-    // The mock server answers any non-image path with 404, so Glide cannot produce a file.
     val missingUrl = "$MOCK_SERVER_URL/does-not-exist"
 
     val saved = runBlocking { saveGifToGallery(context = context, gifUrl = missingUrl) }

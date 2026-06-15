@@ -438,10 +438,6 @@ internal suspend fun saveGifToGallery(
 ): Boolean =
   withContext(Dispatchers.IO) {
     try {
-      // Fetch the raw GIF bytes from Glide — likely already in disk cache from being displayed.
-      // asFile() must use DiskCacheStrategy.DATA (or NONE): the module's default strategy is ALL,
-      // which has no result encoder for File and makes submit().get() throw
-      // NoResultEncoderAvailableException, so saving would always fail.
       val file =
         Glide
           .with(context.applicationContext)
