@@ -73,6 +73,7 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
@@ -431,18 +432,22 @@ private fun GifDialog(
  * the GIF was already loaded for display), then writes it to Pictures/GIF Search/.
  * No WRITE_EXTERNAL_STORAGE permission required on Android 10+ (API 29+).
  */
-private suspend fun saveGifToGallery(
+internal suspend fun saveGifToGallery(
   context: Context,
   gifUrl: String,
 ): Boolean =
   withContext(Dispatchers.IO) {
     try {
-      // Fetch from Glide — likely already in disk cache from being displayed
+      // Fetch the raw GIF bytes from Glide — likely already in disk cache from being displayed.
+      // asFile() must use DiskCacheStrategy.DATA (or NONE): the module's default strategy is ALL,
+      // which has no result encoder for File and makes submit().get() throw
+      // NoResultEncoderAvailableException, so saving would always fail.
       val file =
         Glide
           .with(context.applicationContext)
           .asFile()
           .load(gifUrl)
+          .diskCacheStrategy(DiskCacheStrategy.DATA)
           .submit()
           .get()
       val values =
