@@ -29,6 +29,7 @@ android {
     targetSdk {
       version = release(sdkVersion)
     }
+    manifestPlaceholders["applicationName"] = ".MainApplication"
 
     testApplicationId = "com.burrowsapps.gif.search.test"
     testInstrumentationRunner = "com.burrowsapps.gif.search.test.CustomTestRunner"
@@ -78,6 +79,7 @@ android {
     debug {
       applicationIdSuffix = ".debug"
       versionNameSuffix = "-dev"
+      manifestPlaceholders["applicationName"] = ".DebugApplication"
       signingConfig = signingConfigs.getByName("debug")
     }
 
@@ -98,7 +100,6 @@ android {
       isIncludeAndroidResources = true
     }
     animationsDisabled = true
-    execution = "ANDROIDX_TEST_ORCHESTRATOR"
   }
 
   dependenciesInfo {
@@ -217,7 +218,6 @@ dependencies {
   testImplementation(libs.robolectric)
 
   // Android Tests
-  androidTestUtil(libs.androidx.test.orchestrator)
   androidTestImplementation(projects.testResources)
   androidTestImplementation(libs.androidx.test.annotation)
   androidTestImplementation(libs.androidx.test.core)

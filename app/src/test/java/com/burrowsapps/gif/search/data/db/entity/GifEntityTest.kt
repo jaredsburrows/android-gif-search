@@ -1,25 +1,22 @@
 package com.burrowsapps.gif.search.data.db.entity
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class GifEntityTest {
   @Test
   fun fields_areAssigned() {
     val entity =
       GifEntity(
         tinyGifUrl = "tiny",
-        tinyGifPreviewUrl = "tinyp",
+        tinyGifPreviewUrl = "tiny-preview",
         gifUrl = "gif",
-        gifPreviewUrl = "gifp",
+        gifPreviewUrl = "gif-preview",
       )
 
     assertThat(entity.tinyGifUrl).isEqualTo("tiny")
-    assertThat(entity.tinyGifPreviewUrl).isEqualTo("tinyp")
+    assertThat(entity.tinyGifPreviewUrl).isEqualTo("tiny-preview")
     assertThat(entity.gifUrl).isEqualTo("gif")
-    assertThat(entity.gifPreviewUrl).isEqualTo("gifp")
+    assertThat(entity.gifPreviewUrl).isEqualTo("gif-preview")
   }
 }

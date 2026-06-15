@@ -11,8 +11,8 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -76,7 +76,7 @@ class GifServiceTest {
   @Test
   fun testTrendingResultsURLShouldParseCorrectly() =
     runTest {
-      val response = runBlocking(IO) { sut.fetchTrendingResults(null) }
+      val response = withContext(IO) { sut.fetchTrendingResults(null) }
       val body = response.body()!!
 
       assertThat(
@@ -91,7 +91,7 @@ class GifServiceTest {
   @Test
   fun testTrendingResultsURLPreviewShouldParseCorrectly() =
     runTest {
-      val response = runBlocking(IO) { sut.fetchTrendingResults(null) }
+      val response = withContext(IO) { sut.fetchTrendingResults(null) }
       val body = response.body()!!
 
       assertThat(
@@ -106,7 +106,7 @@ class GifServiceTest {
   @Test
   fun testSearchResultsURLShouldParseCorrectly() =
     runTest {
-      val response = runBlocking(IO) { sut.fetchSearchResults("hello", null) }
+      val response = withContext(IO) { sut.fetchSearchResults("hello", null) }
       val body = response.body()!!
 
       assertThat(
@@ -121,7 +121,7 @@ class GifServiceTest {
   @Test
   fun testSearchResultsURLPreviewShouldParseCorrectly() =
     runTest {
-      val response = runBlocking(IO) { sut.fetchSearchResults("hello", null) }
+      val response = withContext(IO) { sut.fetchSearchResults("hello", null) }
       val body = response.body()!!
 
       assertThat(

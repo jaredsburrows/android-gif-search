@@ -7,49 +7,50 @@ on:
   pull_request:
     types: [ opened, labeled, unlabeled, synchronize ]
 
+# Cancel superseded runs for the same PR/branch (saves runner minutes on rapid pushes, e.g.
+# Renovate, and gives faster feedback on the latest commit); let master runs finish.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 env:
-  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
   JAVA_VERSION: 25
   ANDROID_API_LEVEL: 36
 
-jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+permissions:
+  checks: write
+  pull-requests: write
 
-    permissions:
-      checks: write
-      pull-requests: write
+jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Project
         uses: actions/checkout@v6.0.3
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v6
 
       - name: Configure JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v5.2.0
         with:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
-          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
-      - run: ./gradlew --version
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - name: Run Ktlint Check On All Sources
-        run: ./gradlew ktlintCheck -s
+      - name: Cache Robolectric android-all jars
+        uses: actions/cache@v5.0.5
+        with:
+          path: ~/.m2/repository/org/robolectric
+          key: robolectric-${{ hashFiles('gradle/libs.versions.toml') }}
+          restore-keys: |
+            robolectric-
 
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug -s
-
-      - name: Run Debug Lint Checks
-        run: ./gradlew lintDebug -s
-
-      - name: Run Debug Unit Tests
-        run: ./gradlew testDebug -s
+      - name: Ktlint, Assemble, Lint, Unit Tests
+        run: ./gradlew ktlintCheck assembleDebug lintDebug testDebug -s --continue
 
       - name: Publish Unit Test Report
         uses: EnricoMi/publish-unit-test-result-action@v2.23.0
@@ -61,6 +62,47 @@ jobs:
           files: |
             app/build/test-results/**/TEST-*.xml
 
+      - name: Upload Reports
+        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: com.burrowsapps.gif.search-reports-${{ github.workflow }}-${{ github.run_id }}
+          path: |
+            app/build/reports
+            app/build/test-results
+
+      - name: Upload Debug APK artifact
+        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: com.burrowsapps.gif.search-debug-${{ github.workflow }}-${{ github.run_id }}.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+  instrumentation:
+    name: Instrumentation Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v6.0.3
+
+      - name: Configure JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v5.2.0
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: Cache AVD
         uses: actions/cache@v5.0.5
         id: avd-cache
@@ -68,13 +110,9 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ env.ANDROID_API_LEVEL }}
-
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+          key: avd-${{ runner.os }}-api${{ env.ANDROID_API_LEVEL }}-v1
+          restore-keys: |
+            avd-${{ runner.os }}-api${{ env.ANDROID_API_LEVEL }}-
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -88,7 +126,7 @@ jobs:
           disable-animations: false
           script: echo "Generated AVD snapshot for caching."
 
-      - name: Run Debug Instrumentation Tests on Android API ${{ matrix.api-level }} (Ran up to 2 times)
+      - name: Run Debug Instrumentation Tests (Ran up to 2 times)
         uses: reactivecircus/android-emulator-runner@v2.37.0
         with:
           api-level: ${{ env.ANDROID_API_LEVEL }}
@@ -109,28 +147,35 @@ jobs:
           files: |
             app/build/outputs/androidTest-results/**/TEST-*.xml
 
-      - name: Build Debug APK artifact for upload
-        run: ./gradlew assembleDebug -s
-
-      - name: Build Release APK artifact for upload
-        run: ./gradlew assembleRelease -s
-
-      - name: Upload Reports
+      - name: Upload Integration Reports
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: com.burrowsapps.gif.search-reports-${{ github.workflow }}-${{ github.run_id }}
+          name: com.burrowsapps.gif.search-androidTest-reports-${{ github.workflow }}-${{ github.run_id }}
           path: |
-            app/build/reports
-            app/build/test-results
             app/build/outputs/androidTest-results
 
-      - name: Upload Debug APK artifact
-        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
-        uses: actions/upload-artifact@v7.0.1
+  release:
+    name: Release Build (R8 smoke test)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v6.0.3
+
+      - name: Configure JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v5.2.0
         with:
-          name: com.burrowsapps.gif.search-debug-${{ github.workflow }}-${{ github.run_id }}.apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease -s
 
       - name: Upload Release APK artifact
         if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
