@@ -28,10 +28,10 @@ jobs:
 
     steps:
       - name: Checkout Project
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.0
 
       - name: Configure JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v5.2.0
+        uses: actions/setup-java@v5.4.0
         with:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
@@ -42,7 +42,7 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Cache Robolectric android-all jars
-        uses: actions/cache@v5.0.5
+        uses: actions/cache@v6.0.0
         with:
           path: ~/.m2/repository/org/robolectric
           key: robolectric-${{ hashFiles('gradle/libs.versions.toml') }}
@@ -84,10 +84,10 @@ jobs:
 
     steps:
       - name: Checkout Project
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.0
 
       - name: Configure JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v5.2.0
+        uses: actions/setup-java@v5.4.0
         with:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
@@ -104,7 +104,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Cache AVD
-        uses: actions/cache@v5.0.5
+        uses: actions/cache@v6.0.0
         id: avd-cache
         with:
           path: |
@@ -161,10 +161,10 @@ jobs:
 
     steps:
       - name: Checkout Project
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.0
 
       - name: Configure JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v5.2.0
+        uses: actions/setup-java@v5.4.0
         with:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
