@@ -6,8 +6,8 @@
    See https://developer.android.com/about/versions/12/backup-restore
 -->
 <full-backup-content>
-  <!--
- <include domain="sharedpref" path="."/>
- <exclude domain="sharedpref" path="device.xml"/>
--->
+  <!-- The Room "gif-db" is a fully re-fetchable network cache; exclude it from backup. -->
+  <exclude domain="database" path="gif-db"/>
+  <exclude domain="database" path="gif-db-wal"/>
+  <exclude domain="database" path="gif-db-shm"/>
 </full-backup-content>
