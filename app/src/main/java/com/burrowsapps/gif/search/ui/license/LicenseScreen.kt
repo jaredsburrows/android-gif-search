@@ -2,12 +2,15 @@ package com.burrowsapps.gif.search.ui.license
 
 import android.content.Context
 import android.content.res.Configuration
+import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.PlainTooltip
@@ -23,7 +26,9 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -152,25 +157,46 @@ private fun TheWebView(assetLoader: WebViewAssetLoader) {
   val context = LocalContext.current
   val runningInPreview = LocalInspectionMode.current
 
+  // Build the WebView after the first frame so its one-time Chromium init doesn't jank the
+  // navigation transition into this screen. (WebView must still be constructed on the main thread.)
+  // Read into a plain val (not a `by` delegate) so DisposableEffect's onDispose captures this
+  // composition's value rather than re-reading live state (which would destroy the new instance).
   val webView =
-    remember {
-      configuredWebView(
-        context = context,
-        assetLoader = assetLoader,
-        runningInPreview = runningInPreview,
-      )
-    }
+    produceState<WebView?>(initialValue = null) {
+      value =
+        configuredWebView(
+          context = context,
+          assetLoader = assetLoader,
+          runningInPreview = runningInPreview,
+        )
+    }.value
 
   DisposableEffect(webView) {
-    onDispose { webView.destroy() }
+    onDispose {
+      webView?.let { view ->
+        // Tear down in the documented order: stop the load and detach from the view tree before
+        // destroy(), so Chromium isn't destroyed mid-load while still attached.
+        view.stopLoading()
+        (view.parent as? ViewGroup)?.removeView(view)
+        view.removeAllViews()
+        view.destroy()
+      }
+    }
   }
 
-  AndroidView(
-    factory = { webView },
-    modifier = Modifier.fillMaxSize(),
-  ) {
-    // from "main/assets/index.html" -> "file:///android_asset/index.html"
-    it.loadUrl("https://appassets.androidplatform.net/assets/open_source_licenses.html")
+  val view = webView
+  if (view == null) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+      CircularProgressIndicator()
+    }
+  } else {
+    AndroidView(
+      factory = { view },
+      modifier = Modifier.fillMaxSize(),
+    ) {
+      // from "main/assets/index.html" -> "file:///android_asset/index.html"
+      it.loadUrl("https://appassets.androidplatform.net/assets/open_source_licenses.html")
+    }
   }
 }
 

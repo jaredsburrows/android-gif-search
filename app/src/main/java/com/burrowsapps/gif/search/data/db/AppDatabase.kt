@@ -9,9 +9,11 @@ import com.burrowsapps.gif.search.data.db.entity.GifEntity
 import com.burrowsapps.gif.search.data.db.entity.QueryResultEntity
 import com.burrowsapps.gif.search.data.db.entity.RemoteKeysEntity
 
+// version 2: added RemoteKeysEntity.lastUpdated. No migration is registered; DatabaseModule enables
+// destructive migration, which is fine because this DB is a fully re-fetchable network cache.
 @Database(
   entities = [GifEntity::class, QueryResultEntity::class, RemoteKeysEntity::class],
-  version = 1,
+  version = 2,
   exportSchema = false,
 )
 internal abstract class AppDatabase : RoomDatabase() {
