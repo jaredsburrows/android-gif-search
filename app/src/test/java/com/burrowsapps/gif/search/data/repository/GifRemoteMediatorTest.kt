@@ -557,4 +557,32 @@ class GifRemoteMediatorTest {
       assertThat(result).isInstanceOf(androidx.paging.RemoteMediator.MediatorResult.Success::class.java)
       assertThat((result as androidx.paging.RemoteMediator.MediatorResult.Success).endOfPaginationReached).isTrue()
     }
+
+  @Test
+  fun append_withAllDuplicateItems_returnsEndOfPagination() =
+    runTest(dispatcher) {
+      // First load caches 2 items with a next cursor.
+      whenever(repository.getTrendingResults(anyOrNull()))
+        .thenReturn(NetworkResult.Success(response(2, "a", next = "10.0")))
+
+      val mediator =
+        GifRemoteMediator(
+          queryKey = "",
+          repository = repository,
+          database = db,
+          dispatcher = dispatcher,
+        )
+      mediator.load(LoadType.REFRESH, emptyState())
+
+      // APPEND returns the SAME items (all duplicates) but a fresh, different cursor.
+      whenever(repository.getTrendingResults("10.0"))
+        .thenReturn(NetworkResult.Success(response(2, "a", next = "20.0")))
+
+      val result = mediator.load(LoadType.APPEND, emptyState())
+
+      // Nothing new was inserted, so pagination must end instead of spinning on fresh cursors.
+      assertThat(result).isInstanceOf(androidx.paging.RemoteMediator.MediatorResult.Success::class.java)
+      assertThat((result as androidx.paging.RemoteMediator.MediatorResult.Success).endOfPaginationReached).isTrue()
+      assertThat(db.queryResultDao().allForQuery("")).hasSize(2)
+    }
 }

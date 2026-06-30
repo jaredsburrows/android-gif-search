@@ -11,9 +11,10 @@ import com.burrowsapps.gif.search.ui.giflist.GifImageInfo
 
 @Dao
 internal interface QueryResultDao {
-  // Keep first-seen ordering stable by ignoring duplicates
+  // Keep first-seen ordering stable by ignoring duplicates. Returns the inserted row ids (-1 for a
+  // row that was ignored as a duplicate) so callers can tell how many new rows actually landed.
   @Insert(onConflict = OnConflictStrategy.IGNORE)
-  suspend fun insertAll(items: List<QueryResultEntity>)
+  suspend fun insertAll(items: List<QueryResultEntity>): List<Long>
 
   @Query("DELETE FROM query_results WHERE searchKey = :searchKey")
   suspend fun clearQuery(searchKey: String)

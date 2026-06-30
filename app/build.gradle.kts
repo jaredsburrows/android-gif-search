@@ -90,6 +90,12 @@ android {
         getDefaultProguardFile("proguard-android-optimize.txt"),
         rootDir.resolve("config/proguard/proguard-rules.txt"),
       )
+      if (!hasKeyPath) {
+        logger.warn(
+          "APP_KEYS_PATH is not set: signing the release build with the committed public debug " +
+            "keystore. This artifact must not be distributed.",
+        )
+      }
       signingConfig = signingConfigs.getByName(if (hasKeyPath) "release" else "debug")
     }
   }
