@@ -15,7 +15,7 @@ concurrency:
 
 env:
   JAVA_VERSION: 25
-  ANDROID_API_LEVEL: 36
+  ANDROID_API_LEVEL: 37
 
 permissions:
   checks: write
