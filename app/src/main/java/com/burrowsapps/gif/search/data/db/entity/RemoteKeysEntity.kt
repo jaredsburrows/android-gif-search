@@ -7,4 +7,6 @@ import androidx.room.PrimaryKey
 internal data class RemoteKeysEntity(
   @PrimaryKey val searchKey: String,
   val nextKey: String?,
+  // Wall-clock time of the last successful fetch for this query; used by the staleness/TTL check.
+  val lastUpdated: Long = 0L,
 )

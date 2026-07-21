@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ContentValues
 import android.content.Context
 import android.content.res.Configuration
+import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -84,10 +85,13 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 // Grid cell size for GIF thumbnails
 private val GifCellSize: Dp = 135.dp
@@ -439,32 +443,49 @@ internal suspend fun saveGifToGallery(
   gifUrl: String,
 ): Boolean =
   withContext(Dispatchers.IO) {
+    val resolver = context.contentResolver
+    // asFile() must use DiskCacheStrategy.DATA (or NONE): the module default is ALL, which has no
+    // File encoder and would make get() throw NoResultEncoderAvailableException.
+    val futureTarget =
+      Glide
+        .with(context.applicationContext)
+        .asFile()
+        .load(gifUrl)
+        .diskCacheStrategy(DiskCacheStrategy.DATA)
+        .submit()
+    var uri: Uri? = null
     try {
-      val file =
-        Glide
-          .with(context.applicationContext)
-          .asFile()
-          .load(gifUrl)
-          .diskCacheStrategy(DiskCacheStrategy.DATA)
-          .submit()
-          .get()
+      // runInterruptible makes the blocking Future.get() cancellation-aware, so navigating away
+      // mid-save frees the IO worker instead of leaving it parked.
+      val file = runInterruptible { futureTarget.get() }
       val values =
         ContentValues().apply {
           put(MediaStore.Images.Media.DISPLAY_NAME, "gif_${System.currentTimeMillis()}.gif")
           put(MediaStore.Images.Media.MIME_TYPE, "image/gif")
           put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/GIF Search")
+          // Keep the entry hidden from the gallery/scanner until the bytes are fully written.
+          put(MediaStore.Images.Media.IS_PENDING, 1)
         }
-      val uri =
-        context.contentResolver.insert(
-          MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-          values,
-        ) ?: return@withContext false
-      context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-        file.inputStream().use { inputStream -> inputStream.copyTo(outputStream) }
-      }
+      uri =
+        resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+          ?: return@withContext false
+      // A null output stream means nothing can be written — treat it as failure, not fake success.
+      val output = resolver.openOutputStream(uri) ?: error("openOutputStream returned null for $uri")
+      output.use { out -> file.inputStream().use { input -> input.copyTo(out) } }
+      // Publish the completed file to the gallery.
+      resolver.update(uri, ContentValues().apply { put(MediaStore.Images.Media.IS_PENDING, 0) }, null, null)
       true
-    } catch (_: Exception) {
+    } catch (e: CancellationException) {
+      // Cancelled (e.g. user left the screen) — remove the pending row and propagate.
+      uri?.let { runCatching { resolver.delete(it, null, null) } }
+      throw e
+    } catch (e: Exception) {
+      // On any failure, delete the half-written/empty row so no broken thumbnail is left behind.
+      uri?.let { runCatching { resolver.delete(it, null, null) } }
+      Timber.e(e, "saveGifToGallery failed for $gifUrl")
       false
+    } finally {
+      Glide.with(context.applicationContext).clear(futureTarget)
     }
   }
 
