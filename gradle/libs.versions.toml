@@ -22,7 +22,7 @@ ksp = { id = "com.google.devtools.ksp", version = "2.3.11" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "14.2.0" }
 license = { id = "com.jaredsburrows.license", version = "0.9.9" }
 publish = { id = "com.github.triplet.play", version = "4.0.0" }
-versions = { id = "com.github.ben-manes.versions", version = "0.59.0" }
+versions = { id = "com.github.ben-manes.versions", version = "0.60.0" }
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.13.0" }
