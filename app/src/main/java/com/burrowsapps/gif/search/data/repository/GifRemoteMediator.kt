@@ -31,6 +31,11 @@ internal class GifRemoteMediator(
 
     // Cached results older than this are considered stale and trigger a refresh when the app reopens.
     private val CACHE_TTL_MS = TimeUnit.HOURS.toMillis(1)
+
+    // Searches not revisited within this window are evicted from the DB cache to bound its growth.
+    // Much longer than CACHE_TTL_MS: TTL only decides when to re-fetch a query you're viewing now,
+    // whereas this decides when to forget a query you haven't returned to at all.
+    private val STALE_QUERY_RETENTION_MS = TimeUnit.DAYS.toMillis(7)
   }
 
   // Throttling state is per-mediator: each instance handles exactly one queryKey, and Paging invokes
@@ -39,15 +44,19 @@ internal class GifRemoteMediator(
   // unbounded for the whole process lifetime.
   private var refreshCount = 0
 
-  // Initialized to "now" (not 0L) so a freshly constructed mediator is treated as "just cleaned":
-  // cleanup is gated by the count/time throttle instead of firing on the very first refresh.
-  private var lastCleanupTime = System.currentTimeMillis()
+  // Initialized to 0L so the time-based arm fires on a fresh mediator's first refresh. Mediators
+  // are short-lived — one per query change and per process, usually performing a single refresh —
+  // so seeding this with "now" would leave cleanup (and the stale-query eviction it drives)
+  // essentially unreachable in real sessions: neither five refreshes nor five in-session minutes
+  // typically happen for one instance.
+  private var lastCleanupTime = 0L
 
   /**
-   * Whether orphan cleanup should run for this load. Counts every refresh and runs cleanup on every
-   * CLEANUP_INTERVAL-th refresh, or whenever at least MIN_CLEANUP_INTERVAL_MS has elapsed since the
-   * last successful cleanup. The counter advances on every refresh; the timestamp only advances when
-   * cleanup actually completes (see recordCleanupCompleted).
+   * Whether orphan cleanup should run for this load. Runs cleanup on a fresh instance's first
+   * refresh, then on every CLEANUP_INTERVAL-th refresh, or whenever at least
+   * MIN_CLEANUP_INTERVAL_MS has elapsed since the last successful cleanup. The counter advances on
+   * every refresh; the timestamp only advances when cleanup actually completes (see
+   * recordCleanupCompleted).
    */
   private fun shouldRunCleanup(): Boolean {
     refreshCount++
@@ -232,16 +241,29 @@ internal class GifRemoteMediator(
             withContext(dispatcher) {
               try {
                 val cleanupStartTime = System.currentTimeMillis()
+
+                // Evict caches for searches not refreshed within the retention window (skipping the
+                // active query, which we just refreshed). Dropping their query_results unreferences
+                // the GIFs they pointed at, which deleteOrphanedGifs() below then reclaims.
+                val staleCutoff = System.currentTimeMillis() - STALE_QUERY_RETENTION_MS
+                val evictedRows =
+                  database.withTransaction {
+                    val rows = queryResultsDao.clearStaleQueries(staleCutoff, queryKey)
+                    remoteKeysDao.clearStale(staleCutoff, queryKey)
+                    rows
+                  }
+
                 val orphanedCount = gifDao.deleteOrphanedGifs()
 
                 // Only record successful cleanup to ensure accurate throttling
                 // If cleanup fails, we'll retry on the next interval
                 recordCleanupCompleted()
 
-                if (orphanedCount > 0) {
+                if (orphanedCount > 0 || evictedRows > 0) {
                   Timber.d(
-                    "GifRemoteMediator: Cleaned up $orphanedCount orphaned GIF entities " +
-                      "for query='$queryKey' (took ${System.currentTimeMillis() - cleanupStartTime}ms)",
+                    "GifRemoteMediator: Cleaned up $orphanedCount orphaned GIF entities and " +
+                      "$evictedRows stale result rows for query='$queryKey' " +
+                      "(took ${System.currentTimeMillis() - cleanupStartTime}ms)",
                   )
                 }
               } catch (e: Exception) {

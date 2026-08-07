@@ -16,4 +16,12 @@ internal interface RemoteKeysDao {
 
   @Query("DELETE FROM remote_keys WHERE searchKey = :searchKey")
   suspend fun clearQuery(searchKey: String)
+
+  // Companion to QueryResultDao.clearStaleQueries: drops the cursor rows for the same stale searches
+  // so remote_keys doesn't grow unbounded either. Skips [exceptKey] (the query currently loading).
+  @Query("DELETE FROM remote_keys WHERE searchKey != :exceptKey AND lastUpdated < :cutoff")
+  suspend fun clearStale(
+    cutoff: Long,
+    exceptKey: String,
+  ): Int
 }

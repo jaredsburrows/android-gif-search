@@ -77,12 +77,12 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.signature.ObjectKey
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.Screen
 import com.burrowsapps.gif.search.ui.theme.GifTheme
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.glide.GlideImageState
 import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
 import kotlinx.coroutines.CancellationException
@@ -98,6 +98,10 @@ private val GifCellSize: Dp = 135.dp
 
 // Full-size GIF dialog size
 private val GifDialogSize: Dp = 350.dp
+
+// Stable, shared image options. Hoisted so the ~20 simultaneously-recomposing grid cells (and the
+// dialog) reuse one instance instead of allocating a new ImageOptions on every recomposition.
+private val CropImageOptions = ImageOptions(contentScale = ContentScale.Crop)
 
 /** Shows the main screen of trending gifs. */
 @Preview(
@@ -193,6 +197,9 @@ private fun TheContent(
     // Calculate sizes once, outside the items block
     val cellSizePx = with(LocalDensity.current) { GifCellSize.roundToPx() }
     val dialogSizePx = with(LocalDensity.current) { GifDialogSize.roundToPx() }
+    // Resolve the per-cell content description once here rather than re-resolving it inside every
+    // grid item's composition (stringResource reads LocalContext/LocalConfiguration each call).
+    val gifImageContentDesc = stringResource(R.string.gif_image_content_description)
     // Scope tied to this screen, not the dialog, so clipboard/snackbar work survives dismissal
     val coroutineScope = rememberCoroutineScope()
 
@@ -263,7 +270,26 @@ private fun TheContent(
             contentType = pagingItems.itemContentType { "gif" },
           ) { index ->
             val item = pagingItems[index] ?: return@items
-            val gifImageContentDesc = stringResource(R.string.gif_image_content_description)
+            // Pause this cell's animation during active scroll/fling and while the full-size dialog
+            // is open; resume at rest. This trims the sustained cost of ~20 GIFs decoding at once.
+            // It is start()/stop() on the same drawable landscapist is already drawing — no reload,
+            // no model swap, so nothing flickers; the frame simply freezes and resumes in place.
+            // The states are read inside snapshotFlow (as with focus-clearing above), not in
+            // composition, so scroll flips, dialog toggles, and drawable delivery drive this side
+            // effect without recomposing every visible cell.
+            val gifDrawable = remember { mutableStateOf<GifDrawable?>(null) }
+            LaunchedEffect(Unit) {
+              snapshotFlow {
+                (!gridState.isScrollInProgress && !openDialog.value) to gifDrawable.value
+              }.collect { (shouldAnimate, drawable) ->
+                if (drawable == null) return@collect
+                if (shouldAnimate) {
+                  if (!drawable.isRunning) drawable.start()
+                } else if (drawable.isRunning) {
+                  drawable.stop()
+                }
+              }
+            }
             Box(
               modifier =
                 Modifier
@@ -292,12 +318,19 @@ private fun TheContent(
                 GlideImage(
                   imageModel = { item.tinyGifUrl },
                   glideRequestType = GIF,
+                  // Capture the decoded GifDrawable so the effect above can pause/resume it. For a
+                  // GIF request, Success.data is the GifDrawable landscapist renders.
+                  onImageStateChanged = { state ->
+                    if (state is GlideImageState.Success) {
+                      gifDrawable.value = state.data as? GifDrawable
+                    }
+                  },
                   modifier =
                     Modifier
                       .padding(1.dp)
                       .fillMaxWidth()
                       .size(GifCellSize),
-                  imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+                  imageOptions = CropImageOptions,
                   loading = {
                     // Static placeholder to avoid per-cell animated spinners
                     Box(
@@ -380,7 +413,7 @@ private fun GifDialog(
                 .padding(1.dp)
                 .fillMaxWidth()
                 .size(GifDialogSize),
-            imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+            imageOptions = CropImageOptions,
             loading = {
               Box(modifier = Modifier.matchParentSize()) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -503,4 +536,5 @@ private fun loadGif(
     .load(imageUrl)
     .override(size)
     .dontTransform()
-    .signature(ObjectKey(imageUrl))
+// No .signature(ObjectKey(imageUrl)): imageUrl is already the load model and thus the cache key, so
+// signing with the same string adds nothing but an allocation and extra key hashing per request.

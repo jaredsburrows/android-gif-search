@@ -12,6 +12,9 @@ import com.burrowsapps.gif.search.data.api.model.MediaDto
 import com.burrowsapps.gif.search.data.api.model.NetworkResult
 import com.burrowsapps.gif.search.data.api.model.ResultDto
 import com.burrowsapps.gif.search.data.db.AppDatabase
+import com.burrowsapps.gif.search.data.db.entity.GifEntity
+import com.burrowsapps.gif.search.data.db.entity.QueryResultEntity
+import com.burrowsapps.gif.search.data.db.entity.RemoteKeysEntity
 import com.burrowsapps.gif.search.ui.giflist.GifImageInfo
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -584,5 +587,69 @@ class GifRemoteMediatorTest {
       assertThat(result).isInstanceOf(androidx.paging.RemoteMediator.MediatorResult.Success::class.java)
       assertThat((result as androidx.paging.RemoteMediator.MediatorResult.Success).endOfPaginationReached).isTrue()
       assertThat(db.queryResultDao().allForQuery("")).hasSize(2)
+    }
+
+  @Test
+  fun refresh_evictsStaleNeverRevisitedQueries_onFirstRefresh() =
+    runTest(dispatcher) {
+      // Seed a search the user never returned to, last fetched at the epoch (far past retention).
+      db.gifDao().upsertAll(listOf(GifEntity("oldtiny", "p", "g", "gp")))
+      db.queryResultDao().insertAll(listOf(QueryResultEntity("oldsearch", "oldtiny", 0)))
+      db.remoteKeysDao().upsert(RemoteKeysEntity("oldsearch", nextKey = "1", lastUpdated = 0L))
+
+      whenever(repository.getTrendingResults(anyOrNull()))
+        .thenReturn(NetworkResult.Success(response(2, "a", next = "10.0")))
+
+      val mediator =
+        GifRemoteMediator(
+          queryKey = "",
+          repository = repository,
+          database = db,
+          dispatcher = dispatcher,
+        )
+      // A fresh mediator qualifies for cleanup on its very first refresh (time arm, since
+      // lastCleanupTime starts at 0L), so a single app-open refresh is enough to evict.
+      mediator.load(LoadType.REFRESH, emptyState())
+
+      // The stale search and its now-orphaned GIF are gone; trending stays.
+      assertThat(db.queryResultDao().allForQuery("oldsearch")).isEmpty()
+      assertThat(db.remoteKeysDao().remoteKeys("oldsearch")).isNull()
+      assertThat(db.gifDao().getById("oldtiny")).isNull()
+      assertThat(db.queryResultDao().allForQuery("")).hasSize(2)
+    }
+
+  @Test
+  fun refresh_throttlesEvictionUntilCleanupInterval() =
+    runTest(dispatcher) {
+      whenever(repository.getTrendingResults(anyOrNull()))
+        .thenReturn(NetworkResult.Success(response(2, "a", next = "10.0")))
+
+      val mediator =
+        GifRemoteMediator(
+          queryKey = "",
+          repository = repository,
+          database = db,
+          dispatcher = dispatcher,
+        )
+      // First refresh runs cleanup and arms the throttle.
+      mediator.load(LoadType.REFRESH, emptyState())
+
+      // Seed stale data AFTER that cleanup. The time arm needs 5 real minutes, which a test run
+      // never reaches, so from here only the count arm (every 5th refresh) can evict it.
+      db.gifDao().upsertAll(listOf(GifEntity("oldtiny", "p", "g", "gp")))
+      db.queryResultDao().insertAll(listOf(QueryResultEntity("oldsearch", "oldtiny", 0)))
+      db.remoteKeysDao().upsert(RemoteKeysEntity("oldsearch", nextKey = "1", lastUpdated = 0L))
+
+      // Refreshes 2-4: neither throttle arm fires, so the stale search must survive. This is what
+      // pins the throttle itself — were cleanup to run on every refresh, these assertions fail.
+      repeat(3) { mediator.load(LoadType.REFRESH, emptyState()) }
+      assertThat(db.queryResultDao().allForQuery("oldsearch")).hasSize(1)
+      assertThat(db.remoteKeysDao().remoteKeys("oldsearch")).isNotNull()
+
+      // The 5th refresh hits the count arm and evicts.
+      mediator.load(LoadType.REFRESH, emptyState())
+      assertThat(db.queryResultDao().allForQuery("oldsearch")).isEmpty()
+      assertThat(db.remoteKeysDao().remoteKeys("oldsearch")).isNull()
+      assertThat(db.gifDao().getById("oldtiny")).isNull()
     }
 }

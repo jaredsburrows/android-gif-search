@@ -19,6 +19,25 @@ internal interface QueryResultDao {
   @Query("DELETE FROM query_results WHERE searchKey = :searchKey")
   suspend fun clearQuery(searchKey: String)
 
+  // Evicts cached result rows for any search whose last fetch (remote_keys.lastUpdated) predates
+  // [cutoff], except [exceptKey] (the query currently loading). Without this, every distinct search
+  // a user ever runs lingers in the DB forever, since clearQuery only ever targets the active query.
+  // GIFs left unreferenced by this delete are reclaimed by GifDao.deleteOrphanedGifs(). Returns the
+  // number of rows removed.
+  @Query(
+    """
+    DELETE FROM query_results
+    WHERE searchKey IN (
+      SELECT searchKey FROM remote_keys
+      WHERE searchKey != :exceptKey AND lastUpdated < :cutoff
+    )
+    """,
+  )
+  suspend fun clearStaleQueries(
+    cutoff: Long,
+    exceptKey: String,
+  ): Int
+
   @Query("SELECT COALESCE(MAX(position) + 1, 0) FROM query_results WHERE searchKey = :searchKey")
   suspend fun nextPositionForQuery(searchKey: String): Long
 
