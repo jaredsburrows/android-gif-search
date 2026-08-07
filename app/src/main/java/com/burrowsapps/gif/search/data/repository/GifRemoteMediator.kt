@@ -28,6 +28,14 @@ internal class GifRemoteMediator(
 
     // ...or once enough time has passed since the last cleanup (time-based throttling).
     private val MIN_CLEANUP_INTERVAL_MS = TimeUnit.MINUTES.toMillis(5)
+
+    // Cached results older than this are considered stale and trigger a refresh when the app reopens.
+    private val CACHE_TTL_MS = TimeUnit.HOURS.toMillis(1)
+
+    // Searches not revisited within this window are evicted from the DB cache to bound its growth.
+    // Much longer than CACHE_TTL_MS: TTL only decides when to re-fetch a query you're viewing now,
+    // whereas this decides when to forget a query you haven't returned to at all.
+    private val STALE_QUERY_RETENTION_MS = TimeUnit.DAYS.toMillis(7)
   }
 
   // Throttling state is per-mediator: each instance handles exactly one queryKey, and Paging invokes
@@ -35,13 +43,20 @@ internal class GifRemoteMediator(
   // ConcurrentHashMaps, which were keyed by every distinct search and never evicted, growing
   // unbounded for the whole process lifetime.
   private var refreshCount = 0
+
+  // Initialized to 0L so the time-based arm fires on a fresh mediator's first refresh. Mediators
+  // are short-lived — one per query change and per process, usually performing a single refresh —
+  // so seeding this with "now" would leave cleanup (and the stale-query eviction it drives)
+  // essentially unreachable in real sessions: neither five refreshes nor five in-session minutes
+  // typically happen for one instance.
   private var lastCleanupTime = 0L
 
   /**
-   * Whether orphan cleanup should run for this load. Counts every refresh and runs cleanup on every
-   * CLEANUP_INTERVAL-th refresh, or whenever at least MIN_CLEANUP_INTERVAL_MS has elapsed since the
-   * last successful cleanup. The counter advances on every refresh; the timestamp only advances when
-   * cleanup actually completes (see recordCleanupCompleted).
+   * Whether orphan cleanup should run for this load. Runs cleanup on a fresh instance's first
+   * refresh, then on every CLEANUP_INTERVAL-th refresh, or whenever at least
+   * MIN_CLEANUP_INTERVAL_MS has elapsed since the last successful cleanup. The counter advances on
+   * every refresh; the timestamp only advances when cleanup actually completes (see
+   * recordCleanupCompleted).
    */
   private fun shouldRunCleanup(): Boolean {
     refreshCount++
@@ -56,11 +71,13 @@ internal class GifRemoteMediator(
   }
 
   override suspend fun initialize(): InitializeAction {
-    // Check if we have cached data for this query
-    // If yes, skip refresh to avoid flickering
-    // If no, launch initial refresh to fetch data
+    // Skip the initial network refresh only when cached rows exist AND are still fresh. Without a
+    // TTL, the trending feed (and every search) would stay frozen at its first fetch forever; with
+    // it, a stale cache triggers a refresh on app open while a fresh cache still avoids flicker.
     val hasData = database.queryResultDao().nextPositionForQuery(queryKey) > 0
-    return if (hasData) {
+    val lastUpdated = database.remoteKeysDao().remoteKeys(queryKey)?.lastUpdated ?: 0L
+    val isFresh = System.currentTimeMillis() - lastUpdated < CACHE_TTL_MS
+    return if (hasData && isFresh) {
       InitializeAction.SKIP_INITIAL_REFRESH
     } else {
       InitializeAction.LAUNCH_INITIAL_REFRESH
@@ -139,11 +156,13 @@ internal class GifRemoteMediator(
             response
               ?.next
               ?.takeIf { it.isNotBlank() && it != currentKey }
-          val isEndOfPagination = items.isEmpty() || nextCursor == null
+          // Mutable so an APPEND page that adds no new rows (all duplicates) can also end pagination.
+          var reachedEnd = items.isEmpty() || nextCursor == null
+          val fetchedAt = System.currentTimeMillis()
 
           Timber.d(
             "GifRemoteMediator: Loaded ${items.size} items, nextCursor=$nextCursor, " +
-              "endOfPagination=$isEndOfPagination",
+              "endOfPagination=$reachedEnd",
           )
 
           // Save everything to database in a single transaction for consistency
@@ -189,40 +208,62 @@ internal class GifRemoteMediator(
                 remoteKeysDao.clearQuery(queryKey)
               }
 
-              queryResultsDao.insertAll(mappings)
+              // insertAll uses IGNORE; already-seen (searchKey, gifId) rows are dropped (rowId -1).
+              // If an APPEND page is entirely duplicates, nothing new lands — end pagination so
+              // Paging doesn't keep fetching fresh cursors that never grow the list.
+              val insertedCount = queryResultsDao.insertAll(mappings).count { it != -1L }
+              if (loadType == LoadType.APPEND && insertedCount == 0) {
+                reachedEnd = true
+              }
 
-              Timber.d("GifRemoteMediator: Saved ${items.size} items starting at position $startPos")
+              Timber.d("GifRemoteMediator: Saved $insertedCount/${items.size} items from position $startPos")
             } else if (loadType == LoadType.REFRESH) {
               // If no items, still clear old data
               queryResultsDao.clearQuery(queryKey)
               remoteKeysDao.clearQuery(queryKey)
             }
 
-            // Step 5: Update remote keys with the next cursor for pagination
+            // Step 5: Store the next cursor (null once we've reached the end) plus a fetch timestamp
+            // that initialize() uses for its staleness/TTL check.
             remoteKeysDao.upsert(
               RemoteKeysEntity(
                 searchKey = queryKey,
-                nextKey = nextCursor,
+                nextKey = if (reachedEnd) null else nextCursor,
+                lastUpdated = fetchedAt,
               ),
             )
           }
 
-          // Cleanup orphaned GIFs asynchronously outside the transaction
-          // This runs in the background and doesn't block the user
+          // Cleanup orphaned GIFs outside the transaction, on the IO dispatcher (never the main
+          // thread). It runs inline, so it slightly delays this load()'s completion (and the refresh
+          // spinner); the committed rows are already pushed to the UI by Room before this runs.
           if (loadType == LoadType.REFRESH && shouldRunCleanup()) {
             withContext(dispatcher) {
               try {
                 val cleanupStartTime = System.currentTimeMillis()
+
+                // Evict caches for searches not refreshed within the retention window (skipping the
+                // active query, which we just refreshed). Dropping their query_results unreferences
+                // the GIFs they pointed at, which deleteOrphanedGifs() below then reclaims.
+                val staleCutoff = System.currentTimeMillis() - STALE_QUERY_RETENTION_MS
+                val evictedRows =
+                  database.withTransaction {
+                    val rows = queryResultsDao.clearStaleQueries(staleCutoff, queryKey)
+                    remoteKeysDao.clearStale(staleCutoff, queryKey)
+                    rows
+                  }
+
                 val orphanedCount = gifDao.deleteOrphanedGifs()
 
                 // Only record successful cleanup to ensure accurate throttling
                 // If cleanup fails, we'll retry on the next interval
                 recordCleanupCompleted()
 
-                if (orphanedCount > 0) {
+                if (orphanedCount > 0 || evictedRows > 0) {
                   Timber.d(
-                    "GifRemoteMediator: Cleaned up $orphanedCount orphaned GIF entities " +
-                      "for query='$queryKey' (took ${System.currentTimeMillis() - cleanupStartTime}ms)",
+                    "GifRemoteMediator: Cleaned up $orphanedCount orphaned GIF entities and " +
+                      "$evictedRows stale result rows for query='$queryKey' " +
+                      "(took ${System.currentTimeMillis() - cleanupStartTime}ms)",
                   )
                 }
               } catch (e: Exception) {
@@ -236,7 +277,7 @@ internal class GifRemoteMediator(
             }
           }
 
-          MediatorResult.Success(endOfPaginationReached = isEndOfPagination)
+          MediatorResult.Success(endOfPaginationReached = reachedEnd)
         }
       }
     } catch (e: Exception) {

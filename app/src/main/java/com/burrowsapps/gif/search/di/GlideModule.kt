@@ -62,12 +62,22 @@ internal class GlideModule : AppGlideModule() {
     glide: Glide,
     registry: Registry,
   ) {
-    val okHttpClient = getGlideEntryPoint(context).provideOkHttpClient()
+    // Reuse the app's OkHttpClient (so image fetches share its Dispatcher + ConnectionPool for
+    // connection reuse) but strip the HTTP disk cache. Glide already keeps its own source/result
+    // disk cache, so letting OkHttp cache image bytes too would (1) store every GIF on disk twice
+    // and (2) let large image responses evict the small Tenor API JSON that the shared 50 MiB cache
+    // exists to retain. newBuilder() shares the pools; cache(null) drops only the duplicate cache.
+    val imageClient =
+      getGlideEntryPoint(context)
+        .provideOkHttpClient()
+        .newBuilder()
+        .cache(null)
+        .build()
 
     registry.replace(
       GlideUrl::class.java,
       InputStream::class.java,
-      OkHttpUrlLoader.Factory(okHttpClient),
+      OkHttpUrlLoader.Factory(imageClient),
     )
   }
 
