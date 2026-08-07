@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.data.db.AppDatabase
 import com.burrowsapps.gif.search.data.db.entity.GifEntity
 import com.burrowsapps.gif.search.data.db.entity.QueryResultEntity
+import com.burrowsapps.gif.search.data.db.entity.RemoteKeysEntity
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -116,6 +117,42 @@ class QueryResultDaoTest {
       db.gifDao().clearAll()
       val remain = dao.allForQuery("")
       assertThat(remain).isEmpty()
+    }
+
+  @Test
+  fun clearStaleQueries_removesOnlyStaleNonActiveQueries() =
+    runBlocking {
+      db.gifDao().upsertAll(
+        listOf(
+          GifEntity("f", "fp", "fg", "fgp"),
+          GifEntity("s", "sp", "sg", "sgp"),
+          GifEntity("a", "ap", "ag", "agp"),
+        ),
+      )
+      // Three searches: one fresh, one stale-but-active (the query loading now), one stale.
+      dao.insertAll(
+        listOf(
+          QueryResultEntity("fresh", "f", 0),
+          QueryResultEntity("active", "a", 0),
+          QueryResultEntity("stale", "s", 0),
+        ),
+      )
+      val now = 10_000_000L
+      val cutoff = now - 1_000L
+      db.remoteKeysDao().upsert(RemoteKeysEntity("fresh", nextKey = "1", lastUpdated = now))
+      db.remoteKeysDao().upsert(RemoteKeysEntity("active", nextKey = "1", lastUpdated = 0L))
+      db.remoteKeysDao().upsert(RemoteKeysEntity("stale", nextKey = "1", lastUpdated = 0L))
+
+      val removed = dao.clearStaleQueries(cutoff = cutoff, exceptKey = "active")
+
+      assertThat(removed).isEqualTo(1)
+      assertThat(dao.allForQuery("stale")).isEmpty()
+      // Fresh (recent) and active (excluded despite being stale) both survive.
+      assertThat(dao.allForQuery("fresh")).hasSize(1)
+      assertThat(dao.allForQuery("active")).hasSize(1)
+      // The stale GIF is now orphaned and reclaimable; the others remain referenced.
+      assertThat(db.gifDao().deleteOrphanedGifs()).isEqualTo(1)
+      assertThat(db.gifDao().count()).isEqualTo(2)
     }
 
   @Test

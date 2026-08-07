@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ContentValues
 import android.content.Context
 import android.content.res.Configuration
+import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -76,24 +77,31 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.signature.ObjectKey
 import com.burrowsapps.gif.search.R
 import com.burrowsapps.gif.search.Screen
 import com.burrowsapps.gif.search.ui.theme.GifTheme
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
+import com.skydoves.landscapist.glide.GlideImageState
 import com.skydoves.landscapist.glide.GlideRequestType.GIF
 import com.skydoves.landscapist.glide.LocalGlideRequestBuilder
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 // Grid cell size for GIF thumbnails
 private val GifCellSize: Dp = 135.dp
 
 // Full-size GIF dialog size
 private val GifDialogSize: Dp = 350.dp
+
+// Stable, shared image options. Hoisted so the ~20 simultaneously-recomposing grid cells (and the
+// dialog) reuse one instance instead of allocating a new ImageOptions on every recomposition.
+private val CropImageOptions = ImageOptions(contentScale = ContentScale.Crop)
 
 /** Shows the main screen of trending gifs. */
 @Preview(
@@ -189,6 +197,9 @@ private fun TheContent(
     // Calculate sizes once, outside the items block
     val cellSizePx = with(LocalDensity.current) { GifCellSize.roundToPx() }
     val dialogSizePx = with(LocalDensity.current) { GifDialogSize.roundToPx() }
+    // Resolve the per-cell content description once here rather than re-resolving it inside every
+    // grid item's composition (stringResource reads LocalContext/LocalConfiguration each call).
+    val gifImageContentDesc = stringResource(R.string.gif_image_content_description)
     // Scope tied to this screen, not the dialog, so clipboard/snackbar work survives dismissal
     val coroutineScope = rememberCoroutineScope()
 
@@ -259,7 +270,26 @@ private fun TheContent(
             contentType = pagingItems.itemContentType { "gif" },
           ) { index ->
             val item = pagingItems[index] ?: return@items
-            val gifImageContentDesc = stringResource(R.string.gif_image_content_description)
+            // Pause this cell's animation during active scroll/fling and while the full-size dialog
+            // is open; resume at rest. This trims the sustained cost of ~20 GIFs decoding at once.
+            // It is start()/stop() on the same drawable landscapist is already drawing — no reload,
+            // no model swap, so nothing flickers; the frame simply freezes and resumes in place.
+            // The states are read inside snapshotFlow (as with focus-clearing above), not in
+            // composition, so scroll flips, dialog toggles, and drawable delivery drive this side
+            // effect without recomposing every visible cell.
+            val gifDrawable = remember { mutableStateOf<GifDrawable?>(null) }
+            LaunchedEffect(Unit) {
+              snapshotFlow {
+                (!gridState.isScrollInProgress && !openDialog.value) to gifDrawable.value
+              }.collect { (shouldAnimate, drawable) ->
+                if (drawable == null) return@collect
+                if (shouldAnimate) {
+                  if (!drawable.isRunning) drawable.start()
+                } else if (drawable.isRunning) {
+                  drawable.stop()
+                }
+              }
+            }
             Box(
               modifier =
                 Modifier
@@ -288,12 +318,19 @@ private fun TheContent(
                 GlideImage(
                   imageModel = { item.tinyGifUrl },
                   glideRequestType = GIF,
+                  // Capture the decoded GifDrawable so the effect above can pause/resume it. For a
+                  // GIF request, Success.data is the GifDrawable landscapist renders.
+                  onImageStateChanged = { state ->
+                    if (state is GlideImageState.Success) {
+                      gifDrawable.value = state.data as? GifDrawable
+                    }
+                  },
                   modifier =
                     Modifier
                       .padding(1.dp)
                       .fillMaxWidth()
                       .size(GifCellSize),
-                  imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+                  imageOptions = CropImageOptions,
                   loading = {
                     // Static placeholder to avoid per-cell animated spinners
                     Box(
@@ -376,7 +413,7 @@ private fun GifDialog(
                 .padding(1.dp)
                 .fillMaxWidth()
                 .size(GifDialogSize),
-            imageOptions = ImageOptions(contentScale = ContentScale.Crop),
+            imageOptions = CropImageOptions,
             loading = {
               Box(modifier = Modifier.matchParentSize()) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -439,32 +476,49 @@ internal suspend fun saveGifToGallery(
   gifUrl: String,
 ): Boolean =
   withContext(Dispatchers.IO) {
+    val resolver = context.contentResolver
+    // asFile() must use DiskCacheStrategy.DATA (or NONE): the module default is ALL, which has no
+    // File encoder and would make get() throw NoResultEncoderAvailableException.
+    val futureTarget =
+      Glide
+        .with(context.applicationContext)
+        .asFile()
+        .load(gifUrl)
+        .diskCacheStrategy(DiskCacheStrategy.DATA)
+        .submit()
+    var uri: Uri? = null
     try {
-      val file =
-        Glide
-          .with(context.applicationContext)
-          .asFile()
-          .load(gifUrl)
-          .diskCacheStrategy(DiskCacheStrategy.DATA)
-          .submit()
-          .get()
+      // runInterruptible makes the blocking Future.get() cancellation-aware, so navigating away
+      // mid-save frees the IO worker instead of leaving it parked.
+      val file = runInterruptible { futureTarget.get() }
       val values =
         ContentValues().apply {
           put(MediaStore.Images.Media.DISPLAY_NAME, "gif_${System.currentTimeMillis()}.gif")
           put(MediaStore.Images.Media.MIME_TYPE, "image/gif")
           put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/GIF Search")
+          // Keep the entry hidden from the gallery/scanner until the bytes are fully written.
+          put(MediaStore.Images.Media.IS_PENDING, 1)
         }
-      val uri =
-        context.contentResolver.insert(
-          MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-          values,
-        ) ?: return@withContext false
-      context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-        file.inputStream().use { inputStream -> inputStream.copyTo(outputStream) }
-      }
+      uri =
+        resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+          ?: return@withContext false
+      // A null output stream means nothing can be written — treat it as failure, not fake success.
+      val output = resolver.openOutputStream(uri) ?: error("openOutputStream returned null for $uri")
+      output.use { out -> file.inputStream().use { input -> input.copyTo(out) } }
+      // Publish the completed file to the gallery.
+      resolver.update(uri, ContentValues().apply { put(MediaStore.Images.Media.IS_PENDING, 0) }, null, null)
       true
-    } catch (_: Exception) {
+    } catch (e: CancellationException) {
+      // Cancelled (e.g. user left the screen) — remove the pending row and propagate.
+      uri?.let { runCatching { resolver.delete(it, null, null) } }
+      throw e
+    } catch (e: Exception) {
+      // On any failure, delete the half-written/empty row so no broken thumbnail is left behind.
+      uri?.let { runCatching { resolver.delete(it, null, null) } }
+      Timber.e(e, "saveGifToGallery failed for $gifUrl")
       false
+    } finally {
+      Glide.with(context.applicationContext).clear(futureTarget)
     }
   }
 
@@ -482,4 +536,5 @@ private fun loadGif(
     .load(imageUrl)
     .override(size)
     .dontTransform()
-    .signature(ObjectKey(imageUrl))
+// No .signature(ObjectKey(imageUrl)): imageUrl is already the load model and thus the cache key, so
+// signing with the same string adds nothing but an allocation and extra key hashing per request.

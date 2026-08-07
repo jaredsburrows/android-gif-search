@@ -13,6 +13,12 @@
     <!-- Exclude caches and other transient files -->
     <exclude domain="file" path="cache/"/>
     <exclude domain="file" path="code_cache/"/>
+
+    <!-- The Room "gif-db" is a fully re-fetchable network cache; don't spend backup quota on it or
+         risk restoring a stale/inconsistent WAL snapshot. -->
+    <exclude domain="database" path="gif-db"/>
+    <exclude domain="database" path="gif-db-wal"/>
+    <exclude domain="database" path="gif-db-shm"/>
   </cloud-backup>
   <!--
   <device-transfer>

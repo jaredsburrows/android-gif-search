@@ -34,7 +34,9 @@ internal class GifViewModel
 
     val gifPagingData: Flow<PagingData<GifImageInfo>> =
       searchText
-        .debounce(300) // Wait 300ms after user stops typing
+        // Debounce typed queries by 300ms, but let the initial/blank (trending) query through
+        // immediately so the first load isn't delayed by 300ms with nothing happening.
+        .debounce { query -> if (query.isBlank()) 0L else 300L }
         .map { query ->
           // Normalize the query: trim, lowercase, empty string for trending
           query

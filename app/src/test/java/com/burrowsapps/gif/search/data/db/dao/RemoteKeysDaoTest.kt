@@ -44,4 +44,22 @@ class RemoteKeysDaoTest {
       dao.clearQuery(query)
       assertThat(dao.remoteKeys(query)).isNull()
     }
+
+  @Test
+  fun clearStale_removesOlderThanCutoffExceptActive() =
+    runBlocking {
+      val now = 10_000_000L
+      val cutoff = now - 1_000L
+      dao.upsert(RemoteKeysEntity("fresh", nextKey = "1", lastUpdated = now))
+      dao.upsert(RemoteKeysEntity("active", nextKey = "1", lastUpdated = 0L))
+      dao.upsert(RemoteKeysEntity("stale", nextKey = "1", lastUpdated = 0L))
+
+      val removed = dao.clearStale(cutoff = cutoff, exceptKey = "active")
+
+      assertThat(removed).isEqualTo(1)
+      assertThat(dao.remoteKeys("stale")).isNull()
+      // Recent key and the excluded active key both survive.
+      assertThat(dao.remoteKeys("fresh")).isNotNull()
+      assertThat(dao.remoteKeys("active")).isNotNull()
+    }
 }
