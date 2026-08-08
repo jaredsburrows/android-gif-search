@@ -4,14 +4,14 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Tenor Api Response.
+ * Klipy Api Response.
  *
- * eg. https://g.tenor.com/v1/search?key=LIVDSRZULELA&tag=goodluck&limit=10
+ * eg. https://api.klipy.com/api/v1/{app_key}/gifs/search?q=hello&page=1&per_page=10
  */
 @JsonClass(generateAdapter = true)
 internal data class GifResponseDto(
-  @field:Json(name = "results")
-  val results: List<ResultDto> = emptyList(),
-  @field:Json(name = "next")
-  val next: String = "0.0",
+  @field:Json(name = "result")
+  val result: Boolean = false,
+  @field:Json(name = "data")
+  val data: DataDto = DataDto(),
 )

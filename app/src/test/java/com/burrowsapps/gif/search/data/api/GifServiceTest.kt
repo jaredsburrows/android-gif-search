@@ -49,14 +49,14 @@ class GifServiceTest {
           override fun dispatch(request: RecordedRequest): MockResponse {
             request.path.orEmpty().apply {
               return when {
-                // Matches URL pattern for trending on Tenor with parameters
-                matches(Regex("^/v1/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
+                // Matches URL pattern for trending on Klipy with parameters
+                matches(Regex("^/api/v1/[^/]+/gifs/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
 
-                // Matches URL pattern for search on Tenor with parameters
-                matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
+                // Matches URL pattern for search on Klipy with parameters
+                matches(Regex("^/api/v1/[^/]+/gifs/search.*")) -> getMockResponse(fileName = "/search_results.json")
 
                 // Handling image files with specific response
-                matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/ic_launcher.webp")
+                matches(Regex(".*/[^/]+\\.(png|jpg|gif)$")) -> getMockGifResponse(fileName = "/ic_launcher.webp")
 
                 else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
               }
@@ -76,60 +76,52 @@ class GifServiceTest {
   @Test
   fun testTrendingResultsURLShouldParseCorrectly() =
     runTest {
-      val response = withContext(IO) { sut.fetchTrendingResults(null) }
+      val response = withContext(IO) { sut.fetchTrendingResults(1) }
       val body = response.body()!!
 
       assertThat(
-        body.results
+        body.data.results
           .first()
-          .media
-          .first()
-          .tinyGif.url,
+          .file.sm.gif.url,
       ).matches("http.*localhost.*gif")
     }
 
   @Test
   fun testTrendingResultsURLPreviewShouldParseCorrectly() =
     runTest {
-      val response = withContext(IO) { sut.fetchTrendingResults(null) }
+      val response = withContext(IO) { sut.fetchTrendingResults(1) }
       val body = response.body()!!
 
       assertThat(
-        body.results
+        body.data.results
           .first()
-          .media
-          .first()
-          .tinyGif.preview,
-      ).matches("http.*localhost.*png")
+          .file.sm.jpg.url,
+      ).matches("http.*localhost.*jpg")
     }
 
   @Test
   fun testSearchResultsURLShouldParseCorrectly() =
     runTest {
-      val response = withContext(IO) { sut.fetchSearchResults("hello", null) }
+      val response = withContext(IO) { sut.fetchSearchResults("hello", 1) }
       val body = response.body()!!
 
       assertThat(
-        body.results
+        body.data.results
           .first()
-          .media
-          .first()
-          .tinyGif.url,
+          .file.sm.gif.url,
       ).matches("http.*localhost.*gif")
     }
 
   @Test
   fun testSearchResultsURLPreviewShouldParseCorrectly() =
     runTest {
-      val response = withContext(IO) { sut.fetchSearchResults("hello", null) }
+      val response = withContext(IO) { sut.fetchSearchResults("hello", 1) }
       val body = response.body()!!
 
       assertThat(
-        body.results
+        body.data.results
           .first()
-          .media
-          .first()
-          .tinyGif.preview,
-      ).matches("http.*localhost.*png")
+          .file.sm.jpg.url,
+      ).matches("http.*localhost.*jpg")
     }
 }

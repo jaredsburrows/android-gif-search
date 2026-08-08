@@ -12,5 +12,5 @@ import javax.inject.Singleton
 internal class ApiConfigModule {
   @Provides
   @Singleton
-  fun provideBaseUrl(): String = "https://g.tenor.com"
+  fun provideBaseUrl(): String = "https://api.klipy.com/"
 }

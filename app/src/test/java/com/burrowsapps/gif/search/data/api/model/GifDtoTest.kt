@@ -9,8 +9,7 @@ import org.junit.Before
 import org.junit.Test
 
 class GifDtoTest {
-  private val gifUrl = "https://media.tenor.com/images/ed8cf447392c5e7e0cc16cbad2a0edce/tenor.gif"
-  private val previewUrl = "https://media.tenor.com/images/b1060f2602934944c0e3502a1d7d20d8/raw"
+  private val gifUrl = "https://static.klipy.com/ii/c3a19a0b747a76e98651f2b9a3cca5ff/a7/68/IkPBE6uB.gif"
   private var defaultSut = GifDto()
   private lateinit var sut: GifDto
 
@@ -18,7 +17,7 @@ class GifDtoTest {
 
   @Before
   fun setUp() {
-    sut = GifDto(gifUrl, previewUrl)
+    sut = GifDto(gifUrl)
     moshi = NetworkModule().provideMoshi()
   }
 
@@ -29,18 +28,11 @@ class GifDtoTest {
   }
 
   @Test
-  fun testGetPreview() {
-    assertThat(defaultSut.preview).isEmpty()
-    assertThat(sut.preview).isEqualTo(previewUrl)
-  }
-
-  @Test
   fun testMoshiDeserialization_Positive() {
     val json =
       """
       {
-        "url": "$gifUrl",
-        "preview": "$previewUrl"
+        "url": "$gifUrl"
       }
       """.trimIndent()
 
@@ -49,7 +41,6 @@ class GifDtoTest {
 
     assertThat(result).isNotNull()
     assertThat(result?.url).isEqualTo(gifUrl)
-    assertThat(result?.preview).isEqualTo(previewUrl)
   }
 
   @Test
@@ -57,8 +48,7 @@ class GifDtoTest {
     val invalidJson =
       """
       {
-        "url": 123,
-        "preview": true
+        "url": true
       }
       """.trimIndent()
 

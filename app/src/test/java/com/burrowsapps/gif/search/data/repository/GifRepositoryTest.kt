@@ -20,7 +20,10 @@ import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 
 class GifRepositoryTest {
   private val service = mock<GifService>()
-  private val next = "0.0"
+
+  // Stored remote key "2" maps to Klipy page 2.
+  private val position = "2"
+  private val page = 2
   private val response = GifResponseDto()
 
   private lateinit var sut: GifRepository
@@ -33,24 +36,36 @@ class GifRepositoryTest {
   @Test
   fun testLoadTrendingImagesSuccess() =
     runTest {
-      whenever(service.fetchTrendingResults(eq(next), any(), any(), any()))
+      whenever(service.fetchTrendingResults(eq(page), any()))
         .thenReturn(Response.success(response))
 
-      val result = sut.getTrendingResults(next).data
+      val result = sut.getTrendingResults(position).data
 
-      verify(service).fetchTrendingResults(eq(next), any(), any(), any())
+      verify(service).fetchTrendingResults(eq(page), any())
+      assertThat(result).isEqualTo(response)
+    }
+
+  @Test
+  fun testLoadTrendingImagesDefaultsToFirstPage() =
+    runTest {
+      whenever(service.fetchTrendingResults(eq(1), any()))
+        .thenReturn(Response.success(response))
+
+      val result = sut.getTrendingResults(null).data
+
+      verify(service).fetchTrendingResults(eq(1), any())
       assertThat(result).isEqualTo(response)
     }
 
   @Test
   fun testLoadTrendingImagesEmpty() =
     runTest {
-      whenever(service.fetchTrendingResults(eq(next), any(), any(), any()))
+      whenever(service.fetchTrendingResults(eq(page), any()))
         .thenReturn(Response.success(null))
 
-      val result = sut.getTrendingResults(next).data
+      val result = sut.getTrendingResults(position).data
 
-      verify(service).fetchTrendingResults(eq(next), any(), any(), any())
+      verify(service).fetchTrendingResults(eq(page), any())
       assertThat(result).isNull()
     }
 
@@ -71,12 +86,12 @@ class GifRepositoryTest {
           ).build()
       val plainText = "text/plain; charset=utf-8".toMediaType()
       val errorBody = "Broken!".toResponseBody(plainText)
-      whenever(service.fetchTrendingResults(eq(next), any(), any(), any()))
+      whenever(service.fetchTrendingResults(eq(page), any()))
         .thenReturn(Response.error(errorBody, errorResponse))
 
-      val result = sut.getTrendingResults(next).data
+      val result = sut.getTrendingResults(position).data
 
-      verify(service).fetchTrendingResults(eq(next), any(), any(), any())
+      verify(service).fetchTrendingResults(eq(page), any())
       assertThat(result).isNull()
     }
 
@@ -84,12 +99,12 @@ class GifRepositoryTest {
   fun testLoadSearchImagesSuccess() =
     runTest {
       val searchString = "gifs"
-      whenever(service.fetchSearchResults(eq(searchString), eq(next), any(), any(), any()))
+      whenever(service.fetchSearchResults(eq(searchString), eq(page), any()))
         .thenReturn(Response.success(response))
 
-      val result = sut.getSearchResults(searchString, next).data
+      val result = sut.getSearchResults(searchString, position).data
 
-      verify(service).fetchSearchResults(eq(searchString), eq(next), any(), any(), any())
+      verify(service).fetchSearchResults(eq(searchString), eq(page), any())
       assertThat(result).isEqualTo(response)
     }
 
@@ -97,12 +112,12 @@ class GifRepositoryTest {
   fun testLoadSearchImagesEmpty() =
     runTest {
       val searchString = "gifs"
-      whenever(service.fetchSearchResults(eq(searchString), eq(next), any(), any(), any()))
+      whenever(service.fetchSearchResults(eq(searchString), eq(page), any()))
         .thenReturn(Response.success(null))
 
-      val result = sut.getSearchResults(searchString, next).data
+      val result = sut.getSearchResults(searchString, position).data
 
-      verify(service).fetchSearchResults(eq(searchString), eq(next), any(), any(), any())
+      verify(service).fetchSearchResults(eq(searchString), eq(page), any())
       assertThat(result).isNull()
     }
 
@@ -124,12 +139,12 @@ class GifRepositoryTest {
           ).build()
       val plainText = "text/plain; charset=utf-8".toMediaType()
       val errorBody = "Broken!".toResponseBody(plainText)
-      whenever(service.fetchSearchResults(eq(searchString), eq(next), any(), any(), any()))
+      whenever(service.fetchSearchResults(eq(searchString), eq(page), any()))
         .thenReturn(Response.error(errorBody, errorResponse))
 
-      val result = sut.getSearchResults(searchString, next).data
+      val result = sut.getSearchResults(searchString, position).data
 
-      verify(service).fetchSearchResults(eq(searchString), eq(next), any(), any(), any())
+      verify(service).fetchSearchResults(eq(searchString), eq(page), any())
       assertThat(result).isNull()
     }
 }
