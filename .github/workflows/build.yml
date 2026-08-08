@@ -120,7 +120,7 @@ jobs:
         with:
           api-level: ${{ env.ANDROID_API_LEVEL }}
           arch: x86_64
-          target: google_apis
+          target: google_apis_ps16k
           force-avd-creation: false
           emulator-options: -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
