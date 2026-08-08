@@ -226,11 +226,12 @@ dependencies {
   androidTestImplementation(libs.junit)
   androidTestImplementation(libs.robolectric.annotations)
 
+  // See https://github.com/robolectric/robolectric/issues/11344
   constraints {
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0") {
+    testImplementation("androidx.test.espresso:espresso-core:3.7.0") {
       because("Force espresso-core 3.7.0+ for API 36 support (InputManager.getInstance was removed).")
     }
-    androidTestImplementation("androidx.test.espresso:espresso-idling-resource:3.7.0") {
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0") {
       because("Force espresso-core 3.7.0+ for API 36 support (InputManager.getInstance was removed).")
     }
   }
