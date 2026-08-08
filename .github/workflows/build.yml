@@ -15,7 +15,7 @@ concurrency:
 
 env:
   JAVA_VERSION: 25
-  ANDROID_API_LEVEL: "37.0"
+  ANDROID_API_LEVEL: "37.1"
 
 permissions:
   checks: write
@@ -134,13 +134,13 @@ jobs:
         with:
           api-level: ${{ env.ANDROID_API_LEVEL }}
           arch: x86_64
-          target: google_apis
-          force-avd-creation: false
-          emulator-options: -no-snapshot -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
+          target: google_apis_ps16k
           ram-size: 4096M
           disk-size: 8192M
           emulator-boot-timeout: 1200
+          force-avd-creation: false
+          emulator-options: -no-snapshot -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
           script: |
             timeout 180 sh -c 'until adb shell service check package | grep -q found; do sleep 2; done' || { echo "framework never came up"; exit 1; }
             ./gradlew connectedDebugAndroidTest -s || ./gradlew connectedDebugAndroidTest -s
