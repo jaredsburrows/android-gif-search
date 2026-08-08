@@ -70,7 +70,10 @@ subprojects {
 
     extensions.configure<CommonExtension> {
       compileSdk {
-        version = release(sdkVersion)
+        version =
+          release(sdkVersion) {
+            minorApiLevel = 1
+          }
       }
 
       defaultConfig.apply {
