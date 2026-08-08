@@ -7,7 +7,7 @@
   - app/src/main/AndroidManifest.xml: App manifest.
   - app/src/test: JVM unit tests (JUnit).
   - app/src/androidTest: Instrumented tests (AndroidX Test).
-  - app/proguard-rules.pro: R8/ProGuard rules for release.
+  - app/src/main/keepRules/proguard-rules.keep: app-specific R8 rules for release (library rules ship with the libraries).
 - test-resources: Android library module.
   - app/src/main/java: Kotlin sources.
   - app/src/main/AndroidManifest.xml: App manifest.

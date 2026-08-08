@@ -95,8 +95,7 @@ subprojects {
         checkDependencies = true
         checkReleaseBuilds = false
         lintConfig = rootDir.resolve("config/lint/lint.xml")
-        textReport = true
-        sarifReport = true
+        printTextReport = true
       }
 
       packaging.resources.excludes +=

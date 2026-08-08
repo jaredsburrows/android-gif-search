@@ -84,12 +84,12 @@ android {
     }
 
     release {
-      isMinifyEnabled = true
-      isShrinkResources = true
-      proguardFiles(
-        getDefaultProguardFile("proguard-android-optimize.txt"),
-        rootDir.resolve("config/proguard/proguard-rules.txt"),
-      )
+      // AGP 9.3+ optimization DSL: enables R8 code shrinking/optimization and optimized
+      // resource shrinking. Default rules (proguard-android-optimize.txt) are included via
+      // keepRules.includeDefault; app-specific rules live in src/main/keepRules/.
+      optimization {
+        enable = true
+      }
       if (!hasKeyPath) {
         logger.warn(
           "APP_KEYS_PATH is not set: signing the release build with the committed public debug " +
@@ -118,13 +118,8 @@ licenseReport {
   generateHtmlReport = true
 }
 
-hilt {
-  enableAggregatingTask = true
-}
-
 ksp {
   arg("dagger.formatGeneratedSource", "disabled")
-  arg("dagger.fastInit", "enabled")
   arg("dagger.experimentalDaggerErrorMessages", "enabled")
 }
 
