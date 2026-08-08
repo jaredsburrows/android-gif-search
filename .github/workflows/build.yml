@@ -3,15 +3,15 @@ name: build
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     types: [ opened, labeled, unlabeled, synchronize ]
 
 # Cancel superseded runs for the same PR/branch (saves runner minutes on rapid pushes, e.g.
-# Renovate, and gives faster feedback on the latest commit); let master runs finish.
+# Renovate, and gives faster feedback on the latest commit); let main runs finish.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
   JAVA_VERSION: 25
@@ -63,7 +63,7 @@ jobs:
             app/build/test-results/**/TEST-*.xml
 
       - name: Upload Reports
-        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
+        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7.0.1
         with:
           name: com.burrowsapps.gif.search-reports-${{ github.workflow }}-${{ github.run_id }}
@@ -72,7 +72,7 @@ jobs:
             app/build/test-results
 
       - name: Upload Debug APK artifact
-        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
+        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7.0.1
         with:
           name: com.burrowsapps.gif.search-debug-${{ github.workflow }}-${{ github.run_id }}.apk
@@ -148,7 +148,7 @@ jobs:
             app/build/outputs/androidTest-results/**/TEST-*.xml
 
       - name: Upload Integration Reports
-        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
+        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7.0.1
         with:
           name: com.burrowsapps.gif.search-androidTest-reports-${{ github.workflow }}-${{ github.run_id }}
@@ -178,7 +178,7 @@ jobs:
         run: ./gradlew assembleRelease -s
 
       - name: Upload Release APK artifact
-        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/master'
+        if: github.repository == 'jaredsburrows/android-gif-search' && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7.0.1
         with:
           name: com.burrowsapps.gif.search-release-${{ github.workflow }}-${{ github.run_id }}.apk
