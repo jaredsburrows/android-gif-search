@@ -172,6 +172,7 @@ subprojects {
         },
       )
 
+      // https://robolectric.org/getting-started/#running-with-java-17-and-higher
       jvmArgs(
         "--add-opens=java.base/java.lang=ALL-UNNAMED",
         "--add-opens=java.base/java.util=ALL-UNNAMED",
