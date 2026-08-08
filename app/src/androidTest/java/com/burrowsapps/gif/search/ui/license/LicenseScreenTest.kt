@@ -91,14 +91,14 @@ class LicenseScreenTest {
 
                 path.apply {
                   return when {
-                    // Matches URL pattern for trending on Tenor with parameters
-                    matches(Regex("^/v1/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
+                    // Matches URL pattern for trending on Klipy with parameters
+                    matches(Regex("^/api/v1/[^/]+/gifs/trending.*")) -> getMockResponse(fileName = "/trending_results.json")
 
-                    // Matches URL pattern for search on Tenor with parameters
-                    matches(Regex("^/v1/search.*")) -> getMockResponse(fileName = "/search_results.json")
+                    // Matches URL pattern for search on Klipy with parameters
+                    matches(Regex("^/api/v1/[^/]+/gifs/search.*")) -> getMockResponse(fileName = "/search_results.json")
 
                     // Handling image files with specific response
-                    matches(Regex(".*/[^/]+\\.(png|gif)$")) -> getMockGifResponse(fileName = "/android.gif")
+                    matches(Regex(".*/[^/]+\\.(png|jpg|gif)$")) -> getMockGifResponse(fileName = "/android.gif")
 
                     else -> MockResponse().setResponseCode(code = HTTP_NOT_FOUND)
                   }

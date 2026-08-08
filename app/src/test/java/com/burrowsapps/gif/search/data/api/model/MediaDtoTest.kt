@@ -9,7 +9,8 @@ import org.junit.Before
 import org.junit.Test
 
 class MediaDtoTest {
-  private val gifDto = GifDto()
+  private val gifDto = GifDto(url = "https://static.klipy.com/a.gif")
+  private val jpgDto = GifDto(url = "https://static.klipy.com/a.jpg")
   private var defaultSut = MediaDto()
   private lateinit var sut: MediaDto
 
@@ -17,14 +18,8 @@ class MediaDtoTest {
 
   @Before
   fun setUp() {
-    sut = MediaDto(tinyGif = gifDto, gif = gifDto)
+    sut = MediaDto(gif = gifDto, jpg = jpgDto)
     moshi = NetworkModule().provideMoshi()
-  }
-
-  @Test
-  fun testTinyGetGif() {
-    assertThat(defaultSut.tinyGif).isEqualTo(GifDto())
-    assertThat(sut.tinyGif).isEqualTo(gifDto)
   }
 
   @Test
@@ -34,17 +29,21 @@ class MediaDtoTest {
   }
 
   @Test
+  fun testGetJpg() {
+    assertThat(defaultSut.jpg).isEqualTo(GifDto())
+    assertThat(sut.jpg).isEqualTo(jpgDto)
+  }
+
+  @Test
   fun testMoshiDeserialization_Positive() {
     val json =
       """
       {
-        "tinyGif": {
-          "url": "${gifDto.url}",
-          "preview": "${gifDto.preview}"
-        },
         "gif": {
-          "url": "${gifDto.url}",
-          "preview": "${gifDto.preview}"
+          "url": "${gifDto.url}"
+        },
+        "jpg": {
+          "url": "${jpgDto.url}"
         }
       }
       """.trimIndent()
@@ -53,8 +52,8 @@ class MediaDtoTest {
     val result = adapter.fromJson(json)
 
     assertThat(result).isNotNull()
-    assertThat(result?.tinyGif).isEqualTo(gifDto)
     assertThat(result?.gif).isEqualTo(gifDto)
+    assertThat(result?.jpg).isEqualTo(jpgDto)
   }
 
   @Test
@@ -62,13 +61,11 @@ class MediaDtoTest {
     val invalidJson =
       """
       {
-        "tinyGif": {
-          "url": 123,
-          "preview": true
-        },
         "gif": {
-          "url": null,
-          "preview": {}
+          "url": 123
+        },
+        "jpg": {
+          "url": {}
         }
       }
       """.trimIndent()

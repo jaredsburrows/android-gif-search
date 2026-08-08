@@ -6,6 +6,8 @@ import androidx.paging.PagingState
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.burrowsapps.gif.search.data.api.model.DataDto
+import com.burrowsapps.gif.search.data.api.model.FileDto
 import com.burrowsapps.gif.search.data.api.model.GifDto
 import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.data.api.model.MediaDto
@@ -49,27 +51,30 @@ class GifRemoteMediatorTest {
     db.close()
   }
 
+  private fun media(url: String) = MediaDto(gif = GifDto(url = url), jpg = GifDto(url = "$url.jpg"))
+
+  private fun result(
+    gifUrl: String,
+    tinyGifUrl: String,
+  ) = ResultDto(file = FileDto(md = media(gifUrl), sm = media(tinyGifUrl)))
+
   private fun response(
     items: Int,
     prefix: String,
-    next: String,
+    currentPage: Int = 1,
+    hasNext: Boolean = true,
   ): GifResponseDto {
     val results =
       (1..items).map { i ->
-        val gif =
-          GifDto(
-            url = "https://ex.com/${prefix}g$i.gif",
-            preview = "https://ex.com/${prefix}gp$i.gif",
-          )
-        val tiny =
-          GifDto(
-            url = "https://ex.com/${prefix}t$i.gif",
-            preview = "https://ex.com/${prefix}tp$i.gif",
-          )
-        val media = MediaDto(gif = gif, tinyGif = tiny)
-        ResultDto(media = listOf(media))
+        result(
+          gifUrl = "https://ex.com/${prefix}g$i.gif",
+          tinyGifUrl = "https://ex.com/${prefix}t$i.gif",
+        )
       }
-    return GifResponseDto(results = results, next = next)
+    return GifResponseDto(
+      result = true,
+      data = DataDto(results = results, currentPage = currentPage, perPage = items, hasNext = hasNext),
+    )
   }
 
   private fun emptyState(): PagingState<Int, GifImageInfo> =
@@ -85,11 +90,7 @@ class GifRemoteMediatorTest {
     runTest(dispatcher) {
       whenever(repository.getTrendingResults(anyOrNull())).thenReturn(
         NetworkResult.Success(
-          response(
-            2,
-            "a",
-            next = "10.0",
-          ),
+          response(2, "a"),
         ),
       )
 
@@ -105,7 +106,7 @@ class GifRemoteMediatorTest {
 
       val list = db.queryResultDao().allForQuery("")
       assertThat(list).hasSize(2)
-      assertThat(db.remoteKeysDao().remoteKeys("")?.nextKey).isEqualTo("10.0")
+      assertThat(db.remoteKeysDao().remoteKeys("")?.nextKey).isEqualTo("2")
     }
 
   @Test
@@ -113,7 +114,7 @@ class GifRemoteMediatorTest {
     runTest(dispatcher) {
       // First load with old data
       whenever(repository.getTrendingResults(anyOrNull()))
-        .thenReturn(NetworkResult.Success(response(2, "old", next = "10.0")))
+        .thenReturn(NetworkResult.Success(response(2, "old")))
 
       val mediator =
         GifRemoteMediator(
@@ -131,7 +132,7 @@ class GifRemoteMediatorTest {
 
       // REFRESH should clear old data and load fresh from beginning
       whenever(repository.getTrendingResults(null))
-        .thenReturn(NetworkResult.Success(response(3, "new", next = "5.0")))
+        .thenReturn(NetworkResult.Success(response(3, "new")))
 
       val result = mediator.load(LoadType.REFRESH, emptyState())
       assertThat(result).isInstanceOf(androidx.paging.RemoteMediator.MediatorResult.Success::class.java)
@@ -142,16 +143,16 @@ class GifRemoteMediatorTest {
       assertThat(list[0].tinyGifUrl).contains("new")
       assertThat(list[1].tinyGifUrl).contains("new")
       assertThat(list[2].tinyGifUrl).contains("new")
-      assertThat(db.remoteKeysDao().remoteKeys("")?.nextKey).isEqualTo("5.0")
+      assertThat(db.remoteKeysDao().remoteKeys("")?.nextKey).isEqualTo("2")
     }
 
   @Test
   fun append_trending_appendsAndUpdatesKey() =
     runTest(dispatcher) {
       whenever(repository.getTrendingResults(anyOrNull()))
-        .thenReturn(NetworkResult.Success(response(2, "a", next = "10.0")))
-      whenever(repository.getTrendingResults("10.0"))
-        .thenReturn(NetworkResult.Success(response(2, "b", next = "20.0")))
+        .thenReturn(NetworkResult.Success(response(2, "a")))
+      whenever(repository.getTrendingResults("2"))
+        .thenReturn(NetworkResult.Success(response(2, "b", currentPage = 2)))
 
       val mediator =
         GifRemoteMediator(
@@ -168,14 +169,14 @@ class GifRemoteMediatorTest {
       assertThat(list).hasSize(4)
       assertThat(list.first().tinyGifUrl).contains("a")
       assertThat(list.last().tinyGifUrl).contains("b")
-      assertThat(db.remoteKeysDao().remoteKeys("")?.nextKey).isEqualTo("20.0")
+      assertThat(db.remoteKeysDao().remoteKeys("")?.nextKey).isEqualTo("3")
     }
 
   @Test
   fun append_withNoNextKey_returnsEndOfPagination() =
     runTest(dispatcher) {
       whenever(repository.getTrendingResults(anyOrNull()))
-        .thenReturn(NetworkResult.Success(response(2, "a", next = "10.0")))
+        .thenReturn(NetworkResult.Success(response(2, "a")))
 
       val mediator =
         GifRemoteMediator(
@@ -253,7 +254,7 @@ class GifRemoteMediatorTest {
   fun search_query_storesItemsWithCorrectKey() =
     runTest(dispatcher) {
       whenever(repository.getSearchResults("cats", null))
-        .thenReturn(NetworkResult.Success(response(2, "cat", next = "5.0")))
+        .thenReturn(NetworkResult.Success(response(2, "cat")))
 
       val mediator =
         GifRemoteMediator(
@@ -268,19 +269,21 @@ class GifRemoteMediatorTest {
       val list = db.queryResultDao().allForQuery("cats")
       assertThat(list).hasSize(2)
       assertThat(list.first().tinyGifUrl).contains("cat")
-      assertThat(db.remoteKeysDao().remoteKeys("cats")?.nextKey).isEqualTo("5.0")
+      assertThat(db.remoteKeysDao().remoteKeys("cats")?.nextKey).isEqualTo("2")
     }
 
   @Test
   fun buildGifList_skipsItemsWithMissingData() =
     runTest(dispatcher) {
-      // Create response with one item missing media
-      val validGif = GifDto(url = "https://ex.com/g1.gif", preview = "https://ex.com/gp1.gif")
-      val validTiny = GifDto(url = "https://ex.com/t1.gif", preview = "https://ex.com/tp1.gif")
-      val validResult = ResultDto(media = listOf(MediaDto(gif = validGif, tinyGif = validTiny)))
-      val invalidResult = ResultDto(media = emptyList())
+      // Create response with one item missing its file variants (all URLs blank)
+      val validResult = result(gifUrl = "https://ex.com/g1.gif", tinyGifUrl = "https://ex.com/t1.gif")
+      val invalidResult = ResultDto()
 
-      val response = GifResponseDto(results = listOf(validResult, invalidResult), next = "10.0")
+      val response =
+        GifResponseDto(
+          result = true,
+          data = DataDto(results = listOf(validResult, invalidResult), hasNext = true),
+        )
       whenever(repository.getTrendingResults(anyOrNull())).thenReturn(NetworkResult.Success(response))
 
       val mediator =
@@ -317,7 +320,7 @@ class GifRemoteMediatorTest {
     runTest(dispatcher) {
       // Pre-populate database with data
       whenever(repository.getTrendingResults(anyOrNull()))
-        .thenReturn(NetworkResult.Success(response(2, "a", next = "10.0")))
+        .thenReturn(NetworkResult.Success(response(2, "a")))
 
       val mediator =
         GifRemoteMediator(
@@ -340,7 +343,7 @@ class GifRemoteMediatorTest {
     runTest(dispatcher) {
       // Load "cats" query with 2 GIFs
       whenever(repository.getSearchResults("cats", null))
-        .thenReturn(NetworkResult.Success(response(2, "cat", next = "10.0")))
+        .thenReturn(NetworkResult.Success(response(2, "cat")))
 
       val catMediator =
         GifRemoteMediator(
@@ -359,7 +362,7 @@ class GifRemoteMediatorTest {
       // Now REFRESH the same "cats" query multiple times to trigger clean up
       // Cleanup runs every 5th refresh due to throttling
       whenever(repository.getSearchResults("cats", null))
-        .thenReturn(NetworkResult.Success(response(2, "dog", next = "5.0")))
+        .thenReturn(NetworkResult.Success(response(2, "dog")))
 
       // Do 5 refreshes to hit the cleanup interval
       repeat(5) {
@@ -383,27 +386,16 @@ class GifRemoteMediatorTest {
   fun refresh_doesNotDeleteSharedGifs() =
     runTest(dispatcher) {
       // Create a GIF that will appear in both the first and second refresh
-      val sharedGif =
-        GifDto(url = "https://ex.com/shared.gif", preview = "https://ex.com/sharedp.gif")
-      val sharedTiny =
-        GifDto(url = "https://ex.com/sharedtiny.gif", preview = "https://ex.com/sharedtinyp.gif")
-      val uniqueGif =
-        GifDto(url = "https://ex.com/unique.gif", preview = "https://ex.com/uniquep.gif")
-      val uniqueTiny =
-        GifDto(
-          url = "https://ex.com/uniquetiny.gif",
-          preview = "https://ex.com/uniquetinyp.gif",
-        )
+      val sharedResult =
+        result(gifUrl = "https://ex.com/shared.gif", tinyGifUrl = "https://ex.com/sharedtiny.gif")
+      val uniqueResult =
+        result(gifUrl = "https://ex.com/unique.gif", tinyGifUrl = "https://ex.com/uniquetiny.gif")
 
       // First refresh: load 2 GIFs (shared + unique)
       val firstResponse =
         GifResponseDto(
-          results =
-            listOf(
-              ResultDto(media = listOf(MediaDto(gif = sharedGif, tinyGif = sharedTiny))),
-              ResultDto(media = listOf(MediaDto(gif = uniqueGif, tinyGif = uniqueTiny))),
-            ),
-          next = "10.0",
+          result = true,
+          data = DataDto(results = listOf(sharedResult, uniqueResult), hasNext = true),
         )
 
       whenever(repository.getSearchResults("cats", null)).thenReturn(
@@ -428,19 +420,8 @@ class GifRemoteMediatorTest {
       // Second refresh: load only the shared GIF (unique GIF is gone from API results)
       val secondResponse =
         GifResponseDto(
-          results =
-            listOf(
-              ResultDto(
-                media =
-                  listOf(
-                    MediaDto(
-                      gif = sharedGif,
-                      tinyGif = sharedTiny,
-                    ),
-                  ),
-              ),
-            ),
-          next = "5.0",
+          result = true,
+          data = DataDto(results = listOf(sharedResult), hasNext = true),
         )
       whenever(repository.getSearchResults("cats", null)).thenReturn(
         NetworkResult.Success(
@@ -463,15 +444,16 @@ class GifRemoteMediatorTest {
   @Test
   fun buildGifList_skipsItemsWithBlankUrls() =
     runTest(dispatcher) {
-      val validGif = GifDto(url = "https://ex.com/g1.gif", preview = "https://ex.com/gp1.gif")
-      val validTiny = GifDto(url = "https://ex.com/t1.gif", preview = "https://ex.com/tp1.gif")
-      val blankGif = GifDto(url = "https://ex.com/g2.gif", preview = "https://ex.com/gp2.gif")
-      val blankTiny = GifDto(url = "", preview = "https://ex.com/tp2.gif") // Blank URL
+      val validResult = result(gifUrl = "https://ex.com/g1.gif", tinyGifUrl = "https://ex.com/t1.gif")
+      // Blank tiny gif URL
+      val invalidResult =
+        ResultDto(file = FileDto(md = media("https://ex.com/g2.gif"), sm = MediaDto()))
 
-      val validResult = ResultDto(media = listOf(MediaDto(gif = validGif, tinyGif = validTiny)))
-      val invalidResult = ResultDto(media = listOf(MediaDto(gif = blankGif, tinyGif = blankTiny)))
-
-      val response = GifResponseDto(results = listOf(validResult, invalidResult), next = "10.0")
+      val response =
+        GifResponseDto(
+          result = true,
+          data = DataDto(results = listOf(validResult, invalidResult), hasNext = true),
+        )
       whenever(repository.getTrendingResults(anyOrNull())).thenReturn(NetworkResult.Success(response))
 
       val mediator =
@@ -490,10 +472,10 @@ class GifRemoteMediatorTest {
     }
 
   @Test
-  fun append_withBlankNextCursor_returnsEndOfPagination() =
+  fun refresh_withHasNextFalse_returnsEndOfPagination() =
     runTest(dispatcher) {
-      // First load returns blank next cursor
-      val response = response(2, "a", next = "  ") // Blank/whitespace cursor
+      // Last page: has_next=false means no further pages
+      val response = response(2, "a", hasNext = false)
       whenever(repository.getTrendingResults(anyOrNull())).thenReturn(NetworkResult.Success(response))
 
       val mediator =
@@ -507,32 +489,7 @@ class GifRemoteMediatorTest {
 
       assertThat(result).isInstanceOf(androidx.paging.RemoteMediator.MediatorResult.Success::class.java)
       assertThat((result as androidx.paging.RemoteMediator.MediatorResult.Success).endOfPaginationReached).isTrue()
-    }
-
-  @Test
-  fun append_withSameCursorAsCurrentReturnsEndOfPagination() =
-    runTest(dispatcher) {
-      // First load
-      whenever(repository.getTrendingResults(anyOrNull()))
-        .thenReturn(NetworkResult.Success(response(2, "a", next = "10.0")))
-
-      val mediator =
-        GifRemoteMediator(
-          queryKey = "",
-          repository = repository,
-          database = db,
-          dispatcher = dispatcher,
-        )
-      mediator.load(LoadType.REFRESH, emptyState())
-
-      // Second load returns same cursor (API signaling end of pagination)
-      whenever(repository.getTrendingResults("10.0"))
-        .thenReturn(NetworkResult.Success(response(2, "b", next = "10.0"))) // Same cursor!
-
-      val result = mediator.load(LoadType.APPEND, emptyState())
-
-      assertThat(result).isInstanceOf(androidx.paging.RemoteMediator.MediatorResult.Success::class.java)
-      assertThat((result as androidx.paging.RemoteMediator.MediatorResult.Success).endOfPaginationReached).isTrue()
+      assertThat(db.remoteKeysDao().remoteKeys("")?.nextKey).isNull()
     }
 
   @Test
@@ -540,7 +497,7 @@ class GifRemoteMediatorTest {
     runTest(dispatcher) {
       // First load succeeds
       whenever(repository.getTrendingResults(anyOrNull()))
-        .thenReturn(NetworkResult.Success(response(2, "a", next = "10.0")))
+        .thenReturn(NetworkResult.Success(response(2, "a")))
 
       val mediator =
         GifRemoteMediator(
@@ -552,8 +509,8 @@ class GifRemoteMediatorTest {
       mediator.load(LoadType.REFRESH, emptyState())
 
       // Second load returns empty items (no more data)
-      whenever(repository.getTrendingResults("10.0"))
-        .thenReturn(NetworkResult.Success(response(0, "b", next = "20.0"))) // 0 items
+      whenever(repository.getTrendingResults("2"))
+        .thenReturn(NetworkResult.Success(response(0, "b", currentPage = 2))) // 0 items
 
       val result = mediator.load(LoadType.APPEND, emptyState())
 
@@ -564,9 +521,9 @@ class GifRemoteMediatorTest {
   @Test
   fun append_withAllDuplicateItems_returnsEndOfPagination() =
     runTest(dispatcher) {
-      // First load caches 2 items with a next cursor.
+      // First load caches 2 items with a next page.
       whenever(repository.getTrendingResults(anyOrNull()))
-        .thenReturn(NetworkResult.Success(response(2, "a", next = "10.0")))
+        .thenReturn(NetworkResult.Success(response(2, "a")))
 
       val mediator =
         GifRemoteMediator(
@@ -577,13 +534,13 @@ class GifRemoteMediatorTest {
         )
       mediator.load(LoadType.REFRESH, emptyState())
 
-      // APPEND returns the SAME items (all duplicates) but a fresh, different cursor.
-      whenever(repository.getTrendingResults("10.0"))
-        .thenReturn(NetworkResult.Success(response(2, "a", next = "20.0")))
+      // APPEND returns the SAME items (all duplicates) but a fresh, different page.
+      whenever(repository.getTrendingResults("2"))
+        .thenReturn(NetworkResult.Success(response(2, "a", currentPage = 2)))
 
       val result = mediator.load(LoadType.APPEND, emptyState())
 
-      // Nothing new was inserted, so pagination must end instead of spinning on fresh cursors.
+      // Nothing new was inserted, so pagination must end instead of spinning on fresh pages.
       assertThat(result).isInstanceOf(androidx.paging.RemoteMediator.MediatorResult.Success::class.java)
       assertThat((result as androidx.paging.RemoteMediator.MediatorResult.Success).endOfPaginationReached).isTrue()
       assertThat(db.queryResultDao().allForQuery("")).hasSize(2)
@@ -598,7 +555,7 @@ class GifRemoteMediatorTest {
       db.remoteKeysDao().upsert(RemoteKeysEntity("oldsearch", nextKey = "1", lastUpdated = 0L))
 
       whenever(repository.getTrendingResults(anyOrNull()))
-        .thenReturn(NetworkResult.Success(response(2, "a", next = "10.0")))
+        .thenReturn(NetworkResult.Success(response(2, "a")))
 
       val mediator =
         GifRemoteMediator(
@@ -622,7 +579,7 @@ class GifRemoteMediatorTest {
   fun refresh_throttlesEvictionUntilCleanupInterval() =
     runTest(dispatcher) {
       whenever(repository.getTrendingResults(anyOrNull()))
-        .thenReturn(NetworkResult.Success(response(2, "a", next = "10.0")))
+        .thenReturn(NetworkResult.Success(response(2, "a")))
 
       val mediator =
         GifRemoteMediator(

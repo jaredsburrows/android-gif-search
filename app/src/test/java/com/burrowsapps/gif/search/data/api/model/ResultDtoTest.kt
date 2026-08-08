@@ -9,9 +9,19 @@ import org.junit.Before
 import org.junit.Test
 
 class ResultDtoTest {
-  private val gifDto = GifDto()
-  private val mediaDto = MediaDto(tinyGif = gifDto, gif = gifDto)
-  private val mediaList = listOf(mediaDto)
+  private val fileDto =
+    FileDto(
+      md =
+        MediaDto(
+          gif = GifDto(url = "https://static.klipy.com/md.gif"),
+          jpg = GifDto(url = "https://static.klipy.com/md.jpg"),
+        ),
+      sm =
+        MediaDto(
+          gif = GifDto(url = "https://static.klipy.com/sm.gif"),
+          jpg = GifDto(url = "https://static.klipy.com/sm.jpg"),
+        ),
+    )
   private var sutDefault = ResultDto()
   private lateinit var sut: ResultDto
 
@@ -19,14 +29,14 @@ class ResultDtoTest {
 
   @Before
   fun setUp() {
-    sut = ResultDto(media = mediaList)
+    sut = ResultDto(file = fileDto)
     moshi = NetworkModule().provideMoshi()
   }
 
   @Test
-  fun testGetMedia() {
-    assertThat(sutDefault.media).isEmpty()
-    assertThat(sut.media).isEqualTo(mediaList)
+  fun testGetFile() {
+    assertThat(sutDefault.file).isEqualTo(FileDto())
+    assertThat(sut.file).isEqualTo(fileDto)
   }
 
   @Test
@@ -34,18 +44,16 @@ class ResultDtoTest {
     val json =
       """
       {
-        "media": [
-          {
-            "tinyGif": {
-              "url": "${gifDto.url}",
-              "preview": "${gifDto.preview}"
-            },
-            "gif": {
-              "url": "${gifDto.url}",
-              "preview": "${gifDto.preview}"
-            }
+        "file": {
+          "md": {
+            "gif": { "url": "${fileDto.md.gif.url}" },
+            "jpg": { "url": "${fileDto.md.jpg.url}" }
+          },
+          "sm": {
+            "gif": { "url": "${fileDto.sm.gif.url}" },
+            "jpg": { "url": "${fileDto.sm.jpg.url}" }
           }
-        ]
+        }
       }
       """.trimIndent()
 
@@ -53,8 +61,7 @@ class ResultDtoTest {
     val result = adapter.fromJson(json)
 
     assertThat(result).isNotNull()
-    assertThat(result?.media).hasSize(1)
-    assertThat(result?.media?.first()).isEqualTo(mediaDto)
+    assertThat(result?.file).isEqualTo(fileDto)
   }
 
   @Test
@@ -62,15 +69,13 @@ class ResultDtoTest {
     val invalidJson =
       """
       {
-        "media": [
-          {
-            "tinyGif": {
-              "url": [],
-              "preview": {}
-            },
-            "gif": null
-          }
-        ]
+        "file": {
+          "md": {
+            "gif": { "url": [] },
+            "jpg": null
+          },
+          "sm": 42
+        }
       }
       """.trimIndent()
 

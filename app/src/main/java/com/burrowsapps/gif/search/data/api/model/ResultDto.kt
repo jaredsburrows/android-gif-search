@@ -5,6 +5,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class ResultDto(
-  @field:Json(name = "media")
-  val media: List<MediaDto> = emptyList(),
+  @field:Json(name = "file")
+  val file: FileDto = FileDto(),
 )

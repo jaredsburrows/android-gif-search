@@ -9,11 +9,11 @@ import org.junit.Before
 import org.junit.Test
 
 class GifResponseDtoTest {
-  private val gifDto = GifDto()
-  private val mediaDto = MediaDto(tinyGif = gifDto, gif = gifDto)
-  private val resultDto = ResultDto(media = listOf(mediaDto))
-  private val results = listOf(resultDto)
-  private val nextResponse = "1.0"
+  private val gifDto = GifDto(url = "https://static.klipy.com/sm.gif")
+  private val jpgDto = GifDto(url = "https://static.klipy.com/sm.jpg")
+  private val mediaDto = MediaDto(gif = gifDto, jpg = jpgDto)
+  private val resultDto = ResultDto(file = FileDto(md = mediaDto, sm = mediaDto))
+  private val dataDto = DataDto(results = listOf(resultDto), currentPage = 1, perPage = 1, hasNext = true)
   private var sutDefault = GifResponseDto()
   private lateinit var sut: GifResponseDto
 
@@ -21,20 +21,20 @@ class GifResponseDtoTest {
 
   @Before
   fun setUp() {
-    sut = GifResponseDto(results = results, next = nextResponse)
+    sut = GifResponseDto(result = true, data = dataDto)
     moshi = NetworkModule().provideMoshi()
   }
 
   @Test
-  fun testGetResults() {
-    assertThat(sutDefault.results).isEmpty()
-    assertThat(sut.results).isEqualTo(results)
+  fun testGetResult() {
+    assertThat(sutDefault.result).isFalse()
+    assertThat(sut.result).isTrue()
   }
 
   @Test
-  fun testGetNext() {
-    assertThat(sutDefault.next).isEqualTo("0.0")
-    assertThat(sut.next).isEqualTo(nextResponse)
+  fun testGetData() {
+    assertThat(sutDefault.data).isEqualTo(DataDto())
+    assertThat(sut.data).isEqualTo(dataDto)
   }
 
   @Test
@@ -42,23 +42,26 @@ class GifResponseDtoTest {
     val json =
       """
       {
-        "results": [
-          {
-            "media": [
-              {
-                "tinyGif": {
-                  "url": "${gifDto.url}",
-                  "preview": "${gifDto.preview}"
+        "result": true,
+        "data": {
+          "data": [
+            {
+              "file": {
+                "md": {
+                  "gif": { "url": "${gifDto.url}" },
+                  "jpg": { "url": "${jpgDto.url}" }
                 },
-                "gif": {
-                  "url": "${gifDto.url}",
-                  "preview": "${gifDto.preview}"
+                "sm": {
+                  "gif": { "url": "${gifDto.url}" },
+                  "jpg": { "url": "${jpgDto.url}" }
                 }
               }
-            ]
-          }
-        ],
-        "next": "$nextResponse"
+            }
+          ],
+          "current_page": 1,
+          "per_page": 1,
+          "has_next": true
+        }
       }
       """.trimIndent()
 
@@ -66,9 +69,10 @@ class GifResponseDtoTest {
     val result = adapter.fromJson(json)
 
     assertThat(result).isNotNull()
-    assertThat(result?.results).hasSize(1)
-    assertThat(result?.results?.first()).isEqualTo(resultDto)
-    assertThat(result?.next).isEqualTo(nextResponse)
+    assertThat(result?.result).isTrue()
+    assertThat(result?.data?.results).hasSize(1)
+    assertThat(result?.data?.results?.first()).isEqualTo(resultDto)
+    assertThat(result?.data?.hasNext).isTrue()
   }
 
   @Test
@@ -76,20 +80,16 @@ class GifResponseDtoTest {
     val invalidJson =
       """
       {
-        "results": [
-          {
-            "media": [
-              {
-                "tinyGif": {
-                  "url": {},
-                  "preview": []
-                },
-                "gif": 42
-              }
-            ]
-          }
-        ],
-        "next": false
+        "result": "yes",
+        "data": {
+          "data": [
+            {
+              "file": 42
+            }
+          ],
+          "current_page": false,
+          "has_next": []
+        }
       }
       """.trimIndent()
 

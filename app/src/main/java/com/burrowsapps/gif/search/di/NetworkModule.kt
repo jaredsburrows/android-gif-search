@@ -89,7 +89,7 @@ internal class NetworkModule {
   /**
    * Forces API responses to be cacheable for [FORCE_CACHE_MAX_AGE_SECONDS] seconds.
    *
-   * Tenor's API returns no Cache-Control headers, so OkHttp's disk cache is never
+   * When the API returns no cacheable Cache-Control headers, OkHttp's disk cache is never
    * populated. This interceptor injects a max-age directive so that identical requests
    * within the window are served from disk without a network round-trip.
    */
