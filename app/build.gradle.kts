@@ -84,12 +84,9 @@ android {
     }
 
     release {
-      isMinifyEnabled = true
-      isShrinkResources = true
-      proguardFiles(
-        getDefaultProguardFile("proguard-android-optimize.txt"),
-        rootDir.resolve("config/proguard/proguard-rules.txt"),
-      )
+      optimization {
+        enable = true
+      }
       if (!hasKeyPath) {
         logger.warn(
           "APP_KEYS_PATH is not set: signing the release build with the committed public debug " +
@@ -118,13 +115,8 @@ licenseReport {
   generateHtmlReport = true
 }
 
-hilt {
-  enableAggregatingTask = true
-}
-
 ksp {
   arg("dagger.formatGeneratedSource", "disabled")
-  arg("dagger.fastInit", "enabled")
   arg("dagger.experimentalDaggerErrorMessages", "enabled")
 }
 

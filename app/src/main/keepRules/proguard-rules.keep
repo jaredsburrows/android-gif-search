@@ -1,0 +1,26 @@
+##########################################################################################
+# App-specific R8 rules only. (Default keep rules directory for the AGP optimization DSL.)
+#
+# All third-party rules that used to live in config/proguard/proguard-rules.txt now ship
+# inside the libraries themselves and are applied automatically by AGP (verify in
+# app/build/outputs/mapping/release/configuration.txt):
+#   Retrofit 3.x    retrofit.jar!/META-INF/proguard/retrofit2.pro
+#   OkHttp 5.x      okhttp-android.aar!/proguard.txt
+#   Okio 3.x        no rules required
+#   Moshi 1.15.x    moshi.jar!/META-INF/proguard/moshi.pro + per-model rules generated
+#                   by moshi-kotlin-codegen (KSP) into META-INF/proguard/
+#   Glide 5.x       glide.aar!/proguard.txt (GlideModule/AppGlideModule keeps)
+#   Hilt/Dagger     hilt-android.aar!/proguard.txt + dagger.jar!/META-INF/com.android.tools/r8/
+#   Room 2.8.x      room-runtime.aar!/proguard.txt
+#   Coroutines      kotlinx-coroutines jars!/META-INF/com.android.tools/r8*/coroutines.pro
+#
+# proguard-android-optimize.txt is included automatically (keepRules.includeDefault = true),
+# -allowaccessmodification comes from it, and -repackageclasses is the AGP default for apps
+# since AGP 9.1 — do not re-add any of them here.
+#
+# Note (AGP 9+): '-keep class A' no longer implicitly keeps <init>(); write
+# '-keep class A { <init>(); }' when a constructor must survive.
+#
+# Audit the merged rules after a release build with:
+#   ./gradlew :app:analyzeReleaseR8Config
+##########################################################################################
