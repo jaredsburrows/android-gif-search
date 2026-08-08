@@ -125,6 +125,7 @@ jobs:
           emulator-options: -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
           ram-size: 4096M
+          disk-size: 8192M
           emulator-boot-timeout: 1200
           script: echo "Generated AVD snapshot for caching."
 
@@ -138,8 +139,11 @@ jobs:
           emulator-options: -no-snapshot-save -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           ram-size: 4096M
+          disk-size: 8192M
           emulator-boot-timeout: 1200
-          script: ./gradlew connectedDebugAndroidTest -s || ./gradlew connectedDebugAndroidTest -s
+          script: |
+            timeout 180 sh -c 'until adb shell service check package | grep -q found; do sleep 2; done'
+            ./gradlew connectedDebugAndroidTest -s || ./gradlew connectedDebugAndroidTest -s
 
       - name: Publish Integration Test Report
         uses: EnricoMi/publish-unit-test-result-action@v2.24.0
