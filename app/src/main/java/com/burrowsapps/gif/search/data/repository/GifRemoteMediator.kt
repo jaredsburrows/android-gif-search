@@ -93,21 +93,21 @@ internal class GifRemoteMediator(
       val gifDao = database.gifDao()
       val queryResultsDao = database.queryResultDao()
 
-      // Determine the cursor position for the API call
+      // Determine the page for the API call
       val currentKey =
         when (loadType) {
           LoadType.REFRESH -> {
-            // REFRESH loads from the beginning with fresh data
+            // REFRESH loads from the first page with fresh data
             null
           }
 
           LoadType.PREPEND -> {
-            // Tenor API doesn't support backwards pagination
+            // Klipy API doesn't support backwards pagination
             return MediatorResult.Success(endOfPaginationReached = true)
           }
 
           LoadType.APPEND -> {
-            // Get the next cursor from our stored remote keys
+            // Get the next page from our stored remote keys
             val remoteKey = remoteKeysDao.remoteKeys(queryKey)
             if (remoteKey?.nextKey == null) {
               // No next key means we've reached the end
@@ -117,7 +117,7 @@ internal class GifRemoteMediator(
           }
         }
 
-      Timber.d("GifRemoteMediator: query='$queryKey', loadType=$loadType, cursor=$currentKey")
+      Timber.d("GifRemoteMediator: query='$queryKey', loadType=$loadType, page=$currentKey")
 
       // Fetch data from network on IO dispatcher
       val result: NetworkResult<GifResponseDto> =
@@ -149,19 +149,18 @@ internal class GifRemoteMediator(
           val response = result.data
           val items = buildGifList(response)
 
-          // Check if we've reached the end of pagination
-          // Tenor API returns the same cursor when no more data is available,
-          // or an empty/blank string, or fewer items than requested
-          val nextCursor =
+          // Klipy pagination is page-based: advance to current_page + 1 while has_next is true.
+          val nextPage =
             response
-              ?.next
-              ?.takeIf { it.isNotBlank() && it != currentKey }
+              ?.data
+              ?.takeIf { it.hasNext }
+              ?.let { (it.currentPage + 1).toString() }
           // Mutable so an APPEND page that adds no new rows (all duplicates) can also end pagination.
-          var reachedEnd = items.isEmpty() || nextCursor == null
+          var reachedEnd = items.isEmpty() || nextPage == null
           val fetchedAt = System.currentTimeMillis()
 
           Timber.d(
-            "GifRemoteMediator: Loaded ${items.size} items, nextCursor=$nextCursor, " +
+            "GifRemoteMediator: Loaded ${items.size} items, nextPage=$nextPage, " +
               "endOfPagination=$reachedEnd",
           )
 
@@ -223,12 +222,12 @@ internal class GifRemoteMediator(
               remoteKeysDao.clearQuery(queryKey)
             }
 
-            // Step 5: Store the next cursor (null once we've reached the end) plus a fetch timestamp
+            // Step 5: Store the next page (null once we've reached the end) plus a fetch timestamp
             // that initialize() uses for its staleness/TTL check.
             remoteKeysDao.upsert(
               RemoteKeysEntity(
                 searchKey = queryKey,
-                nextKey = if (reachedEnd) null else nextCursor,
+                nextKey = if (reachedEnd) null else nextPage,
                 lastUpdated = fetchedAt,
               ),
             )
@@ -288,24 +287,23 @@ internal class GifRemoteMediator(
 
   private fun buildGifList(response: GifResponseDto?): List<GifImageInfo> =
     response
+      ?.data
       ?.results
       ?.mapNotNull { result ->
-        // Use mapNotNull to safely skip any items with missing data
-        val media = result.media.firstOrNull() ?: return@mapNotNull null
+        // The grid renders the "sm" tier and the full-size dialog renders "md"; each tier's
+        // animated file is "gif" and its static preview is "jpg".
+        val gif = result.file.md
+        val tinyGif = result.file.sm
 
-        // Defensive null checks even though DTOs have default values
-        // This protects against malformed JSON or future API changes
-        val gif = media.gif
-        val tinyGif = media.tinyGif
-
-        // Skip items with missing URLs (defensive programming)
-        if (tinyGif.url.isBlank()) return@mapNotNull null
+        // Skip items with missing URLs (defensive programming against malformed JSON or
+        // future API changes, even though DTOs have default values)
+        if (tinyGif.gif.url.isBlank()) return@mapNotNull null
 
         GifImageInfo(
-          gifUrl = gif.url,
-          gifPreviewUrl = gif.preview,
-          tinyGifUrl = tinyGif.url,
-          tinyGifPreviewUrl = tinyGif.preview,
+          gifUrl = gif.gif.url,
+          gifPreviewUrl = gif.jpg.url,
+          tinyGifUrl = tinyGif.gif.url,
+          tinyGifPreviewUrl = tinyGif.jpg.url,
         )
       }.orEmpty()
 }

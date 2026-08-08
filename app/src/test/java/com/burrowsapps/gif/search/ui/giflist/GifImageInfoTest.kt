@@ -5,8 +5,8 @@ import org.junit.Before
 import org.junit.Test
 
 class GifImageInfoTest {
-  private val gifUrl = "https://media.tenor.com/images/ed8cf447392c5e7e0cc16cbad2a0edce/tenor.gif"
-  private val previewUrl = "https://media.tenor.com/images/b1060f2602934944c0e3502a1d7d20d8/raw"
+  private val gifUrl = "https://static.klipy.com/ii/c3a19a0b747a76e98651f2b9a3cca5ff/a7/68/IkPBE6uB.gif"
+  private val previewUrl = "https://static.klipy.com/ii/c3a19a0b747a76e98651f2b9a3cca5ff/a7/68/idSbgVOfzB3KVfKSzd8W.jpg"
   private var sutDefault = GifImageInfo()
 
   private lateinit var sut: GifImageInfo

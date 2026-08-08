@@ -10,20 +10,21 @@ android {
 }
 
 tasks.register("updateTestFiles") {
-  description = "Updates the test JSON files with fresh data from the Tenor API."
+  description = "Updates the test JSON files with fresh data from the Klipy API."
 
   // Resolve the output dir at configuration time so the doLast lambda captures only a
   // File (configuration-cache safe), not the Project via android.sourceSets.
   val resourcesFolder = layout.projectDirectory.dir("src/main/resources").asFile
   doLast {
+    val apiKey = "bA9nOCYnCLJhSswsDyJQcGMiigKFLuh2WaZRjzZF8ZfTDxLIrph5CGcHspLqZo9n"
     val testData =
       mapOf(
         // Show enough to emulate a filtered "search" for testing
         "search_results.json" to
-          "https://g.tenor.com/v1/search?key=LIVDSRZULELA&media_filter=minimal&q=hello&limit=1",
+          "https://api.klipy.com/api/v1/$apiKey/gifs/search?q=hello&page=1&per_page=1",
         // Show just enough to fill the screen for testing
         "trending_results.json" to
-          "https://g.tenor.com/v1/trending?key=LIVDSRZULELA&media_filter=minimal&limit=1",
+          "https://api.klipy.com/api/v1/$apiKey/gifs/trending?page=1&per_page=1",
       )
 
     testData.forEach { (file, url) ->
@@ -32,8 +33,7 @@ tasks.register("updateTestFiles") {
           .toURL()
           .readText()
           // Point our mock JSON to point to local OkHTTP Mock server
-          .replace("media.tenor.com", "localhost:8080")
-          .replace("tenor.com", "localhost:8080")
+          .replace("static.klipy.com", "localhost:8080")
           // Enforce HTTP for local MockWebServer
           .replace("https:", "http:")
 

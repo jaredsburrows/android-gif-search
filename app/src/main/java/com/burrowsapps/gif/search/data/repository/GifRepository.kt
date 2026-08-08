@@ -14,8 +14,15 @@ internal class GifRepository
     suspend fun getSearchResults(
       query: String,
       position: String?,
-    ): NetworkResult<GifResponseDto> = safeApiCall { service.fetchSearchResults(query, position) }
+    ): NetworkResult<GifResponseDto> = safeApiCall { service.fetchSearchResults(query, position.toPage()) }
 
     suspend fun getTrendingResults(position: String?): NetworkResult<GifResponseDto> =
-      safeApiCall { service.fetchTrendingResults(position) }
+      safeApiCall { service.fetchTrendingResults(position.toPage()) }
+
+    private companion object {
+      const val FIRST_PAGE = 1
+
+      /** Klipy pagination is page-based; a null/invalid stored position means "load page 1". */
+      fun String?.toPage(): Int = this?.toIntOrNull() ?: FIRST_PAGE
+    }
   }

@@ -7,6 +7,4 @@ import com.squareup.moshi.JsonClass
 internal data class GifDto(
   @field:Json(name = "url")
   val url: String = "",
-  @field:Json(name = "preview")
-  val preview: String = "",
 )
