@@ -84,9 +84,6 @@ android {
     }
 
     release {
-      // AGP 9.3+ optimization DSL: enables R8 code shrinking/optimization and optimized
-      // resource shrinking. Default rules (proguard-android-optimize.txt) are included via
-      // keepRules.includeDefault; app-specific rules live in src/main/keepRules/.
       optimization {
         enable = true
       }
