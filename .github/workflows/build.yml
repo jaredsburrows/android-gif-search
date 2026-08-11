@@ -103,30 +103,21 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Install adb service-readiness shim for ps16k emulator
+      # The runner ships an outdated avdmanager that writes target=android-0 into the
+      # AVD config for minor-versioned packages (android-37.x), so the emulator clamps
+      # to API 3 and boots misconfigured. Update cmdline-tools so avdmanager parses it.
+      # See https://github.com/ReactiveCircus/android-emulator-runner/issues/482
+      - name: Update SDK cmdline-tools
+        id: cmdline-tools
         run: |
-          # On google_apis_ps16k, system services (input, settings) may not be registered
-          # in ServiceManager yet when sys.boot_completed=1.  The emulator-runner action
-          # immediately runs "adb shell input keyevent 82" and "adb shell settings put ..."
-          # after detecting boot; if those fail (exit 20) the action aborts before the
-          # script: block runs.  This shim retries those commands until services respond.
-          REAL_ADB="${ANDROID_HOME}/platform-tools/adb"
-          printf '#!/bin/bash\nDELEGATE=%s\n' "$REAL_ADB" > /tmp/adb
-          printf '%s\n' \
-            'if [[ "$*" == *"shell input keyevent"* ]] || [[ "$*" == *"shell settings put"* ]]; then' \
-            '  for i in $(seq 1 30); do' \
-            '    out=$("$DELEGATE" "$@" 2>&1); rc=$?' \
-            '    if [ $rc -eq 0 ] && ! echo "$out" | grep -q "find service"; then' \
-            '      echo "$out"; exit 0' \
-            '    fi' \
-            '    echo "adb shim: service not ready (attempt $i/30), retrying in 2s..."' \
-            '    sleep 2' \
-            '  done' \
-            '  exit 0' \
-            'fi' \
-            'exec "$DELEGATE" "$@"' >> /tmp/adb
-          chmod +x /tmp/adb
-          echo "/tmp" >> "$GITHUB_PATH"
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          yes | "$SDK/cmdline-tools/latest/bin/sdkmanager" --install "cmdline-tools;latest" > /dev/null
+          # sdkmanager won't overwrite the preinstalled dir, so it installs to latest-2.
+          if [ -d "$SDK/cmdline-tools/latest-2" ]; then
+            rm -rf "$SDK/cmdline-tools/latest"
+            mv "$SDK/cmdline-tools/latest-2" "$SDK/cmdline-tools/latest"
+          fi
+          echo "version=$("$SDK/cmdline-tools/latest/bin/sdkmanager" --version 2>/dev/null | grep -Eo '^[0-9][0-9.]*' | head -1)" >> "$GITHUB_OUTPUT"
 
       - name: Cache AVD
         uses: actions/cache@v6.1.0
@@ -135,9 +126,11 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ runner.os }}-api${{ env.ANDROID_API_LEVEL }}-v1
+          # Include cmdline-tools version so AVDs created by the old broken avdmanager
+          # are automatically invalidated when the tools are updated.
+          key: avd-${{ runner.os }}-api${{ env.ANDROID_API_LEVEL }}-tools${{ steps.cmdline-tools.outputs.version }}-v1
           restore-keys: |
-            avd-${{ runner.os }}-api${{ env.ANDROID_API_LEVEL }}-
+            avd-${{ runner.os }}-api${{ env.ANDROID_API_LEVEL }}-tools${{ steps.cmdline-tools.outputs.version }}-
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -146,9 +139,11 @@ jobs:
           api-level: ${{ env.ANDROID_API_LEVEL }}
           arch: x86_64
           target: google_apis_ps16k
+          channel: canary
           force-avd-creation: false
           emulator-options: -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
+          disable-spellchecker: true
           ram-size: 4096M
           disk-size: 8192M
           emulator-boot-timeout: 1200
@@ -160,15 +155,15 @@ jobs:
           api-level: ${{ env.ANDROID_API_LEVEL }}
           arch: x86_64
           target: google_apis_ps16k
+          channel: canary
           ram-size: 4096M
           disk-size: 8192M
           emulator-boot-timeout: 1200
           force-avd-creation: false
           emulator-options: -no-snapshot -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: |
-            i=0; while [ $i -lt 6 ]; do if adb shell pm path android 2>&1 | grep -q "package:" && adb shell am get-current-user 2>&1 | grep -qE "^[0-9]+$"; then i=$((i+1)); echo "Framework healthy ($i/6)"; else i=0; echo "Framework not stable, resetting"; fi; sleep 5; done; echo "Framework stable"
-            ./gradlew connectedDebugAndroidTest -s || ./gradlew connectedDebugAndroidTest -s
+          disable-spellchecker: true
+          script: ./gradlew connectedDebugAndroidTest -s || ./gradlew connectedDebugAndroidTest -s
 
       - name: Publish Integration Test Report
         uses: EnricoMi/publish-unit-test-result-action@v2.24.0
