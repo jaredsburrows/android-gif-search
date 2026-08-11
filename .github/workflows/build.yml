@@ -142,23 +142,7 @@ jobs:
           emulator-options: -no-snapshot -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |
-            # The ps16k emulator performs a secondary system_server restart after boot to finalize
-            # 16K-page configuration. Wait for both package manager and activity manager to be
-            # responsive for 6 consecutive checks (30 seconds of sustained stability) before installing.
-            timeout 600 sh -c '
-              stable=0
-              while [ $stable -lt 6 ]; do
-                if adb shell pm path android 2>&1 | grep -q "package:" && \
-                   adb shell am get-current-user 2>&1 | grep -qE "^[0-9]+$"; then
-                  stable=$((stable+1))
-                  echo "Framework healthy ($stable/6)"
-                else
-                  stable=0
-                  echo "Framework not yet stable, resetting"
-                fi
-                sleep 5
-              done
-            ' || { echo "framework never stabilized"; exit 1; }
+            i=0; while [ $i -lt 6 ]; do if adb shell pm path android 2>&1 | grep -q "package:" && adb shell am get-current-user 2>&1 | grep -qE "^[0-9]+$"; then i=$((i+1)); echo "Framework healthy ($i/6)"; else i=0; echo "Framework not stable, resetting"; fi; sleep 5; done; echo "Framework stable"
             ./gradlew connectedDebugAndroidTest -s || ./gradlew connectedDebugAndroidTest -s
 
       - name: Publish Integration Test Report
