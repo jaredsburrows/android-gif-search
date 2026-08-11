@@ -105,30 +105,26 @@ jobs:
 
       - name: Install adb service-readiness shim for ps16k emulator
         run: |
-          REAL_ADB=$(which adb)
           # On google_apis_ps16k, system services (input, settings) may not be registered
           # in ServiceManager yet when sys.boot_completed=1.  The emulator-runner action
           # immediately runs "adb shell input keyevent 82" and "adb shell settings put ..."
           # after detecting boot; if those fail (exit 20) the action aborts before the
-          # script: block runs.  This shim intercepts those commands and retries them until
-          # the services respond, then delegates everything else to the real adb.
-          {
-            printf '%s\n' '#!/bin/bash'
-            printf 'DELEGATE=%q\n' "$REAL_ADB"
-            printf '%s\n' \
-              'if [[ "$*" == *"shell input keyevent"* ]] || [[ "$*" == *"shell settings put"* ]]; then' \
-              '  for i in $(seq 1 30); do' \
-              '    out=$("$DELEGATE" "$@" 2>&1); rc=$?' \
-              '    if [ $rc -eq 0 ] && ! echo "$out" | grep -q "find service"; then' \
-              '      echo "$out"; exit 0' \
-              '    fi' \
-              '    echo "adb shim: service not ready (attempt $i/30), retrying in 2s..."' \
-              '    sleep 2' \
-              '  done' \
-              '  exit 0' \
-              'fi' \
-              'exec "$DELEGATE" "$@"'
-          } > /tmp/adb
+          # script: block runs.  This shim retries those commands until services respond.
+          REAL_ADB="${ANDROID_HOME}/platform-tools/adb"
+          printf '#!/bin/bash\nDELEGATE=%s\n' "$REAL_ADB" > /tmp/adb
+          printf '%s\n' \
+            'if [[ "$*" == *"shell input keyevent"* ]] || [[ "$*" == *"shell settings put"* ]]; then' \
+            '  for i in $(seq 1 30); do' \
+            '    out=$("$DELEGATE" "$@" 2>&1); rc=$?' \
+            '    if [ $rc -eq 0 ] && ! echo "$out" | grep -q "find service"; then' \
+            '      echo "$out"; exit 0' \
+            '    fi' \
+            '    echo "adb shim: service not ready (attempt $i/30), retrying in 2s..."' \
+            '    sleep 2' \
+            '  done' \
+            '  exit 0' \
+            'fi' \
+            'exec "$DELEGATE" "$@"' >> /tmp/adb
           chmod +x /tmp/adb
           echo "/tmp" >> "$GITHUB_PATH"
 
