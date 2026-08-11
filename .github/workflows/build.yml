@@ -15,7 +15,7 @@ concurrency:
 
 env:
   JAVA_VERSION: 25
-  ANDROID_API_LEVEL: 36
+  ANDROID_API_LEVEL: "37.1"
 
 permissions:
   checks: write
@@ -97,6 +97,22 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
+      # The runner ships an outdated avdmanager that writes target=android-0 into the
+      # AVD config for minor-versioned packages (android-37.x), so the emulator clamps
+      # to API 3 and boots misconfigured. Update cmdline-tools so avdmanager parses it.
+      # See https://github.com/ReactiveCircus/android-emulator-runner/issues/482
+      - name: Update SDK cmdline-tools
+        id: cmdline-tools
+        run: |
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          yes | "$SDK/cmdline-tools/latest/bin/sdkmanager" --install "cmdline-tools;latest" > /dev/null
+          # sdkmanager won't overwrite the preinstalled dir, so it installs to latest-2.
+          if [ -d "$SDK/cmdline-tools/latest-2" ]; then
+            rm -rf "$SDK/cmdline-tools/latest"
+            mv "$SDK/cmdline-tools/latest-2" "$SDK/cmdline-tools/latest"
+          fi
+          echo "version=$("$SDK/cmdline-tools/latest/bin/sdkmanager" --version 2>/dev/null | grep -Eo '^[0-9][0-9.]*' | head -1)" >> "$GITHUB_OUTPUT"
+
       - name: Enable KVM group perms
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -110,9 +126,11 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ runner.os }}-api${{ env.ANDROID_API_LEVEL }}-v1
+          # Include cmdline-tools version so AVDs created by the old broken avdmanager
+          # are automatically invalidated when the tools are updated.
+          key: avd-${{ runner.os }}-api${{ env.ANDROID_API_LEVEL }}-tools${{ steps.cmdline-tools.outputs.version }}-v1
           restore-keys: |
-            avd-${{ runner.os }}-api${{ env.ANDROID_API_LEVEL }}-
+            avd-${{ runner.os }}-api${{ env.ANDROID_API_LEVEL }}-tools${{ steps.cmdline-tools.outputs.version }}-
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -120,10 +138,12 @@ jobs:
         with:
           api-level: ${{ env.ANDROID_API_LEVEL }}
           arch: x86_64
-          target: google_apis
+          target: google_apis_ps16k
           force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
+          disable-spellchecker: true
+          disk-size: 8192M
           script: echo "Generated AVD snapshot for caching."
 
       - name: Run Debug Instrumentation Tests (Ran up to 2 times)
@@ -131,10 +151,12 @@ jobs:
         with:
           api-level: ${{ env.ANDROID_API_LEVEL }}
           arch: x86_64
-          target: google_apis
+          target: google_apis_ps16k
+          disk-size: 8192M
           force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
+          disable-spellchecker: true
           script: ./gradlew connectedDebugAndroidTest -s || ./gradlew connectedDebugAndroidTest -s
 
       - name: Publish Integration Test Report
