@@ -142,9 +142,8 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
-          ram-size: 4096M
+          disable-spellchecker: true
           disk-size: 8192M
-          emulator-boot-timeout: 1200
           script: echo "Generated AVD snapshot for caching."
 
       - name: Run Debug Instrumentation Tests (Ran up to 2 times)
@@ -153,15 +152,12 @@ jobs:
           api-level: ${{ env.ANDROID_API_LEVEL }}
           arch: x86_64
           target: google_apis_ps16k
-          ram-size: 4096M
           disk-size: 8192M
-          emulator-boot-timeout: 1200
           force-avd-creation: false
           emulator-options: -no-snapshot -no-metrics -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: |
-            timeout 180 sh -c 'until adb shell service check package | grep -q found; do sleep 2; done' || { echo "framework never came up"; exit 1; }
-            ./gradlew connectedDebugAndroidTest -s || ./gradlew connectedDebugAndroidTest -s
+          disable-spellchecker: true
+          script: ./gradlew connectedDebugAndroidTest -s || ./gradlew connectedDebugAndroidTest -s
 
       - name: Publish Integration Test Report
         uses: EnricoMi/publish-unit-test-result-action@v2.24.0
