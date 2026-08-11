@@ -103,6 +103,13 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Update SDK cmdline-tools
+        id: cmdline-tools
+        run: |
+            yes | sdkmanager --licenses
+            yes | sdkmanager --update
+            yes |sdkmanager "cmdline-tools;latest"
+
       - name: Cache AVD
         uses: actions/cache@v6.1.0
         id: avd-cache
