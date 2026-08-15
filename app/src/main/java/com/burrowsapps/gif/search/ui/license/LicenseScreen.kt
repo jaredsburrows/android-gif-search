@@ -26,8 +26,12 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -157,17 +161,22 @@ private fun TheWebView(assetLoader: WebViewAssetLoader) {
   val context = LocalContext.current
   val runningInPreview = LocalInspectionMode.current
 
+  // Bumped when the WebView's render process dies, so produceState replaces the dead instance
+  // (which DisposableEffect below tears down once the new one takes its place).
+  var webViewGeneration by remember { mutableIntStateOf(0) }
+
   // Build the WebView after the first frame so its one-time Chromium init doesn't jank the
   // navigation transition into this screen. (WebView must still be constructed on the main thread.)
   // Read into a plain val (not a `by` delegate) so DisposableEffect's onDispose captures this
   // composition's value rather than re-reading live state (which would destroy the new instance).
   val webView =
-    produceState<WebView?>(initialValue = null) {
+    produceState<WebView?>(initialValue = null, webViewGeneration) {
       value =
         configuredWebView(
           context = context,
           assetLoader = assetLoader,
           runningInPreview = runningInPreview,
+          onRendererGone = { webViewGeneration++ },
         )
     }.value
 
@@ -190,12 +199,16 @@ private fun TheWebView(assetLoader: WebViewAssetLoader) {
       CircularProgressIndicator()
     }
   } else {
-    AndroidView(
-      factory = { view },
-      modifier = Modifier.fillMaxSize(),
-    ) {
-      // from "main/assets/index.html" -> "file:///android_asset/index.html"
-      it.loadUrl("https://appassets.androidplatform.net/assets/open_source_licenses.html")
+    // key() so a replacement instance (after a render process crash) gets a fresh AndroidView
+    // node — AndroidView's factory only ever runs once per node.
+    key(view) {
+      AndroidView(
+        factory = { view },
+        modifier = Modifier.fillMaxSize(),
+      ) {
+        // from "main/assets/index.html" -> "file:///android_asset/index.html"
+        it.loadUrl("https://appassets.androidplatform.net/assets/open_source_licenses.html")
+      }
     }
   }
 }
@@ -204,11 +217,12 @@ private fun configuredWebView(
   context: Context,
   assetLoader: WebViewAssetLoader,
   runningInPreview: Boolean,
+  onRendererGone: (WebView) -> Unit,
 ): WebView =
   WebView(context).apply {
     isVerticalScrollBarEnabled = false
 
-    webViewClient = LicenseWebViewClient(assetLoader)
+    webViewClient = LicenseWebViewClient(assetLoader, onRendererGone)
     webChromeClient = LicenseWebChromeClient()
 
     if (!runningInPreview) {
