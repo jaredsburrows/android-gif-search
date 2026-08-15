@@ -1,6 +1,8 @@
 package com.burrowsapps.gif.search.ui.license
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
@@ -8,8 +10,13 @@ import android.webkit.WebViewClient
 import androidx.webkit.WebViewAssetLoader
 import timber.log.Timber
 
+// MissingOnRenderProcessGone (androidx.webkit 1.17.0) also unconditionally flags every
+// WebViewClient constructor call, including the super-constructor call every Kotlin subclass
+// makes, so it still trips here even though onRenderProcessGone is implemented below.
+@SuppressLint("MissingOnRenderProcessGone")
 internal class LicenseWebViewClient(
   private val assetLoader: WebViewAssetLoader,
+  private val onRendererGone: (WebView) -> Unit = {},
 ) : WebViewClient() {
   override fun onPageStarted(
     view: WebView?,
@@ -55,5 +62,17 @@ internal class LicenseWebViewClient(
     errorResponse: WebResourceResponse,
   ) {
     Timber.tag("LicenseWebViewClient").e("onReceivedHttpError: ${request.url} (${errorResponse.statusCode})")
+  }
+
+  override fun onRenderProcessGone(
+    view: WebView,
+    detail: RenderProcessGoneDetail,
+  ): Boolean {
+    Timber.tag("LicenseWebViewClient").e("onRenderProcessGone: didCrash=${detail.didCrash()}")
+
+    // The instance can't be reused once its render process is gone; the owner must detach,
+    // destroy and replace it. Returning true keeps the crash from taking down the app process.
+    onRendererGone(view)
+    return true
   }
 }

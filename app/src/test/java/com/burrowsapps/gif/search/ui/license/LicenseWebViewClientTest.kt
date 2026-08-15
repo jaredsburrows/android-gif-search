@@ -2,6 +2,7 @@ package com.burrowsapps.gif.search.ui.license
 
 import android.content.Context
 import android.net.Uri
+import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
@@ -10,6 +11,8 @@ import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.webkit.WebViewAssetLoader
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -90,4 +93,26 @@ class LicenseWebViewClientTest {
     // Will be null unless asset actually exists in your test /assets dir
     client.shouldInterceptRequest(webView, request)
   }
+
+  @Test
+  fun testOnRenderProcessGoneReturnsTrue() {
+    assertTrue(client.onRenderProcessGone(webView, renderProcessGoneDetail()))
+  }
+
+  @Test
+  fun testOnRenderProcessGoneReportsDeadViewToOwner() {
+    var goneView: WebView? = null
+    val client = LicenseWebViewClient(assetLoader) { view -> goneView = view }
+
+    client.onRenderProcessGone(webView, renderProcessGoneDetail())
+
+    assertSame(webView, goneView)
+  }
+
+  private fun renderProcessGoneDetail(): RenderProcessGoneDetail =
+    object : RenderProcessGoneDetail() {
+      override fun didCrash(): Boolean = true
+
+      override fun rendererPriorityAtExit(): Int = WebView.RENDERER_PRIORITY_BOUND
+    }
 }
