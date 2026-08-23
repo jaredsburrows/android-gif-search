@@ -4,7 +4,7 @@ dagger = "2.60.1"
 glide = "5.0.9"
 leakcanary = "2.14"
 moshi = "1.15.2"
-robolectric = "4.17-beta-3"
+robolectric = "4.17-beta-4"
 room = "2.8.4"
 # build
 sdk = "37"
