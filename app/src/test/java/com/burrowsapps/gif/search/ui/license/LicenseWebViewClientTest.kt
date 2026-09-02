@@ -16,6 +16,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
 class LicenseWebViewClientTest {
@@ -109,10 +111,11 @@ class LicenseWebViewClientTest {
     assertSame(webView, goneView)
   }
 
+  // RenderProcessGoneDetail's constructor is deprecated - only the framework is meant to build
+  // one - so stub the detail instead of subclassing it.
   private fun renderProcessGoneDetail(): RenderProcessGoneDetail =
-    object : RenderProcessGoneDetail() {
-      override fun didCrash(): Boolean = true
-
-      override fun rendererPriorityAtExit(): Int = WebView.RENDERER_PRIORITY_BOUND
+    mock<RenderProcessGoneDetail> {
+      on { didCrash() } doReturn true
+      on { rendererPriorityAtExit() } doReturn WebView.RENDERER_PRIORITY_BOUND
     }
 }
