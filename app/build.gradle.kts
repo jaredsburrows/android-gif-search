@@ -169,10 +169,9 @@ dependencies {
   androidTestImplementation(libs.androidx.compose.junit)
 
   // Room Database
-  implementation(libs.androidx.room.runtime)
-  implementation(libs.androidx.room)
-  implementation(libs.androidx.room.paging)
-  ksp(libs.androidx.room.compiler)
+  implementation(libs.androidx.room3.runtime)
+  implementation(libs.androidx.room3.paging)
+  ksp(libs.androidx.room3.compiler)
 
   // Glide
   implementation(libs.landscapist.glide)
