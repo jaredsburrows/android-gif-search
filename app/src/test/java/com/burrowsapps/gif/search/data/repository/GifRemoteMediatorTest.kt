@@ -3,7 +3,7 @@ package com.burrowsapps.gif.search.data.repository
 import androidx.paging.LoadType
 import androidx.paging.PagingConfig
 import androidx.paging.PagingState
-import androidx.room.Room
+import androidx.room3.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.data.api.model.DataDto
