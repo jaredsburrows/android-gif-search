@@ -329,5 +329,6 @@ hs_err_pid*
 
 # ai
 .claude/
-.cursor/
-.firebender/
+.copilot/
+.codex/
+.team/
