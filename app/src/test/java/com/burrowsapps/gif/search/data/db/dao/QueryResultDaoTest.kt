@@ -1,12 +1,14 @@
 package com.burrowsapps.gif.search.data.db.dao
 
-import androidx.room.Room
+import androidx.paging.PagingSource
+import androidx.room3.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.data.db.AppDatabase
 import com.burrowsapps.gif.search.data.db.entity.GifEntity
 import com.burrowsapps.gif.search.data.db.entity.QueryResultEntity
 import com.burrowsapps.gif.search.data.db.entity.RemoteKeysEntity
+import com.burrowsapps.gif.search.ui.giflist.GifImageInfo
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -175,5 +177,57 @@ class QueryResultDaoTest {
       assertThat(dao.allForQuery("")).hasSize(1)
       assertThat(dao.allForQuery("cats")).hasSize(1)
       assertThat(db.gifDao().count()).isEqualTo(1)
+    }
+
+  // Regression coverage for the room3 migration: room3-compiler no longer special-cases
+  // PagingSource DAO returns on its own. Support only exists because QueryResultDao carries
+  // @DaoReturnTypeConverters(PagingSourceDaoReturnTypeConverter::class) at the @Dao (class) level.
+  // If that annotation were missing, misplaced (e.g. on the function instead of the interface), or
+  // silently ignored by the compiler, pagingSource() would either fail to compile or -- worse --
+  // compile but return a broken/empty PagingSource at runtime, which is exactly the kind of failure
+  // that would slip past code review and only surface as an empty results grid in production.
+  @Test
+  fun pagingSource_load_returnsInsertedItemsInOrder() =
+    runBlocking {
+      val gifs =
+        listOf(
+          GifEntity("tiny1", "preview1", "gif1", "gifPrev1"),
+          GifEntity("tiny2", "preview2", "gif2", "gifPrev2"),
+        )
+      db.gifDao().upsertAll(gifs)
+
+      val query = "cats"
+      dao.insertAll(
+        listOf(
+          QueryResultEntity(query, "tiny1", 0),
+          QueryResultEntity(query, "tiny2", 1),
+        ),
+      )
+
+      val pagingSource = dao.pagingSource(query)
+      val result =
+        pagingSource.load(
+          PagingSource.LoadParams.Refresh(key = null, loadSize = 10, placeholdersEnabled = false),
+        )
+
+      assertThat(result).isInstanceOf(PagingSource.LoadResult.Page::class.java)
+      val page = result as PagingSource.LoadResult.Page<Int, GifImageInfo>
+      assertThat(page.data.map { it.tinyGifUrl }).containsExactly("tiny1", "tiny2").inOrder()
+    }
+
+  // Edge case: a query with no cached rows should yield a valid, empty page rather than throwing
+  // or returning null/Invalid -- callers (Paging3) rely on that contract to render an empty list.
+  @Test
+  fun pagingSource_load_withNoMatchingRows_returnsEmptyPage() =
+    runBlocking {
+      val pagingSource = dao.pagingSource("no-such-query")
+      val result =
+        pagingSource.load(
+          PagingSource.LoadParams.Refresh(key = null, loadSize = 10, placeholdersEnabled = false),
+        )
+
+      assertThat(result).isInstanceOf(PagingSource.LoadResult.Page::class.java)
+      val page = result as PagingSource.LoadResult.Page<Int, GifImageInfo>
+      assertThat(page.data).isEmpty()
     }
 }

@@ -4,8 +4,8 @@ dagger = "2.60.1"
 glide = "5.0.9"
 leakcanary = "2.14"
 moshi = "1.15.2"
-robolectric = "4.17-beta-4"
-room = "2.8.4"
+robolectric = "4.17"
+room3 = "3.0.3"
 # build
 sdk = "37"
 # signing
@@ -18,15 +18,15 @@ android-library = { id = "com.android.library", version.ref = "android" }
 dagger = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 dexcount = { id = "com.getkeepsafe.dexcount", version = "4.0.0" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version = "2.4.20" }
-ksp = { id = "com.google.devtools.ksp", version = "2.3.11" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.12" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "14.2.0" }
 license = { id = "com.jaredsburrows.license", version = "0.9.91" }
 publish = { id = "com.github.triplet.play", version = "4.1.1" }
-versions = { id = "io.github.ben-manes.versions", version = "0.61.0" }
+versions = { id = "io.github.ben-manes.versions", version = "0.63.1" }
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.13.0" }
-androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2026.08.00" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version = "2026.09.00" }
 androidx-compose-junit = { module = "androidx.compose.ui:ui-test-junit4" } # uses compose-bom
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" } # uses compose-bom
 androidx-compose-navigation = { module = "androidx.navigation:navigation-compose" } # uses compose-bom
@@ -38,10 +38,9 @@ androidx-compose-uitoolingpreview = { module = "androidx.compose.ui:ui-tooling-p
 androidx-core = { module = "androidx.core:core-ktx", version = "1.19.0" }
 androidx-hilt-compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.4.0" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version = "3.5.1" }
-androidx-room = { module = "androidx.room:room-ktx", version.ref = "room" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room3" }
+androidx-room3-paging = { module = "androidx.room3:room3-paging", version.ref = "room3" }
+androidx-room3-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room3" }
 androidx-test-annotation = { module = "androidx.test:annotation", version = "1.0.1" }
 androidx-test-core = { module = "androidx.test:core-ktx", version = "1.7.0" }
 androidx-test-junit = { module = "androidx.test.ext:junit-ktx", version = "1.3.0" }
@@ -66,7 +65,7 @@ kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bo
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" } # uses kotlinx-bom
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" } # uses kotlinx-bom
 ktlint-compose-ruleset = { module = "io.nlopez.compose.rules:ktlint", version = "0.6.6" }
-landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version = "2.12.0" }
+landscapist-glide = { module = "com.github.skydoves:landscapist-glide", version = "2.13.1" }
 mockito = { module = "org.mockito.kotlin:mockito-kotlin", version = "6.3.0" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 robolectric-annotations = { module = "org.robolectric:annotations", version.ref = "robolectric" }

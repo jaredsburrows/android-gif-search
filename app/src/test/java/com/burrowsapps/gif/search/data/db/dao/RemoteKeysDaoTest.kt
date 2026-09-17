@@ -1,6 +1,6 @@
 package com.burrowsapps.gif.search.data.db.dao
 
-import androidx.room.Room
+import androidx.room3.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.burrowsapps.gif.search.data.db.AppDatabase

@@ -1,7 +1,7 @@
 package com.burrowsapps.gif.search.data.db.entity
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room3.Entity
+import androidx.room3.PrimaryKey
 
 @Entity(tableName = "remote_keys")
 internal data class RemoteKeysEntity(

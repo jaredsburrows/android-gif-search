@@ -1,15 +1,20 @@
 package com.burrowsapps.gif.search.data.db.dao
 
 import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.RewriteQueriesToDropUnusedColumns
+import androidx.room3.Dao
+import androidx.room3.DaoReturnTypeConverters
+import androidx.room3.Insert
+import androidx.room3.OnConflictStrategy
+import androidx.room3.Query
+import androidx.room3.RewriteQueriesToDropUnusedColumns
+import androidx.room3.paging.PagingSourceDaoReturnTypeConverter
 import com.burrowsapps.gif.search.data.db.entity.QueryResultEntity
 import com.burrowsapps.gif.search.ui.giflist.GifImageInfo
 
+// Room 3 no longer special-cases PagingSource returns: paging support ships as a pluggable
+// return-type converter in room3-paging that has to be declared explicitly.
 @Dao
+@DaoReturnTypeConverters(PagingSourceDaoReturnTypeConverter::class)
 internal interface QueryResultDao {
   // Keep first-seen ordering stable by ignoring duplicates. Returns the inserted row ids (-1 for a
   // row that was ignored as a duplicate) so callers can tell how many new rows actually landed.

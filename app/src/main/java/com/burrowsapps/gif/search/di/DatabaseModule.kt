@@ -1,8 +1,8 @@
 package com.burrowsapps.gif.search.di
 
 import android.content.Context
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room3.Room
+import androidx.room3.RoomDatabase
 import com.burrowsapps.gif.search.data.db.AppDatabase
 import com.burrowsapps.gif.search.data.db.dao.GifDao
 import com.burrowsapps.gif.search.data.db.dao.QueryResultDao

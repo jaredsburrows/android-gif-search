@@ -3,7 +3,7 @@ package com.burrowsapps.gif.search.data.repository
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
+import androidx.room3.withWriteTransaction
 import com.burrowsapps.gif.search.data.api.model.GifResponseDto
 import com.burrowsapps.gif.search.data.api.model.NetworkResult
 import com.burrowsapps.gif.search.data.db.AppDatabase
@@ -165,7 +165,7 @@ internal class GifRemoteMediator(
           )
 
           // Save everything to database in a single transaction for consistency
-          database.withTransaction {
+          database.withWriteTransaction {
             if (items.isNotEmpty()) {
               // Step 1: Upsert GIF entities FIRST (deduplicated by primary key: tinyGifUrl)
               // This ensures GIFs are available before we reference them
@@ -246,7 +246,7 @@ internal class GifRemoteMediator(
                 // the GIFs they pointed at, which deleteOrphanedGifs() below then reclaims.
                 val staleCutoff = System.currentTimeMillis() - STALE_QUERY_RETENTION_MS
                 val evictedRows =
-                  database.withTransaction {
+                  database.withWriteTransaction {
                     val rows = queryResultsDao.clearStaleQueries(staleCutoff, queryKey)
                     remoteKeysDao.clearStale(staleCutoff, queryKey)
                     rows
