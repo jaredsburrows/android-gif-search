@@ -37,7 +37,7 @@ androidx-compose-uitooling = { module = "androidx.compose.ui:ui-tooling" } # use
 androidx-compose-uitoolingpreview = { module = "androidx.compose.ui:ui-tooling-preview" } # uses compose-bom
 androidx-core = { module = "androidx.core:core-ktx", version = "1.19.1" }
 androidx-hilt-compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.4.0" }
-androidx-paging-compose = { module = "androidx.paging:paging-compose", version = "3.5.1" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version = "3.5.2" }
 androidx-room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room3" }
 androidx-room3-paging = { module = "androidx.room3:room3-paging", version.ref = "room3" }
 androidx-room3-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room3" }
