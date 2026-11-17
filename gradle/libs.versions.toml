@@ -1,7 +1,7 @@
 [versions]
 android = "9.5.1"
 dagger = "2.60.1"
-glide = "5.0.9"
+glide = "5.0.10"
 leakcanary = "2.14"
 moshi = "1.15.2"
 robolectric = "4.18"
