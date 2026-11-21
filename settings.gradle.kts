@@ -1,10 +1,18 @@
 pluginManagement {
   repositories {
-    google {
-      mavenContent {
+    exclusiveContent {
+      // androidx is served ONLY by Google's Maven repo, so an androidx coordinate that
+      // dl.google.com cannot serve fails instead of falling through to Maven Central.
+      forRepository {
+        google {
+          mavenContent {
+            includeGroupAndSubgroups("com.android")
+            includeGroupAndSubgroups("com.google")
+          }
+        }
+      }
+      filter {
         includeGroupAndSubgroups("androidx")
-        includeGroupAndSubgroups("com.android")
-        includeGroupAndSubgroups("com.google")
       }
     }
     mavenCentral()
@@ -16,11 +24,19 @@ dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
   repositories {
-    google {
-      mavenContent {
+    exclusiveContent {
+      // androidx is served ONLY by Google's Maven repo, so an androidx coordinate that
+      // dl.google.com cannot serve fails instead of falling through to Maven Central.
+      forRepository {
+        google {
+          mavenContent {
+            includeGroupAndSubgroups("com.android")
+            includeGroupAndSubgroups("com.google")
+          }
+        }
+      }
+      filter {
         includeGroupAndSubgroups("androidx")
-        includeGroupAndSubgroups("com.android")
-        includeGroupAndSubgroups("com.google")
       }
     }
     mavenCentral()
